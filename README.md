@@ -10,6 +10,7 @@
 
 <br>
 해당 자료는 가짜연구소 인과추론팀에 속한 게임/엔터 분야의 현업 데이터 분석가분들이 아래 자료를 바탕으로 요약 및 현업에서의 고민과 생각을 담아 정리했습니다.
+
 > - [고수들의 계량경제학](https://product.kyobobook.co.kr/detail/S000001059425)
 > - [Causal Inference for the brave and true](https://matheusfacure.github.io/python-causality-handbook/landing-page.html) / [[한국어 번역자료]](https://github.com/CausalInferenceLab/Causal-Inference-with-Python)
 > - [인과추론의 데이터 과학](https://sites.google.com/view/causal-inference2022)
