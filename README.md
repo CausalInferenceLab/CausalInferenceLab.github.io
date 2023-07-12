@@ -23,8 +23,8 @@
 
 해당 자료는 11개 정도의 챕터로 구성 예정이며, 하반기에 마무리될 예정입니다.
 
-| 순서 | 완료여부 | Chapter | 작성일 | 작성자 (소속) |
+| 순서 | 완료여부 | Chapter | 발표일 | 작성자 (소속) |
 | ------ | -- |----------- |------|------|
-| 1 | ☑️ | [1. Randomised Controlled Trial]() | 2023-07-09 | [신진수](https://github.com/jsshin2022) (크래프톤) |
-| 2 |  | [2. Regression]() |  | [박시온](https://github.com/rockgoat95) (넥슨코리아) |
+| 1 | ☑️ | [1. Randomised Controlled Trial](https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/blob/main/causal_inference_study_materials/Study%201.%20Randomised%20Controlled%20Trial.ipynb) | 2023-07-09 | [신진수](https://github.com/jsshin2022) (크래프톤) |
+| 2 |  | [2. Regression]() | 2023-07-23 | [박시온](https://github.com/rockgoat95) (넥슨코리아) |
 <br>
