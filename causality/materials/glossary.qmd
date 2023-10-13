@@ -1,0 +1,19 @@
+---
+title: "Study Contents"
+# subtitle: ""
+listing:
+  - id: terms
+    contents: terms
+    sort:
+      - "title"
+    categories: unnumbered
+    sort-ui: [title]
+    filter-ui: [title, category, description]
+    type: default
+    page-size: 10
+    fields: [title, category, description, url]
+    image-align: left
+---
+
+
+

@@ -2,26 +2,25 @@ project:
   type: website
 
 website:
-  title: "딥러닝 용어사전"
-  description: "딥러닝 영어문서를 한국어로 번역하는 과정에서 용어를 통일하여 사용하기 위한 오픈소스 용어 사전입니다."
+  title: "분석가를 위한 인과추론 개념 정리"
+  description: "현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다."
   search: true
   navbar:
     left:
       - dictionary/glossary.qmd
-      - guide.qmd
       - contribution.qmd
     right:
       - icon: github
-        href: https://github.com/Pseudo-Lab/deep-learning-glossary
-  favicon: images/pseudo-lab-pavicon.png
+        href: https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst
+  favicon: images/pseudo_lab_eng.png
   open-graph: 
-    title: "딥러닝 용어사전"
-    description: "딥러닝 영어문서를 한국어로 번역하는 과정에서 용어를 통일하여 사용하기 위한 오픈소스 용어 사전입니다."
-    image: images/pseudo-lab-1200x630.png
+    title: "분석가를 위한 인과추론 개념 정리"
+    description: "현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다."
+    image: images/pseudo_lab_eng.png
   twitter-card: 
-    title: "딥러닝 용어사전"
-    description: "딥러닝 영어문서를 한국어로 번역하는 과정에서 용어를 통일하여 사용하기 위한 오픈소스 용어 사전입니다."
-    image: images/pseudo-lab-1200x630.png
+    title: "분석가를 위한 인과추론 개념 정리"
+    description: "현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다."
+    image: images/pseudo_lab_eng.png
 
 
 
@@ -38,11 +37,11 @@ website:
   #         - pr.qmd
   #     - contribution.qmd
 
-  google-analytics: "G-TFCJQ03RNB"
+  # google-analytics: "G-TFCJQ03RNB"
   page-footer:
-    center: "by HuggingFace KREW"
-  repo-url: https://github.com/Pseudo-Lab/deep-learning-glossary
-  site-url: 'https://pseudo-lab.github.io/deep-learning-glossary/'
+    center: "by PseudoLab Causal Inference Team"
+  repo-url: https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst
+  site-url: 'https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/'
   site-path: '/'
 
 format:
