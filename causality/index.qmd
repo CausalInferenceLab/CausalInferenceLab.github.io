@@ -1,0 +1,49 @@
+---
+callout-icon: false
+---
+
+![](images/causal_inference_team_logo.jpg)
+
+
+# 스터디 소개 {.unnumbered}
+
+안녕하세요. 가짜연구소 Causal Inference 팀 신진수 입니다.
+
+가짜연구소 인과추론팀은 데이터를 통한 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️ 한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다! 가짜연 디스코드 커뮤니티 에 오셔서 인과추론에 대해 많은 이야기를 같이 나눠봐요!
+
+
+## 자료 소개
+
+해당 자료는 가짜연구소 인과추론팀에 속한 게임/엔터 분야의 현업 데이터 분석가분들이 아래 자료를 바탕으로 요약 및 현업에서의 고민과 생각을 담아 정리했습니다.
+
+Causal Inference for the brave and true / [한국어 번역자료]
+인과추론의 데이터 과학
+혹시 잘못된 내용이나 오타가 발견되면, 해당 Github 저장소의 이슈 페이지를 방문해주세요. 또한, 관련 질문은 빌더인 신진수에게 문의 부탁드립니다.
+
+
+딥러닝 영어문서를 일관성 있게 한국어로 번역하고 용어의 의미를 정리하기 위한 오픈소스 용어 사전입니다.
+
+
+## 참고한 자료
+
+용어 사전은 아래의 번역 프로젝트와 함께하고 있습니다. 번역 작업 중인 문서에 대해 프로젝트 카드를 등록을 요청할 수 있으니 용어 사전과 함께 번역 작업을 진행하는 건 어떨까요?
+
+::: g-col-12
+::: {.callout-note appearance="simple"}
+**🤗 Causal Inference for the brave and true** <a href="https://matheusfacure.github.io/python-causality-handbook/landing-page.html" target="_blank">\[Link »\]</a>
+:::
+
+::: {.callout-note appearance="simple"}
+**🤗 Causal Inference for the brave and true 한국어 번역** <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/landing-page.html" target="_blank">\[Link »\]</a>
+:::
+
+::: {.callout-note appearance="simple"}
+**🤗 고수들의 계량경제학** <a href="https://product.kyobobook.co.kr/detail/S000001059425" target="_blank">\[Link »\]</a>
+:::
+
+::: {.callout-note appearance="simple"}
+**🤗 인과추론의 데이터 과학** <a href="https://sites.google.com/view/causal-inference2023" target="_blank">\[Link »\]</a>
+:::
+
+
+<a href="./intro.html/googleb64f32a1f0de3b5f.html"></a>
