@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://pseudo-lab.github.io/deep-learning-glossary/index.html</loc>
-    <lastmod>2023-10-13T16:56:41.325Z</lastmod>
+    <loc>https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/index.html</loc>
+    <lastmod>2023-10-13T17:50:40.712Z</lastmod>
   </url>
   <url>
-    <loc>https://pseudo-lab.github.io/deep-learning-glossary/contribution.html</loc>
-    <lastmod>2023-10-13T16:56:38.909Z</lastmod>
+    <loc>https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/book readings/1. Randomised Controlled Trial.html</loc>
+    <lastmod>2023-10-13T17:50:39.316Z</lastmod>
   </url>
   <url>
-    <loc>https://pseudo-lab.github.io/deep-learning-glossary/materials/1. Randomised Controlled Trial.html</loc>
-    <lastmod>2023-10-13T16:56:40.849Z</lastmod>
+    <loc>https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/contribution.html</loc>
+    <lastmod>2023-10-13T17:50:37.556Z</lastmod>
+  </url>
+  <url>
+    <loc>https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/glossary.html</loc>
+    <lastmod>2023-10-13T17:50:38.280Z</lastmod>
+  </url>
+  <url>
+    <loc>https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/1. Randomised Controlled Trial.html</loc>
+    <lastmod>2023-10-13T17:50:40.348Z</lastmod>
   </url>
 </urlset>
