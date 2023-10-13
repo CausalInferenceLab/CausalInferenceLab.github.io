@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>분석가를 위한 인과추론 개념 정리</title>
+<title>분석가를 위한 인과추론 개념 정리 - Study Contents</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,23 +23,25 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./images/pseudo_lab_eng.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/pseudo_lab_eng.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-listing/list.min.js"></script>
+<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -60,19 +62,46 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-terms .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-category','listing-description','listing-url',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-title","listing-category","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-terms'] = new List('listing-terms', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <meta property="og:title" content="분석가를 위한 인과추론 개념 정리">
 <meta property="og:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
-<meta property="og:image" content="https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/images/pseudo_lab_eng.png">
+<meta property="og:image" content="https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/images/pseudo_lab_eng.png">
 <meta property="og:site-name" content="분석가를 위한 인과추론 개념 정리">
-<meta property="og:image:height" content="630">
-<meta property="og:image:width" content="1200">
 <meta name="twitter:title" content="분석가를 위한 인과추론 개념 정리">
 <meta name="twitter:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
-<meta name="twitter:image" content="https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/images/pseudo_lab_eng.png">
-<meta name="twitter:image-height" content="630">
-<meta name="twitter:image-width" content="1200">
+<meta name="twitter:image" content="https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/images/pseudo_lab_eng.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -83,7 +112,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">분석가를 위한 인과추론 개념 정리</span>
     </a>
   </div>
@@ -96,7 +125,7 @@ ul.task-list li input[type="checkbox"] {
   <li class="dropdown-header">
  <span class="menu-text">dictionary/glossary.qmd</span></li>
   <li class="nav-item">
-    <a class="nav-link" href="./contribution.html" rel="" target="">
+    <a class="nav-link" href="../contribution.html" rel="" target="">
  <span class="menu-text">Gamifying Causal Inference</span></a>
   </li>  
 </ul>
@@ -118,74 +147,56 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#스터디-소개" id="toc-스터디-소개" class="nav-link active" data-scroll-target="#스터디-소개">스터디 소개</a>
-  <ul class="collapse">
-  <li><a href="#자료-소개" id="toc-자료-소개" class="nav-link" data-scroll-target="#자료-소개">자료 소개</a></li>
-  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">Reference</a></li>
-  </ul></li>
-  </ul>
-</nav>
-    </div>
+        
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-unnumbered"></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Study Contents</h1>
+</div>
 
 
-<p><img src="images/causal_inference_team_logo.jpg" class="img-fluid"></p>
-<section id="스터디-소개" class="level1 unnumbered">
-<h1 class="unnumbered">스터디 소개</h1>
-<p>안녕하세요. 가짜연구소 Causal Inference 팀 <a href="https://www.linkedin.com/in/jinsoo-shin-436060162/">신진수</a> 입니다.</p>
-<p>가짜연구소 인과추론팀은 데이터를 통한 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️ 한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다! 가짜연 디스코드 커뮤니티 에 오셔서 인과추론에 대해 많은 이야기를 같이 나눠봐요!</p>
-<section id="자료-소개" class="level2">
-<h2 class="anchored" data-anchor-id="자료-소개">자료 소개</h2>
-<p>해당 자료는 가짜연구소 인과추론팀에 속한 게임/엔터 분야의 현업 데이터 분석가분들이 아래 자료를 바탕으로 요약 및 현업에서의 고민과 생각을 담아 정리했습니다.</p>
-<p>혹시 잘못된 내용이나 오타가 발견되면, 해당 Github 저장소의 <a href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/issues">이슈 페이지</a>를 방문해주세요. 또한, 관련 질문은 빌더인 신진수에게 문의 부탁드립니다.</p>
-</section>
-<section id="reference" class="level2">
-<h2 class="anchored" data-anchor-id="reference">Reference</h2>
-<p>게임/엔터테인먼트 업계의 데이터 분석과 분들과 함께 아래 책/자료를 참고해 스터디를 진행했습니다.</p>
-<p>::: g-col-12 ::: {.callout-note appearance=“simple”} <strong>🤗 Causal Inference for the brave and true</strong> <a href="https://matheusfacure.github.io/python-causality-handbook/landing-page.html" target="_blank">[Link »]</a> :::</p>
-<div class="callout callout-style-simple callout-note no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<p><strong>🤗 Causal Inference for the brave and true 한국어 번역</strong> <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/landing-page.html" target="_blank">[Link »]</a></p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-note no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<p><strong>🤗 고수들의 계량경제학</strong> <a href="https://product.kyobobook.co.kr/detail/S000001059425" target="_blank">[Link »]</a></p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-note no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<p><strong>🤗 인과추론의 데이터 과학</strong> <a href="https://sites.google.com/view/causal-inference2023" target="_blank">[Link »]</a></p>
-</div>
-</div>
-</div>
-<p><a href="./intro.html/googleb64f32a1f0de3b5f.html"></a></p>
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
 
 
-</section>
-</section>
 
-</main> <!-- /main -->
+
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-terms">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-terms-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-terms'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-title" data-direction="asc">
+          Title
+        </option>
+     </select>
+  </div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
+</div>
+<div class="list quarto-listing-default">
+
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

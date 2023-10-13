@@ -1,1 +1,1 @@
-Sitemap: https://pseudo-lab.github.io/deep-learning-glossary/sitemap.xml
+Sitemap: https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/sitemap.xml
