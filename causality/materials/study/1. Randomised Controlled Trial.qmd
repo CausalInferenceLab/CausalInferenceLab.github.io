@@ -1,3 +1,10 @@
+---
+title: '1. Randomised Controlled Trial'
+description: '무작위 통제 실험'
+categories:
+  - A/B Test
+---
+
 # 1 - Randomised Controlled Trial (RCT)
 
 > 👉 해당 포스트는 아래 인과추론 자료를 바탕으로 정리했습니다.

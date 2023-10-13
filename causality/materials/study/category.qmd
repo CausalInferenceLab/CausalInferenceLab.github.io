@@ -1,5 +1,5 @@
 ---
-title: "Study Contents"
+title: "Study"
 # subtitle: ""
 listing:
   - id: terms
@@ -11,6 +11,6 @@ listing:
     filter-ui: [title, category, description]
     type: default
     page-size: 10
-    fields: [title, category, description, url]
+    fields: [title, category, description]
     image-align: left
 ---
