@@ -14,6 +14,3 @@ listing:
     fields: [title, category, description, url]
     image-align: left
 ---
-
-
-

@@ -2,14 +2,13 @@
 callout-icon: false
 ---
 
-![](images/causal_inference_team_logo.jpg)
-
-
 # 스터디 소개 {.unnumbered}
 
 안녕하세요. 가짜연구소 Causal Inference 팀 [신진수](https://www.linkedin.com/in/jinsoo-shin-436060162/) 입니다.
 
-가짜연구소 인과추론팀은 데이터를 통한 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️ 한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다! 가짜연 디스코드 커뮤니티 에 오셔서 인과추론에 대해 많은 이야기를 같이 나눠봐요!
+가짜연구소 인과추론팀은 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️ 한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다! 
+
+[가짜연 디스코드 커뮤니티](https://discord.gg/HeHbFAvmSZ)에 오셔서 인과추론에 대한 많은 이야기를 같이 나눠봅시다.
 
 
 ## 자료 소개
@@ -39,6 +38,8 @@ callout-icon: false
 ::: {.callout-note appearance="simple"}
 **🤗 인과추론의 데이터 과학** <a href="https://sites.google.com/view/causal-inference2023" target="_blank">\[Link »\]</a>
 :::
+:::
 
+![](images/causal_inference_team_logo.jpg)
 
 <a href="./intro.html/googleb64f32a1f0de3b5f.html"></a>

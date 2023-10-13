@@ -7,7 +7,7 @@ website:
   search: true
   navbar:
     left:
-      - dictionary/glossary.qmd
+      - study/category.qmd
       - contribution.qmd
     right:
       - icon: github
