@@ -5,12 +5,12 @@
 
 | 이름   |                                     소속 |           소개|
 |:-----  |:----------------------------------------|:--------------|
-| 신진수 |  [크래프톤](https://www.krafton.com/) Data Analyst |  [Github](https://github.com/CausalInferenceLab) / [Linkedin](https://www.linkedin.com/in/jinsoo-shin-436060162/) |
-| 박시온 |  [넥슨코리아](https://www.krafton.com/) Data Analyst |  |
-| 김소희 |  [티빙](https://www.krafton.com/) Data Analyst |  |
-| 조슬지 |  [넷마블](https://www.krafton.com/) Data Analyst |  |
-| 임종언 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
-| 박병수 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
-| 박이삭 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
-| 유정현 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
-| 김지연 |  [엔씨소프트](https://kr.ncsoft.com/kr/index.do) Data Analyst |  |
+| 신진수 |  [크래프톤](https://www.krafton.com/) |  [Github](https://github.com/CausalInferenceLab) / [Linkedin](https://www.linkedin.com/in/jinsoo-shin-436060162/) |
+| 박시온 |  [넥슨코리아](https://www.krafton.com/) |  |
+| 김소희 |  [티빙](https://www.krafton.com/) |  |
+| 조슬지 |  [넷마블](https://www.krafton.com/) |  |
+| 임종언 |  [넥슨코리아](https://company.nexon.com/kr/) |  |
+| 박병수 |  [넥슨코리아](https://company.nexon.com/kr/) |  |
+| 박이삭 |  [넥슨코리아](https://company.nexon.com/kr/) |  |
+| 유정현 |  [넥슨코리아](https://company.nexon.com/kr/) |  |
+| 김지연 |  [엔씨소프트](https://kr.ncsoft.com/kr/index.do) |  |
