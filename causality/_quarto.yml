@@ -2,23 +2,23 @@ project:
   type: website
 
 website:
-  title: "분석가를 위한 인과추론 개념 정리"
+  title: "분석가를 위한 인과추론"
   description: "현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다."
   search: true
   navbar:
     left:
-      - study/category.qmd
+      - study/notes/category.qmd
       - contribution.qmd
     right:
       - icon: github
         href: https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst
   favicon: images/pseudo_lab_eng.png
   open-graph: 
-    title: "분석가를 위한 인과추론 개념 정리"
+    title: "분석가를 위한 인과추론"
     description: "현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다."
     image: images/pseudo_lab_eng.png
   twitter-card: 
-    title: "분석가를 위한 인과추론 개념 정리"
+    title: "분석가를 위한 인과추론"
     description: "현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다."
     image: images/pseudo_lab_eng.png
 
