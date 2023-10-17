@@ -1,0 +1,129 @@
+/*-- scss:defaults --*/
+$h1-font-size: 155%  !default;
+$h2-font-size: 135%  !default;
+$h3-font-size: 115%  !default;
+$h4-font-size: 100%  !default; 
+$h5-font-size: 100%  !default;
+$g6-font-size: 100%  !default;
+$figure-caption-font-size: 80% !important;
+$headings-font-weight:  600 !default;
+
+// $body-color: black !default;
+
+@import url("https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/static/woff2/SUIT.css");
+@import url("https://cdn.jsdelivr.net/gh/sunn-us/SUITE/fonts/static/woff2/SUITE.css");
+@import url("https://cdn.jsdelivr.net/gh/wan2land/d2coding/d2coding-ligature-subset.css");
+// @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap'); 
+// @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+// @import url("https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css");
+
+//@import url('http://fonts.cdnfonts.com/css/xits'); // Not working
+
+
+/*-- scss:rules --*/
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'SUITE', sans-serif !important;
+  font-weight: 650;
+  //text-shadow: -1px -1px 0 rgba(0, 0, 0, .3);
+}
+
+ul, li, ol{
+    font-family: 'SUIT', sans-serif !important;
+    font-size: 95%;
+    font-weight: 400;
+   }
+
+p, fig-caption {
+    font-family: 'SUIT', sans-serif !important;
+    font-size: 90%;
+    font-weight: 400; 
+}
+
+table {
+  font-family: 'SUIT', sans-serif !important;
+  font-size: 90%;
+  font-weight: 400; 
+}
+
+//.category{
+//  font-family: 'SUIT', sans-serif !important;
+//  font-size: 90%;
+//  font-weight: 350;
+//  text-shadow: -1px -1px 0 rgba(0, 0, 0, .3);
+//}
+
+.sourceCode {
+  font-family: 'D2Coding', monospace !important;
+  font-size: 95%;
+}
+
+code {
+  font-family: 'D2Coding', monospace !important;
+  font-size: 85%;
+}
+
+.math.display {
+  //font-family: 'STIX Two Math' !important; // Not working
+  font-size: 90%;
+}
+
+.math.inline {
+  font-size: 85% !important;
+}
+
+//.math.display .MathJax  {
+//  font-size: 100% !important;
+  //color: #b22222;
+//}
+
+.figure{
+    display: inline-block; 
+    margin: 0 auto;
+    border:0px silver solid; 
+    padding: 5px;
+    text-align: left; 
+    background:#FFFFFF;
+   }
+
+.figurec{
+    display: inline-block; 
+    margin: 0 auto;
+    border:0px silver solid; 
+    padding: 5px;
+    text-align: right; 
+    background:#FFFFFF;
+   }
+
+
+// Obsolete but backward compatibility 
+
+.my-figure7 {
+    display: inline-block; 
+    margin: 0 auto;
+    //border:1.5px silver solid; 
+    padding: 5px;
+    text-align: left; 
+    width: 70%;
+    background:#FFFFFF;
+  }
+  
+.my-figure5 {
+    display: inline-block; 
+    margin: 0 auto;
+    //border:1.5px silver solid; 
+    padding: 5px;
+    text-align: left; 
+    width: 50%;
+    background:#FFFFFF;
+  }
+  
+.my-figure3 {
+    display: inline-block; 
+    margin: 0 auto;
+    //border:1.5px silver solid; 
+    padding: 5px;
+    text-align: left; 
+    width: 30%;
+    background:#FFFFFF;
+  }
+ 

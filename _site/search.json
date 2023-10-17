@@ -1,0 +1,51 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "분석가를 위한 인과추론",
+    "section": "",
+    "text": "Intro. Casual하게 Causality 이해하기 소개\n\n\n\n\n\n\n\nnews\n\n\n\n\n스터디 소개\n\n\n\n\n\n\nOct 18, 2023\n\n\nJin soo\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "분석가를 위한 인과추론",
+    "section": "",
+    "text": "about\n아무거나\n\n\n\n문구1\n\n\n\n문구2"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Intro. Casual하게 Causality 이해하기 소개",
+    "section": "",
+    "text": "안녕하세요, 가짜연구소 Causal Inference 팀입니다.\n지난 3개월 간 가짜연구소에서 “Casual하게 Causality 이해하기” 스터디가 진행되었습니다.\n해당 스터디를 통해 저희가 달성하고자 하는 목표는 크게 3가지입니다.\n\n◦ Causal Inference에 대한 기본적인 개념 학습\n◦ 문제 or ML 모델에 대한 원인 분석 능력 키우기\n◦ 공부한 내용을 정리해, Causal Inference 에 대한 한국어 자료 만들어보기\n\n\n인과추론을 공부하러 오신 분들이 저희가 작성한 블로그를 통해,\n한국어 자료가 많지 않은 인과추론에 더 쉽게 다가가셨으면 좋겠습니다!\n\n\n“Casual하게 Causality 이해하기” 스터디는 Brady Neal의 Introduction to Causal Inference 강의를 바탕으로 진행되었습니다.\n블로그 글 이전에 전체 챕터에 대한 노션 페이지 정리 자료를 보고 싶으신 분들은 가짜연구소 Causal Inference 아카이브를 참고해주시면 감사하겠습니다!"
+  },
+  {
+    "objectID": "about.html#스터디-자료-소개",
+    "href": "about.html#스터디-자료-소개",
+    "title": "게임/엔터 산업의 분석가를 위한 인과추론 스터디 : Causal-Inference-Study-for-Analyst",
+    "section": "",
+    "text": "안녕하세요. 가짜연구소 Causal Inference 팀 신진수 입니다.\n 가짜연구소 인과추론팀은 데이터를 통한 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️ 한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다! 가짜연 디스코드 커뮤니티 에 오셔서 인과추론에 대해 많은 이야기를 같이 나눠봐요!\n 해당 자료는 가짜연구소 인과추론팀에 속한 게임/엔터 분야의 현업 데이터 분석가분들이 아래 자료를 바탕으로 요약 및 현업에서의 고민과 생각을 담아 정리했습니다.\n\n\n고수들의 계량경제학\nCausal Inference for the brave and true / [한국어 번역자료]\n인과추론의 데이터 과학\n\n\n혹시 잘못된 내용이나 오타가 발견되면, 해당 Github 저장소의 이슈 페이지를 방문해주세요. 또한, 관련 질문은 빌더인 신진수에게 문의 부탁드립니다."
+  },
+  {
+    "objectID": "about.html#인과추론-개념정리-스터디-일정",
+    "href": "about.html#인과추론-개념정리-스터디-일정",
+    "title": "게임/엔터 산업의 분석가를 위한 인과추론 스터디 : Causal-Inference-Study-for-Analyst",
+    "section": "",
+    "text": "해당 스터디 Summary 11개 정도의 챕터로 구성 예정입니다.\n\n\n\n순서\n완료여부\nChapter\n발표일\n작성자 (소속)\n\n\n\n\n1\n☑️\n1. Randomised Controlled Trial\n2023-07-09\n신진수 (크래프톤)\n\n\n2\n\n2. Regression\n2023-07-23\n박시온 (넥슨코리아)"
+  },
+  {
+    "objectID": "posts/2023-10-18-intro/index.html",
+    "href": "posts/2023-10-18-intro/index.html",
+    "title": "Intro. Casual하게 Causality 이해하기 소개",
+    "section": "",
+    "text": "안녕하세요, 가짜연구소 Causal Inference 팀입니다.\n지난 3개월 간 가짜연구소에서 “Casual하게 Causality 이해하기” 스터디가 진행되었습니다.\n해당 스터디를 통해 저희가 달성하고자 하는 목표는 크게 3가지입니다.\n\n◦ Causal Inference에 대한 기본적인 개념 학습\n◦ 문제 or ML 모델에 대한 원인 분석 능력 키우기\n◦ 공부한 내용을 정리해, Causal Inference 에 대한 한국어 자료 만들어보기\n\n\n인과추론을 공부하러 오신 분들이 저희가 작성한 블로그를 통해,\n한국어 자료가 많지 않은 인과추론에 더 쉽게 다가가셨으면 좋겠습니다!\n\n\n“Casual하게 Causality 이해하기” 스터디는 Brady Neal의 Introduction to Causal Inference 강의를 바탕으로 진행되었습니다.\n블로그 글 이전에 전체 챕터에 대한 노션 페이지 정리 자료를 보고 싶으신 분들은 가짜연구소 Causal Inference 아카이브를 참고해주시면 감사하겠습니다!\n\n\n\nCitationBibTeX citation:@online{soo2023,\n  author = {soo, Jin},\n  title = {Intro. {Casual하게} {Causality} {이해하기} {소개}},\n  date = {2023-10-18},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nsoo, Jin. 2023. “Intro. Casual하게 Causality 이해하기\n소개.” October 18, 2023."
+  }
+]
