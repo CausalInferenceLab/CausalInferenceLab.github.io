@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>분석가를 위한 인과추론 - Study</title>
+<title>분석가를 위한 인과추론 -</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,25 +23,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../images/pseudo_lab_eng.png" rel="icon" type="image/png">
-<script src="../../site_libs/quarto-listing/list.min.js"></script>
-<script src="../../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -62,57 +60,28 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-terms .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-title','listing-category','listing-description',{ data: ['index'] },{ data: ['categories'] }],
-      
-      searchColumns: ["listing-title","listing-category","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-terms'] = new List('listing-terms', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
+<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="분석가를 위한 인과추론">
 <meta property="og:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
-<meta property="og:image" content="https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/study/images/pseudo_lab_eng.png">
+<meta property="og:image" content="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/images/pseudo_lab_eng.png">
 <meta property="og:site-name" content="분석가를 위한 인과추론">
-<meta name="twitter:title" content="분석가를 위한 인과추론">
-<meta name="twitter:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
-<meta name="twitter:image" content="https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/study/images/pseudo_lab_eng.png">
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image:height" content="630">
+<meta property="og:image:width" content="1200">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="../../index.html">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./images/causal_inference_team_logo.jpg" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">분석가를 위한 인과추론</span>
     </a>
   </div>
@@ -121,15 +90,11 @@ ul.task-list li input[type="checkbox"] {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="dropdown-header">
- <span class="menu-text">study/notes/category.qmd</span></li>
-  <li class="nav-item">
-    <a class="nav-link" href="../../contribution.html" rel="" target="">
- <span class="menu-text">Contributors</span></a>
-  </li>  
-</ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./about.html" rel="" target="" aria-current="page">
+ <span class="menu-text">about</span></a>
+  </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
@@ -137,6 +102,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
 </ul>
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
@@ -146,57 +112,45 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-unnumbered"></div></div>
+    
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Study</h1>
+<div class="quarto-about-trestles">
+  <div class="about-entity">
+    <img src="images/pseudo_lab_eng.png" class="about-image
+  rounded " style="width: 20em;">
+    <div class="about-links">
+  <a href="https://twitter.com/" class="about-link" rel="" target="">
+    <i class="bi bi-twitter"></i>
+     <span class="about-link-text">Twitter</span>
+  </a>
+  <a href="https://www.linkedin.com/company/pseudolab/?originalSubdomain=kr" class="about-link" rel="" target="">
+    <i class="bi bi-linkedin"></i>
+     <span class="about-link-text">LinkedIn</span>
+  </a>
+  <a href="https://github.com/CausalInferenceLab" class="about-link" rel="" target="">
+    <i class="bi bi-github"></i>
+     <span class="about-link-text">Github</span>
+  </a>
 </div>
-
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
   </div>
-  
+  <div class="about-contents"><main class="content" id="quarto-document-content">
+<section id="about" class="level4">
+<h4 data-anchor-id="about">about</h4>
+<p>아무거나</p>
+<hr>
+</section>
+<section id="문구1" class="level4">
+<h4 data-anchor-id="문구1">문구1</h4>
+<hr>
+</section>
+<section id="문구2" class="level4">
+<h4 data-anchor-id="문구2">문구2</h4>
 
-</header>
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-terms">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-     <select id="listing-terms-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-terms'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-       <option value="" disabled="" selected="" hidden="">Order By</option>
-       <option value="index" data-direction="asc">Default</option>
-         <option value="listing-title" data-direction="asc">
-          Title
-        </option>
-     </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
+</section>
+</main></div>
 </div>
-<div class="list quarto-listing-default">
-
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+ <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -217,13 +171,121 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
   };
-  anchorJS.add('.anchored');
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     
@@ -431,17 +493,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
-    <div class="nav-footer-left">
-      &nbsp;
-    </div>   
-    <div class="nav-footer-center">by PseudoLab Causal Inference Team</div>
-    <div class="nav-footer-right">
-      &nbsp;
-    </div>
-  </div>
-</footer>
 
 
 
