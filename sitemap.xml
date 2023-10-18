@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/index.html</loc>
-    <lastmod>2023-10-14T02:56:23.616Z</lastmod>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/about.html</loc>
+    <lastmod>2023-10-18T16:02:09.601Z</lastmod>
   </url>
   <url>
-    <loc>https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/study/category.html</loc>
-    <lastmod>2023-10-14T02:56:22.172Z</lastmod>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/index.html</loc>
+    <lastmod>2023-10-18T16:02:07.097Z</lastmod>
   </url>
   <url>
-    <loc>https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/contribution.html</loc>
-    <lastmod>2023-10-14T02:56:21.476Z</lastmod>
-  </url>
-  <url>
-    <loc>https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/study/notes/1. Randomised Controlled Trial.html</loc>
-    <lastmod>2023-10-14T02:56:23.232Z</lastmod>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/2023-10-18-intro/index.html</loc>
+    <lastmod>2023-10-18T16:02:09.273Z</lastmod>
   </url>
 </urlset>
