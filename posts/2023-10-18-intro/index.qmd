@@ -1,6 +1,6 @@
 ---
 title: "Intro. Casual하게 Causality 이해하기 소개"
-author: "Jin soo"
+author: "JINSOO SHIN"
 description: |
   스터디 소개
 date: now
