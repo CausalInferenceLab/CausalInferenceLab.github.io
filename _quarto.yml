@@ -2,7 +2,7 @@ project:
   type: website
   
 website:
-  title: "분석가를 위한 인과추론"
+  title: "PseudoLab Causal Inference Team"
   description: "현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다."
   search: true
   navbar:
@@ -12,7 +12,7 @@ website:
       - icon: github
         href: https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst
   open-graph: 
-    title: "분석가를 위한 인과추론"
+    title: "PseudoLab Causal Inference Team"
     description: "현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다."
     image: images/pseudo_lab_eng.png        
         

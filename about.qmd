@@ -17,15 +17,44 @@ about:
 
 #### about
 
-아무거나
+안녕하세요. 가짜연구소 Causal Inference 팀입니다.
+
+데이터를 통한 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️ 
+
+한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다!
 
 
 ---
 
-#### 문구1
+#### 인과추론팀 빌더
+| 이름   |                                     소속 |           소개|
+|:-----  |:----------------------------------------|:--------------|
+| 신진수 |  [크래프톤](https://www.krafton.com/) Data Analyst |  [Github](https://github.com/CausalInferenceLab) / [Linkedin](https://www.linkedin.com/in/jinsoo-shin-436060162/) |
+
+#### Study : 인과추론 with Entertainment
+
+| 이름   |                                     소속 |           소개|
+|:-----  |:----------------------------------------|:--------------|
+| 김소희 |  [티빙](https://www.krafton.com/) Data Analyst |  |
+| 김지연 |  [엔씨소프트](https://kr.ncsoft.com/kr/index.do) Data Analyst |  |
+| 박시온 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
+| 박병수 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
+| 박이삭 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
+| 유정현 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
+| 임종언 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
+| 조슬지 |  [넷마블](https://www.krafton.com/) Data Analyst |  |
 
 
----
+#### Study : 인과추론 라이브러리
 
 
-#### 문구2
+#### Research : 인과추론 논문쓰기
+
+
+#### Tech Support
+| 김상돈 |   |  |
+| 최은희 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
+| 홍성철 |  [엔씨소프트](https://kr.ncsoft.com/kr/index.do) Data Analyst |  |
+
+
+
