@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/about.html</loc>
-    <lastmod>2023-10-18T16:02:09.601Z</lastmod>
-  </url>
-  <url>
     <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/index.html</loc>
-    <lastmod>2023-10-18T16:02:07.097Z</lastmod>
+    <lastmod>2023-10-22T12:00:00.009Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/2023-10-18-intro/index.html</loc>
-    <lastmod>2023-10-18T16:02:09.273Z</lastmod>
+    <lastmod>2023-10-22T11:59:59.049Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html</loc>
+    <lastmod>2023-10-22T11:59:57.821Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/about.html</loc>
+    <lastmod>2023-10-22T11:59:59.477Z</lastmod>
   </url>
 </urlset>
