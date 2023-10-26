@@ -29,13 +29,13 @@ about:
 #### 인과추론팀 빌더
 | 이름   |                                     소속 |           소개|
 |:-----  |:----------------------------------------|:--------------|
-| 신진수 |  [크래프톤](https://www.krafton.com/) Data Analyst |  [Github](https://github.com/CausalInferenceLab) / [Linkedin](https://www.linkedin.com/in/jinsoo-shin-436060162/) |
+| 신진수 |  [크래프톤](https://www.krafton.com/) Data Analyst |  [Github](https://github.com/CausalInferenceLab) / [Linkedn](https://www.linkedin.com/in/jinsoo-shin-436060162/) |
 
 #### Study : 인과추론 with Entertainment
 
 | 이름   |                                     소속 |           소개|
 |:-----  |:----------------------------------------|:--------------|
-| 김소희 |  [티빙](https://www.krafton.com/) Data Analyst |  |
+| 김소희 |  [티빙](https://team.tving.com/) Data Analyst |  [LinkedIn](https://www.linkedin.com/in/sohee-kim-9460b6113/) |
 | 김지연 |  [엔씨소프트](https://kr.ncsoft.com/kr/index.do) Data Analyst |  |
 | 박시온 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
 | 박병수 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
