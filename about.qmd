@@ -29,7 +29,7 @@ about:
 #### 인과추론팀 빌더
 | 이름   |                                     소속 |           소개|
 |:-----  |:----------------------------------------|:--------------|
-| 신진수 |  [크래프톤](https://www.krafton.com/) Data Analyst |  [Github](https://github.com/CausalInferenceLab) / [Linkedn](https://www.linkedin.com/in/jinsoo-shin-436060162/) |
+| 신진수 |  [크래프톤](https://www.krafton.com/) Data Analyst |  [Github](https://github.com/CausalInferenceLab) / [LinkedIn](https://www.linkedin.com/in/jinsoo-shin-436060162/) |
 
 #### Study : 인과추론 with Entertainment
 
