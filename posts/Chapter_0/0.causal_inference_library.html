@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="everything">
+<meta name="dcterms.date" content="2023-10-27">
+<meta name="description" content="인과추론 라이브러리 소개">
 
-<title>PseudoLab Causal Inference Team -</title>
+<title>PseudoLab Causal Inference Team - Chapter 0. Causal Inference 라이브러리 정리</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,26 +26,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -63,46 +64,13 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="PseudoLab Causal Inference Team">
 <meta property="og:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
-<meta property="og:image" content="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/images/pseudo_lab_eng.png">
+<meta property="og:image" content="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_0/images/pseudo_lab_eng.png">
 <meta property="og:site-name" content="PseudoLab Causal Inference Team">
-<meta property="og:image:height" content="630">
-<meta property="og:image:width" content="1200">
 </head>
 
 <body class="nav-fixed">
@@ -112,10 +80,10 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/causal_inference_team_logo.jpg" alt="" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/causal_inference_team_logo.jpg" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">PseudoLab Causal Inference Team</span>
     </a>
   </div>
@@ -126,7 +94,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
+    <a class="nav-link" href="../../about.html" rel="" target="">
  <span class="menu-text">about</span></a>
   </li>  
   <li class="nav-item compact">
@@ -143,279 +111,167 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Chapter 0. Causal Inference 라이브러리 정리</h1>
+                  <div>
+        <div class="description">
+          <p>인과추론 라이브러리 소개</p>
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">packages</div>
+                <div class="quarto-category">chapter0</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>everything </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 27, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(7)</span></div><div class="category" data-category="A/B Test">A/B Test <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RCT">RCT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="chapter0">chapter0 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="chapter1">chapter1 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="chapter2">chapter2 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="chapter3">chapter3 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="chapter4">chapter4 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(1)</span></div><div class="category" data-category="packages">packages <span class="quarto-category-count">(1)</span></div></div></div>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<p>안녕하세요, 가짜연구소 Causal Inference 팀입니다.</p>
+<p>본격적으로 Causal Inference 챕터 공부에 앞서, 학습에 필요한 <strong>Library와 튜토리얼</strong>을 정리해보았습니다.</p>
+<p>앞으로 Causal Inference 관련된 패키지를 꾸준히 추가할 예정이니, 혹시나 해당 페이지에</p>
+<p>정리되지 않은 라이브러리는 댓글로 달아주시면 감사하겠습니다~!&nbsp; (Update 22.06.18)</p>
+<hr>
+<table class="table">
+<thead>
+<tr class="header">
+<th><strong>순서</strong></th>
+<th><strong>언어</strong></th>
+<th><strong>라이브러리 명</strong></th>
+<th><strong>설명 &amp; 링크</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Python</td>
+<td>causality</td>
+<td>Python Causality 라이브러리 (Observational Datasets 기반) <a href="https://github.com/akelleh/causality%20">Github 링크</a></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Python</td>
+<td>Microsoft - DoWhy</td>
+<td>Causal Inference End-to-End 라이브러리 (4단계로 구성) <a href="https://microsoft.github.io/dowhy%20">Github 링크</a>/<a href="https://arxiv.org/pdf/2011.04216.pdf">Dowhy 설명자료</a></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Python</td>
+<td>Microsoft - EconML</td>
+<td>Heterogeneous treatment effects 추정 라이브러리 <a href="https://github.com/microsoft/EconML">Github 링크</a></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Python</td>
+<td>Uber - CausalML</td>
+<td>Uplift Modeling &amp; ML과 함께 사용할 수 있는 라이브러리 <a href="https://github.com/uber/causalml%20">Github 링크</a></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Python</td>
+<td>sensemakr</td>
+<td>Python Sensitivity Analysis 라이브러리 <a href="https://pysensemakr.readthedocs.io/en/latest/index.html">설명 링크</a></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Python</td>
+<td>cdt</td>
+<td>Causal Discovery 라이브러리 (PC, Skeleton) <a href="https://fentechsolutions.github.io/CausalDiscoveryToolbox/html/index.html">Github 링크</a></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>R</td>
+<td>Google - CausalImpact</td>
+<td>Google에서 베이지안 Time Series 모델을 사용한 R 기반 라이브러리 <a href="https://github.com/google/CausalImpact">Github 링크</a></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>R</td>
+<td>Dagitty</td>
+<td>DAG 시각화 및 모델링 라이브러리 <a href="https://github.com/jtextor/dagitty">Github 링크</a> / <a href="http://www.dagitty.net/primer/#study-question-1.5.1">시각화 연습</a></td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>R</td>
+<td>bnlearn</td>
+<td>DAG 베이지안 네트워크 모델링 라이브러리 <a href="https://github.com/erdogant/bnlearn">Github 링크</a> /<a href="https://osf.io/vufj4/">관련 논문 및 코드 소개</a></td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>R</td>
+<td>sensemakr / tipr</td>
+<td>R Sensitivity Analysis 라이브러리 <a href="https://cran.r-project.org/web/packages/sensemakr/index.html">sensemakr 설명 링크</a> / <a href="https://github.com/cran/tipr">tipr Github 링크</a></td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>R</td>
+<td>Matchlt</td>
+<td>Matching (PSM)라이브러리 <a href="https://sejdemyr.github.io/r-tutorials/statistics/tutorial8.html">Github 링크</a></td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>공통</td>
+<td>causaldata</td>
+<td>Causal inference 책에 있는 데이터를 불러오는 라이브러리 <a href="https://github.com/NickCH-K/causaldata">Github 링크</a></td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>R</td>
+<td>tlverse</td>
+<td>causal data science with the tlverse software ecosystem <a href="https://tlverse.org/tlverse-handbook/" class="uri">https://tlverse.org/tlverse-handbook/</a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Causal Inference 라이브러리와 튜토리얼에 대한 정리는</p>
+<p><a href="https://pseudo-lab.com/Casual-Causality-efb2d821ae334b8d9674ca331edebc72">가짜연구소 Causal Inference 노션 페이지</a>에서도 확인하실 수 있습니다.</p>
 
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="packages,chapter0" data-listing-date-sort="1698421937000" data-listing-file-modified-sort="1698421909304" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
-<div class="thumbnail">
-<p><a href="./posts/Chapter_0/0.causal_inference_library.html"> <img src="./posts/Chapter_0/ex_image.png" class="thumbnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Chapter_0/0.causal_inference_library.html">
-<h3 class="no-anchor listing-title">
-Chapter 0. Causal Inference 라이브러리 정리
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('packages'); return false;">
-packages
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('chapter0'); return false;">
-chapter0
-</div>
-</div>
-<a href="./posts/Chapter_0/0.causal_inference_library.html">
-<div class="listing-description">
-<p>인과추론 라이브러리 소개</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Chapter_0/0.causal_inference_library.html">
-<div class="listing-date">
-Oct 27, 2023
-</div>
-<div class="listing-author">
-everything
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="chapter2" data-listing-date-sort="1698421937000" data-listing-file-modified-sort="1698421909316" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
-<div class="thumbnail">
-<p><a href="./posts/Chapter_2/2.Potential_Outcomes.html"> <p class="card-img-top"><img src="posts/Chapter_2/ex_image1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Chapter_2/2.Potential_Outcomes.html">
-<h3 class="no-anchor listing-title">
-Chapter 2. Potential Outcomes
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('chapter2'); return false;">
-chapter2
-</div>
-</div>
-<a href="./posts/Chapter_2/2.Potential_Outcomes.html">
-<div class="listing-description">
-<p>Introduction to Causal Inference 강의 chapter 2 소개</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Chapter_2/2.Potential_Outcomes.html">
-<div class="listing-date">
-Oct 27, 2023
-</div>
-<div class="listing-author">
-Jinsoo shin
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="news" data-listing-date-sort="1698421937000" data-listing-file-modified-sort="1698421909304" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
-<div class="thumbnail">
-<p><a href="./posts/2023-10-18-intro/index.html"> <p class="card-img-top"><img src="posts/2023-10-18-intro/thumbnail2.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/2023-10-18-intro/index.html">
-<h3 class="no-anchor listing-title">
-Intro. Casual하게 Causality 이해하기 소개
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('news'); return false;">
-news
-</div>
-</div>
-<a href="./posts/2023-10-18-intro/index.html">
-<div class="listing-description">
-<p>스터디 소개</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/2023-10-18-intro/index.html">
-<div class="listing-date">
-Oct 27, 2023
-</div>
-<div class="listing-author">
-jinsoo shin
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="chapter1" data-listing-date-sort="1698421937000" data-listing-file-modified-sort="1698421909304" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
-<div class="thumbnail">
-<p><a href="./posts/Chapter_1/1.Motivation.html"> <p class="card-img-top"><img src="posts/Chapter_1/ex_image1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Chapter_1/1.Motivation.html">
-<h3 class="no-anchor listing-title">
-Chapter 1. Motivation
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('chapter1'); return false;">
-chapter1
-</div>
-</div>
-<a href="./posts/Chapter_1/1.Motivation.html">
-<div class="listing-description">
-<p>Introduction to Causal Inference 강의 chapter 1 소개</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Chapter_1/1.Motivation.html">
-<div class="listing-date">
-Oct 27, 2023
-</div>
-<div class="listing-author">
-Jinsoo shin
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="A/B Test,RCT" data-listing-date-sort="1698421937000" data-listing-file-modified-sort="1698421909372" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14">
-<div class="thumbnail">
-<p><a href="./posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html"> <p class="card-img-top"><img src="posts/entertainment_basic_study_1/Data/5th_PseudoCon_Confounders.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html">
-<h3 class="no-anchor listing-title">
-Randomised Controoled Trial
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('A/B Test'); return false;">
-A/B Test
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('RCT'); return false;">
-RCT
-</div>
-</div>
-<a href="./posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html">
-<div class="listing-description">
-<p>스터디 소개</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html">
-<div class="listing-date">
-Oct 27, 2023
-</div>
-<div class="listing-author">
-jinsoo shin
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="chapter4" data-listing-date-sort="1698421937000" data-listing-file-modified-sort="1698421909348" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14">
-<div class="thumbnail">
-<p><a href="./posts/Chapter_4/4.Causal_Models.html"> <p class="card-img-top"><img src="posts/Chapter_4/ex_image1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Chapter_4/4.Causal_Models.html">
-<h3 class="no-anchor listing-title">
-Chapter 4. Causal Models
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('chapter4'); return false;">
-chapter4
-</div>
-</div>
-<a href="./posts/Chapter_4/4.Causal_Models.html">
-<div class="listing-description">
-<p>Introduction to Causal Inference 강의 chapter 4 소개</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Chapter_4/4.Causal_Models.html">
-<div class="listing-date">
-Oct 27, 2023
-</div>
-<div class="listing-author">
-seongsoo kim &amp; hojae jeong
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="chapter3" data-listing-date-sort="1698421937000" data-listing-file-modified-sort="1698421909332" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9">
-<div class="thumbnail">
-<p><a href="./posts/Chapter_3/3.Graphical_Models.html"> <p class="card-img-top"><img src="posts/Chapter_3/ex_image1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Chapter_3/3.Graphical_Models.html">
-<h3 class="no-anchor listing-title">
-Chapter 3. Graphical Models
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('chapter3'); return false;">
-chapter3
-</div>
-</div>
-<a href="./posts/Chapter_3/3.Graphical_Models.html">
-<div class="listing-description">
-<p>Introduction to Causal Inference 강의 chapter 3 소개</p>
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Chapter_3/3.Graphical_Models.html">
-<div class="listing-date">
-Oct 27, 2023
-</div>
-<div class="listing-author">
-seongchul hong
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2023,
+  author = {, everything},
+  title = {Chapter 0. {Causal} {Inference} {라이브러리} {정리}},
+  date = {2023-10-27},
+  url = {https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_0/0.causal_inference_library.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2023" class="csl-entry quarto-appendix-citeas" role="listitem">
+everything. 2023. <span>“Chapter 0. Causal Inference 라이브러리
+정리.”</span> October 27, 2023. <a href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_0/0.causal_inference_library.html">https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_0/0.causal_inference_library.html</a>.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
