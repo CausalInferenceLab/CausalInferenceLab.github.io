@@ -6,8 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="JINSOO SHIN">
-<meta name="dcterms.date" content="2023-10-26">
+<meta name="author" content="jinsoo shin">
+<meta name="dcterms.date" content="2023-10-27">
 <meta name="description" content="스터디 소개">
 
 <title>PseudoLab Causal Inference Team - Randomised Controoled Trial</title>
@@ -135,14 +135,14 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>JINSOO SHIN </p>
+               <p>jinsoo shin </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 26, 2023</p>
+        <p class="date">October 27, 2023</p>
       </div>
     </div>
     
@@ -262,7 +262,7 @@ ul.task-list li input[type="checkbox"] {
 <dl>
 <dt>💡Causal Inference is concerned with a <strong>very specific kind of prediction problem</strong></dt>
 <dd>
-Predicting the results of an action, manipulation, or Intervention - “Making Things Happen” (2003, Woodward)
+<p>Predicting the results of an action, manipulation, or Intervention - “Making Things Happen” (2003, Woodward)</p>
 </dd>
 </dl>
 </blockquote>
@@ -304,8 +304,8 @@ Predicting the results of an action, manipulation, or Intervention - “Making T
 </ul></li>
 <li><strong>인과추론 접근</strong> : <span class="math inline">\(X\)</span> (원인)의 변화가 <span class="math inline">\(Y\)</span>의 변화를 <strong>유발</strong>하는지를 확인하는데 관심
 <ul>
-<li>해당 접근은 <strong>Y가 변하는 이유(원인)</strong>에 대한 질문에 답을 할 수 있음</li>
-<li>만약 <span class="math inline">\(X\)</span>와 <span class="math inline">\(Y\)</span>가 인과적으로 관계가 있다면, <span class="math inline">\(Y\)</span>의 변화는 <span class="math inline">\(X\)</span>의 변화로 설명 가능
+<li><p>해당 접근은 <strong>Y가 변하는 이유(원인)</strong>에 대한 질문에 답을 할 수 있음</p></li>
+<li><p>만약 <span class="math inline">\(X\)</span>와 <span class="math inline">\(Y\)</span>가 인과적으로 관계가 있다면, <span class="math inline">\(Y\)</span>의 변화는 <span class="math inline">\(X\)</span>의 변화로 설명 가능</p>
 </li></ul></li></ul></aside></li>
 </ul>
 
@@ -348,7 +348,7 @@ Predicting the results of an action, manipulation, or Intervention - “Making T
 </ul>
 
 <ul class="page-columns page-full">
-<li class="page-columns page-full">실험 그룹 설계 : 올바른 실험설계를 통해, 목적에 맞는 인과효과를 추정하기 위함
+<li class="page-columns page-full"><p>실험 그룹 설계 : 올바른 실험설계를 통해, 목적에 맞는 인과효과를 추정하기 위함</p>
 <ol type="1">
 <li><code>테스트 가능한 가설 설계 및 목표 지표 설계</code>
 <ul>
@@ -371,13 +371,13 @@ Predicting the results of an action, manipulation, or Intervention - “Making T
 </ol>
 <aside>
 <ol start="4" type="1">
-<li><code>그룹 검증</code> : 과연 랜덤하게 나눈 실험군과 대조군이 서로 비교 가능한가 (<strong>Ceteris Paribus</strong>)
+<li><p><code>그룹 검증</code> : 과연 랜덤하게 나눈 실험군과 대조군이 서로 비교 가능한가 (<strong>Ceteris Paribus</strong>)</p>
 <ul>
 <li>실험 대상 (유저/국민)을 대표할 수 있는 비교 변수 설정 (Ex. 나이/연령/과금 수준 등)</li>
 <li>통계적으로 유의미한 차이가 발생했는지 확인 → 상황에 따라 <a href="https://yozm.wishket.com/magazine/detail/1257/">A/A 테스트 진행</a>을 하기도 함</li>
 <li>표본의 수가 충분한지 (Law of Large Numbers 나온 배경) &amp; 동일한 수준으로 제대로 나뉘었는지 체크 필요</li>
 </ul>
-→ 해당 실험에서 그룹간 차이는 무시해도 되는 것으로 보여짐</li>
+<p>→ 해당 실험에서 그룹간 차이는 무시해도 되는 것으로 보여짐</p></li>
 </ol></aside></aside></aside></li>
 </ul>
 </section>
@@ -411,7 +411,7 @@ Predicting the results of an action, manipulation, or Intervention - “Making T
 </ul>
 <aside class="page-columns page-full">
 <ul class="page-columns page-full">
-<li class="page-columns page-full">건강 보험 실험 Feedback
+<li class="page-columns page-full"><p>건강 보험 실험 Feedback</p>
 <ul>
 <li>실험 설계의 문제 : 건강보험이라는 국가적 실험에서 완벽한 <strong>Random Assignment</strong>가 된 것이 맞을까?
 <ul>
@@ -498,7 +498,7 @@ Predicting the results of an action, manipulation, or Intervention - “Making T
 <li>만약, 제대로 된 실험 설계를 하지 않고 ATE를 계산한다면? 아래와 같은 Selection Bias가 생김 &lt;<a href="https://matheusfacure.github.io/python-causality-handbook/01-Introduction-To-Causality.html">Causal Inference for the brave and true Chapter1. 수식 참조</a>&gt;</li>
 </ul>
 <p>$ E[Y|T=1] - E[Y|T=0] = E[Y_1|T=1] - E[Y_0|T=0] + E[Y_0|T=1] - E[Y_0|T=1] $</p>
-<p>$ E[Y|T=1] - E[Y|T=0] = <em>{ATT} + </em>{BIAS} $</p></li>
+<p>$ E[Y|T=1] - E[Y|T=0] = <em>{ATT} +</em> $</p></li>
 </ul>
 </aside></section>
 <section id="how-to-solve" class="level3 page-columns page-full">
@@ -523,7 +523,7 @@ Predicting the results of an action, manipulation, or Intervention - “Making T
 </ul>
 <aside class="page-columns page-full">
 <ul class="page-columns page-full">
-<li class="page-columns page-full">Random Assignment이 가장 좋은 방법이지만, <strong>Research Design</strong> 필요성 존재
+<li class="page-columns page-full"><p>Random Assignment이 가장 좋은 방법이지만, <strong>Research Design</strong> 필요성 존재</p>
 <ul>
 <li>목적 :
 <ul>
@@ -623,15 +623,15 @@ Predicting the results of an action, manipulation, or Intervention - “Making T
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{shin2023,
-  author = {SHIN, JINSOO},
+  author = {shin, jinsoo},
   title = {Randomised {Controoled} {Trial}},
-  date = {2023-10-26},
+  date = {2023-10-27},
   url = {https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-shin2023" class="csl-entry quarto-appendix-citeas" role="listitem">
-SHIN, JINSOO. 2023. <span>“Randomised Controoled Trial.”</span> October
-26, 2023. <a href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html">https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/entertainment_basic_study_1/1.
+shin, jinsoo. 2023. <span>“Randomised Controoled Trial.”</span> October
+27, 2023. <a href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html">https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/entertainment_basic_study_1/1.
 Randomised Controlled Trial.html</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
