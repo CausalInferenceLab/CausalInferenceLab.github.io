@@ -232,15 +232,15 @@ ul.task-list li input[type="checkbox"] {
 <blockquote class="blockquote">
 <p>◦ 변수간의 관계 (association)를 모른다면, 확률 연쇄법칙을 사용해서 다음과 같이 조건부 분포들의<br>
 &nbsp; &nbsp; (coditional distribution) 곱으로 결합분포를 표현할 수 있어요.<br>
-&nbsp; &nbsp;- <span class="math inline">\(p(x\_1, \\dots, x\_n) = p(x\_1)\\prod\_{i=2}^n p(x\_i | x\_{i-1}, \\dots, x\_1)\)</span></p>
-<p>◦&nbsp; 만약 <span class="math inline">\(x\_i, i=1,\\dots, n\)</span> 가 이항(binary) 변수라면, <span class="math inline">\(p(x\_i | x\_{i-1}, \\dots, x\_1)\)</span>은 <span class="math inline">\(2^{i-1}\)</span> 개의 모수가 필요해요.<br>
+&nbsp; &nbsp;- <span class="math inline">\(p(x_1, \dots, x_n) = p(x_1)\prod_{i=2}^n p(x_i | x_{i-1}, \dots, x_1)\)</span></p>
+<p>◦&nbsp; 만약 <span class="math inline">\(x_i, i=1,\dots, n\)</span> 가 이항(binary) 변수라면, <span class="math inline">\(p(x_i | x_{i-1}, \dots, x_1)\)</span>은 <span class="math inline">\(2^{i-1}\)</span> 개의 모수가 필요해요.<br>
 &nbsp; &nbsp; &nbsp;→ 결론적으로 조건부 확률에서 조건으로 주어지는 변수가 많아지면 모수가 지수적으로 증가하게 됩니다.<br>
 &nbsp;</p>
 <p>◦&nbsp; 필요없는 변수는 고려하지 말고 영향을 주는 변수만을 골라서 조건으로 준다면, 고려해야하는 경우가 적어지므로<br>
 &nbsp; &nbsp; &nbsp;필요한 모수가 적어질 것입니다..!&nbsp;<br>
-&nbsp; &nbsp;- 아래 예시에서 <span class="math inline">\((x\_1, x\_2, x\_3)\)</span>가 주어지는 경우, <span class="math inline">\(x\_4\)</span> = 1(or <span class="math inline">\(x\_4=0\)</span>)인 확률, 즉 <span class="math inline">\(p(x\_4|x\_3, x\_2, x\_1)\)</span>만<br>
-&nbsp; &nbsp; &nbsp;정하면 나머지 확률은 <span class="math inline">\(1-p(x\_4|x\_3, x\_2, x\_1)\)</span>로 자동으로 정해지게 됩니다.<br>
-&nbsp; &nbsp; &nbsp;→&nbsp;따라서, 각 <span class="math inline">\((x\_1, x\_2, x\_3)\)</span> 경우에 1개의 모수만을 필요로 하게 됩니다.<br>
+&nbsp; &nbsp;- 아래 예시에서 <span class="math inline">\((x_1, x_2, x_3)\)</span>가 주어지는 경우, <span class="math inline">\(x_4\)</span> = 1(or <span class="math inline">\(x_4=0\)</span>)인 확률, 즉 <span class="math inline">\(p(x_4|x_3, x_2, x_1)\)</span>만<br>
+&nbsp; &nbsp; &nbsp;정하면 나머지 확률은 <span class="math inline">\(1-p(x_4|x_3, x_2, x_1)\)</span>로 자동으로 정해지게 됩니다.<br>
+&nbsp; &nbsp; &nbsp;→&nbsp;따라서, 각 <span class="math inline">\((x_1, x_2, x_3)\)</span> 경우에 1개의 모수만을 필요로 하게 됩니다.<br>
 <img src="ex_image3.png" class="img-fluid"></p>
 <p>◦&nbsp; 다음 내용에서는 확률 분포의 조건부 독립에 대한 가정에 대해 알아보도록 하겠습니다~!</p>
 </blockquote>
@@ -251,12 +251,12 @@ ul.task-list li input[type="checkbox"] {
 <p>◦ 정의 : DAG의 Parent가 주어지면, 노드 X는 나머지 descendants가 아닌 노드들과 독립&nbsp;&nbsp;<br>
 ◦ 목적 : Conditional probability를 단순하게 만들기 위해서 입니다..!<br>
 &nbsp; &nbsp; (마치, Markov chain에서 현재 <span class="math inline">\(t\)</span>시점의 확률분포가 이전 <span class="math inline">\((t-1)\)</span> 시점에만 의존하는 것을 생각하면,<br>
-&nbsp; &nbsp; 이해가 조금 쉬울 것 같습니다! - <span class="math inline">\(P(X\_t|X\_{t-1}, \\dots, X\_1) = P(X\_t|X\_{t-1})\)</span> )<br>
+&nbsp; &nbsp; 이해가 조금 쉬울 것 같습니다! - <span class="math inline">\(P(X_t|X_{t-1}, \dots, X_1) = P(X_t|X_{t-1})\)</span> )<br>
 ◦ 기대효과 : 결합분포에서, 조건으로 주어지는 변수가 줄어 <strong>고려해야하는 모수가 줄어들게 됩니다!</strong><br>
-&nbsp; &nbsp; → <span class="math inline">\(P(x\_1, \\dots, x\_4) = P(x\_1) P(x\_2|x\_1) P(x\_3 | x\_2, x\_1) P(x\_4|x\_3)\)</span><br>
+&nbsp; &nbsp; → <span class="math inline">\(P(x_1, \dots, x_4) = P(x_1) P(x_2|x_1) P(x_3 | x_2, x_1) P(x_4|x_3)\)</span><br>
 <img src="ex_image4.png" class="img-fluid"></p>
-<p>◦ 예시 : 아래 그림에서&nbsp;<span class="math inline">\(X\_4\)</span>는 <span class="math inline">\(X\_3\)</span>가 조건으로 주어진다면&nbsp;나머지 변수들과는 조건부 독립이에요.<br>
-&nbsp; &nbsp; → <span class="math inline">\(P(X\_4|X\_3,X\_2,X\_1) = P(X\_4|X\_3)\)</span></p>
+<p>◦ 예시 : 아래 그림에서&nbsp;<span class="math inline">\(X_4\)</span>는 <span class="math inline">\(X_3\)</span>가 조건으로 주어진다면&nbsp;나머지 변수들과는 조건부 독립이에요.<br>
+&nbsp; &nbsp; → <span class="math inline">\(P(X_4|X_3,X_2,X_1) = P(X_4|X_3)\)</span></p>
 <p>◦ 직관 : “지능 → 성적 → 장학금 수여” 이라는 DAG를 생각해봅시다.<br>
 &nbsp; &nbsp; - 만약 어떤 학생의 성적을 안다면, 그 학생의 지능을 몰라도 장학금을 수여여부를 알 수 있게 됩니다..!<br>
 &nbsp; &nbsp; &nbsp; <span class="math inline">\(P(장학금|지능,성적) = P(장학금|성적)\)</span></p>
@@ -266,7 +266,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <blockquote class="blockquote">
 <p>◦ 정의 : 확률분포 P와 DAG인 G가 주어졌을 때, G에 따른 P의 Factorisation은 아래와 같습니다.<br>
-&nbsp; &nbsp; <span class="math inline">\(p(x\_1, \\dots, x\_n) =\\prod\_{i=1}^n p(x\_i | Pa\_i)\)</span><br>
+&nbsp; &nbsp; <span class="math inline">\(p(x_1, \dots, x_n) =\prod_{i=1}^n p(x_i | Pa_i)\)</span><br>
 ◦ <strong>Local Markov assumption ⟺ Bayesian network factorization</strong><br>
 &nbsp; &nbsp; → 위에서 배운 Local Markov assumption과 Bayesian network factorization은 같아요!<br>
 &nbsp; &nbsp; &nbsp; &nbsp;(해당 부분에 대한 증명은 <a href="https://djsaunde.github.io/read/books/pdfs/probabilistic%20graphical%20models.pdf">Probabilistic Graphical Models</a> 책의 Chapter 3 참고 부탁드립니다)<br>
@@ -333,11 +333,11 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <blockquote class="blockquote">
 <p>◦&nbsp; 설명 :&nbsp;<br>
-&nbsp; &nbsp; - <span class="math inline">\(X\_2\)</span>가 주어지지 않은 경우 : &nbsp;<span class="math inline">\(X\_1, X\_3\)</span>는 직접 연결되어있지는 않지만, 연관성은 존재합니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp;→ <span class="math inline">\(X\_1\)</span>에서 <span class="math inline">\(X\_3\)</span>로 가는 통로가 차단되어 있지 않아, 그대로 정보가 <span class="math inline">\(X\_3\)</span>까지 흐르게 됩니다.<br>
+&nbsp; &nbsp; - <span class="math inline">\(X_2\)</span>가 주어지지 않은 경우 : &nbsp;<span class="math inline">\(X_1, X_3\)</span>는 직접 연결되어있지는 않지만, 연관성은 존재합니다.<br>
+&nbsp; &nbsp; &nbsp; &nbsp;→ <span class="math inline">\(X_1\)</span>에서 <span class="math inline">\(X_3\)</span>로 가는 통로가 차단되어 있지 않아, 그대로 정보가 <span class="math inline">\(X_3\)</span>까지 흐르게 됩니다.<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (Unblocked Path)</p>
-<p>&nbsp; &nbsp; - <span class="math inline">\(X\_2\)</span>가 주어진 경우 : &nbsp;<span class="math inline">\(X\_1, X\_3\)</span>는 조건부 독립입니다. (연관성은 사라지게 됩니다)<br>
-&nbsp; &nbsp; &nbsp; &nbsp;→ <span class="math inline">\(X\_1\)</span>에서 <span class="math inline">\(X\_3\)</span>로 가는 통로가 차단되어 있어,&nbsp; <span class="math inline">\(X\_1\)</span>에 있는 정보가 더이상 흐르지 않게 됩니다.<br>
+<p>&nbsp; &nbsp; - <span class="math inline">\(X_2\)</span>가 주어진 경우 : &nbsp;<span class="math inline">\(X_1, X_3\)</span>는 조건부 독립입니다. (연관성은 사라지게 됩니다)<br>
+&nbsp; &nbsp; &nbsp; &nbsp;→ <span class="math inline">\(X_1\)</span>에서 <span class="math inline">\(X_3\)</span>로 가는 통로가 차단되어 있어,&nbsp; <span class="math inline">\(X_1\)</span>에 있는 정보가 더이상 흐르지 않게 됩니다.<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (Blocked Path)</p>
 <p>◦&nbsp; 목표 : Causal association이외의 Non-causal association 영향을 제거 (Path 차단)<br>
 &nbsp; &nbsp; - <strong>Chains</strong> : Mediator (매개변수)를 <strong>통제</strong>&nbsp;<br>
@@ -347,11 +347,11 @@ ul.task-list li input[type="checkbox"] {
 &nbsp; &nbsp; - <strong>Chains</strong> : 위에서 이야기한 사례인 “지능 →&nbsp;성적&nbsp;→ 장학금 수여” 이라는 DAG를 생각해봅시다.<br>
 &nbsp; &nbsp; &nbsp; &nbsp;→ 만약 성적을 알고 있다면, 지능과 장학금 수여에 대한 연관성은 더이상 존재하지 않게 됩니다!<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt; 성적을 알고 있고, 그에 따라서 장학금을 수여 받게된 것이기 때문이죠 &gt;&nbsp;<br>
-&nbsp; &nbsp; - <strong>Forks</strong> : <span class="math inline">\(X\_1, X\_2, X\_3\)</span>가 연관되어 있는 Fork 형태를 선형 모형으로 이해 해봅시다!&nbsp;&nbsp;<br>
-&nbsp; &nbsp; &nbsp; &nbsp;→ <span class="math inline">\(X\_1 = X\_2 + \\epsilon\_1\)</span>. <span class="math inline">\(X\_3 = X\_2 + \\epsilon\_2\)</span>&nbsp;&nbsp;<br>
-&nbsp; &nbsp; &nbsp; &nbsp;→ <span class="math inline">\(X\_2 \\perp \\epsilon\_1, \\epsilon\_2\)</span> / <span class="math inline">\(\\epsilon\_1 \\perp \\epsilon\_2\)</span><br>
-&nbsp; &nbsp; &nbsp; &nbsp;→ <span class="math inline">\(X\_2 = x\)</span> 로 주어진다면, <span class="math inline">\(x + \\epsilon\_1 \\perp x + \\epsilon\_2\)</span><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 즉, <span class="math inline">\(X\_1\)</span>과 <span class="math inline">\(X\_3\)</span>는 조건부 독립입니다.!</p>
+&nbsp; &nbsp; - <strong>Forks</strong> : <span class="math inline">\(X_1, X_2, X_3\)</span>가 연관되어 있는 Fork 형태를 선형 모형으로 이해 해봅시다!&nbsp;&nbsp;<br>
+&nbsp; &nbsp; &nbsp; &nbsp;→ <span class="math inline">\(X_1 = X_2 + \epsilon_1\)</span>. <span class="math inline">\(X_3 = X_2 + \epsilon_2\)</span>&nbsp;&nbsp;<br>
+&nbsp; &nbsp; &nbsp; &nbsp;→ <span class="math inline">\(X_2 \perp \epsilon_1, \epsilon_2\)</span> / <span class="math inline">\(\epsilon_1 \perp \epsilon_2\)</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp;→ <span class="math inline">\(X_2 = x\)</span> 로 주어진다면, <span class="math inline">\(x + \epsilon_1 \perp x + \epsilon_2\)</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 즉, <span class="math inline">\(X_1\)</span>과 <span class="math inline">\(X_3\)</span>는 조건부 독립입니다.!</p>
 </blockquote>
 <ul>
 <li>Coliders(Immoralities) and their Descendants :&nbsp;</li>
@@ -359,22 +359,22 @@ ul.task-list li input[type="checkbox"] {
 <blockquote class="blockquote">
 <p>◦&nbsp; <strong>Immoralities</strong> vs Chains &amp; Forks :&nbsp;&nbsp;<br>
 &nbsp; &nbsp; - Immoralities는 앞에서 설명한 Chains과 Forks와 다른 구조를 가집니다.<br>
-&nbsp; &nbsp; - <span class="math inline">\(X\_1\)</span>과 <span class="math inline">\(X\_3\)</span>에 공통으로 영향받는 변수인 <span class="math inline">\(X\_2\)</span>가 주어진다면, <span class="math inline">\(X\_1\)</span>과 <span class="math inline">\(X\_3\)</span>에 <strong>연관성이 생기게 됩니다</strong>.</p>
+&nbsp; &nbsp; - <span class="math inline">\(X_1\)</span>과 <span class="math inline">\(X_3\)</span>에 공통으로 영향받는 변수인 <span class="math inline">\(X_2\)</span>가 주어진다면, <span class="math inline">\(X_1\)</span>과 <span class="math inline">\(X_3\)</span>에 <strong>연관성이 생기게 됩니다</strong>.</p>
 <p>◦&nbsp; 목표 : Causal association이외의 Non-causal association영향을 제거 (Path를 차단하지 않음)<br>
 &nbsp; &nbsp; - Immoralities : Collider를 통제하게 되면, Association이 <strong>형성되므로 통제하지 X</strong>&nbsp;</p>
 <p><img src="ex_image9.png" class="img-fluid"></p>
 <p><strong>◦&nbsp; 만약 Collider의 자손 (Descendents)이 주어졌다면, 어떻게 될까요?</strong>&nbsp;&nbsp; &nbsp;</p>
-<p><span class="math inline">\(X\_4\)</span>가 주어진 경우, <span class="math inline">\(X\_1\)</span>과 <span class="math inline">\(X\_3\)</span>는 더 이상 독립이 아니게 됩니다</p>
+<p><span class="math inline">\(X_4\)</span>가 주어진 경우, <span class="math inline">\(X_1\)</span>과 <span class="math inline">\(X_3\)</span>는 더 이상 독립이 아니게 됩니다</p>
 <p><img src="ex_image10.png" class="img-fluid"></p>
 <p>◦&nbsp; 사례 1 : 잘생긴 사람들은 무례한가요?&nbsp; &nbsp;</p>
-<p>- <span class="math inline">\(X\_2\)</span> (연애여부)를 통제하지 않았을 때 : 외모 (<span class="math inline">\(X\_1\)</span>)와 친절함 (<span class="math inline">\(X\_3\)</span>)은 독립에 가깝습니다.&nbsp; &nbsp;</p>
-<p>- <span class="math inline">\(X\_2\)</span> (연애여부)를 통제하지 했을 때 : 연애여부를 안다면 (<span class="math inline">\(X\_2\)</span>), &nbsp;연애를 하지 않는 사람들은 외모와 친절함과 음의 상관관계를 가지는 것을 확인해볼 수 있습니다…!<br>
+<p>- <span class="math inline">\(X_2\)</span> (연애여부)를 통제하지 않았을 때 : 외모 (<span class="math inline">\(X_1\)</span>)와 친절함 (<span class="math inline">\(X_3\)</span>)은 독립에 가깝습니다.&nbsp; &nbsp;</p>
+<p>- <span class="math inline">\(X_2\)</span> (연애여부)를 통제하지 했을 때 : 연애여부를 안다면 (<span class="math inline">\(X_2\)</span>), &nbsp;연애를 하지 않는 사람들은 외모와 친절함과 음의 상관관계를 가지는 것을 확인해볼 수 있습니다…!<br>
 </p>
 <p><img src="ex_image11.png" class="img-fluid"></p>
 <p>◦&nbsp; 사례 2 : 아래와 같은 Data Generating Process를 살펴봅시다.<br>
-&nbsp; &nbsp; - <span class="math inline">\(X\_1\)</span> ~ <span class="math inline">\(N(0,1)\)</span>, <span class="math inline">\(X\_2\)</span> ~ <span class="math inline">\(N(0,1)\)</span>, <span class="math inline">\(X\_2 = X\_1 + X\_3\)</span><br>
-&nbsp; &nbsp; - <span class="math inline">\(X\_2\)</span>가 조건으로 주어지지 않은 경우, 공분산은 0 (독립)<br>
-&nbsp; &nbsp; - <span class="math inline">\(X\_2\)</span>가 조건으로 주어진 경우, 공분산은 -1 (음의 상관관계)<br>
+&nbsp; &nbsp; - <span class="math inline">\(X_1\)</span> ~ <span class="math inline">\(N(0,1)\)</span>, <span class="math inline">\(X_2\)</span> ~ <span class="math inline">\(N(0,1)\)</span>, <span class="math inline">\(X_2 = X_1 + X_3\)</span><br>
+&nbsp; &nbsp; - <span class="math inline">\(X_2\)</span>가 조건으로 주어지지 않은 경우, 공분산은 0 (독립)<br>
+&nbsp; &nbsp; - <span class="math inline">\(X_2\)</span>가 조건으로 주어진 경우, 공분산은 -1 (음의 상관관계)<br>
 </p>
 <p><img src="ex_image12.png" class="img-fluid"></p>
 </blockquote>
@@ -398,7 +398,7 @@ ul.task-list li input[type="checkbox"] {
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;확률분포의 분해와 연결됩니다.</p>
 <p><img src="ex_image13.png" class="img-fluid"></p>
 <p>◦&nbsp; 예시 :&nbsp;<br>
-&nbsp; &nbsp; - <span class="math inline">\(T\)</span>와 <span class="math inline">\(Y\)</span>는 <span class="math inline">\(\\{M\_1, W\_2, X\_2\\}\)</span>가 주어진 경우, d-separated 될까요?&nbsp; &nbsp; - <span class="math inline">\(T\)</span>와 <span class="math inline">\(Y\)</span>는 <span class="math inline">\(\\{M\_1, W\_2, X\_1, X\_2\\}\)</span>가 주어진 경우, d-separated 될까요?<br>
+&nbsp; &nbsp; - <span class="math inline">\(T\)</span>와 <span class="math inline">\(Y\)</span>는 <span class="math inline">\(\{M_1, W_2, X_2\}\)</span>가 주어진 경우, d-separated 될까요?&nbsp; &nbsp; - <span class="math inline">\(T\)</span>와 <span class="math inline">\(Y\)</span>는 <span class="math inline">\(\{M_1, W_2, X_1, X_2\}\)</span>가 주어진 경우, d-separated 될까요?<br>
 &nbsp; &nbsp; &nbsp; &nbsp;→ 정답은 댓글로 달아주세요</p>
 <p><img src="ex_image14.png" class="img-fluid"></p>
 </blockquote>

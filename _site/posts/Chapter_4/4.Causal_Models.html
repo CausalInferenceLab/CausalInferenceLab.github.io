@@ -217,8 +217,9 @@ ul.task-list li input[type="checkbox"] {
 &nbsp; &nbsp; &nbsp;- 특징 : Treatment에 대한 <strong>개입 (do-operator)이 존재</strong>합니다.&nbsp;<br>
 &nbsp; &nbsp; &nbsp; &nbsp; → &nbsp;처치(<span class="math inline">\(T\)</span>)를 통해 Randomized trial실험과 같은 효과를 낼 수 있으며, 이러한 데이터를 통해 추정된 인과 효과를<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <strong>Causal Estimand</strong>라고 합니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;→&nbsp;반면, do-operator를 포함하지 않은 추정치 (Estimand)는 <strong>Statistical Estimand</strong>라고 합니다.&nbsp; &nbsp; &nbsp;- 예시 : <span class="math inline">\(P(Y|do(T=t),Z = z)\)</span>가 의미하는 것은 무엇일까요?<br>
-&nbsp; &nbsp; &nbsp; &nbsp;→ 모집단에 대해서 <span class="math inline">\(T=t\)</span>에 대한 개입을 받은 Z=z인 부분집합에 해당하는 데이터라고 할 수 있습니다.</p>
+&nbsp; &nbsp; &nbsp; &nbsp; →&nbsp;반면, do-operator를 포함하지 않은 추정치 (Estimand)는 <strong>Statistical Estimand</strong>라고 합니다.&nbsp; &nbsp; &nbsp;</p>
+<p>&nbsp; &nbsp; &nbsp;- 예시 : <span class="math inline">\(P(Y|do(T=t),Z = z)\)</span>가 의미하는 것은 무엇일까요?<br>
+&nbsp; &nbsp; &nbsp; &nbsp; → 모집단에 대해서 <span class="math inline">\(T=t\)</span>에 대한 개입을 받은 Z=z인 부분집합에 해당하는 데이터라고 할 수 있습니다.</p>
 <p><img src="ex_image3.png" class="img-fluid"></p>
 <ul>
 <li><strong>Identifiability</strong> :</li>
@@ -246,9 +247,8 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <blockquote class="blockquote">
 <p>◦&nbsp;&nbsp;의미 : 어떤 노드에 개입(Intervention)하게 되면, <strong>개입으로 인한 변화가 local</strong>하다는 것입니다.<br>
-◦&nbsp;&nbsp;효과 : 즉, 개입한 노드 <span class="math inline">\(X\_i\)</span>에 대해서 부모 노드 <span class="math inline">\(pa\_i\)</span>가 미치는 영향만 변하고,<br>
-&nbsp; &nbsp; &nbsp;나머지 노드에서 주는 영향은 유지가 된다라는 것입니다.<br>
-◦&nbsp; 예시 : 아래 그림에서, 해당 가정에 따르면 원 안에 있는 <span class="math inline">\(X\_i\)</span>의 부모 노드(<span class="math inline">\(pa\_i\)</span>)가 미치는 영향만 변화하고,<br>
+◦&nbsp;&nbsp;효과 : 즉, 개입한 노드 <span class="math inline">\(X_i\)</span>에 대해서 부모 노드 <span class="math inline">\(pa_i\)</span>가 미치는 영향만 변하고, 나머지 노드에서 주는 영향은 유지가 된다라는 것입니다.<br>
+◦&nbsp; 예시 : 아래 그림에서, 해당 가정에 따르면 원 안에 있는 <span class="math inline">\(X_i\)</span>의 부모 노드(<span class="math inline">\(pa_i\)</span>)가 미치는 영향만 변화하고,<br>
 &nbsp; &nbsp; &nbsp;나머지는 영향은 유지 됩니다.</p>
 <p><img src="ex_image7.png" class="img-fluid"></p>
 </blockquote>
@@ -259,21 +259,21 @@ ul.task-list li input[type="checkbox"] {
 <p>◦ 정의 :&nbsp;</p>
 <hr>
 <p>&nbsp; &nbsp;어떤 Graph 상 n개의 노드가 존재하고, 그 중 개입(intervention)을 한 노드의 인덱스 집합을 S라고 한다면,<br>
-&nbsp; &nbsp; 1. 노드 i가 개입되지 않은 경우 (<span class="math inline">\(i∉S\)</span>) 노드 i (<span class="math inline">\(X\_i\)</span>)의 부모 노드(<span class="math inline">\(pa\_i\)</span>)가 노드 <span class="math inline">\(i\)</span>에 미치는 영향은 그대로 유지<br>
-&nbsp; &nbsp; 2. 노드 i가 개입되었다면 (<span class="math inline">\(i∈S\)</span>), <span class="math inline">\(x\_i\)</span>값으로 개입한 경우 <span class="math inline">\(P(x\_i|pa\_i)\)</span> = 1,<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="math inline">\(x\_i\)</span>값으로 개입하지 않은 경우 <span class="math inline">\(P(x\_i|pa\_i)\)</span> = 0</p>
+&nbsp; &nbsp; 1. 노드 i가 개입되지 않은 경우 (<span class="math inline">\(i∉S\)</span>) 노드 i (<span class="math inline">\(X_i\)</span>)의 부모 노드(<span class="math inline">\(pa_i\)</span>)가 노드 <span class="math inline">\(i\)</span>에 미치는 영향은 그대로 유지<br>
+&nbsp; &nbsp; 2. 노드 i가 개입되었다면 (<span class="math inline">\(i∈S\)</span>), <span class="math inline">\(x_i\)</span>값으로 개입한 경우 <span class="math inline">\(P(x_i|pa_i)\)</span> = 1,<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="math inline">\(x_i\)</span>값으로 개입하지 않은 경우 <span class="math inline">\(P(x_i|pa_i)\)</span> = 0</p>
 <p>&nbsp; &nbsp; &nbsp;* [n] = 1,2,3,4…,n 이며 각 숫자는 노드의 index를 의미<br>
-&nbsp; &nbsp; &nbsp; &nbsp; <span class="math inline">\(X\_i\)</span>: Index가 i인 노드를 의미, <span class="math inline">\(x\_i\)</span> : 값(scalar)을 의미</p>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="math inline">\(X_i\)</span>: Index가 i인 노드를 의미, <span class="math inline">\(x_i\)</span> : 값(scalar)을 의미</p>
 <hr>
 <p>◦ Assumption violation : 그러면, Modularity 가정이 위배된다는 것은 어떤 의미일까요?</p>
 <p>&nbsp; &nbsp; &nbsp;- 노드 <span class="math inline">\(T\)</span> 에 대한 개입(intervention)이 <span class="math inline">\(T\)</span>의 부모 노드에 대한 영향력에 변화를 줄 뿐만 아니라, &nbsp;<br>
-&nbsp; &nbsp; &nbsp; &nbsp;<span class="math inline">\(T\_2\)</span>의 부모 노드에 대해&nbsp;변화를 주었을 때, “Intervention이 local이 아니다”라고 합니다.</p>
+&nbsp; &nbsp; &nbsp; &nbsp;<span class="math inline">\(T_2\)</span>의 부모 노드에 대해&nbsp;변화를 주었을 때, “Intervention이 local이 아니다”라고 합니다.</p>
 <p><img src="ex_image8.png" class="img-fluid"></p>
 <p>◦ 예시&nbsp;:&nbsp;<br>
 &nbsp; &nbsp; (a) 개입이 없는 Observational distribution<br>
 &nbsp; &nbsp;&nbsp;(b) <span class="math inline">\(T\)</span>에 개입 : <span class="math inline">\(T\)</span>의 부모 노드에서 오는 영향만 사라지고, 나머지는 유지됩니다.<br>
-&nbsp; &nbsp;&nbsp;(c) <span class="math inline">\(T\_2\)</span>에 개입 : <span class="math inline">\(T\_2\)</span>의 부모 노드에서 오는 영향이 사라지고, 나머지는 유지됩니다.<br>
-&nbsp; &nbsp; &nbsp;→ <span class="math inline">\(P(Y)\)</span>, <span class="math inline">\(P(Y|do(T=t))\)</span>, <span class="math inline">\(P(Y|do(T\_2=t\_2))\)</span>는 서로 연관되지 않은 완전히 다른 분포가 됩니다.<br>
+&nbsp; &nbsp;&nbsp;(c) <span class="math inline">\(T_2\)</span>에 개입 : <span class="math inline">\(T_2\)</span>의 부모 노드에서 오는 영향이 사라지고, 나머지는 유지됩니다.<br>
+&nbsp; &nbsp; &nbsp;→ <span class="math inline">\(P(Y)\)</span>, <span class="math inline">\(P(Y|do(T=t))\)</span>, <span class="math inline">\(P(Y|do(T_2=t_2))\)</span>는 서로 연관되지 않은 완전히 다른 분포가 됩니다.<br>
 &nbsp; &nbsp; &nbsp;→ (b), (c) 처럼 edge가 제거된 그래프를 <strong>Manipulated graph</strong>라고 해요!</p>
 <p><br>
 <img src="ex_image9.png" class="img-fluid"></p>
@@ -292,12 +292,13 @@ ul.task-list li input[type="checkbox"] {
 &nbsp; &nbsp; &nbsp; &nbsp; - Markov assumption : 모든 노드는 오직 부모 노드로부터 영향을 받습니다.</p>
 <p>&nbsp; &nbsp; 2. Modularity assumption 적용<br>
 &nbsp; &nbsp; &nbsp; &nbsp;여기서 개입(intervention)을 한 노드의 인덱스 집합을 S라고 한다면, <span class="math inline">\(i∈S\)</span> 인 노드들에 대해서는,<br>
-&nbsp; &nbsp; &nbsp; &nbsp;<span class="math inline">\(P(x\_i|pa\_i)\)</span> = 1이기 때문에, bayesian network factorization 계산 과정에서 생략이 가능합니다.</p>
-<p>&nbsp; &nbsp; &nbsp; → &nbsp;따라서 <span class="math inline">\(i∉S\)</span>인 노드들에 대해서만 <span class="math inline">\(P(x\_i|pa\_i)\)</span>를 계산하면 되며, bayesian network factorization<br>
+&nbsp; &nbsp; &nbsp; &nbsp;<span class="math inline">\(P(x_i|pa_i)\)</span> = 1이기 때문에, bayesian network factorization 계산 과정에서 생략이 가능합니다.</p>
+<p>&nbsp; &nbsp; &nbsp; → &nbsp;따라서 <span class="math inline">\(i∉S\)</span>인 노드들에 대해서만 <span class="math inline">\(P(x_i|pa_i)\)</span>를 계산하면 되며, bayesian network factorization<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;식에서 아래와 같은 식을 도출할 수 있습니다.</p>
 <p>&nbsp;<br>
 <img src="ex_image11.png" class="img-fluid"></p>
-<p>◦ 예시 : <span class="math inline">\(P(y|do(t))\)</span>를 Identify 해봅시다.&nbsp; &nbsp; → Treatment <span class="math inline">\(T\)</span>에 영향을 미치는 부분이, 제거 (Trucated) 됩니다.</p>
+<p>◦ 예시 : <span class="math inline">\(P(y|do(t))\)</span>를 Identify 해봅시다.</p>
+<p>→ Treatment <span class="math inline">\(T\)</span>에 영향을 미치는 부분이, 제거 (Trucated) 됩니다.</p>
 <p><img src="ex_image12.png" class="img-fluid"></p>
 </blockquote>
 </section>
@@ -328,20 +329,22 @@ Casual effect를 구할 수 있다고 했습니다.</li>
 <li>Backdoor Criterion :</li>
 </ul>
 <blockquote class="blockquote">
-<p>◦ 정의 : $T → Y $간의 Causal association을 제외한 모든 Backdoor paths를 막을 수 있는 변수들의 집합 <span class="math inline">\(W\)</span><br>
+<p>◦ 정의 : <span class="math inline">\(T → Y\)</span>간의 Causal association을 제외한 모든 Backdoor paths를 막을 수 있는 변수들의 집합 <span class="math inline">\(W\)</span><br>
 ◦ 조건 :<br>
 &nbsp; &nbsp;1. 집합 W는 T에서 Y로 가는 모든 Backdoor paths를 block<br>
 &nbsp; &nbsp;2. 집합 W는 T의 어느 자손도 포함하지 말아야 함</p>
 <p>◦ Sufficient adjustment set : Modularity 가정이 주어졌을 때, 변수들의 집합 <span class="math inline">\(W\)</span>가 Backddor Criterion을<br>
 &nbsp; &nbsp; 만족한다면, <span class="math inline">\(W\)</span>를 Sufficient adjustment set이라고 합니다.</p>
 <p>◦ 의미 : <span class="math inline">\(W\)</span>가 Backdoor Criterion을 만족하게 되면, <span class="math inline">\(T\)</span>에 대한 <span class="math inline">\(Y\)</span>의 <strong>Causal Effect</strong>를 <strong>Identify 할 수 있어요!</strong></p>
-<p>◦ 예시&nbsp;:&nbsp;&nbsp; &nbsp; 1. &nbsp;만약 confounder가 있다면, <strong>confounder를 통제를 해야</strong> backdoor path를 막을 수 있습니다.&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;이러한 confounder의 집합이 backdoor criterion을 만족하는 집합이라고 볼 수 있겠죠.&nbsp;</p>
-<p>&nbsp; &nbsp; 2.&nbsp;<strong>반면에 collider는 통제하면 안됩니다.</strong>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; 따라서 이러한 collider는 backdoor criterion을 만족하는 집합이라고 볼 수 없습니다.</p>
+<p>◦ 예시&nbsp;:&nbsp;&nbsp; &nbsp;</p>
+<p>1. &nbsp;만약 confounder가 있다면, <strong>confounder를 통제를 해야</strong> backdoor path를 막을 수 있습니다. 이러한 confounder의 집합이 backdoor criterion을 만족하는 집합이라고 볼 수 있겠죠.&nbsp;</p>
+<p>2.&nbsp;<strong>반면에 collider는 통제하면 안됩니다.</strong> 따라서 이러한 collider는 backdoor criterion을 만족하는 집합이라고 볼 수 없습니다.</p>
 <p>&nbsp; &nbsp; &nbsp;→&nbsp;즉, 우리가 해야하는 것은 backdoor criterion을 만족하는 모든 집합을 통제해야해요!</p>
 <p>◦ 증명 : 그렇다면 정말 Backdoor adjustment를 통해 Doing(개입)의 효과를 얻을 수 있을까요?<br>
 &nbsp; &nbsp; 1. &nbsp;<span class="math inline">\(P(Y|do(t),W)=P(Y|T,W)\)</span>&nbsp; &lt; line 1 to line 2 &gt;<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Backdoor criterion 1번 조건에 의해 <span class="math inline">\(W\)</span>는 모든 backdoor paths를 차단합니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; → 따라서, <span class="math inline">\(T\)</span>로 들어오는 edge의 영향이 제거 됩니다!&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - 좌변 : <span class="math inline">\(do(t)\)</span>의 modularity assumption에 의해 <span class="math inline">\(T\)</span>에 들어오는 edge의 영향이 제거<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; → 따라서, <span class="math inline">\(T\)</span>로 들어오는 edge의 영향이 제거 됩니다!</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - 좌변 : <span class="math inline">\(do(t)\)</span>의 modularity assumption에 의해 <span class="math inline">\(T\)</span>에 들어오는 edge의 영향이 제거<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -&nbsp;우변 : <span class="math inline">\(W\)</span>를 condition함으로써, <span class="math inline">\(T\)</span>로 들어오는 edge의 영향을 제거</p>
 <p>&nbsp; &nbsp; 2.&nbsp;&nbsp;<span class="math inline">\(P(W|do(t)) = P(W)\)</span> &lt; line 2 to line 3 &gt;<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - <span class="math inline">\(T=t\)</span> 라고 통제를 했으므로, <span class="math inline">\(W\)</span>→<span class="math inline">\(T\)</span> 관계가 사라집니다. (독립)<br>
@@ -355,14 +358,14 @@ Casual effect를 구할 수 있다고 했습니다.</li>
 <blockquote class="blockquote">
 <p>1. Backdoor criterion &lt; 왼쪽 그림 &gt;<br>
 &nbsp; &nbsp; &nbsp;-&nbsp;조건 1. 집합 <span class="math inline">\(W\)</span>는 <span class="math inline">\(T\)</span>에서 <span class="math inline">\(Y\)</span>로 가는 모든 backdoor paths를 막아야합니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;열려 있는 Backdoor path는 <span class="math inline">\(W\_2\)</span> or <span class="math inline">\(W\_1\)</span>→ Blocked<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;열려 있는 Backdoor path는 <span class="math inline">\(W_2\)</span> or <span class="math inline">\(W_1\)</span>→ Blocked<br>
 &nbsp; &nbsp; &nbsp;-&nbsp;조건 2. 집합 <span class="math inline">\(W\)</span>는 <span class="math inline">\(T\)</span>의 어느 자손도 포함하지 말아야 합니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="math inline">\(T\)</span>의 자손인 <span class="math inline">\(X\_2\)</span>가 막혀 있습니다. → Unblocked</p>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="math inline">\(T\)</span>의 자손인 <span class="math inline">\(X_2\)</span>가 막혀 있습니다. → Unblocked</p>
 <p>2. &nbsp;Backdoor adjustment 처리 된 그래프 <span class="math inline">\(G\)</span> &lt; 가운데 그림 &gt;<br>
-&nbsp; &nbsp; &nbsp;-&nbsp;그리고 단 하나의 Association도 존재하지 않는 조건부 독립을 의미하는 D-separated는 <span class="math inline">\(T\)</span>→<span class="math inline">\(M\_1\)</span>으로 가는<br>
+&nbsp; &nbsp; &nbsp;-&nbsp;그리고 단 하나의 Association도 존재하지 않는 조건부 독립을 의미하는 D-separated는 <span class="math inline">\(T\)</span>→<span class="math inline">\(M_1\)</span>으로 가는<br>
 &nbsp; &nbsp; &nbsp; &nbsp;edge를 제거하게 됩니다.</p>
 <p>3. D-separation &lt; 오른쪽 그림 &gt;<br>
-&nbsp; &nbsp; &nbsp;-&nbsp;이렇게 하여 생성된 그래프를 아래 그림과 같이 <span class="math inline">\(G\_{\\bar{T}}\)</span>로 표현하고, <span class="math inline">\(W\)</span> 컨디션 아래에서 <span class="math inline">\(Y\)</span>와 <span class="math inline">\(T\)</span>는<br>
+&nbsp; &nbsp; &nbsp;-&nbsp;이렇게 하여 생성된 그래프를 아래 그림과 같이 <span class="math inline">\(G_{\bar{T}}\)</span>로 표현하고, <span class="math inline">\(W\)</span> 컨디션 아래에서 <span class="math inline">\(Y\)</span>와 <span class="math inline">\(T\)</span>는<br>
 &nbsp; &nbsp; &nbsp; &nbsp;d-separated 되었다고 표현합니다.</p>
 <p><img src="ex_image15.png" class="img-fluid"></p>
 </blockquote>
@@ -385,10 +388,10 @@ Casual effect를 구할 수 있다고 했습니다.</li>
 <p>◦&nbsp;정의 : Structural causal models은 다음 3개의 집합에 대한 튜플(Tuple)입니다.</p>
 <p>&nbsp; &nbsp; 1.&nbsp;&nbsp;U : 외생(exogenous) 변수, 모델 밖에서 그 값이 결정되는 변수들의 집합<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;- 부모 노드가 없는 변수로 이 노드의 causes를 모델링 할 필요가 없습니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;- 아래 그림에서는 변수 <span class="math inline">\(U\_B, U\_C, U\_D\)</span>에 해당합니다.<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;- 아래 그림에서는 변수 <span class="math inline">\(U_B, U_C, U_D\)</span>에 해당합니다.<br>
 &nbsp; &nbsp; 2.&nbsp;&nbsp;V : 내생(endogenous) 변수, 모델 내에서 다른 변수들에 의해 설명되는 집합<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;- 부모노드가 존재하는 변수로 모델링 하고자하는 structural equation의 변수<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;- 아래 그림에서는 변수&nbsp; $ B, C, D$에 해당합니다.</p>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;- 아래 그림에서는 변수&nbsp; <span class="math inline">\(B, C, D\)</span>에 해당합니다.</p>
 <p>&nbsp; &nbsp; 3.&nbsp;&nbsp;f : 모델 내 다른 변수들에 따라 V에 속한 변수들의 값을 결정하는 함수 집합</p>
 <p><img src="ex_image17.png" class="img-fluid"></p>
 <p>◦&nbsp;Structural Causal Model (SCM)를 쓰는 이유가 무엇일까요?</p>
@@ -402,19 +405,20 @@ Casual effect를 구할 수 있다고 했습니다.</li>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;- 그래프 기반으로 인과관계를 분석하는 건 간단하지만 이런 그래프가 복잡해지면 직관적인 이해만으론 한계가<br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;존재합니다. 그렇기 때문에, 그래프 기반의 인과관계 분석을 수학적인 언어를 통해 보다 체계화 할 수 있어요.</p>
 <p>◦&nbsp;예시 : 아래 그래프를 SCM 구조로 표현해봅시다.<br>
-&nbsp; &nbsp; -&nbsp;<span class="math inline">\(U=\)</span> {<span class="math inline">\(X\)</span>}, <span class="math inline">\(V=\)</span> {<span class="math inline">\(T,Y\)</span>}, <span class="math inline">\(F=\)</span> {<span class="math inline">\(f\_T,f\_Y\)</span>}&nbsp; &nbsp; -&nbsp;<span class="math inline">\(f\_T:=\\alpha\_1X\)</span><br>
-&nbsp; &nbsp; -&nbsp;<span class="math inline">\(f\_Y:=\\beta T+\\alpha\_2X\)</span><br>
+&nbsp; &nbsp; -&nbsp;<span class="math inline">\(U=\)</span> {<span class="math inline">\(X\)</span>}, <span class="math inline">\(V=\)</span> {<span class="math inline">\(T,Y\)</span>}, <span class="math inline">\(F=\)</span> {<span class="math inline">\(f_T,f_Y\)</span>}</p>
+<p>&nbsp; &nbsp; -&nbsp;<span class="math inline">\(f_T:=\alpha_1X\)</span><br>
+&nbsp; &nbsp; -&nbsp;<span class="math inline">\(f_Y:=\beta T+\alpha_2X\)</span><br>
 <img src="ex_image18.png" class="img-fluid"></p>
 </blockquote>
 <ul>
-<li>&nbsp;SCMs에서의 Intervention : Modularity assumption에 의해 SCM(M)과 Interventional SCM(<span class="math inline">\(M\_t\)</span>)에는 <span class="math inline">\(M\_t\)</span>에서 개입이 일어나는 변수 <span class="math inline">\(T\)</span>에 대한 구조방정식이 T:=t로 대체되는 것 외, 개입이 일어나지 않는 다른 변수에 대한 구조 방정식은 동일합니다.</li>
+<li>&nbsp;SCMs에서의 Intervention : Modularity assumption에 의해 SCM(M)과 Interventional SCM(<span class="math inline">\(M_t\)</span>)에는 <span class="math inline">\(M_t\)</span>에서 개입이 일어나는 변수 <span class="math inline">\(T\)</span>에 대한 구조방정식이 T:=t로 대체되는 것 외, 개입이 일어나지 않는 다른 변수에 대한 구조 방정식은 동일합니다.</li>
 </ul>
 <p><img src="ex_image19.png" class="img-fluid"></p>
 <ul>
 <li>The Law of Counterfactuals (and Interventions)</li>
 </ul>
 <blockquote class="blockquote">
-<p>◦ 정의 : &nbsp;<span class="math inline">\(Y\_t(u) = Y\_{M\_t}(u)\)</span><br>
+<p>◦ 정의 : &nbsp;<span class="math inline">\(Y_t(u) = Y_{M_t}(u)\)</span><br>
 ◦ 의미 : SCM에 대한 충분한 정보가 있는 경우, 실질적으로 Counterfactuals을 계산 할 수 있다는 Principle입니다.<br>
 ◦ 의의 : Chapter 2에서 이야기한 인과추론의 근본적인 문제이기 때문입니다.&nbsp;<br>
 &nbsp; &nbsp; 해당 내용은 Chapter 14에서 더 세부적으로 다룰 예정이에요.</p>
@@ -432,7 +436,7 @@ Casual effect를 구할 수 있다고 했습니다.</li>
 <p><img src="ex_image20.png" class="img-fluid"></p>
 <ol start="2" type="1">
 <li><p>새로운 형태의 Association이 생기기 때문입니다 : new post-treatment association<br>
-&nbsp; &nbsp; ◦오른쪽 그림 : <span class="math inline">\(M\)</span>에서 관측되지 않은 외생변수 <span class="math inline">\(U\_M\)</span>과 <span class="math inline">\(T\)</span>, <span class="math inline">\(M\)</span>사이엔 collider가 있다고 볼 수 있어요.<br>
+&nbsp; &nbsp; ◦오른쪽 그림 : <span class="math inline">\(M\)</span>에서 관측되지 않은 외생변수 <span class="math inline">\(U_M\)</span>과 <span class="math inline">\(T\)</span>, <span class="math inline">\(M\)</span>사이엔 collider가 있다고 볼 수 있어요.<br>
 &nbsp; &nbsp; &nbsp; &nbsp;→&nbsp;collider의 자식 노드인 <span class="math inline">\(Z\)</span>를 condition하면, 새로운 post-treatment association이 발생할 수 있습니다!<br>
 &nbsp;<br>
 <img src="ex_image21.png" class="img-fluid"></p></li>
