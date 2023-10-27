@@ -54,8 +54,10 @@ categories: [chapter4]
 >      - 특징 : Treatment에 대한 **개입 (do-operator)이 존재**합니다. \
 >         →  처치($T$)를 통해 Randomized trial실험과 같은 효과를 낼 수 있으며, 이러한 데이터를 통해 추정된 인과 효과를\
 >               **Causal Estimand**라고 합니다.\
->          → 반면, do-operator를 포함하지 않은 추정치 (Estimand)는 **Statistical Estimand**라고 합니다.     - 예시 : $P(Y|do(T=t),Z = z)$가 의미하는 것은 무엇일까요?\
->        → 모집단에 대해서 $T=t$에 대한 개입을 받은 Z=z인 부분집합에 해당하는 데이터라고 할 수 있습니다.
+>         → 반면, do-operator를 포함하지 않은 추정치 (Estimand)는 **Statistical Estimand**라고 합니다.     
+>
+>      - 예시 : $P(Y|do(T=t),Z = z)$가 의미하는 것은 무엇일까요?\
+>         → 모집단에 대해서 $T=t$에 대한 개입을 받은 Z=z인 부분집합에 해당하는 데이터라고 할 수 있습니다.
 >
 > ![](ex_image3.png)
 >
@@ -90,9 +92,8 @@ Do-operator를 적용하면, X에 영향을 주는 C→ X 사이의 연결고리
 -   그러면, Interventions are local이 무엇일까요?
 
 > ◦  의미 : 어떤 노드에 개입(Intervention)하게 되면, **개입으로 인한 변화가 local**하다는 것입니다.\
-> ◦  효과 : 즉, 개입한 노드 $X\_i$에 대해서 부모 노드 $pa\_i$가 미치는 영향만 변하고,\
->      나머지 노드에서 주는 영향은 유지가 된다라는 것입니다.\
-> ◦  예시 : 아래 그림에서, 해당 가정에 따르면 원 안에 있는 $X\_i$의 부모 노드($pa\_i$)가 미치는 영향만 변화하고,\
+> ◦  효과 : 즉, 개입한 노드 $X_i$에 대해서 부모 노드 $pa_i$가 미치는 영향만 변하고, 나머지 노드에서 주는 영향은 유지가 된다라는 것입니다.\
+> ◦  예시 : 아래 그림에서, 해당 가정에 따르면 원 안에 있는 $X_i$의 부모 노드($pa_i$)가 미치는 영향만 변화하고,\
 >      나머지는 영향은 유지 됩니다.
 >
 > ![](ex_image7.png)
@@ -104,27 +105,27 @@ Do-operator를 적용하면, X에 영향을 주는 C→ X 사이의 연결고리
 > ------------------------------------------------------------------------
 >
 >    어떤 Graph 상 n개의 노드가 존재하고, 그 중 개입(intervention)을 한 노드의 인덱스 집합을 S라고 한다면,\
->     1. 노드 i가 개입되지 않은 경우 ($i∉S$) 노드 i ($X\_i$)의 부모 노드($pa\_i$)가 노드 $i$에 미치는 영향은 그대로 유지\
->     2. 노드 i가 개입되었다면 ($i∈S$), $x\_i$값으로 개입한 경우 $P(x\_i|pa\_i)$ = 1,\
->                                                           $x\_i$값으로 개입하지 않은 경우 $P(x\_i|pa\_i)$ = 0
+>     1. 노드 i가 개입되지 않은 경우 ($i∉S$) 노드 i ($X_i$)의 부모 노드($pa_i$)가 노드 $i$에 미치는 영향은 그대로 유지\
+>     2. 노드 i가 개입되었다면 ($i∈S$), $x_i$값으로 개입한 경우 $P(x_i|pa_i)$ = 1,\
+>                                                           $x_i$값으로 개입하지 않은 경우 $P(x_i|pa_i)$ = 0
 >
 >      \* \[n\] = 1,2,3,4...,n 이며 각 숫자는 노드의 index를 의미\
->         $X\_i$: Index가 i인 노드를 의미, $x\_i$ : 값(scalar)을 의미
+>         $X_i$: Index가 i인 노드를 의미, $x_i$ : 값(scalar)을 의미
 >
 > ------------------------------------------------------------------------
 >
 > ◦ Assumption violation : 그러면, Modularity 가정이 위배된다는 것은 어떤 의미일까요?
 >
 >      - 노드 $T$ 에 대한 개입(intervention)이 $T$의 부모 노드에 대한 영향력에 변화를 줄 뿐만 아니라,  \
->        $T\_2$의 부모 노드에 대해 변화를 주었을 때, "Intervention이 local이 아니다"라고 합니다.
+>        $T_2$의 부모 노드에 대해 변화를 주었을 때, "Intervention이 local이 아니다"라고 합니다.
 >
 > ![](ex_image8.png)
 >
 > ◦ 예시 : \
 >     (a) 개입이 없는 Observational distribution\
 >     (b) $T$에 개입 : $T$의 부모 노드에서 오는 영향만 사라지고, 나머지는 유지됩니다.\
->     (c) $T\_2$에 개입 : $T\_2$의 부모 노드에서 오는 영향이 사라지고, 나머지는 유지됩니다.\
->      → $P(Y)$, $P(Y|do(T=t))$, $P(Y|do(T\_2=t\_2))$는 서로 연관되지 않은 완전히 다른 분포가 됩니다.\
+>     (c) $T_2$에 개입 : $T_2$의 부모 노드에서 오는 영향이 사라지고, 나머지는 유지됩니다.\
+>      → $P(Y)$, $P(Y|do(T=t))$, $P(Y|do(T_2=t_2))$는 서로 연관되지 않은 완전히 다른 분포가 됩니다.\
 >      → (b), (c) 처럼 edge가 제거된 그래프를 **Manipulated graph**라고 해요!
 >
 > \
@@ -146,15 +147,17 @@ Do-operator를 적용하면, X에 영향을 주는 C→ X 사이의 연결고리
 >
 >     2. Modularity assumption 적용\
 >        여기서 개입(intervention)을 한 노드의 인덱스 집합을 S라고 한다면, $i∈S$ 인 노드들에 대해서는,\
->        $P(x\_i|pa\_i)$ = 1이기 때문에, bayesian network factorization 계산 과정에서 생략이 가능합니다.
+>        $P(x_i|pa_i)$ = 1이기 때문에, bayesian network factorization 계산 과정에서 생략이 가능합니다.
 >
->       →  따라서 $i∉S$인 노드들에 대해서만 $P(x\_i|pa\_i)$를 계산하면 되며, bayesian network factorization\
+>       →  따라서 $i∉S$인 노드들에 대해서만 $P(x_i|pa_i)$를 계산하면 되며, bayesian network factorization\
 >            식에서 아래와 같은 식을 도출할 수 있습니다.
 >
 >  \
 > ![](ex_image11.png)
 >
-> ◦ 예시 : $P(y|do(t))$를 Identify 해봅시다.    → Treatment $T$에 영향을 미치는 부분이, 제거 (Trucated) 됩니다.
+> ◦ 예시 : $P(y|do(t))$를 Identify 해봅시다.
+>
+> → Treatment $T$에 영향을 미치는 부분이, 제거 (Trucated) 됩니다.
 >
 > ![](ex_image12.png)
 
@@ -180,7 +183,7 @@ Do-operator를 적용하면, X에 영향을 주는 C→ X 사이의 연결고리
 
 -   Backdoor Criterion :
 
-> ◦ 정의 : \$T → Y \$간의 Causal association을 제외한 모든 Backdoor paths를 막을 수 있는 변수들의 집합 $W$\
+> ◦ 정의 : $T → Y$간의 Causal association을 제외한 모든 Backdoor paths를 막을 수 있는 변수들의 집합 $W$\
 > ◦ 조건 :\
 >    1. 집합 W는 T에서 Y로 가는 모든 Backdoor paths를 block\
 >    2. 집합 W는 T의 어느 자손도 포함하지 말아야 함
@@ -190,16 +193,20 @@ Do-operator를 적용하면, X에 영향을 주는 C→ X 사이의 연결고리
 >
 > ◦ 의미 : $W$가 Backdoor Criterion을 만족하게 되면, $T$에 대한 $Y$의 **Causal Effect**를 **Identify 할 수 있어요!**
 >
-> ◦ 예시 :     1.  만약 confounder가 있다면, **confounder를 통제를 해야** backdoor path를 막을 수 있습니다.         이러한 confounder의 집합이 backdoor criterion을 만족하는 집합이라고 볼 수 있겠죠. 
+> ◦ 예시 :    
 >
->     2. **반면에 collider는 통제하면 안됩니다.**         따라서 이러한 collider는 backdoor criterion을 만족하는 집합이라고 볼 수 없습니다.
+> 1\.  만약 confounder가 있다면, **confounder를 통제를 해야** backdoor path를 막을 수 있습니다. 이러한 confounder의 집합이 backdoor criterion을 만족하는 집합이라고 볼 수 있겠죠. 
+>
+> 2. **반면에 collider는 통제하면 안됩니다.** 따라서 이러한 collider는 backdoor criterion을 만족하는 집합이라고 볼 수 없습니다.
 >
 >      → 즉, 우리가 해야하는 것은 backdoor criterion을 만족하는 모든 집합을 통제해야해요!
 >
 > ◦ 증명 : 그렇다면 정말 Backdoor adjustment를 통해 Doing(개입)의 효과를 얻을 수 있을까요?\
 >     1.  $P(Y|do(t),W)=P(Y|T,W)$  \< line 1 to line 2 \>\
 >           - Backdoor criterion 1번 조건에 의해 $W$는 모든 backdoor paths를 차단합니다.\
->           → 따라서, $T$로 들어오는 edge의 영향이 제거 됩니다!          - 좌변 : $do(t)$의 modularity assumption에 의해 $T$에 들어오는 edge의 영향이 제거\
+>           → 따라서, $T$로 들어오는 edge의 영향이 제거 됩니다!
+>
+>           - 좌변 : $do(t)$의 modularity assumption에 의해 $T$에 들어오는 edge의 영향이 제거\
 >           - 우변 : $W$를 condition함으로써, $T$로 들어오는 edge의 영향을 제거
 >
 >     2.  $P(W|do(t)) = P(W)$ \< line 2 to line 3 \>\
@@ -213,16 +220,16 @@ Do-operator를 적용하면, X에 영향을 주는 C→ X 사이의 연결고리
 
 > 1\. Backdoor criterion \< 왼쪽 그림 \>\
 >      - 조건 1. 집합 $W$는 $T$에서 $Y$로 가는 모든 backdoor paths를 막아야합니다.\
->                    열려 있는 Backdoor path는 $W\_2$ or $W\_1$→ Blocked\
+>                    열려 있는 Backdoor path는 $W_2$ or $W_1$→ Blocked\
 >      - 조건 2. 집합 $W$는 $T$의 어느 자손도 포함하지 말아야 합니다.\
->                    $T$의 자손인 $X\_2$가 막혀 있습니다. → Unblocked
+>                    $T$의 자손인 $X_2$가 막혀 있습니다. → Unblocked
 >
 > 2\.  Backdoor adjustment 처리 된 그래프 $G$ \< 가운데 그림 \>\
->      - 그리고 단 하나의 Association도 존재하지 않는 조건부 독립을 의미하는 D-separated는 $T$→$M\_1$으로 가는\
+>      - 그리고 단 하나의 Association도 존재하지 않는 조건부 독립을 의미하는 D-separated는 $T$→$M_1$으로 가는\
 >        edge를 제거하게 됩니다.
 >
 > 3\. D-separation \< 오른쪽 그림 \>\
->      - 이렇게 하여 생성된 그래프를 아래 그림과 같이 $G\_{\\bar{T}}$로 표현하고, $W$ 컨디션 아래에서 $Y$와 $T$는\
+>      - 이렇게 하여 생성된 그래프를 아래 그림과 같이 $G_{\bar{T}}$로 표현하고, $W$ 컨디션 아래에서 $Y$와 $T$는\
 >        d-separated 되었다고 표현합니다.
 >
 > ![](ex_image15.png)
@@ -244,10 +251,10 @@ Do-operator를 적용하면, X에 영향을 주는 C→ X 사이의 연결고리
 >
 >     1.  U : 외생(exogenous) 변수, 모델 밖에서 그 값이 결정되는 변수들의 집합\
 >          - 부모 노드가 없는 변수로 이 노드의 causes를 모델링 할 필요가 없습니다.\
->          - 아래 그림에서는 변수 $U\_B, U\_C, U\_D$에 해당합니다.\
+>          - 아래 그림에서는 변수 $U_B, U_C, U_D$에 해당합니다.\
 >     2.  V : 내생(endogenous) 변수, 모델 내에서 다른 변수들에 의해 설명되는 집합\
 >          - 부모노드가 존재하는 변수로 모델링 하고자하는 structural equation의 변수\
->          - 아래 그림에서는 변수  \$ B, C, D\$에 해당합니다.
+>          - 아래 그림에서는 변수  $B, C, D$에 해당합니다.
 >
 >     3.  f : 모델 내 다른 변수들에 따라 V에 속한 변수들의 값을 결정하는 함수 집합
 >
@@ -267,18 +274,24 @@ Do-operator를 적용하면, X에 영향을 주는 C→ X 사이의 연결고리
 >          - 그래프 기반으로 인과관계를 분석하는 건 간단하지만 이런 그래프가 복잡해지면 직관적인 이해만으론 한계가\
 >            존재합니다. 그렇기 때문에, 그래프 기반의 인과관계 분석을 수학적인 언어를 통해 보다 체계화 할 수 있어요.
 >
-> ◦ 예시 : 아래 그래프를 SCM 구조로 표현해봅시다.\
->     - $U=$ {$X$}, $V=$ {$T,Y$}, $F=$ {$f\_T,f\_Y$}    - $f\_T:=\\alpha\_1X$\
->     - $f\_Y:=\\beta T+\\alpha\_2X$\
-> ![](ex_image18.png)
+> ◦ 예시 : 아래 그래프를 SCM 구조로 표현해봅시다.
+>
+> -   $U=$ {$X$}, $V=$ {$T,Y$}, $F=$ {$f_T,f_Y$}
+>
+> -   $f_T:=\alpha_1X$
+>
+> -   $f_Y:=\beta T+\alpha_2X$
+>
+>     \
+>     ![](ex_image18.png)
 
--    SCMs에서의 Intervention : Modularity assumption에 의해 SCM(M)과 Interventional SCM($M\_t$)에는 $M\_t$에서 개입이 일어나는 변수 $T$에 대한 구조방정식이 T:=t로 대체되는 것 외, 개입이 일어나지 않는 다른 변수에 대한 구조 방정식은 동일합니다.
+-    SCMs에서의 Intervention : Modularity assumption에 의해 SCM(M)과 Interventional SCM($M_t$)에는 $M_t$에서 개입이 일어나는 변수 $T$에 대한 구조방정식이 T:=t로 대체되는 것 외, 개입이 일어나지 않는 다른 변수에 대한 구조 방정식은 동일합니다.
 
 ![](ex_image19.png)
 
 -   The Law of Counterfactuals (and Interventions)
 
-> ◦ 정의 :  $Y\_t(u) = Y\_{M\_t}(u)$\
+> ◦ 정의 :  $Y_t(u) = Y_{M_t}(u)$\
 > ◦ 의미 : SCM에 대한 충분한 정보가 있는 경우, 실질적으로 Counterfactuals을 계산 할 수 있다는 Principle입니다.\
 > ◦ 의의 : Chapter 2에서 이야기한 인과추론의 근본적인 문제이기 때문입니다. \
 >     해당 내용은 Chapter 14에서 더 세부적으로 다룰 예정이에요.
@@ -293,7 +306,7 @@ Do-operator를 적용하면, X에 영향을 주는 C→ X 사이의 연결고리
 > ![](ex_image20.png)
 >
 > 2)  새로운 형태의 Association이 생기기 때문입니다 : new post-treatment association\
->         ◦오른쪽 그림 : $M$에서 관측되지 않은 외생변수 $U\_M$과 $T$, $M$사이엔 collider가 있다고 볼 수 있어요.\
+>         ◦오른쪽 그림 : $M$에서 관측되지 않은 외생변수 $U_M$과 $T$, $M$사이엔 collider가 있다고 볼 수 있어요.\
 >            → collider의 자식 노드인 $Z$를 condition하면, 새로운 post-treatment association이 발생할 수 있습니다!\
 >      \
 >     ![](ex_image21.png)

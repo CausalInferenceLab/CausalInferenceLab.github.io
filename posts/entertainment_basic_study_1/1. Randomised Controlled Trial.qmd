@@ -1,6 +1,6 @@
 ---
 title: "Randomised Controoled Trial"
-author: "JINSOO SHIN"
+author: "jinsoo shin"
 description: |
   스터디 소개
 date: now

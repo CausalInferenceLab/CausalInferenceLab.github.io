@@ -39,9 +39,9 @@ categories: [chapter2]
 ◦  Intuition : 타임머신을 통해 시간을 되돌릴 수 있어서, 그 때 다른 action을 취했더라면 어떻게 되었을까요?\
 ◦  Example : 타이레놀 복용과 두통 \
     - **Factual** : 코로나 의심 증상으로 타이레놀을 먹었더니, 두통이 사라졌다\
-                                                          \< $do(T=0)$         \< $Y\_i(1) = 1$\>\
+                                                             \<$do(T=0)$\>                  \<$Y\_i(1) = 1$\>\
     - **Counterfactual** : 타이레놀을 안먹었더니, 두통이 사라지지 않았다\
-                                               \< $do(T=1)$        \< $Y\_i(1) = 0$ \>\
+                                                       \<$do(T=1)$\>                  \< $Y\_i(1) = 0$\>\
     → Potential Outcomes : 두통이 사라진 경우 & 두통이 사라지지 않은 경우\
     → Observed Outcomes : 두통이 사라진 경우  \
       \
@@ -51,7 +51,7 @@ categories: [chapter2]
 
 **◦** Causation은 처치 (Treatment) 이후, Potential Outcomes에 대한 차이로 정의될 수 있습니다. 
 
--   처치에 대한 인과 효과 = (Treatment 받은 경우에 대한 Observed Outcomes) - (Treatment 받지 않은 경우에 대한 Potential Outcomes)   
+-   처치에 대한 인과 효과 = (Treatment 받은 경우에 대한 Observed Outcomes) - (Treatment 받지 않은 경우에 대한 Potential Outcomes)
 
 -   타이레놀에 대한 인과효과 = (타이레놀을 먹은 후, 두통 여부에 대한 관측 결과) - (타이레놀을 먹지 않고, 두통에 대한 잠재적 결과)
 
@@ -94,22 +94,23 @@ categories: [chapter2]
 -   ITE 계산의 어려움 : (2)번의 인과 추론의 근본적인 문제(Missing values)에서 보았던 것 처럼,\
     개개인에 대한 효과 (ITE)에 대해서 Treatment 효과를 추정하기가 어려운 문제가 생겨요.
 -   ATE 계산 :
-
-1)  Q : 반면, ATE는 구할 수 있을까요? \
-      A : Yes, 개인이 아닌 집단에 대한 평균 효과는 구할 수 있어요. \
-           집단은 일반적으로 Control Group (대조군) vs Treatment Group (실험군)으로 나누어 측정합니다.\
-           엄밀하게 말하면 **Statistical Estimand**를 구할 수 있습니다! (아래 그림에서는 1/3 이네요)
+-   Q : 반면, ATE는 구할 수 있을까요? \
+          A : Yes, 개인이 아닌 집단에 대한 평균 효과는 구할 수 있어요. \
+               집단은 일반적으로 Control Group (대조군) vs Treatment Group (실험군)으로 나누어 측정합니다.\
+               엄밀하게 말하면 **Statistical Estimand**를 구할 수 있습니다! (아래 그림에서는 1/3 이네요)
 
 ![](ex_image3.png)
 
-2)  Q : 그런데, 실제로 ATE가 계산이 가능한 걸까요?\
+-   Q : 그런데, 실제로 ATE가 계산이 가능한 걸까요?\
          A : No, 그 이유는 인과추론의 근본적인 문제인 Counterfactuals (Missing values) 때문이에요.\
               위의 그림에서는 Missing values (Selection Bias)를 무시하고 계산한 **Statistical Estimand**의 결과입니다.\
               하지만, 저희가 필요한 건 **Causal Estimand**입니다.
 
-    ![](ex_image4.png)
+![](ex_image4.png)
 
-                              **"Association is not Causation"**
+```         
+                          **"Association is not Causation"**
+```
 
    → Selection Bias를 해소하기 위해서는 Control/Treatment 그룹간에 비교가 가능해야 합니다!
 
@@ -201,10 +202,9 @@ categories: [chapter2]
 ![](ex_image11.png)
 
 **Postivity와 Unconfoundedness Tradeoff** \
-   : Machine Learning에서의 차원의 저주 처럼, Condition하는 Covariate의 차원이 커지면 커질 수록 \
-     Overlap이 되는 부분이 점점 줄어들게 됩니다. \
-      → 즉, 더 많은 Covariates에 Condition을 줄 수록, Unconfoundedness 가정은 만족하기 쉬워지지만,\
-           반대로 차원이 커지게 되어 Overlap (Positivity)가정은 만족하지 못할 확률이 높아집니다.
+   : Machine Learning에서의 차원의 저주 처럼, Condition하는 Covariate의 차원이 커지면 커질 수록 Overlap이 되는 부분이 점점 줄어들게 됩니다. 
+
+→ 즉, 더 많은 Covariates에 Condition을 줄 수록, Unconfoundedness 가정은 만족하기 쉬워지지만, 반대로 차원이 커지게 되어 Overlap (Positivity)가정은 만족하지 못할 확률이 높아집니다.
 
 \
 ![](ex_image12.png)
@@ -252,7 +252,7 @@ categories: [chapter2]
 
 ![](ex_image15.png)
 
-**To be continued)** 앞으로 **인과추론의 다른 Framework**인 **Strcutural Causal Models에 대해** 배울 예정입니다.
+**To be continued)** 앞으로 **인과추론의 다른 Framework**인 **Strcutural Causal Models에 대해** 배울 예정입니다.
 
 ### Reference
 
