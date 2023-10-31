@@ -47,6 +47,14 @@ about:
 
 #### Study : 인과추론 라이브러리
 
+| 이름   |                                     소속 |           소개|
+|:-----  |:----------------------------------------|:--------------|
+| 남궁민상 |  [가짜연구소](https://pseudo-lab.com) Data Analyst |  |
+| 박상우 |  [가짜연구소](https://pseudo-lab.com) Data Analyst |  |
+| 이홍규 |  [가짜연구소](https://pseudo-lab.com) Data Analyst |  |
+| 정호재 |  [롯데캐피탈](https://www.lottecap.com) Credit Analyst |  [LinkedIn](https://www.linkedin.com/in/wjdghwo/) |
+| 조인서 |  [가짜연구소](https://pseudo-lab.com) Data Analyst |  |
+
 
 #### Research : 인과추론 논문쓰기
 
