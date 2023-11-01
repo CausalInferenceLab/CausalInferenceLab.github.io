@@ -1,0 +1,31 @@
+project:
+  type: website
+  
+website:
+  title: "PseudoLab Causal Inference Team"
+  description: "현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다."
+  search: true
+  navbar:
+    logo: images/causal_inference_team_logo.jpg
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst
+  open-graph: 
+    title: "PseudoLab Causal Inference Team"
+    description: "현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다."
+    image: images/pseudo_lab_eng.png        
+        
+format:
+  html:
+    theme:
+        light: [cosmo, theme.scss, anari-custom.scss]
+        dark: [cosmo, theme-dark.scss, anari-custom.scss]
+    css: styles.css
+    
+execute: 
+  warning: false
+  freeze: auto
+
+editor: visual
+

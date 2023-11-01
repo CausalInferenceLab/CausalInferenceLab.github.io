@@ -1,0 +1,33 @@
+---
+title: "Intro. Casual하게 Causality 이해하기 소개"
+author: "jinsoo shin"
+description: |
+  스터디 소개
+date: now
+categories: [news]
+#image: "링크.png"
+---
+
+안녕하세요, 가짜연구소 Causal Inference 팀입니다.
+
+지난 3개월 간 [**가짜연구소**](https://pseudo-lab.com/)에서 **"Casual하게 Causality 이해하기"** 스터디가 진행되었습니다.
+
+해당 스터디를 통해 저희가 달성하고자 하는 목표는 크게 3가지입니다.
+
+> ◦ Causal Inference에 대한 기본적인 개념 학습\
+> ◦ 문제 or ML 모델에 대한 원인 분석 능력 키우기\
+> ◦ 공부한 내용을 정리해, Causal Inference 에 대한 한국어 자료 만들어보기
+
+------------------------------------------------------------------------
+
+인과추론을 공부하러 오신 분들이 저희가 작성한 블로그를 통해,
+
+한국어 자료가 많지 않은 **인과추론에 더 쉽게 다가가셨으면 좋겠습니다!**
+
+![](thumbnail2.png)
+
+------------------------------------------------------------------------
+
+**"Casual하게 Causality 이해하기"** 스터디는 [Brady Neal의 Introduction to Causal Inference 강의](https://www.bradyneal.com/causal-inference-course)를 바탕으로 진행되었습니다.
+
+블로그 글 이전에 전체 챕터에 대한 노션 페이지 정리 자료를 보고 싶으신 분들은 [가짜연구소 Causal Inference 아카이브](https://pseudo-lab.com/Casual-Causality-efb2d821ae334b8d9674ca331edebc72)를 참고해주시면 감사하겠습니다!
