@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_3/3.Graphical_Models.html</loc>
-    <lastmod>2023-10-31T17:09:56.156Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html</loc>
-    <lastmod>2023-10-31T17:09:54.104Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/2023-10-18-intro/index.html</loc>
-    <lastmod>2023-10-31T17:09:52.004Z</lastmod>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_1/1.Motivation.html</loc>
+    <lastmod>2023-11-03T16:23:09.606Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_0/0.causal_inference_library.html</loc>
-    <lastmod>2023-10-31T17:09:50.548Z</lastmod>
+    <lastmod>2023-11-03T16:23:08.198Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/about.html</loc>
-    <lastmod>2023-10-31T17:09:46.864Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/index.html</loc>
-    <lastmod>2023-10-31T17:09:49.864Z</lastmod>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/2023-10-18-intro/index.html</loc>
+    <lastmod>2023-11-03T16:23:06.866Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_2/2.Potential_Outcomes.html</loc>
-    <lastmod>2023-10-31T17:09:51.480Z</lastmod>
+    <lastmod>2023-11-03T16:23:05.830Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_1/1.Motivation.html</loc>
-    <lastmod>2023-10-31T17:09:52.852Z</lastmod>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/index.html</loc>
+    <lastmod>2023-11-03T16:23:04.302Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/about.html</loc>
+    <lastmod>2023-11-03T16:23:05.190Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_3/3.Graphical_Models.html</loc>
+    <lastmod>2023-11-03T16:23:06.478Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html</loc>
+    <lastmod>2023-11-03T16:23:07.738Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_4/4.Causal_Models.html</loc>
-    <lastmod>2023-10-31T17:09:55.252Z</lastmod>
+    <lastmod>2023-11-03T16:23:09.006Z</lastmod>
   </url>
 </urlset>
