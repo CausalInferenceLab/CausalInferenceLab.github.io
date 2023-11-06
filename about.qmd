@@ -38,14 +38,22 @@ about:
 | 김소희 |  [티빙](https://team.tving.com/) Data Analyst |  [LinkedIn](https://www.linkedin.com/in/sohee-kim-9460b6113/) |
 | 김지연 |  [엔씨소프트](https://kr.ncsoft.com/kr/index.do) Data Analyst |  |
 | 박시온 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
-| 박병수 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
-| 박이삭 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
-| 유정현 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
+| 박병수 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst | [LinkedIn](https://www.linkedin.com/in/byeongsu-park-58249b196/) |
+| 박이삭 |  [하이브IM](https://hybecorp.com/kor/main) Data Analyst | [LinkedIn](https://www.linkedin.com/in/%EC%9D%B4%EC%82%AD-%EB%B0%95-75a7a916a/) |
+| 유정현 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst | [LinkedIn](https://www.linkedin.com/in/jeonghyun-y-750a7b1b2/) |
 | 임종언 |  [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |  |
-| 조슬지 |  [넷마블](https://www.krafton.com/) Data Analyst |  |
+| 조슬지 |  [넷마블에프앤씨](https://company.netmarble.com/studio/list/fnc) Data Analyst | [LinkedIn](https://www.linkedin.com/in/%EC%8A%AC%EC%A7%80-%EC%A1%B0-4370251b8/) |
 
 
 #### Study : 인과추론 라이브러리
+
+| 이름   |                                     소속 |           소개|
+|:-----  |:----------------------------------------|:--------------|
+| 남궁민상 |  [가짜연구소](https://pseudo-lab.com) Data Analyst |  |
+| 박상우 |  [가짜연구소](https://pseudo-lab.com) Data Analyst |  |
+| 이홍규 |  [가짜연구소](https://pseudo-lab.com) Data Analyst |  |
+| 정호재 |  [롯데캐피탈](https://www.lottecap.com) Credit Analyst |  [LinkedIn](https://www.linkedin.com/in/wjdghwo/) |
+| 조인서 |  [가짜연구소](https://pseudo-lab.com) Data Analyst |  |
 
 
 #### Research : 인과추론 논문쓰기
