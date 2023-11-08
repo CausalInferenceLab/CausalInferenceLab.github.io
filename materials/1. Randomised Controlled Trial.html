@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>분석가를 위한 인과추론 개념 정리 - 1 - Randomised Controlled Trial (RCT)</title>
+<title>딥러닝 용어사전 – randomised-controlled-trial</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../images/pseudo_lab_eng.png" rel="icon" type="image/png">
+<link href="../images/pseudo-lab-pavicon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -60,17 +60,26 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-TFCJQ03RNB"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-TFCJQ03RNB', { 'anonymize_ip': true});
+</script>
 
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<meta property="og:title" content="분석가를 위한 인과추론 개념 정리">
-<meta property="og:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
-<meta property="og:image" content="https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/images/pseudo_lab_eng.png">
-<meta property="og:site-name" content="분석가를 위한 인과추론 개념 정리">
-<meta name="twitter:title" content="분석가를 위한 인과추론 개념 정리">
-<meta name="twitter:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
-<meta name="twitter:image" content="https://causalinferencelab.github.io/Causal-Inference-Study-for-Analyst/materials/images/pseudo_lab_eng.png">
+<meta property="og:title" content="딥러닝 용어사전">
+<meta property="og:description" content="딥러닝 영어문서를 한국어로 번역하는 과정에서 용어를 통일하여 사용하기 위한 오픈소스 용어 사전입니다.">
+<meta property="og:image" content="https://pseudo-lab.github.io/deep-learning-glossary/materials/images/pseudo-lab-1200x630.png">
+<meta property="og:site-name" content="딥러닝 용어사전">
+<meta name="twitter:title" content="딥러닝 용어사전">
+<meta name="twitter:description" content="딥러닝 영어문서를 한국어로 번역하는 과정에서 용어를 통일하여 사용하기 위한 오픈소스 용어 사전입니다.">
+<meta name="twitter:image" content="https://pseudo-lab.github.io/deep-learning-glossary/materials/images/pseudo-lab-1200x630.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -82,7 +91,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">분석가를 위한 인과추론 개념 정리</span>
+    <span class="navbar-title">딥러닝 용어사전</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -93,6 +102,8 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="dropdown-header">
  <span class="menu-text">dictionary/glossary.qmd</span></li>
+  <li class="dropdown-header">
+ <span class="menu-text">guide.qmd</span></li>
   <li class="nav-item">
     <a class="nav-link" href="../contribution.html" rel="" target="">
  <span class="menu-text">Gamifying Causal Inference</span></a>
@@ -100,7 +111,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/Pseudo-Lab/deep-learning-glossary" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -120,7 +131,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#chapter-summary" id="toc-chapter-summary" class="nav-link active" data-scroll-target="#chapter-summary">0. Chapter Summary</a></li>
+  <li><a href="#randomised-controlled-trial-rct" id="toc-randomised-controlled-trial-rct" class="nav-link active" data-scroll-target="#randomised-controlled-trial-rct">1 - Randomised Controlled Trial (RCT)</a>
+  <ul class="collapse">
+  <li><a href="#chapter-summary" id="toc-chapter-summary" class="nav-link" data-scroll-target="#chapter-summary">0. Chapter Summary</a></li>
   <li><a href="#introduction-to-causal-inference" id="toc-introduction-to-causal-inference" class="nav-link" data-scroll-target="#introduction-to-causal-inference">1. Introduction to Causal Inference</a></li>
   <li><a href="#experiment-key-takeaway" id="toc-experiment-key-takeaway" class="nav-link" data-scroll-target="#experiment-key-takeaway">2. Experiment Key Takeaway</a>
   <ul class="collapse">
@@ -136,32 +149,20 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#how-to-solve" id="toc-how-to-solve" class="nav-link" data-scroll-target="#how-to-solve">3) How to solve?</a></li>
   <li><a href="#statistical-theory" id="toc-statistical-theory" class="nav-link" data-scroll-target="#statistical-theory">4) Statistical Theory</a></li>
   </ul></li>
-  <li><a href="#ab-테스트-open-source" id="toc-ab-테스트-open-source" class="nav-link" data-scroll-target="#ab-테스트-open-source">3. A/B 테스트 Open Source</a></li>
+  <li><a href="#ab-테스트-open-source" id="toc-ab-테스트-open-source" class="nav-link" data-scroll-target="#ab-테스트-open-source">4. A/B 테스트 Open Source</a></li>
   <li><a href="#q-a" id="toc-q-a" class="nav-link" data-scroll-target="#q-a">😍 Q &amp; A</a></li>
   <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">😍 Reference</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">1 - Randomised Controlled Trial (RCT)</h1>
-</div>
 
 
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-</header>
-
+<section id="randomised-controlled-trial-rct" class="level1 page-columns page-full">
+<h1>1 - Randomised Controlled Trial (RCT)</h1>
 <blockquote class="blockquote">
 <p>👉 해당 포스트는 아래 인과추론 자료를 바탕으로 정리했습니다. - <a href="https://product.kyobobook.co.kr/detail/S000001059425">고수들의 계량경제학 1장 무작위 시행</a> - <a href="https://matheusfacure.github.io/python-causality-handbook/02-Randomised-Experiments.html">Causal Inference for the brave and true Chapter 2. Randomised Experiments</a> / <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html">한국어 번역 자료</a> - <a href="https://sites.google.com/view/causal-inference2022">인과추론의 데이터 과학</a></p>
 </blockquote>
@@ -542,7 +543,7 @@ Predicting the results of an action, manipulation, or Intervention - “Making T
 </aside></section>
 </section>
 <section id="ab-테스트-open-source" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="ab-테스트-open-source">3. A/B 테스트 Open Source</h2>
+<h2 class="anchored" data-anchor-id="ab-테스트-open-source">4. A/B 테스트 Open Source</h2>
 <ul>
 <li>A/B 테스트를 할 수 있는 오픈 소스 및 자료
 <ul>
@@ -590,6 +591,7 @@ Predicting the results of an action, manipulation, or Intervention - “Making T
 </ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -832,7 +834,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">by PseudoLab Causal Inference Team</div>
+    <div class="nav-footer-center">by HuggingFace KREW</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
