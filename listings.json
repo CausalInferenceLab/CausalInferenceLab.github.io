@@ -2,13 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/Chapter_0/0.causal_inference_library.html",
-      "/posts/Chapter_2/2.Potential_Outcomes.html",
       "/posts/2023-10-18-intro/index.html",
-      "/posts/Chapter_1/1.Motivation.html",
-      "/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html",
-      "/posts/Chapter_4/4.Causal_Models.html",
-      "/posts/Chapter_3/3.Graphical_Models.html"
+      "/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html"
     ]
   }
 ]
