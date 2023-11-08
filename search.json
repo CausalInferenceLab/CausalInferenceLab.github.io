@@ -1,5 +1,19 @@
 [
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "PseudoLab Causal Inference Team",
+    "section": "",
+    "text": "Randomised Controoled Trial\n\n\n\n\n\n\n\nA/B Test\n\n\nRCT\n\n\n\n\n스터디 소개\n\n\n\n\n\n\nOct 22, 2023\n\n\nJINSOO SHIN\n\n\n\n\n\n\n  \n\n\n\n\nIntro. Casual하게 Causality 이해하기 소개\n\n\n\n\n\n\n\nnews\n\n\n\n\n스터디 소개\n\n\n\n\n\n\nOct 22, 2023\n\n\nJINSOO SHIN\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/2023-10-18-intro/index.html",
+    "href": "posts/2023-10-18-intro/index.html",
+    "title": "Intro. Casual하게 Causality 이해하기 소개",
+    "section": "",
+    "text": "안녕하세요, 가짜연구소 Causal Inference 팀입니다.\n지난 3개월 간 가짜연구소에서 “Casual하게 Causality 이해하기” 스터디가 진행되었습니다.\n해당 스터디를 통해 저희가 달성하고자 하는 목표는 크게 3가지입니다.\n\n◦ Causal Inference에 대한 기본적인 개념 학습\n◦ 문제 or ML 모델에 대한 원인 분석 능력 키우기\n◦ 공부한 내용을 정리해, Causal Inference 에 대한 한국어 자료 만들어보기\n\n\n인과추론을 공부하러 오신 분들이 저희가 작성한 블로그를 통해,\n한국어 자료가 많지 않은 인과추론에 더 쉽게 다가가셨으면 좋겠습니다!\n\n\n“Casual하게 Causality 이해하기” 스터디는 Brady Neal의 Introduction to Causal Inference 강의를 바탕으로 진행되었습니다.\n블로그 글 이전에 전체 챕터에 대한 노션 페이지 정리 자료를 보고 싶으신 분들은 가짜연구소 Causal Inference 아카이브를 참고해주시면 감사하겠습니다!\n\n\n\nCitationBibTeX citation:@online{shin2023,\n  author = {SHIN, JINSOO},\n  title = {Intro. {Casual하게} {Causality} {이해하기} {소개}},\n  date = {2023-10-22},\n  url = {https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/2023-10-18-intro},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nSHIN, JINSOO. 2023. “Intro. Casual하게 Causality 이해하기\n소개.” October 22, 2023. https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/2023-10-18-intro."
+  },
+  {
     "objectID": "posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html",
     "href": "posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html",
     "title": "Randomised Controoled Trial",
@@ -56,24 +70,10 @@
     "text": "고수들의 계량경제학 Chapter 1. 무작위 시행 &lt;Joshua D. Angrist , Jorn-Steffen Pischke 저&gt;\nCausal Inference for the brave and true Chapter 1. Introduction to Causality \nKorea Summer Workshop on Causal Inference 2022\nIntroduction to Causal Inference\n유 퀴즈 온 더 블럭 - 구준엽편"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "PseudoLab Causal Inference Team",
-    "section": "",
-    "text": "Intro. Casual하게 Causality 이해하기 소개\n\n\n\n\n\n\n\nnews\n\n\n\n\n스터디 소개\n\n\n\n\n\n\nOct 26, 2023\n\n\nJINSOO SHIN\n\n\n\n\n\n\n  \n\n\n\n\nRandomised Controoled Trial\n\n\n\n\n\n\n\nA/B Test\n\n\nRCT\n\n\n\n\n스터디 소개\n\n\n\n\n\n\nOct 26, 2023\n\n\nJINSOO SHIN\n\n\n\n\n\n\nNo matching items"
-  },
-  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "PseudoLab Causal Inference Team",
     "section": "",
-    "text": "about\n안녕하세요. 가짜연구소 Causal Inference 팀입니다.\n데이터를 통한 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️\n한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다!\n\n\n\n인과추론팀 빌더\n\n\n\n이름\n소속\n소개\n\n\n\n\n신진수\n크래프톤 Data Analyst\nGithub / LinkedIn\n\n\n\n\n\nStudy : 인과추론 with Entertainment\n\n\n\n이름\n소속\n소개\n\n\n\n\n김소희\n티빙 Data Analyst\nLinkedIn\n\n\n김지연\n엔씨소프트 Data Analyst\n\n\n\n박시온\n넥슨코리아 Data Analyst\n\n\n\n박병수\n넥슨코리아 Data Analyst\n\n\n\n박이삭\n넥슨코리아 Data Analyst\n\n\n\n유정현\n넥슨코리아 Data Analyst\n\n\n\n임종언\n넥슨코리아 Data Analyst\n\n\n\n조슬지\n넷마블 Data Analyst\n\n\n\n\n\n\nStudy : 인과추론 라이브러리\n\n\nResearch : 인과추론 논문쓰기\n\n\nTech Support\n김상돈 | | |\n최은희 | 넥슨코리아 Data Analyst | |\n홍성철 | 엔씨소프트 Data Analyst | |"
-  },
-  {
-    "objectID": "posts/2023-10-18-intro/index.html",
-    "href": "posts/2023-10-18-intro/index.html",
-    "title": "Intro. Casual하게 Causality 이해하기 소개",
-    "section": "",
-    "text": "안녕하세요, 가짜연구소 Causal Inference 팀입니다.\n지난 3개월 간 가짜연구소에서 “Casual하게 Causality 이해하기” 스터디가 진행되었습니다.\n해당 스터디를 통해 저희가 달성하고자 하는 목표는 크게 3가지입니다.\n\n◦ Causal Inference에 대한 기본적인 개념 학습\n◦ 문제 or ML 모델에 대한 원인 분석 능력 키우기\n◦ 공부한 내용을 정리해, Causal Inference 에 대한 한국어 자료 만들어보기\n\n\n인과추론을 공부하러 오신 분들이 저희가 작성한 블로그를 통해,\n한국어 자료가 많지 않은 인과추론에 더 쉽게 다가가셨으면 좋겠습니다!\n\n\n“Casual하게 Causality 이해하기” 스터디는 Brady Neal의 Introduction to Causal Inference 강의를 바탕으로 진행되었습니다.\n블로그 글 이전에 전체 챕터에 대한 노션 페이지 정리 자료를 보고 싶으신 분들은 가짜연구소 Causal Inference 아카이브를 참고해주시면 감사하겠습니다!\n\n\n\nCitationBibTeX citation:@online{shin2023,\n  author = {SHIN, JINSOO},\n  title = {Intro. {Casual하게} {Causality} {이해하기} {소개}},\n  date = {2023-10-26},\n  url = {https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/2023-10-18-intro},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nSHIN, JINSOO. 2023. “Intro. Casual하게 Causality 이해하기\n소개.” October 26, 2023. https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/2023-10-18-intro."
+    "text": "about\n안녕하세요. 가짜연구소 Causal Inference 팀입니다.\n데이터를 통한 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️\n한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다!\n\n\n\n인과추론팀 빌더\n\n\n\n이름\n소속\n소개\n\n\n\n\n신진수\n크래프톤 Data Analyst\nGithub / Linkedin\n\n\n\n\n\nStudy : 인과추론 with Entertainment\n\n\n\n이름\n소속\n소개\n\n\n\n\n김소희\n티빙 Data Analyst\n\n\n\n김지연\n엔씨소프트 Data Analyst\n\n\n\n박시온\n넥슨코리아 Data Analyst\n\n\n\n박병수\n넥슨코리아 Data Analyst\n\n\n\n박이삭\n넥슨코리아 Data Analyst\n\n\n\n유정현\n넥슨코리아 Data Analyst\n\n\n\n임종언\n넥슨코리아 Data Analyst\n\n\n\n조슬지\n넷마블 Data Analyst\n\n\n\n\n\n\nStudy : 인과추론 라이브러리\n\n\nResearch : 인과추론 논문쓰기\n\n\nTech Support\n김상돈 | | |\n최은희 | 넥슨코리아 Data Analyst | |\n홍성철 | 엔씨소프트 Data Analyst | |"
   }
 ]
