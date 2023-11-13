@@ -28,13 +28,13 @@ about:
 #### 인과추론팀 빌더
 
 | 이름   | 소속                                              | 소개                                                                                                             |
-|:-------|:--------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|
+|:-------------|:----------------|:-----------------------------------------|
 | 신진수 | [크래프톤](https://www.krafton.com/) Data Analyst | [Github](https://github.com/CausalInferenceLab) / [LinkedIn](https://www.linkedin.com/in/jinsoo-shin-436060162/) |
 
 #### Study : 인과추론 with Entertainment
 
 | 이름   | 소속                                                                         | 소개                                                                            |
-|:-------|:-----------------------------------------------------------------------------|:--------------------------------------------------------------------------------|
+|:-------------|:----------------------------|:-----------------------------|
 | 김소희 | [티빙](https://team.tving.com/) Data Analyst                                 | [LinkedIn](https://www.linkedin.com/in/sohee-kim-9460b6113/)                    |
 | 김지연 | [엔씨소프트](https://kr.ncsoft.com/kr/index.do) Data Analyst                 |                                                                                 |
 | 박시온 | [넥슨코리아](https://company.nexon.com/kr/) Data Analyst                     |                                                                                 |
@@ -46,20 +46,20 @@ about:
 
 #### Study : 인과추론 라이브러리
 
-| 이름     | 소속                                                  | 소개                                             |
-|:---------|:------------------------------------------------------|:-------------------------------------------------|
-| 남궁민상 | [가짜연구소](https://pseudo-lab.com) Data Analyst     |                                                  |
-| 박상우   | [가짜연구소](https://pseudo-lab.com) Data Analyst     |                                                  |
-| 이홍규   | [가짜연구소](https://pseudo-lab.com) Data Analyst     |                                                  |
-| 정호재   | [롯데캐피탈](https://www.lottecap.com) Credit Analyst | [LinkedIn](https://www.linkedin.com/in/wjdghwo/) |
-| 조인서   | [가짜연구소](https://pseudo-lab.com) Data Analyst     |                                                  |
+| 이름     | 소속                                                  | 소개                                               |
+|:--------------|:------------------------------------------|:--------------|
+| 남궁민상 | [가짜연구소](https://pseudo-lab.com) Data Analyst     |                                                    |
+| 박상우   | [가짜연구소](https://pseudo-lab.com) Data Analyst     |                                                    |
+| 이홍규   | [가짜연구소](https://pseudo-lab.com) Data Analyst     |                                                    |
+| 정호재   | [롯데캐피탈](https://www.lottecap.com) Credit Analyst | [LinkedIn](https://www.linkedin.com/in/wjdghwo/)   |
+| 조인서   | [KOICA](https://www.koica.go.kr) Manager              | [LinkedIn](https://www.linkedin.com/in/yinseo-cho) |
 
 #### Research : 인과추론 논문쓰기
 
 #### Tech Support
 
-| 이름   | 소속                                                     | 소개 |
-|:-------|:---------------------------------------------------------|:-----|
-| 김상돈 | 베가스 Data Analyst                                      |      |
-| 최은희 | [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |      |
-| 홍성철 | [가짜연구소](https://pseudo-lab.com) Data Analyst        |      |
+| 이름   | 소속                                                     | 소개                                                                            |
+|:-----------|:------------------------------------------------|:-----------|
+| 김상돈 | 베가스 Data Analyst                                      | [LinkedIn](https://www.linkedin.com/in/%EC%83%81%EB%8F%88-%EA%B9%80-b89985199/) |
+| 최은희 | [넥슨코리아](https://company.nexon.com/kr/) Data Analyst |                                                                                 |
+| 홍성철 | [가짜연구소](https://pseudo-lab.com) Data Analyst        |                                                                                 |
