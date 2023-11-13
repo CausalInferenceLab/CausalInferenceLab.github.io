@@ -19,7 +19,7 @@ image: "ex_image.png"
 ------------------------------------------------------------------------
 
 | **순서** | **언어** | **라이브러리 명**     | **설명 & 링크**                                                                                                                                                          |
-|------------------|------------------|------------------|------------------|
+|----------|----------|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1        | Python   | causality             | Python Causality 라이브러리 (Observational Datasets 기반) [Github 링크](https://github.com/akelleh/causality%20)                                                         |
 | 2        | Python   | Microsoft - DoWhy     | Causal Inference End-to-End 라이브러리 (4단계로 구성) [Github 링크](https://microsoft.github.io/dowhy%20)/[Dowhy 설명자료](https://arxiv.org/pdf/2011.04216.pdf)         |
 | 3        | Python   | Microsoft - EconML    | Heterogeneous treatment effects 추정 라이브러리 [Github 링크](https://github.com/microsoft/EconML)                                                                       |
