@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sangdon &amp; Junyoung">
+<meta name="dcterms.date" content="2024-01-04">
+<meta name="description" content="Introduction to Causal Inference 강의 chapter 11 소개">
+
+<title>PseudoLab Causal Inference Team - 12. Causal Discovery from Observational Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="PseudoLab Causal Inference Team">
+<meta property="og:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
+<meta property="og:image" content="images/pseudo_lab_eng.png">
+<meta property="og:site-name" content="PseudoLab Causal Inference Team">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/causal_inference_team_logo.jpg" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">PseudoLab Causal Inference Team</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">about</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">12. Causal Discovery from Observational Data</h1>
+                  <div>
+        <div class="description">
+          <p>Introduction to Causal Inference 강의 chapter 11 소개</p>
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Causal Discovery</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Sangdon &amp; Junyoung </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 4, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#contents" id="toc-contents" class="nav-link active" data-scroll-target="#contents"><strong>Contents</strong></a></li>
+  <li><a href="#markov-equivalent-class" id="toc-markov-equivalent-class" class="nav-link" data-scroll-target="#markov-equivalent-class">Markov equivalent class</a></li>
+  <li><a href="#pc-algorithm" id="toc-pc-algorithm" class="nav-link" data-scroll-target="#pc-algorithm">PC algorithm</a></li>
+  <li><a href="#pc-알고리즘-한계점" id="toc-pc-알고리즘-한계점" class="nav-link" data-scroll-target="#pc-알고리즘-한계점">PC 알고리즘 한계점</a></li>
+  <li><a href="#semi-parametric-causal-discovery" id="toc-semi-parametric-causal-discovery" class="nav-link" data-scroll-target="#semi-parametric-causal-discovery">2. Semi-Parametric Causal Discovery</a>
+  <ul class="collapse">
+  <li><a href="#issues-in-independence-based-causal-discovery" id="toc-issues-in-independence-based-causal-discovery" class="nav-link" data-scroll-target="#issues-in-independence-based-causal-discovery">Issues in independence based causal discovery</a></li>
+  <li><a href="#no-identifiability-without-parametric-assumptions" id="toc-no-identifiability-without-parametric-assumptions" class="nav-link" data-scroll-target="#no-identifiability-without-parametric-assumptions">No identifiability without Parametric Assumptions</a></li>
+  <li><a href="#lingam" id="toc-lingam" class="nav-link" data-scroll-target="#lingam">LiNGAM</a></li>
+  <li><a href="#nonlinear-models" id="toc-nonlinear-models" class="nav-link" data-scroll-target="#nonlinear-models">Nonlinear Models</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+<p>안녕하세요, 가짜연구소 Causal Inference 팀의 김상돈, 김준영입니다.&nbsp;</p>
+<p>Introduction to Causal Inference 강의의 11번째 챕터이며, 해당 챕터에서 다루는 내용은 아래와 같습니다.</p>
+<section id="contents" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="contents"><strong>Contents</strong></h3>
+<ul>
+<li>Independence-Based Causal Discovery</li>
+<li>Semi-Parametric Causal Discovery</li>
+</ul>
+<p>◦ 강의 영상 링크 : <a href="https://www.youtube.com/watch?v=lVE-4deFe7c&amp;list=PLoazKTcS0Rzb6bb9L508cyJ1z-U9iWkA0&amp;index=62" title="causal discovery from observational data">Chapter 11. causal discovery from observational data</a></p>
+<p>&nbsp; &nbsp; 작성된 내용 중 개선점이나 잘못된 부분이 있다면 댓글로 알려주세요!</p>
+<section id="causal-discovery-의미" class="level4">
+<h4 class="anchored" data-anchor-id="causal-discovery-의미"><strong>Causal Discovery 의미</strong></h4>
+<ul>
+<li>Causal Discovery : Data → Causal graph</li>
+<li>몇 가지 가정 하에서, causal discovery를 찾는 알고리즘을 적용하여 causal graph를 찾을 수 있음</li>
+</ul>
+<p><img src="img1.png" class="img-fluid"></p>
+</section>
+<section id="independence-based-causal-discovery" class="level4 page-columns page-full">
+<h4 class="anchored" data-anchor-id="independence-based-causal-discovery"><strong>1. Independence-Based Causal Discovery</strong></h4>
+<p><strong>Assumption</strong></p>
+<blockquote class="blockquote">
+<p><strong>Markov assumption<br>
+</strong>A node is dependent only on its descendants in the graph</p>
+</blockquote>
+<ul>
+<li>예시) 아래 그림에서 <span class="math inline">\(X_4\)</span>는 <span class="math inline">\(X_3\)</span>가 조건으로 주어진다면 나머지 변수들과는 독립(조건부 독립)</li>
+</ul>
+<p>→ <span class="math inline">\(P(X_4|X_3,X_2,X_1) = P(X_4|X_3)\)</span></p>
+
+<div class="no-row-height column-margin column-container"><div class="">
+<p><img src="img2.png" class="img-fluid"></p>
+</div></div><blockquote class="blockquote">
+<p><strong>Faithfulness<br>
+</strong>Node that are causally connected in a particular way in the graph are probabilistically dependent</p>
+</blockquote>
+<p><strong>Faithfulness Conterexample</strong></p>
+
+<div class="no-row-height column-margin column-container"><div class="">
+<p><img src="img3.png" class="img-fluid"></p>
+</div></div><ul>
+<li><span class="math display">\[ \begin{aligned} B &amp;:= \alpha A \\ C &amp;:= \gamma A \\ D &amp;:= \beta B + \delta C \\ \newline D &amp;= (\alpha \beta + \gamma \delta) A \end{aligned}  
+\]</span></li>
+<li><span class="math inline">\(\alpha \beta = - \gamma \delta\)</span> 일 때, <span class="math inline">\(D = 0\)</span>이 됨</li>
+<li>즉, A → B → D의 효과와 A → C → D의 효과가 서로 반대일 경우 효과가 상쇄됨</li>
+<li>A, D 간에 관계가 없다는 잘못된 결론을 도출할 수 있으므로, 이러한 경우는 없다고 가정함</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Causal sufficiency</strong><br>
+there are no unobserved confounders of any of the variables in the graph</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Acyclicity</strong><br>
+still assuming there are no cycles in the graph</p>
+</blockquote>
+</section>
+</section>
+<section id="markov-equivalent-class" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="markov-equivalent-class">Markov equivalent class</h3>
+<ul>
+<li>conditional independence 구조가 같은 DAG의 집합을 의미함</li>
+<li>DAG에서 skeleton과 v-structure(immorality)가 같은 경우</li>
+</ul>
+<p><strong>Chain/Fork</strong></p>
+<p><img src="img4.png" class="img-fluid"></p>
+<ul>
+<li>Markov : <span class="math inline">\(X_1 \perp\!\!\!\perp X_3 | X_2\)</span></li>
+<li>Minimality : <span class="math inline">\(X_1 \not\!\perp\!\!\!\perp X_2 \text{ and }X_2 \not\!\perp\!\!\!\perp X_3\)</span></li>
+<li>Faithfulness : <span class="math inline">\(X_1 \not\!\perp\!\!\!\perp X_3\)</span></li>
+<li>chain/fork에 해당하는 세 그래프 모두 그래프의 형태는 다르지만, 같은 conditional independence 구조를 갖음</li>
+</ul>
+<p><strong>Immorality</strong></p>
+
+<div class="no-row-height column-margin column-container"><div class="">
+<p><img src="img5.png" class="img-fluid"></p>
+</div></div><ul>
+<li>Markov : <span class="math inline">\(X_1 \not\!\perp\!\!\!\perp X_3 | X_2\)</span></li>
+<li>Minimality : <span class="math inline">\(X_1 \not\!\perp\!\!\!\perp X_2 \text{ and }X_2 \not\!\perp\!\!\!\perp X_3\)</span></li>
+<li>Faithfulness : <span class="math inline">\(X_1 \perp\!\!\!\perp X_3\)</span></li>
+<li>Immorality의 경우 같은 conditional independent 구조를 갖는 그래프는 한 개밖에 없음</li>
+</ul>
+<p><strong>Skeletons</strong></p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="img6.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="img7.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<ul>
+<li>chain/fork 구조의 경우 같은 conditional independence 구조를 갖고, 같은 skeleton을 갖음</li>
+<li>complete 그래프의 의 경우 chain 구조에서 <span class="math inline">\(X_1 \rightarrow X_3\)</span> edge를 추가할 때, 이전과 다른 conditional independence 구조를 갖고, 다른 skeleton을 갖음</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Markov Equivalence via Immoral Skeletons</strong><br>
+two graphs are markov equivalent if and only if they have the same skeleton and same immoralities</p>
+</blockquote>
+<ul>
+<li>Essential graph(CPDAG): skeleton, immorality가 같은 그래프를 의미함</li>
+<li>Markov equivalent class를 만족하는 DAG는 CPDAG로 표현할 수 있음</li>
+</ul>
+<p><strong>Example</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img8.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img9.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="pc-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="pc-algorithm">PC algorithm</h3>
+<ul>
+<li>데이터로부터 CPDAG를 찾는 알고리즘</li>
+</ul>
+<p><img src="img10.png" class="img-fluid"></p>
+<p><strong>1. Identify the skeleton</strong></p>
+<p><img src="img11.png" class="img-fluid"></p>
+<ul>
+<li>노드 간 완전연결된 complete graph 생성</li>
+<li>complete graph에서 두 노드 간 unconditionally independent인 경우 edge 제거
+<ul>
+<li><span class="math inline">\(A,\, B\)</span>는 immorality이므로 <span class="math inline">\(A\perp\!\!\!\perp B\)</span>, edge 제거</li>
+</ul></li>
+<li>모든 쌍 <span class="math inline">\((X, Y)\)</span>에 대해 <span class="math inline">\(X\perp\!\!\!\perp Y|{Z}\)</span>인 경우 edge 제거
+<ul>
+<li><span class="math inline">\(C\)</span>에 대해 conditioning 했을 때, conditionally independent라는 의미는 두 노드 간 직접 연결된 edge가 없다는 의미로 볼 수 있음</li>
+<li><span class="math inline">\(A\)</span>와 <span class="math inline">\(E\)</span>에 직접 연결된 edge가 사라짐</li>
+<li>나머지 노드도 동일한 접근 방식으로 생각해보면 (c)그래프처럼 true graph의 skeleton을 식별할 수 있음</li>
+</ul></li>
+</ul>
+<p><strong>2. Identify immoralities and orient them</strong>&nbsp;</p>
+<p><img src="img12.png" class="img-fluid"></p>
+<ul>
+<li>Immorality의 경우 conditional independent 구조를 갖는 그래프는 한 개밖에 없으므로 방향을 식별할 수 있음</li>
+<li>Immorality의 경우 <span class="math inline">\(X \not\!\perp\!\!\!\perp Y | Z\)</span> 인 경우에 해당함</li>
+<li><span class="math inline">\(A\perp\!\!\!\perp B|{C}\)</span>, <span class="math inline">\(A\perp\!\!\!\perp D|{C}\)</span>, <span class="math inline">\(B\perp\!\!\!\perp C|{E}\)</span>, <span class="math inline">\(A\perp\!\!\!\perp B|{C}\)</span>, <span class="math inline">\(D\perp\!\!\!\perp E|{C}\)</span> 에 대해서, 각각 다 test해보고conditionally dependent가 되는 쌍을 찾음</li>
+</ul>
+<p><strong>3. Orient qualifying edges that are incident on colliders</strong></p>
+<p><img src="img13.png" class="img-fluid"></p>
+<ul>
+<li>남은 edge 중에서 방향을 지정했을 때, immorality가 되지 않는 방향으로 지정</li>
+<li><span class="math inline">\(D \rightarrow C\)</span>의 경우 <span class="math inline">\(A \rightarrow C \leftarrow D\)</span>로 immorality에 해당하므로, <span class="math inline">\(C \rightarrow D\)</span> 로 방향을 지정해줘야 함</li>
+</ul>
+<p><strong>Causal discovery에 관한 다른 방법</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img14.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">인과추론의 데이터과학 [session 18-3] 강의자료</figcaption>
+</figure>
+</div>
+<ul>
+<li>FCI : without assuming causal sufficiency</li>
+<li>CCD : without assuming acylicity</li>
+</ul>
+</section>
+<section id="pc-알고리즘-한계점" class="level3">
+<h3 class="anchored" data-anchor-id="pc-알고리즘-한계점">PC 알고리즘 한계점</h3>
+<ul>
+<li>각 노드 쌍의 conditional independence test에 의존하므로 계산량이 많음</li>
+<li>정확한 test를 하기 위해서는 데이터가 많아야 함</li>
+</ul>
+</section>
+<section id="semi-parametric-causal-discovery" class="level1">
+<h1>2. Semi-Parametric Causal Discovery</h1>
+<section id="issues-in-independence-based-causal-discovery" class="level3">
+<h3 class="anchored" data-anchor-id="issues-in-independence-based-causal-discovery">Issues in independence based causal discovery</h3>
+<ol type="1">
+<li>Faithfulness assumption 필요</li>
+<li>Large samples for conditional independence tests</li>
+<li>Markov equivalence class만 identify</li>
+</ol>
+</section>
+<section id="no-identifiability-without-parametric-assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="no-identifiability-without-parametric-assumptions">No identifiability without Parametric Assumptions</h3>
+<p>1. Markov perspective</p>
+<p><img src="img15.png" class="img-fluid"></p>
+<ul>
+<li>Markov equivalent인 경우, conditional independence가 <span class="math inline">\(X→Y\)</span>와 <span class="math inline">\(X←Y\)</span>구별에 도움 X</li>
+<li>Best는 essential graph X-Y identification</li>
+</ul>
+<p>2. SCM perspective</p>
+<blockquote class="blockquote">
+<p>Non-Identifiability of Two-Node Graphs(proposition): For every joint distribution P(x,y) on two real-valued random variables, there is an SCM in either direction that generates data consistent with P(x,y)</p>
+</blockquote>
+<p><img src="img16.png" class="img-fluid"></p>
+<ul>
+<li>Parametric form SCM에 assumptions을 한다면, 구별 가능!</li>
+<li>즉, parametric form needs assumptions!</li>
+</ul>
+<p><strong>Linear Non-Gaussian Assumption</strong></p>
+<ul>
+<li>Markov Completeness Theorem에 의해 linear with Gaussian noise형태는 그래프 구별이 불가능</li>
+<li>그렇지만 non-Gaussian인 경우 구별 가능!</li>
+</ul>
+<p><span class="math display">\[Y : = f(x) + U\]</span></p>
+<p><span class="math inline">\(X\perp\!\!\!\perp U\)</span>, and U is non-Gaussian random variable.</p>
+<blockquote class="blockquote">
+<p>Identifiability in linear non-Gaussian setting theorem:</p>
+</blockquote>
+<p><img src="img17.png" class="img-fluid"></p>
+<section id="graphic-intuition" class="level4">
+<h4 class="anchored" data-anchor-id="graphic-intuition"><strong>Graphic intuition</strong></h4>
+<p><img src="img18.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="lingam" class="level3">
+<h3 class="anchored" data-anchor-id="lingam">LiNGAM</h3>
+<p>가정</p>
+<ol type="1">
+<li>Data generating process is linear</li>
+<li>No unobserved confounders</li>
+<li>⇒ DAG 충족</li>
+<li>Noise follows independent non-Gaussian distribution.
+<ul>
+<li>complete causal structure can be estimated without prior information</li>
+<li>discover direction of causality</li>
+</ul></li>
+<li>⇒ Linear, Non-Gaussian, Acyclic Model</li>
+</ol>
+<ul>
+<li>ICA(Independent Component Analysis)</li>
+</ul>
+<p>: A statistical technique used for estimating mixing matrix A s.t x=Ae, x is observed and A and e are not.</p>
+<p>→ identify linear model</p>
+<ul>
+<li>독립 성분 분석</li>
+<li>Dimension reduction</li>
+<li>데이터가 통계적으로 독립이고 정규분포를 따르지 않을 때, 독립성이 최대가 되는 방향으로 축을 삼음</li>
+<li>⇒ 가장 독립적인 축을 찾음</li>
+</ul>
+<p>만일 Gaussian이면 covariance matrix가 항상 같음</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img19.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">https://www.jmlr.org/papers/volume7/shimizu06a/shimizu06a.pdf</figcaption>
+</figure>
+</div>
+</section>
+<section id="nonlinear-models" class="level3">
+<h3 class="anchored" data-anchor-id="nonlinear-models">Nonlinear Models</h3>
+<p><strong>Nonlinear additive noise setting</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img20.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">https://papers.nips.cc/paper/2008/file/f7664060cc52bc6f3d620bcedc94a4b6-Paper.pdf</figcaption>
+</figure>
+</div>
+<ul>
+<li>Nonlinear의 역할은 non-Gaussianity와 유사causal direction identify 가능</li>
+<li>⇒ 관측변수들의 symmetry를 깸</li>
+<li>nonlinear+additive noise yields identifiable models</li>
+</ul>
+<p><strong>Post-Nonlinear setting</strong></p>
+<dl>
+<dt>→ noise가 additive로 들어가지 않는다면?</dt>
+<dd>
+<p>generalization of the nonlinear additive model (mild assumption)</p>
+</dd>
+</dl>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img21.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">https://arxiv.org/ftp/arxiv/papers/1205/1205.2599.pdf</figcaption>
+</figure>
+</div>
+<section id="참고-자료" class="level4">
+<h4 class="anchored" data-anchor-id="참고-자료">참고 자료&nbsp;</h4>
+<p>인과추론의 데이터과학 강의 : <a href="https://youtu.be/h1eMKb4iCTk" class="uri">https://youtu.be/h1eMKb4iCTk</a></p>
+
+
+</section>
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{&amp; junyoung2024,
+  author = {\&amp; Junyoung, Sangdon},
+  title = {12\textbackslash. {Causal} {Discovery} from {Observational}
+    {Data}},
+  date = {2024-01-04},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-&amp; junyoung2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+&amp; Junyoung, Sangdon. 2024. <span>“12\. Causal Discovery from
+Observational Data.”</span> January 4, 2024.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

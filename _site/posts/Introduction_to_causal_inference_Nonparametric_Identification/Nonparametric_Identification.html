@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Minsang Namgoong">
+<meta name="dcterms.date" content="2024-01-04">
+<meta name="description" content="Introduction to Causal Inference 강의 chapter 6 소개">
+
+<title>PseudoLab Causal Inference Team - 07. Nonparametric Identification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="PseudoLab Causal Inference Team">
+<meta property="og:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
+<meta property="og:image" content="images/pseudo_lab_eng.png">
+<meta property="og:site-name" content="PseudoLab Causal Inference Team">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/causal_inference_team_logo.jpg" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">PseudoLab Causal Inference Team</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">about</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">07. Nonparametric Identification</h1>
+                  <div>
+        <div class="description">
+          <p>Introduction to Causal Inference 강의 chapter 6 소개</p>
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Nonparametric Identification</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Minsang Namgoong </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 4, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#contents" id="toc-contents" class="nav-link active" data-scroll-target="#contents"><strong>Contents</strong></a></li>
+  <li><a href="#do-calculus" id="toc-do-calculus" class="nav-link" data-scroll-target="#do-calculus"><span class="math inline">\(do\)</span>-calculus</a>
+  <ul class="collapse">
+  <li><a href="#do-calculus를-위한-몇-가지-표기법" id="toc-do-calculus를-위한-몇-가지-표기법" class="nav-link" data-scroll-target="#do-calculus를-위한-몇-가지-표기법"><span class="math inline">\(do\)</span>-calculus를 위한 몇 가지 표기법</a></li>
+  <li><a href="#rule-1-observation의-삽입-제거" id="toc-rule-1-observation의-삽입-제거" class="nav-link" data-scroll-target="#rule-1-observation의-삽입-제거">Rule 1: Observation의 삽입 / 제거</a></li>
+  <li><a href="#rule-2-action-intervention의-교환" id="toc-rule-2-action-intervention의-교환" class="nav-link" data-scroll-target="#rule-2-action-intervention의-교환">Rule 2: Action ↔︎ Intervention의 교환</a></li>
+  <li><a href="#rule-3-action의-삽입-제거" id="toc-rule-3-action의-삽입-제거" class="nav-link" data-scroll-target="#rule-3-action의-삽입-제거">Rule 3: Action의 삽입 / 제거</a></li>
+  <li><a href="#application" id="toc-application" class="nav-link" data-scroll-target="#application">Application</a></li>
+  <li><a href="#do-calculus의-특징" id="toc-do-calculus의-특징" class="nav-link" data-scroll-target="#do-calculus의-특징"><span class="math inline">\(do\)</span>-calculus의 특징</a></li>
+  </ul></li>
+  <li><a href="#determining-identifiability-from-the-graph" id="toc-determining-identifiability-from-the-graph" class="nav-link" data-scroll-target="#determining-identifiability-from-the-graph">Determining Identifiability from the Graph</a></li>
+  <li><a href="#참고자료" id="toc-참고자료" class="nav-link" data-scroll-target="#참고자료">참고자료</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>안녕하세요, 가짜연구소 Causal Inference 팀의 남궁민상입니다.&nbsp;</p>
+<p>Introduction to Causal Inference 강의의 여섯 번째 챕터이며, 해당 챕터에서 다루는 내용은 아래와 같습니다.</p>
+<section id="contents" class="level3">
+<h3 class="anchored" data-anchor-id="contents"><strong>Contents</strong></h3>
+<ul>
+<li><span class="math inline">\(do\)</span>-calculus</li>
+<li>Determining Identifiability from the Graph</li>
+</ul>
+<p>◦ 강의 영상 링크 :&nbsp;<a href="https://youtu.be/9X4pR4jvKmM?t=1199">Chapter 5 - Randomised Experiments and Identification</a></p>
+<p>&nbsp; &nbsp; Ch 5와 6이 하나의 강의로 합쳐져 있습니다. 위 영상의 전반부는 교과서의 Ch 5, 후반부는 Ch 6 내용입니다. 그래서 여기서부터는 영상 제목과 챕터 제목이 안 맞습니다ㅠ</p>
+<p>&nbsp; &nbsp; 작성된 내용 중 개선점이나 잘못된 부분이 있다면 댓글로 알려주세요!</p>
+<hr>
+</section>
+<section id="do-calculus" class="level2">
+<h2 class="anchored" data-anchor-id="do-calculus"><span class="math inline">\(do\)</span>-calculus</h2>
+<p>잠깐 지금까지의 내용을 되짚어 볼까요? 우리가 원하는 것은 treatment <span class="math inline">\(T\)</span>와 outcome <span class="math inline">\(Y\)</span>의 인과관계, 즉 <span class="math inline">\(P(y\:|\:do(t))\)</span>를 밝혀내는 것입니다. 이것을 <strong>identification</strong>이라 하죠.</p>
+<ul>
+<li>아주아주 간단한 경우, 다른 노드 없이 <span class="math inline">\(T \rightarrow Y\)</span>라면 statistical quantity가 곧 causal quantity입니다. <span class="math inline">\(P(y\:|\:do(t))\:=\:P(y\:|\:t)\)</span>입니다.</li>
+<li>그런데 여러 노드들 사이의 관계가 복잡하게 엮이면, <span class="math inline">\(P(y\:|\:do(t))\)</span>를 계산하기 위해 더 복잡한 과정이 필요합니다.
+<ul>
+<li>graph factorization을 통해 노드들 사이의 관계를 쭉 늘어놓고</li>
+<li>우리가 관심없는 것들(<span class="math inline">\(T\)</span>를&nbsp;제외한 노드들)은 marginalize하고</li>
+<li>그리고 <span class="math inline">\(do(t)\)</span> 항을 없애는 방향으로(observation으로 바꿔나가는 방향으로) 식을 정리한다.</li>
+<li>이 과정이 지난 시간에 배웠던 adjusting for confounders입니다.</li>
+</ul></li>
+</ul>
+<p>앞서 다룬 backdoor criterion과 frontdoor criterion은 이런 과정이 간단한 케이스입니다. DAG만 쓱 보고도 identify할 수 있는 특수 케이스죠. 그런데 특수 케이스 말고, 일반적인 접근법은 없을까요?</p>
+<p>당연히 있습니다! 이 과정에 쓰일 수 있는 3가지의 inference rule이 있는데, 이 일련의 규칙들이 바로 <span class="math inline">\(do\)</span>-calculus입니다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">누군가가 던진 질문에 주디아 펄 교수님이 직접 답변해주셨네요!</figcaption>
+</figure>
+</div>
+<p>&nbsp;쉽게 말하자면, <span class="math inline">\(do\)</span>-calculus는 일종의 논리적 법칙입니다. 우리가 유클리드 기하학의 5가지 공준을 이용해 피타고라스의 정리를 유도할 수 있는 것처럼, <span class="math inline">\(do\)</span>-calculus의 3가지 규칙을 이용하면 인과적 관계를 규명할 수 있습니다. frontdoor &amp; backdoor adjustment는 이 법칙들을 적용해서 유도한 공식 중 하나인 거고요.</p>
+<p>&nbsp;밑에 자세히 설명하겠지만 <span class="math inline">\(do\)</span>-calculus의 3가지 룰은 DAG에서 ‘이런 노드들은 무시해도 돼!’ 또는 ‘이런 intervention은 observation으로 취급해도 돼!’ (또는 그 역) 라고 말해줍니다. 쉽게 말해 복잡하게 얽혀있는 상관관계 항들을 쳐내면서 인과관계를 규명할 수 있게 도와주는 거죠.</p>
+<blockquote class="blockquote">
+<p><span class="math inline">\(do\)</span>-calculus의 의미를 쉽게 설명하자면…<br>
+Rule 1: ~~한 조건이 만족된다면, ~~에 대한 observation을 무시할 수 있다.<br>
+Rule 2: ~~한 조건이 만족된다면, ~~에 대한 intervention을 observation으로 간주할 수 있다.<br>
+Rule 3: ~~한 조건이 만족된다면, ~~에 대한 intervention을 무시할 수 있다.</p>
+<p>또는 3개의 규칙 모두…<br>
+DAG를 ~~하게 조작했을 때, <span class="math inline">\(Y\)</span>와 <span class="math inline">\(Z\)</span>가 d-separated 관계라면 <span class="math inline">\(Z\)</span>에 대한 항을 무시 or 치환할 수 있다.</p>
+</blockquote>
+<section id="do-calculus를-위한-몇-가지-표기법" class="level3">
+<h3 class="anchored" data-anchor-id="do-calculus를-위한-몇-가지-표기법"><span class="math inline">\(do\)</span>-calculus를 위한 몇 가지 표기법</h3>
+<p><span class="math inline">\(do\)</span>-calculus를 살펴보기 앞서, 이 챕터에서 자주 쓰이는 노드 이름은 다음과 같습니다.</p>
+<ul>
+<li><span class="math inline">\(T\)</span> 또는 <span class="math inline">\(X\)</span>: 조작변인. 우리가 그 영향력을 알아보고자 하는 노드들.</li>
+<li><span class="math inline">\(Y\)</span>: 종속변인. 쉽게 말하면 결과. 우리가 궁극적으로 원하는 것은 <span class="math inline">\(P(y\:|\:do(t))\)</span>를 알아내는 것.</li>
+</ul>
+<p>또, <span class="math inline">\(do\)</span>-calculus에서는 causal graph를 이리저리 조작할 필요가 있습니다. 그래서 아래와 같은 표기법을 도입합니다.</p>
+<p><img src="img2.png" class="img-fluid"></p>
+<p>Causal graph <span class="math inline">\(G\)</span>에 대해서,&nbsp;</p>
+<ul>
+<li><span class="math inline">\(G\_{\overline{X}}\)</span>: 집합 <span class="math inline">\(X\)</span>에 포함된 노드들의 incoming edge (<span class="math inline">\(parent(X)\rightarrow X\)</span>인 엣지)를 제거한 그래프</li>
+<li><span class="math inline">\(G\_{\underline{X}}\)</span>: 집합 <span class="math inline">\(X\)</span>에 포함된 노드들의 outgoing edge (<span class="math inline">\(X \rightarrow child(X)\)</span>인 엣지)를 제거한 그래프</li>
+</ul>
+<p>처음 보는 표기법이지만, 직관적으로 이해하기는 어렵지 않을 겁니다. 노드 사이의 관계가 폭포처럼 위에서 아래로 흐른다고 생각해봅시다.</p>
+<ul>
+<li><span class="math inline">\(G\_{\overline{X}}\)</span>:&nbsp;위를 막는다 → 부모로부터 오는 엣지 차단</li>
+<li><span class="math inline">\(G\_{\underline{X}}\)</span>:&nbsp;아래를 막는다 → 자식한테 넘겨주는 엣지 차단</li>
+</ul>
+<p>그럼 본격적으로 <span class="math inline">\(do\)</span>-calculus의 3가지 규칙을 살펴볼까요?</p>
+</section>
+<section id="rule-1-observation의-삽입-제거" class="level3">
+<h3 class="anchored" data-anchor-id="rule-1-observation의-삽입-제거">Rule 1: Observation의 삽입 / 제거</h3>
+<p><span class="math inline">\([P(y\:|\:do(t),z,w)=P(y\:|\:do(t),w)\quad if \quad Y {\perp\!\!\!\perp}_{G_{\overline{T}}} Z\:|\:T,W]\)</span></p>
+<p>수학적인 의미를 풀어보자면, 우리가 <span class="math inline">\(P(y\:|\:do(t))\)</span>를 계산하는 과정에서 <span class="math inline">\(Z\)</span>에 대한 observation 항이 등장할 수도 있습니다. 그런데&nbsp;이 때, <span class="math inline">\(G\_{\overline{T}}\)</span>에서 <span class="math inline">\((Y {\perp\!\!\!\perp} Z\:|\:T,W)\)</span>가 성립하면 <span class="math inline">\(Z\)</span>에 대한 observation 항은 무시할 수 있습니다.</p>
+<p>조금 직관적으로 풀어보자면, <span class="math inline">\(Z\)</span>가 <span class="math inline">\(Y\)</span>에 영향을 줄 수 있는 path가 없다면, <span class="math inline">\(Z\)</span><strong>에 대한 observation은 무시할 수 있다</strong>는 이야기입니다.</p>
+<p><img src="img3.png" class="img-fluid"></p>
+<p>예시 하나 살펴볼까요? 위와 같은 그래프를 생각해보자. (여기서는 <span class="math inline">\(T\)</span> 대신 <span class="math inline">\(X\)</span>라는 문자를 사용합니다)</p>
+<p><span class="math inline">\(X\rightarrow Y\)</span>에 대한 인과관계를 밝히고 싶은데, <span class="math inline">\(Z\)</span>를 신경써야 할까요?</p>
+<p><span class="math inline">\(do\)</span>-calculus의 1 규칙에 따르면, <span class="math inline">\(G\_{\overline{X}}\)</span>에서 <span class="math inline">\(W\)</span>,<span class="math inline">\(X\)</span>를 conditioning 했을 때, <span class="math inline">\(Z\)</span>와 <span class="math inline">\(Y\)</span>가 d-separation 되어있는 걸 볼 수 있습니다. 따라서&nbsp;<span class="math inline">\(Z\)</span>는 무시해도 됩니다!</p>
+<p>직관적으로 봤을 때도, <span class="math inline">\(Z\)</span>가 바뀌었다고 <span class="math inline">\(Y\)</span>에 영향을 주는 경로가 없죠? 지금 같은 경우는 그래프가 간단해 바로 보이지만, 그래프가 복잡해지면 유용하게 사용되겠죠?</p>
+</section>
+<section id="rule-2-action-intervention의-교환" class="level3">
+<h3 class="anchored" data-anchor-id="rule-2-action-intervention의-교환">Rule 2: Action ↔︎ Intervention의 교환</h3>
+<p>그런데 Rule 1을 아무리 활용해도 식에 do-operator가 있는 걸 없앨 수는 없죠? 그걸 해주는 게 Rule 2입니다!</p>
+<p><span class="math inline">\([P(y\:|\:do(t),do(z),w)=P(y\:|\:do(t),z,w)\quad&nbsp;if&nbsp;\quad&nbsp;Y&nbsp;{\perp\!\!\!\perp}_{G_{\overline{T},\underline{Z}}}&nbsp;Z\:|\:T,W]\)</span></p>
+<p>수학적으로는, <span class="math inline">\(G\_{\overline{T},\underline{Z}}\)</span>에서 <span class="math inline">\((Y {\perp\!\!\!\perp} Z\:|\:T,W)\)</span>가 성립하면 <span class="math inline">\(Z\)</span>에 대한 intervention은 observation과 같습니다. 즉, <span class="math inline">\(Z\)</span>에 <span class="math inline">\(do\)</span>-operator를 마음대로 삽입하거나 제거할 수 있습니다.</p>
+<p>직관적으로는, <span class="math inline">\(Z\)</span>가 <span class="math inline">\(Y\)</span>에 영향을 줄 수 있는 path가 directed path 밖에 없다면 <span class="math inline">\(Z\)</span>에 대한 intervention은 observation과 같게 생각할 수 있다는 뜻입니다.</p>
+<p><img src="img4.png" class="img-fluid"></p>
+<p>마찬가지로 위와 같은 예시를 생각해봅시다. 여기서 <span class="math inline">\(do(z)\)</span>를 관측값 <span class="math inline">\(z\)</span>로 생각할 수 있을까요?</p>
+<p><span class="math inline">\(G\_{\overline{X},\underline{Z}}\)</span>를 보면 <span class="math inline">\(W,X\)</span>를 conditioning 했을 때, <span class="math inline">\(Z\)</span>와 <span class="math inline">\(Y\)</span>는 서로 영향을 주지 않습니다 (d-separation). 따라서 <span class="math inline">\(do(z)\)</span>를 그냥 <span class="math inline">\(z\)</span>로 생각해도 무방합니다.</p>
+</section>
+<section id="rule-3-action의-삽입-제거" class="level3">
+<h3 class="anchored" data-anchor-id="rule-3-action의-삽입-제거">Rule 3: Action의 삽입 / 제거</h3>
+<p>규칙 3은 꽤나 복잡하게 생겼습니다.</p>
+<p><span class="math inline">\([P(y\:|\:do(t),do(z),w)=P(y\:|\:do(t),w)\quad&nbsp;if&nbsp;\quad&nbsp;Y&nbsp;{\perp\!\!\!\perp}_{G_{\overline{T},\overline{Z(W)}}}&nbsp;Z\:|\:T,W&nbsp;]\)</span></p>
+<p>먼저 <span class="math inline">\(Z(W)\)</span>가 뭘까요? <span class="math inline">\(Z(W)\)</span>는 ’<span class="math inline">\(Z\)</span>에 속한 노드 중에, <span class="math inline">\(W\)</span>의 부모가 아닌 노드들의 집합’입니다.</p>
+<p><img src="img5.png" class="img-fluid"></p>
+<p>위 케이스에서, <span class="math inline">\(Z\)</span>는 <span class="math inline">\(W\)</span>의 부모가 아닙니다. 따라서 <span class="math inline">\(Z(W)\)</span>는 그냥 <span class="math inline">\(Z\)</span>와 같습니다. (여기서는 <span class="math inline">\(Z\)</span>가 하나의 노드이지만, <span class="math inline">\(Z\)</span>가 여러 노드의 집합을 의미하도록 확장될 수 있다는 것, 명심하세요!)</p>
+<p>따라서 <span class="math inline">\(G\_{\overline{X},\overline{Z(W)}}\)</span>는 위와 같이 변경됩니다. <span class="math inline">\(Z\rightarrow X\)</span>는 <span class="math inline">\(\overline{X}\)</span>에 의해, <span class="math inline">\(W\rightarrow Z\)</span>는 <span class="math inline">\(\overline{Z(W)}\)</span>에 의해 제거되었죠.</p>
+<p><img src="img6.png" class="img-fluid"></p>
+<p>반면 이 경우, 하나 있는 <span class="math inline">\(Z\)</span>가 <span class="math inline">\(W\)</span>의 부모이므로 <span class="math inline">\(Z(W)\)</span>는 공집합입니다. 그래서 <span class="math inline">\(\overline{Z(W)}\)</span>를 한다고 해도 <span class="math inline">\(X\rightarrow Z\)</span>는 바뀌지 않습니다.</p>
+<p>그러면 두 케이스에서 <span class="math inline">\(do(z)\)</span>는 무시할 수 있을까요? 두 케이스 모두, <span class="math inline">\(X\)</span>와 <span class="math inline">\(W\)</span>를 conditioning하면 <span class="math inline">\(Z\)</span>와 <span class="math inline">\(Y\)</span>는 d-separated이므로 <span class="math inline">\(do(z)\)</span>는 무시 가능합니다!</p>
+</section>
+<section id="application" class="level3">
+<h3 class="anchored" data-anchor-id="application">Application</h3>
+<p>앞서서 frontdoor &amp; backdoor adjustment는 <span class="math inline">\(do\)</span>-calculus를 통해 유도될 수 있다고 했습니다. 그 과정을 직접 살펴보면서 <span class="math inline">\(do\)</span>-calculus가 실제로 어떻게 적용될 수 있는지 살펴봅시다.</p>
+<section id="backdoor-adjustment" class="level4">
+<h4 class="anchored" data-anchor-id="backdoor-adjustment">Backdoor Adjustment</h4>
+<p><img src="img7.png" class="img-fluid"></p>
+<p><img src="img8.png" class="img-fluid"></p>
+</section>
+<section id="frontdoor-adjustment" class="level4">
+<h4 class="anchored" data-anchor-id="frontdoor-adjustment">Frontdoor Adjustment</h4>
+<p><img src="img9.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="do-calculus의-특징" class="level3">
+<h3 class="anchored" data-anchor-id="do-calculus의-특징"><span class="math inline">\(do\)</span>-calculus의 특징</h3>
+<p><span class="math inline">\(do\)</span>-calculus는 아래와 같은 특징을 가집니다.</p>
+<ul>
+<li><strong>Complete:</strong> <span class="math inline">\(do\)</span>-calculus의 3가지 규칙을 이용하면 모든 identifiable causal estimand를 identify할 수 있습니다. 다시 말해, 이 세 가지 규칙을 이용해도 identify하지 못하는 케이스는 그냥 identify할 수 없는 케이스입니다.</li>
+<li><strong>Nonparametric:</strong> <span class="math inline">\(do\)</span>-calculus는 데이터 분포에 대해 특별한 가정을 하지 않습니다. 특정 분포를 가정했을 때는 parametric identification이라고 불리며 nonparametric에 비해 더 많은 causal estimand를 알아낼 수 있다고 합니다. 하지만 이 코스에서는 다루지 않는다네요.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="determining-identifiability-from-the-graph" class="level2">
+<h2 class="anchored" data-anchor-id="determining-identifiability-from-the-graph">Determining Identifiability from the Graph</h2>
+<p><span class="math inline">\(do\)</span>-calculus가 유용하고 좋긴 한데, frontdoor이나 backdoor criterion처럼 그래프만 언뜻 보고도 identifiability를 알아낼 수는 없죠. causal graph를 언뜻 보고도 찾아낼 수 있는, 특수한 causal estimand는 더 없을까요?</p>
+<p>있습니다! <strong>Unconfounded Children Identifiability</strong>라고 불리는 케이스입니다. 아래와 같은 경우죠.</p>
+<blockquote class="blockquote">
+<p>하나의 conditioning set으로 <span class="math inline">\(T\)</span>의 자손 중에 <span class="math inline">\(Y\)</span>의 조상인 것들로 통하는 backdoor path를 모두 막을 수 있다면, <span class="math inline">\(P(y\:|\:do(t))\)</span>는 identifiable하다.</p>
+</blockquote>
+<p>frontdoor adjustment와 비슷해 보입니다. 자세한 예시를 볼까요?</p>
+<p><img src="img10.png" class="img-fluid"></p>
+<p>위의 그림에서 frontdoor는 만족하지 않지만 confounded children은 만족한다. Confounded children criterion이 좀 더 일반적인 기준인 셈이죠.</p>
+<p>이 외에도 hedge condition이라는 게 있긴 한데, 이 강의에서는 다루지 않습니다.</p>
+<hr>
+</section>
+<section id="참고자료" class="level2">
+<h2 class="anchored" data-anchor-id="참고자료">참고자료</h2>
+<ul>
+<li><a href="https://www.andrewheiss.com/blog/2021/09/07/do-calculus-backdoors"><strong>do-calculus adventures!</strong></a></li>
+<li><a href="https://stephenmalina.com/post/2020-03-09-front-door-do-calc-derivation/"><strong>Deriving the front-door criterion with the do-calculus</strong></a></li>
+<li><a href="https://csinva.io/notes/stat/causal_inference.html#dags--structural-causal-models-pearl-et-al"><strong>chandan singh Causality</strong></a></li>
+</ul>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{namgoong2024,
+  author = {Namgoong, Minsang},
+  title = {07\textbackslash. {Nonparametric} {Identification}},
+  date = {2024-01-04},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-namgoong2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Namgoong, Minsang. 2024. <span>“07\. Nonparametric
+Identification.”</span> January 4, 2024.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

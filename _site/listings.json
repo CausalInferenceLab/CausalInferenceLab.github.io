@@ -2,13 +2,20 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/Chapter_1/1.Motivation.html",
-      "/posts/Chapter_0/0.causal_inference_library.html",
       "/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html",
-      "/posts/2023-10-18-intro/index.html",
-      "/posts/Chapter_2/2.Potential_Outcomes.html",
-      "/posts/Chapter_4/4.Causal_Models.html",
-      "/posts/Chapter_3/3.Graphical_Models.html"
+      "/posts/Introduction_to_causal_inference_Causal_Discovery/Causal_Discovery.html",
+      "/posts/Introduction_to_causal_inference_DID/DID.html",
+      "/posts/Introduction_to_causal_inference_Instrumental_Variables/Instrumental_Variables.html",
+      "/posts/Introduction_to_causal_inference_Unobserved_confounding_Analysis/Unobserved_Confounding_Analysis.html",
+      "/posts/Introduction_to_causal_inference_Estimation/Estimation.html",
+      "/posts/Introduction_to_causal_inference_Nonparametric_Identification/Nonparametric_Identification.html",
+      "/posts/Introduction_to_causal_inference_RCT/RCT.html",
+      "/posts/Introduction_to_causal_inference_Causal_Models/Causal_Models.html",
+      "/posts/Introduction_to_causal_inference_Graphical_Models/Graphical_Models.html",
+      "/posts/Introduction_to_causal_inference_Potential_Outcomes/Potential_Outcomes.html",
+      "/posts/Introduction_to_causal_inference_Motivation/Motivation.html",
+      "/posts/Introduction_to_causal_inference_Library/causal_inference_library.html",
+      "/posts/Introduction_to_causal_inference_intro/index.html"
     ]
   }
 ]
