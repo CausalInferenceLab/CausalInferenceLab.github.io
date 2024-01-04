@@ -1,5 +1,5 @@
 ---
-title: "Randomised Controoled Trial"
+title: "Randomised Controlled Trial"
 author: "jinsoo shin"
 description: |
   스터디 소개

@@ -2,7 +2,7 @@
 title: ""
 listing:
   contents: posts
-  sort: "date desc"
+  sort: "title desc"
   type: default
   categories: true
   sort-ui: false
@@ -10,5 +10,4 @@ listing:
 page-layout: full
 title-block-banner: true
 ---
-
 
