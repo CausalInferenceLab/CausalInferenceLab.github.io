@@ -1,39 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_1/1.Motivation.html</loc>
-    <lastmod>2023-11-13T15:11:06.916Z</lastmod>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Graphical_Models/Graphical_Models.html</loc>
+    <lastmod>2024-01-08T14:41:06.630Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_0/0.causal_inference_library.html</loc>
-    <lastmod>2023-11-13T15:11:04.952Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/2023-10-18-intro/index.html</loc>
-    <lastmod>2023-11-13T15:11:03.080Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_2/2.Potential_Outcomes.html</loc>
-    <lastmod>2023-11-13T15:11:01.640Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/index.html</loc>
-    <lastmod>2023-11-13T15:10:59.548Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/about.html</loc>
-    <lastmod>2023-11-13T15:11:00.744Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_3/3.Graphical_Models.html</loc>
-    <lastmod>2023-11-13T15:11:02.556Z</lastmod>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Causal_Discovery/Causal_Discovery.html</loc>
+    <lastmod>2024-01-08T14:41:05.430Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html</loc>
-    <lastmod>2023-11-13T15:11:04.304Z</lastmod>
+    <lastmod>2024-01-08T14:41:04.318Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Chapter_4/4.Causal_Models.html</loc>
-    <lastmod>2023-11-13T15:11:06.068Z</lastmod>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Estimation/Estimation.html</loc>
+    <lastmod>2024-01-08T14:41:02.850Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Library/causal_inference_library.html</loc>
+    <lastmod>2024-01-08T14:41:01.694Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Causal_Models/Causal_Models.html</loc>
+    <lastmod>2024-01-08T14:41:00.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Unobserved_confounding_Analysis/Unobserved_Confounding_Analysis.html</loc>
+    <lastmod>2024-01-08T14:40:59.402Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/index.html</loc>
+    <lastmod>2024-01-08T14:40:57.762Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/about.html</loc>
+    <lastmod>2024-01-08T14:40:56.022Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Instrumental_Variables/Instrumental_Variables.html</loc>
+    <lastmod>2024-01-08T14:40:58.494Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_intro/index.html</loc>
+    <lastmod>2024-01-08T14:40:59.802Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Potential_Outcomes/Potential_Outcomes.html</loc>
+    <lastmod>2024-01-08T14:41:01.230Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_DID/DID.html</loc>
+    <lastmod>2024-01-08T14:41:02.270Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Motivation/Motivation.html</loc>
+    <lastmod>2024-01-08T14:41:03.442Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_RCT/RCT.html</loc>
+    <lastmod>2024-01-08T14:41:04.842Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Nonparametric_Identification/Nonparametric_Identification.html</loc>
+    <lastmod>2024-01-08T14:41:05.986Z</lastmod>
   </url>
 </urlset>

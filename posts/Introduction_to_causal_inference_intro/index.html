@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="jinsoo shin">
+<meta name="dcterms.date" content="2024-01-08">
+<meta name="description" content="스터디 소개">
 
-<title>PseudoLab Causal Inference Team -</title>
+<title>PseudoLab Causal Inference Team - 00. Casual하게 Causality 이해하기 소개</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,23 +26,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -62,26 +66,24 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="PseudoLab Causal Inference Team">
 <meta property="og:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
-<meta property="og:image" content="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/images/pseudo_lab_eng.png">
+<meta property="og:image" content="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_intro/images/pseudo_lab_eng.png">
 <meta property="og:site-name" content="PseudoLab Causal Inference Team">
-<meta property="og:image:height" content="630">
-<meta property="og:image:width" content="1200">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/causal_inference_team_logo.jpg" alt="" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/causal_inference_team_logo.jpg" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">PseudoLab Causal Inference Team</span>
     </a>
   </div>
@@ -92,7 +94,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="../../about.html" rel="" target="">
  <span class="menu-text">about</span></a>
   </li>  
   <li class="nav-item compact">
@@ -109,187 +111,83 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">00. Casual하게 Causality 이해하기 소개</h1>
+                  <div>
+        <div class="description">
+          <p>스터디 소개</p>
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">news</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>jinsoo shin </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 8, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
 <!-- main -->
-<div class="quarto-about-trestles">
-  <div class="about-entity">
-    <img src="images/pseudo_lab_eng.png" class="about-image
-  rounded " style="width: 20em;">
-    <div class="about-links">
-  <a href="https://twitter.com/" class="about-link" rel="" target="">
-    <i class="bi bi-twitter"></i>
-     <span class="about-link-text">Twitter</span>
-  </a>
-  <a href="https://www.linkedin.com/company/pseudolab/?originalSubdomain=kr" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
-     <span class="about-link-text">LinkedIn</span>
-  </a>
-  <a href="https://github.com/CausalInferenceLab" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
-     <span class="about-link-text">Github</span>
-  </a>
-</div>
-  </div>
-  <div class="about-contents"><main class="content" id="quarto-document-content">
-<section id="about" class="level4">
-<h4 data-anchor-id="about">about</h4>
-<p>안녕하세요. 가짜연구소 Causal Inference 팀입니다.</p>
-<p>데이터를 통한 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️</p>
-<p>한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다!</p>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>안녕하세요, 가짜연구소 Causal Inference 팀입니다.</p>
+<p>지난 3개월 간 <a href="https://pseudo-lab.com/"><strong>가짜연구소</strong></a>에서 <strong>“Casual하게 Causality 이해하기”</strong> 스터디가 진행되었습니다.</p>
+<p>해당 스터디를 통해 저희가 달성하고자 하는 목표는 크게 3가지입니다.</p>
+<blockquote class="blockquote">
+<p>◦ Causal Inference에 대한 기본적인 개념 학습<br>
+◦ 문제 or ML 모델에 대한 원인 분석 능력 키우기<br>
+◦ 공부한 내용을 정리해, Causal Inference 에 대한 한국어 자료 만들어보기</p>
+</blockquote>
 <hr>
-</section>
-<section id="인과추론팀-빌더" class="level4">
-<h4 data-anchor-id="인과추론팀-빌더">인과추론팀 빌더</h4>
-<table class="table">
-<thead>
-<tr class="header">
-<th style="text-align: left;">이름</th>
-<th style="text-align: left;">소속</th>
-<th style="text-align: left;">소개</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">신진수</td>
-<td style="text-align: left;"><a href="https://www.krafton.com/">크래프톤</a> Data Analyst</td>
-<td style="text-align: left;"><a href="https://github.com/CausalInferenceLab">Github</a> / <a href="https://www.linkedin.com/in/jinsoo-shin-436060162/">LinkedIn</a></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="study-인과추론-with-entertainment" class="level4">
-<h4 data-anchor-id="study-인과추론-with-entertainment">Study : 인과추론 with Entertainment</h4>
-<table class="table">
-<thead>
-<tr class="header">
-<th style="text-align: left;">이름</th>
-<th style="text-align: left;">소속</th>
-<th style="text-align: left;">소개</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">김소희</td>
-<td style="text-align: left;"><a href="https://team.tving.com/">티빙</a> Data Analyst</td>
-<td style="text-align: left;"><a href="https://www.linkedin.com/in/sohee-kim-9460b6113/">LinkedIn</a></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">김지연</td>
-<td style="text-align: left;"><a href="https://kr.ncsoft.com/kr/index.do">엔씨소프트</a> Data Analyst</td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">박시온</td>
-<td style="text-align: left;"><a href="https://company.nexon.com/kr/">넥슨코리아</a> Data Analyst</td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">박병수</td>
-<td style="text-align: left;"><a href="https://company.nexon.com/kr/">넥슨코리아</a> Data Analyst</td>
-<td style="text-align: left;"><a href="https://www.linkedin.com/in/byeongsu-park-58249b196/">LinkedIn</a></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">박이삭</td>
-<td style="text-align: left;"><a href="https://hybecorp.com/kor/main">하이브IM</a> Data Analyst</td>
-<td style="text-align: left;"><a href="https://www.linkedin.com/in/%EC%9D%B4%EC%82%AD-%EB%B0%95-75a7a916a/">LinkedIn</a></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">유정현</td>
-<td style="text-align: left;"><a href="https://company.nexon.com/kr/">넥슨코리아</a> Data Analyst</td>
-<td style="text-align: left;"><a href="https://www.linkedin.com/in/jeonghyun-y-750a7b1b2/">LinkedIn</a></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">임종언</td>
-<td style="text-align: left;"><a href="https://company.nexon.com/kr/">넥슨코리아</a> Data Analyst</td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">조슬지</td>
-<td style="text-align: left;"><a href="https://company.netmarble.com/studio/list/fnc">넷마블에프앤씨</a> Data Analyst</td>
-<td style="text-align: left;"><a href="https://www.linkedin.com/in/%EC%8A%AC%EC%A7%80-%EC%A1%B0-4370251b8/">LinkedIn</a></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="study-인과추론-라이브러리" class="level4">
-<h4 data-anchor-id="study-인과추론-라이브러리">Study : 인과추론 라이브러리</h4>
-<table class="table">
-<thead>
-<tr class="header">
-<th style="text-align: left;">이름</th>
-<th style="text-align: left;">소속</th>
-<th style="text-align: left;">소개</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">남궁민상</td>
-<td style="text-align: left;"><a href="https://pseudo-lab.com">가짜연구소</a> Data Analyst</td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">박상우</td>
-<td style="text-align: left;"><a href="https://pseudo-lab.com">가짜연구소</a> Data Analyst</td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">이홍규</td>
-<td style="text-align: left;"><a href="https://pseudo-lab.com">가짜연구소</a> Data Analyst</td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">정호재</td>
-<td style="text-align: left;"><a href="https://www.lottecap.com">롯데캐피탈</a> Credit Analyst</td>
-<td style="text-align: left;"><a href="https://www.linkedin.com/in/wjdghwo/">LinkedIn</a></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">조인서</td>
-<td style="text-align: left;"><a href="https://www.koica.go.kr">KOICA</a> Manager</td>
-<td style="text-align: left;"><a href="https://www.linkedin.com/in/yinseo-cho">LinkedIn</a></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="research-인과추론-논문쓰기" class="level4">
-<h4 data-anchor-id="research-인과추론-논문쓰기">Research : 인과추론 논문쓰기</h4>
-</section>
-<section id="tech-support" class="level4">
-<h4 data-anchor-id="tech-support">Tech Support</h4>
-<table class="table">
-<thead>
-<tr class="header">
-<th style="text-align: left;">이름</th>
-<th style="text-align: left;">소속</th>
-<th style="text-align: left;">소개</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">김상돈</td>
-<td style="text-align: left;">베가스 Data Analyst</td>
-<td style="text-align: left;"><a href="https://www.linkedin.com/in/%EC%83%81%EB%8F%88-%EA%B9%80-b89985199/">LinkedIn</a></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">최은희</td>
-<td style="text-align: left;"><a href="https://company.nexon.com/kr/">넥슨코리아</a> Data Analyst</td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">홍성철</td>
-<td style="text-align: left;"><a href="https://pseudo-lab.com">가짜연구소</a> Data Analyst</td>
-<td style="text-align: left;"></td>
-</tr>
-</tbody>
-</table>
+<p>인과추론을 공부하러 오신 분들이 저희가 작성한 블로그를 통해,</p>
+<p>한국어 자료가 많지 않은 <strong>인과추론에 더 쉽게 다가가셨으면 좋겠습니다!</strong></p>
+<p><img src="thumbnail2.png" class="img-fluid"></p>
+<hr>
+<p><strong>“Casual하게 Causality 이해하기”</strong> 스터디는 <a href="https://www.bradyneal.com/causal-inference-course">Brady Neal의 Introduction to Causal Inference 강의</a>를 바탕으로 진행되었습니다.</p>
+<p>블로그 글 이전에 전체 챕터에 대한 노션 페이지 정리 자료를 보고 싶으신 분들은 <a href="https://pseudo-lab.com/Casual-Causality-efb2d821ae334b8d9674ca331edebc72">가짜연구소 Causal Inference 아카이브</a>를 참고해주시면 감사하겠습니다!</p>
 
 
-</section>
-</main></div>
-</div>
- <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{shin2024,
+  author = {shin, jinsoo},
+  title = {00\textbackslash. {Casual하게} {Causality} {이해하기} {소개}},
+  date = {2024-01-08},
+  url = {https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_intro},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-shin2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+shin, jinsoo. 2024. <span>“00\. Casual하게 Causality 이해하기
+소개.”</span> January 8, 2024. <a href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_intro">https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_intro</a>.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -425,6 +323,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   } else {
     toggleColorMode(false);
   }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     

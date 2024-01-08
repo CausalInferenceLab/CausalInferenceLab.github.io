@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Brady Kim &amp; Minsang Namgoong">
+<meta name="dcterms.date" content="2024-01-08">
+<meta name="description" content="Introduction to Causal Inference 강의 chapter 10 소개">
+
+<title>PseudoLab Causal Inference Team - 11. Difference-in-Difference(DID)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="PseudoLab Causal Inference Team">
+<meta property="og:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
+<meta property="og:image" content="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_DID/images/pseudo_lab_eng.png">
+<meta property="og:site-name" content="PseudoLab Causal Inference Team">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/causal_inference_team_logo.jpg" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">PseudoLab Causal Inference Team</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">about</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">11. Difference-in-Difference(DID)</h1>
+                  <div>
+        <div class="description">
+          <p>Introduction to Causal Inference 강의 chapter 10 소개</p>
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Difference-in-Difference</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Brady Kim &amp; Minsang Namgoong </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 8, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#contents" id="toc-contents" class="nav-link active" data-scroll-target="#contents"><strong>Contents</strong></a></li>
+  <li><a href="#preliminaries" id="toc-preliminaries" class="nav-link" data-scroll-target="#preliminaries"><strong>1-2 Preliminaries</strong></a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"><strong>2 OverView</strong></a></li>
+  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions">3. Assumptions</a></li>
+  <li><a href="#proof" id="toc-proof" class="nav-link" data-scroll-target="#proof"><strong>3. Proof</strong></a></li>
+  <li><a href="#problems-with-difference-in-differnces" id="toc-problems-with-difference-in-differnces" class="nav-link" data-scroll-target="#problems-with-difference-in-differnces"><strong>4. Problems with Difference-in-Differnces</strong></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>안녕하세요, 가짜연구소 Causal Inference 팀의 김성수, 남궁민상입니다.&nbsp;</p>
+<p>Introduction to Causal Inference 강의의 열 번째 챕터이며, 해당 챕터에서 다루는 내용은 아래와 같습니다.</p>
+<section id="contents" class="level3">
+<h3 class="anchored" data-anchor-id="contents"><strong>Contents</strong></h3>
+<ul>
+<li>Motivation and Preliminaries</li>
+<li>Difference-in-Differneces Overview</li>
+<li>Assumptions and Proof</li>
+<li>Probelms with Difference-in-Differences</li>
+</ul>
+<p>◦&nbsp;강의 영상 링크 :&nbsp;<a href="https://www.youtube.com/watch?v=2nDgrNP7XSE&amp;list=PLoazKTcS0RzZ1SUgeOgc6SWt51gfT80N0&amp;index=10">Chapter 10 - Difference in Difference</a></p>
+<p>&nbsp; &nbsp; 작성된 내용 중 개선점이나 잘못된 부분이 있다면 댓글로 알려주세요!</p>
+<section id="motivation" class="level4">
+<h4 class="anchored" data-anchor-id="motivation"><strong>1. Motivation</strong></h4>
+<p><strong>Q. 인과관계를 밝히려면 어떻게 해야할까요?</strong></p>
+<p>A. RCT, frontdoor adjustment, backdoor adjustment, do-calculus 등을 이용해 confounding factor를 통제하고 연관관계를 보세요 (~Chapter 7)</p>
+<p><strong>Q. unobserved confounding factor가 있으면 어떡하죠?</strong></p>
+<p>A. 몇 가지 가정을 통해 구간을 줄일 수도 있고 (Chapter 8) 도구변수를 이용해 unobserved confounder의 영향을 없앨 수 있습니다 (Chapter 9)</p>
+<p><strong>Q. 괜찮은 도구변수를 찾는 게 너무 힘들어요.</strong></p>
+<p>A. 도구변수 외에도, unobserved confounder를 처리하는 기법들이 이것저것 있습니다.</p>
+<p>→ 그 중 하나가 오늘 다룰 이중차분법(Difference-in-Differences)입니다!</p>
+<blockquote class="blockquote">
+<p>DID는 평행 추세를 가정합니다 (parallel trends assumption)<br>
+쉽게 말해, 처치집단과 통제집단이 다를 수는 있지만 (= 변수의 값은 다를 수 있지만) 같은 추세로 움직인다는 가정 (= unobserved confounder의 영향은 두 집단에 동등하다) → 처치집단과 통제집단이 움직이는 추세가 다르다면, 이는 처치 때문이다 → 차분(difference)을 통해 confounder의 영향을 상쇄할 수 있습니다</p>
+</blockquote>
+</section>
+<section id="did-활용-예시" class="level4">
+<h4 class="anchored" data-anchor-id="did-활용-예시"><strong>1-1 DID 활용 예시</strong></h4>
+<p><img src="img1.png" class="img-fluid"></p>
+<p>무기 프로모션 A와 방어구 프로모션 B의 수익을 비교해봅시다.</p>
+<p>우리는 인과관계를 추론하는 다양한 방법을 배웠으니, “단순히 올해에는 무기 프로모션 A가 110억의 수익을 냈고, B가 100억의 수익을 냈으니, 무기 프로모션이 10억 정도 더 성과가 좋았다” 로 단순히 분석하고 끝내면 안됩니다.</p>
+<p>그렇다면 왜 이러한 차이가 발생했을까?</p>
+<p>커뮤니티를 분석해보니, 2021.12월부터 <strong>무기 위주 업데이트가 되었다는 커뮤니티의 평가</strong>가 있었습니다.</p>
+<p>그럼 과연 무기 위주 업데이트가 프로모션의 수익에 영향을 미쳤을까?</p>
+<p>Q. “무기 위주 업데이트”가 프로모션 수익에 긍정적인 영향을 미쳤나?</p>
+<p>여기서 “무기 위주 업데이트”가 프로모션에 미친 Casual effect를 발라내기 위해 고려해야 하는 것은 아래와 같습니다.</p>
+<ol type="1">
+<li>같은 시점에서 서로 다른 개체를 관찰한 자료에서 오는 차이</li>
+</ol>
+<ul>
+<li><strong>각 개체마다 특성이 다를 수 있음. 즉,무기와 방어구는 전혀 다른 개체</strong></li>
+</ul>
+<ol start="2" type="1">
+<li>다른 시점에 따른 변수의 변화</li>
+</ol>
+<ul>
+<li><strong>작년과 올해라는 시점의 변화</strong></li>
+</ul>
+<table class="table">
+<thead>
+<tr class="header">
+<th>&nbsp;</th>
+<th>무기 프로모션 A</th>
+<th>방어구 프로모션 B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2021.05</td>
+<td>150억(A1)</td>
+<td>200억(B1)</td>
+</tr>
+<tr class="even">
+<td>2022.05</td>
+<td>110억(A2)</td>
+<td>100억(B2)</td>
+</tr>
+</tbody>
+</table>
+<ol type="1">
+<li><strong>다른 시점에 따른 변수의 변화 차분</strong>
+<ul>
+<li>A1&nbsp;-&nbsp;A2&nbsp;: 무기 프로모션의 시간에 따른 변화</li>
+<li>B1&nbsp;-&nbsp;B2&nbsp;: 방어구 프로모션의 시간에 따른 변화</li>
+</ul></li>
+<li><strong>다른 개체를 관찰한 자료에서 오는 차이 차분</strong>
+<ul>
+<li>A1&nbsp;-&nbsp;B1&nbsp;: 무기 업데이트 시작 전 무기 프로모션과 방어구 프로모션 간의 차이</li>
+<li>A2&nbsp;-&nbsp;B2&nbsp;: 무기 업데이트 시작 후 무기 프로모션과 방어구 프로모션 간의 차이</li>
+</ul></li>
+<li><strong>이중 차분 δDD(Difference-in-Differences)<br>
+</strong>(1) 시간적 특성을 제거&nbsp;<strong>(A2-A1) - (B2-B1)</strong>(2) 다른 개체에서 오는 차이를 제거 <strong>(A2-B2) - (A1-B1)<br>
+</strong>=&gt; Term = (2) Term(1)&nbsp;</li>
+</ol>
+<p>이렇게 Difference에 한 번 다시 Difference를 하기 때문에 Difference-in-Differences(DID)라 불리며, 이렇게 <strong>DID는 두 집단 간의 특징 차이를 제거하고, 시점에 따른 결과 변수의 변화가 얼마나 다르게 일어나는지 확인할 수 있습니다.</strong></p>
+<p><a href="https://danbi-ncsoft.github.io/study/2019/08/13/causality-part4-DID.html">참고 :NC Soft 단비 블로그</a></p>
+<p><strong>그럼 DID를 이해하기 위해 알아야하는 선행 개념을 알아보겠습니다.</strong></p>
+</section>
+</section>
+<section id="preliminaries" class="level3">
+<h3 class="anchored" data-anchor-id="preliminaries"><strong>1-2 Preliminaries</strong></h3>
+<p><strong>앞 챕터에서 배운 평균처리 효과(ATE)를 떠올려 보세요.</strong></p>
+<p><strong>ATE:</strong></p>
+<p><span class="math display">\[
+\begin{aligned}\
+\mathbb{E}[Y(1)-Y(0)]&nbsp;&amp;=\mathbb{E}[Y(1)]-\mathbb{E}[Y(0)]&nbsp;\\\
+&amp;=\mathbb{E}[Y(1)&nbsp;\mid&nbsp;T=1]-\mathbb{E}[Y(0)&nbsp;\mid&nbsp;T=0]&nbsp;\\\
+&amp;=\mathbb{E}[Y&nbsp;\mid&nbsp;T=1]-\mathbb{E}[Y&nbsp;\mid&nbsp;T=0]
+\end{aligned}
+\]</span></p>
+<p>위의 ATE가 성립하려면 만족해야 하는 가정은 Unconfoundedness였습니다.</p>
+<blockquote class="blockquote">
+<p><span class="math inline">\((Y(0), Y(1)) \perp T\)</span><br>
+Unconfoundedness</p>
+</blockquote>
+<p><strong>ATT:</strong></p>
+<p>Difference in Difference 에서 활용하는 새로운 Casual estimation은 ATT라고 하며 Treatment가 (T=1)일 때의 ATE입니다.</p>
+<p>아래의 수식과 그림을 보시죠.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbb{E}[Y(1)-Y(0)&nbsp;\mid&nbsp;T=1]&nbsp;&amp;=\mathbb{E}[Y(1)&nbsp;\mid&nbsp;T=1]-\mathbb{E}[Y(0)&nbsp;\mid&nbsp;T=1]&nbsp;\\\
+&amp;=\mathbb{E}[Y&nbsp;\mid&nbsp;T=1](\text&nbsp;{&nbsp;consistency&nbsp;})-\mathbb{E}[Y(0)&nbsp;\mid&nbsp;T=1]&nbsp;\\\
+&amp;=\mathbb{E}[Y&nbsp;\mid&nbsp;T=1]-\mathbb{E}[Y(0)&nbsp;\mid&nbsp;T=0]&nbsp;\quad(Y(0)&nbsp;\perp&nbsp;T)&nbsp;\\\
+&amp;=\mathbb{E}[Y&nbsp;\mid&nbsp;T=1]-\mathbb{E}[Y&nbsp;\mid&nbsp;T=0](\text&nbsp;{&nbsp;consistency&nbsp;})\
+\end{aligned}
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">파란색 점: Control Group, 빨간색 점: Treamtment Group</figcaption>
+</figure>
+</div>
+<p>위 식을 만족시키기 위해서는 ATE와는 다르게 Unconfoundedness보다 약한 가정이 필요합니다.</p>
+<blockquote class="blockquote">
+<p><span class="math inline">\(Y(0) \perp T\)</span><br>
+Weak Unconfoundedness&nbsp;</p>
+</blockquote>
+</section>
+<section id="overview" class="level3">
+<h3 class="anchored" data-anchor-id="overview"><strong>2 OverView</strong></h3>
+<p>Control Group은 Treamtment(T=1)에 영향을 받지 않으니, 이 둘의 차이를 구하면 Unconfoundedness 가정 하에서 아래의 식과 같이 됩니다.</p>
+<p><span class="math inline">\(\mathbb{E}[Y(1)-Y(0)\mid T=1]\)</span> (Without Time)</p>
+<p>그럼 이제 Y-axis(Time)을 추가하여 시간에 대한 축을 나타내보고, ATT도 시간 Term을 넣어 일반화 시켜봅시다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img3.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">파란색 점: Control Group, 빨간색 점: Treamtment Group</figcaption>
+</figure>
+</div>
+<p>여기서 Treatment를 받는 것은 오직 Treatment Administered(어떠한 처치를 실행) 이후의 오른쪽 상단에 있는 수식입니다. 즉, Treatment Group이며, 이때 Control Group은 어떠한 Treatment도 받지 않습니다.</p>
+<p>타임 t=0은 처치를 시행하기 전, t=1은 처치를 시행한 후로 두고 ATT에 Time Term(t)를 넣어 다음과 같이 일반화할 수 있습니다.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{ ATT estimand with time: } \mathbb{E}\left[Y_{1}(1)-Y_{1}(0) \mid T=1\right]
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbb{E}\left[Y_{1}(1) \mid T=1\right]-{E}\left[Y_{1}(0) \mid T=1\right](Counter Factual)
+\end{aligned}
+\]</span></p>
+<p>하지만 여기서 <span class="math inline">\({E} \left[Y_{1}(0) \mid T=1\right]\)</span> 는 Counterfactual 이기 때문에, 관측할 수 없습니다. 따라서 이때 Control Group의 결과를 활용하여 Counterfactual를 계산할 수 있게 만들어 줍니다.</p>
+<p><img src="img4.png" class="img-fluid"></p>
+<p>위 그림에서 보이는 실선과 같이 애초부터 Treatment를 받지 않은 Control Group을 Treatment Group에서 Counterfactual</p>
+<p><span class="math inline">\({E}\left[Y_{1}(0)&nbsp;\mid&nbsp;T=1\right]\)</span> 을 대신합니다.</p>
+<p>따라서 Difference-in-Differences의 식은 다음과 같습니다.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbb{E}\left[Y_{1}(1)-Y_{1}(0) \mid T=1\right]=
+\left(\mathbb{E}\left[Y_{1} \mid T=1\right]-\mathbb{E}\left[Y_{0} \mid T=1\right]\right)-\left(\mathbb{E}\left[Y_{1} \mid T=0\right]-\mathbb{E}\left[Y_{0} \mid T=0\right]\right)
+\end{aligned}
+\]</span></p>
+<p>여기서 첫 번째 Term <span class="math inline">\(\left(\mathbb{E}\left[Y_{1} \mid T=1\right]-\mathbb{E}\left[Y_{0} \mid T=1\right]\right)\)</span> 은 Treatment Group에서 만들어진 삼각형에서 높이와 같고 두번째 Term <span class="math inline">\(\left(\mathbb{E}\left[Y_{1} \mid T=0\right]-\mathbb{E}\left[Y_{0} \mid T=0\right]\right)\)</span> Control Group에서 만들어진 삼각형의 높이와 같습니다.</p>
+<p><img src="img5.png" class="img-fluid"></p>
+<p>그리고 첫번째 Term과 두번째 Term을 차분(Difference)하는 것은 아래 그림과 같이 Purple line을 구하는 것과 같으며, 이는 우리가 구하고자 하는 Treatment에 의한 Causal estimand입니다.</p>
+<p><img src="img6.png" class="img-fluid"></p>
+<p>DID는 Time-Invariant(대상 또는 시간 차이에서 오는 이질성) Confounders에 대해 Robustness 한데, 그 이유는 다른 시점에 따른 변수의 변화 차분, 다른 개체를 관찰한 자료에서 오는 차이를 차분하기 때문입니다.</p>
+</section>
+<section id="assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="assumptions">3. Assumptions</h3>
+<p><img src="img7.png" class="img-fluid"></p>
+<p><strong>→(1) 위 그림에서</strong> <span class="math inline">\(\mathbb{E}\left[Y_{1}(0) \mid T=1\right]\)</span> 는 Counterfactual 이기 때문에, 관측할 수 없음</p>
+<p><strong>(우리가 관측할 수 있는 것은</strong> <span class="math inline">\({E}\left[Y_{1}(1) \mid T=1\right]\)</span>)</p>
+<p><strong>→(2) 처치를 받지 않는 Control Group의 결과를 활용하여 Counterfactual를 계산할 수 있게 만듦</strong></p>
+<p><img src="img8.png" class="img-fluid"></p>
+<p><strong>→(3) 위 그림에서 Control Group의 기울기를 통해 그어진 점선을 통해 Treatment Group에서 Counterfactual</strong> <span class="math inline">\({E}\left[Y_{1}(0) \mid T=1\right]\)</span>을 대신함</p>
+<p>→(4) <strong>Control Group의 기울기가 Treatment Group의 Counterfactual, 즉</strong> <span class="math inline">\({E}\left[Y_{1}(0) \mid T=1\right]\)</span>을 대신하기 위한 Assumptions 이 필요</p>
+<ol type="1">
+<li>Consistency Assumption</li>
+</ol>
+<p>Extended to Time Causal estimand → Statistical estimand</p>
+<p><img src="img9.png" class="img-fluid"></p>
+<p>*Counterfacutal Quantities <span class="math inline">\({E}\left[Y_{\tau}(1) \mid T=0\right]\)</span>&nbsp;와 <span class="math inline">\({E}\left[Y_{\tau}(0) \mid T=1\right]\)</span>는 관측 불가하기 때문에 Consistency Assumption을 통해 Statistical estimand 로 추정할 수 없습니다.</p>
+<ol start="2" type="1">
+<li>Paralled Trends Assumption</li>
+</ol>
+<p>Counterfacual <span class="math inline">\({E}\left[Y_{1}(1) \mid T=0\right]\)</span>이 Control Group과 비슷하게 똑같이 움직인다는 가정</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img10.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Paralled Trends Assumption</figcaption>
+</figure>
+</div>
+<p><img src="img11.png" class="img-fluid"></p>
+<p>우리가 알고 싶은것은 위 그림에서 저 Gray point가 Treatment Group의 Counterfactual <span class="math inline">\(\mathbb{E}\left[Y_{1}(1) \mid T=0\right]\)</span> 인가를 알고 싶습니다.</p>
+<p>즉, 저 첫 번째 Blue line이 두 번째 Blue line과 같은지를 확인해야 하는 것이며, 이것은 두 선의 기울기가 같은가를 추정하는 것과 같은 문제⇒ 따라서 Parallel Trends Assumption이라고 합니다.</p>
+<p>위 가정에서 <span class="math inline">\({E}\left[Y_{0}(0) \mid T=1\right]\)</span>는 Consistency를 통해 <span class="math inline">\({E}\left[Y_0 \mid T=1\right]\)</span> 를 만들 수 없음. 따라서 하나의 가정이 더 필요합니다.</p>
+<ol start="3" type="1">
+<li>No Pretreatment effect Assumption</li>
+</ol>
+<p>어떠한 처치의 시점이 되기 전에는 Treatment Group에 어떠한 Treatment도 없다는 것을 가정</p>
+<p><img src="img12.png" class="img-fluid"></p>
+</section>
+<section id="proof" class="level3">
+<h3 class="anchored" data-anchor-id="proof"><strong>3. Proof</strong></h3>
+<p>위에서 배운 가정을 활용하여, 증명해봅시다.</p>
+<p>우리가 보여주고자 하는 DID 수식은 아래와 같습니다.</p>
+<p><span class="math display">\[  
+\begin{aligned}  
+&amp;\mathbb{E}\left[Y_1(1)-Y_1(0)&nbsp;\mid&nbsp;T=1\right]=\left(\mathbb{E}\left[Y_1&nbsp;\mid&nbsp;T=1\right]-\mathbb{E}\left[Y_0&nbsp;\mid&nbsp;T=1\right]\right)-&nbsp;\\  
+&amp;\left(\mathbb{E}\left[Y_1&nbsp;\mid&nbsp;T=0\right]-\mathbb{E}\left[Y_0&nbsp;\mid&nbsp;T=0\right]\right)  
+\end{aligned}  
+\]</span></p>
+<p><strong>(1) Consistency 충족하지 않는 Counterfacual Term을 좌변에 두고, Paralled Trend assumption을 통해 수식 전개</strong></p>
+<p><span class="math display">\[  
+\begin{aligned}(Assumptions)\mathbb{E}\left[Y_{1}(0) \mid T=1\right] &amp;=\mathbb{E}\left[Y_{0}(0) \mid T=1\right]+\mathbb{E}\left[Y_{1}(0) \mid T=0\right]-\mathbb{E}\left[Y_{0}(0) \mid T=0\right] \\&amp;=\mathbb{E}\left[Y_{0}(0) \mid T=1\right]+\mathbb{E}\left[Y_{1} \mid T=0\right]-\mathbb{E}\left[Y_{0} \mid T=0\right] \\&amp;=\mathbb{E}\left[Y_{0}(1) \mid T=1\right]+\mathbb{E}\left[Y_{1} \mid T=0\right]-\mathbb{E}\left[Y_{0} \mid T=0\right] \\&amp;=\mathbb{E}\left[Y_{0} \mid T=1\right]+\mathbb{E}\left[Y_{1} \mid T=0\right]-\mathbb{E}\left[Y_{0} \mid T=0\right]\end{aligned}  
+\]</span></p>
+<p><strong>(2) 위에서 만들어진 수식을 아래의 식에 대입</strong></p>
+<p><span class="math display">\[  
+\begin{aligned}\mathbb{E}\left[Y_{1}(1)-Y_{1}(0)&nbsp;\mid&nbsp;T=1\right]&nbsp;&amp;=\mathbb{E}\left[Y_{1}(1)&nbsp;\mid&nbsp;T=1\right]-\mathbb{E}\left[Y_{1}(0)&nbsp;\mid&nbsp;T=1\right]\\&amp;=\mathbb{E}\left[Y_{1}&nbsp;\mid&nbsp;T=1\right]-\mathbb{E}\left[Y_{1}(0)&nbsp;\mid&nbsp;T=1\right]\end{aligned}&nbsp;&nbsp;&nbsp;&nbsp;  
+\]</span></p>
+<p><strong>(3) 결론</strong></p>
+<p><span class="math display">\[  
+\begin{aligned}\mathbb{E}\left[Y_{1}(1)-Y_{1}(0)&nbsp;\mid&nbsp;T=1\right]&nbsp;&amp;=\mathbb{E}\left[Y_{1}&nbsp;\mid&nbsp;T=1\right]-\left(\mathbb{E}\left[Y_{0}&nbsp;\mid&nbsp;T=1\right]+\mathbb{E}\left[Y_{1}&nbsp;\mid&nbsp;T=0\right]-\mathbb{E}\left[Y_{0}&nbsp;\mid&nbsp;T=0\right]\right)&nbsp;\\&amp;=\left(\mathbb{E}\left[Y_{1}&nbsp;\mid&nbsp;T=1\right]-\mathbb{E}\left[Y_{0}&nbsp;\mid&nbsp;T=1\right]\right)-\left(\mathbb{E}\left[Y_{1}&nbsp;\mid&nbsp;T=0\right]-\mathbb{E}\left[Y_{0}&nbsp;\mid&nbsp;T=0\right]\right)\end{aligned}  
+\]</span></p>
+<p>즉, 우리가 증명하고자 한 아래 식을 가정을 통해 성립함을 알 수 있습니다.</p>
+<p><span class="math display">\[  
+\mathbb{E}\left[Y_{1}(1)-Y_{1}(0) \mid T=1\right]=  
+\left(\mathbb{E}\left[Y_{1}&nbsp;\mid&nbsp;T=1\right]-\mathbb{E}\left[Y_{0}&nbsp;\mid&nbsp;T=1\right]\right)-\left(\mathbb{E}\left[Y_{1}&nbsp;\mid&nbsp;T=0\right]-\mathbb{E}\left[Y_{0}&nbsp;\mid&nbsp;T=0\right]\right)  
+\]</span></p>
+</section>
+<section id="problems-with-difference-in-differnces" class="level3">
+<h3 class="anchored" data-anchor-id="problems-with-difference-in-differnces"><strong>4. Problems with Difference-in-Differnces</strong></h3>
+<ol type="1">
+<li>Violations of Paralle Trends</li>
+</ol>
+<p>DID는 기본적으로 Parallel trands assumption을 따르지만 실제에선 이 가정을 따르지 않는 경우가 많습니다.&nbsp;</p>
+<p><span class="math inline">\(Violation: \quad \mathbb{E}\left[Y_{1}(0)-Y_{0}(0) \mid T=1\right] \neq \mathbb{E}\left[Y_{1}(0)-Y_{0}(0) \mid T=0\right]\)</span></p>
+<blockquote class="blockquote">
+<p>DID procedures rely on different parallel trends assumptions (PTAs), and recover different causal parameters (<a href="https://www.journals.uchicago.edu/doi/10.1086/711509#">Michelle Marcus</a> and&nbsp;<a href="https://www.journals.uchicago.edu/doi/10.1086/711509#">Pedro H. C. Sant’Anna</a>)</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>We document a “robustness” versus “efficiency” trade-off in terms of the strength of the underlying Parelle Trends assumtions (<a href="https://www.journals.uchicago.edu/doi/10.1086/711509#">Michelle Marcus</a> and&nbsp;<a href="https://www.journals.uchicago.edu/doi/10.1086/711509#">Pedro H. C. Sant’Anna</a>)</p>
+</blockquote>
+<p>그럴때는, W라는 변수로 Conditioning하여 Backdoor path를 막아 Parallel Trends 가정이 성립되도록 할 수 있습니다.</p>
+<p><strong>Control for relevant confounders</strong></p>
+<p><span class="math inline">\(\mathbb{E}\left[Y_{1}(0)-Y_{0}(0) \mid T=1, W\right]=\mathbb{E}\left[Y_{1}(0)-Y_{0}(0) \mid T=0, W\right]\)</span></p>
+<p>하지만 위 식에서 회귀분석에서 말하는 interaction term이 Treatment 와 Time 사이에 있다면, W라는 변수로 Conditioning 한다고 해서 Parallel Trends를 성립할 수 있도록 할 수 없다는 것을 주위하셔야 합니다.</p>
+<p><span class="math inline">\(Y:=\ldots+T \tau \quad \Longrightarrow \quad \text { Parallel trends violation }\)</span></p>
+<ol start="2" type="1">
+<li>Paralle Trends is Scale-Specific</li>
+</ol>
+<p>the parallel trends assumption이 만족한다고 해서, Y에 transoformation 또는 Scale을 취한 값이 parallel trends assumption를 만족한다고 할 수 없기 때문에 이를 주의하셔야 합니다.</p>
+<p><span class="math inline">\(\mathbb{E}\left[Y_{1}(0) \mid T=1\right]-\mathbb{E}\left[Y_{0}(0) \mid T=1\right]=\mathbb{E}\left[Y_{1}(0) \mid T=0\right]-\mathbb{E}\left[Y_{0}(0) \mid T=0\right]\)</span></p>
+<p>이상으로 Chapter 10. Difference-in-Difference를 마치도록 하겠습니다.</p>
+<p>감사합니다.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{kim &amp; minsang namgoong2024,
+  author = {Kim \&amp; Minsang Namgoong, Brady},
+  title = {11\textbackslash. {Difference-in-Difference(DID)}},
+  date = {2024-01-08},
+  url = {https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_DID/DID.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-kim &amp; minsang namgoong2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Kim &amp; Minsang Namgoong, Brady. 2024. <span>“11\.
+Difference-in-Difference(DID).”</span> January 8, 2024. <a href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_DID/DID.html">https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_DID/DID.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

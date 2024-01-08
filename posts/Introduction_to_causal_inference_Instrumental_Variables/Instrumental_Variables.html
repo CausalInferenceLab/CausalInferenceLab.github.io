@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Minsang Namgoon &amp; Hojae">
+<meta name="dcterms.date" content="2024-01-08">
+<meta name="description" content="Introduction to Causal Inference 강의 chapter 9 소개">
+
+<title>PseudoLab Causal Inference Team - 10. Instrumental Variables</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="PseudoLab Causal Inference Team">
+<meta property="og:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
+<meta property="og:image" content="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Instrumental_Variables/images/pseudo_lab_eng.png">
+<meta property="og:site-name" content="PseudoLab Causal Inference Team">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/causal_inference_team_logo.jpg" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">PseudoLab Causal Inference Team</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">about</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">10. Instrumental Variables</h1>
+                  <div>
+        <div class="description">
+          <p>Introduction to Causal Inference 강의 chapter 9 소개</p>
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Instrumental Variables</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Minsang Namgoon &amp; Hojae </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 8, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#contents" id="toc-contents" class="nav-link active" data-scroll-target="#contents">Contents</a></li>
+  <li><a href="#intro" id="toc-intro" class="nav-link" data-scroll-target="#intro">1. Intro</a></li>
+  <li><a href="#what-is-an-instrument" id="toc-what-is-an-instrument" class="nav-link" data-scroll-target="#what-is-an-instrument">2. What is an Instrument?</a>
+  <ul class="collapse">
+  <li><a href="#assumption" id="toc-assumption" class="nav-link" data-scroll-target="#assumption">2.1 Assumption</a></li>
+  </ul></li>
+  <li><a href="#no-nonparametric-identification-of-the-ate" id="toc-no-nonparametric-identification-of-the-ate" class="nav-link" data-scroll-target="#no-nonparametric-identification-of-the-ate">3. No Nonparametric Identification of the ATE</a></li>
+  <li><a href="#warm-up-binary-linear-setting" id="toc-warm-up-binary-linear-setting" class="nav-link" data-scroll-target="#warm-up-binary-linear-setting">4. Warm-Up: Binary Linear Setting</a></li>
+  <li><a href="#continuous-linear-setting" id="toc-continuous-linear-setting" class="nav-link" data-scroll-target="#continuous-linear-setting">5. Continuous Linear Setting</a>
+  <ul class="collapse">
+  <li><a href="#two-stage-least-squares-estimator" id="toc-two-stage-least-squares-estimator" class="nav-link" data-scroll-target="#two-stage-least-squares-estimator"><strong>Two-stage least squares estimator</strong></a></li>
+  </ul></li>
+  <li><a href="#nonparametric-identification-of-the-late" id="toc-nonparametric-identification-of-the-late" class="nav-link" data-scroll-target="#nonparametric-identification-of-the-late">6. Nonparametric Identification of the LATE</a>
+  <ul class="collapse">
+  <li><a href="#iv-관련-notation" id="toc-iv-관련-notation" class="nav-link" data-scroll-target="#iv-관련-notation">IV 관련 Notation</a></li>
+  <li><a href="#principal-strata" id="toc-principal-strata" class="nav-link" data-scroll-target="#principal-strata">Principal Strata</a></li>
+  <li><a href="#late-구하기" id="toc-late-구하기" class="nav-link" data-scroll-target="#late-구하기">LATE 구하기</a></li>
+  </ul></li>
+  <li><a href="#iv-in-more-general-settings" id="toc-iv-in-more-general-settings" class="nav-link" data-scroll-target="#iv-in-more-general-settings">7. IV in More General Settings</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>안녕하세요, 가짜연구소 Causal Inference 팀의 남궁민상, 정호재입니다.&nbsp;</p>
+<p>Introduction to Causal Inference 강의의 아홉번째 챕터이며, 해당 챕터에서 다루는 내용은 아래와 같습니다.</p>
+<p>강의 영상 링크 : <a href="https://youtu.be/B0SRWteGoOw" class="uri">https://youtu.be/B0SRWteGoOw</a></p>
+<p>작성된 내용 중 개선점이나 잘못된 부분이 있다면 댓글로 알려주세요!</p>
+<hr>
+<section id="contents" class="level2">
+<h2 class="anchored" data-anchor-id="contents">Contents</h2>
+<ol type="1">
+<li>Intro</li>
+<li>What is an Instrument?</li>
+<li>No Nonparametric Identification of the ATE</li>
+<li>Warm-Up: Binary Linear Setting</li>
+<li>Continuous Linear Setting</li>
+<li>Nonparametric Identification of the LATE</li>
+<li>IV in More General Settings</li>
+</ol>
+<hr>
+</section>
+<section id="intro" class="level2">
+<h2 class="anchored" data-anchor-id="intro">1. Intro</h2>
+<p>Q : 관찰되지 않은 교란 요인이 있을 때 어떻게 인과관계를 확인할 수 있나요?</p>
+<p>A : Frontdoor adjustment - Chap.5</p>
+<ul>
+<li>중간 매개변수를 사용하여 인과효과를 계산하는 방법</li>
+</ul>
+<p>A : Unconfounded children criterion - Chap.5</p>
+<ul>
+<li>하나의 conditioning set으로 처치변수 T의 자손 중에 결과변수 Y의 조상인 것들로 통하는 backdoor path를 모두 막는 방법</li>
+</ul>
+<p>A : Some other fancy application of do-calculus - Chap.5</p>
+<ul>
+<li>그래프가 아닌 statistical quantity를 이용한 일반적인 방법</li>
+</ul>
+<p>A : Set identification (bounds) - Chap.7</p>
+<ul>
+<li>관찰되지 않은 교란 요인의 interval을 좁혀보는 방법</li>
+</ul>
+<p>A : Sensitivity analysis - Chap.7</p>
+<ul>
+<li>관찰되지 않은 교란요인이 존재할때 정량적으로 영향력을 판단하는 방법</li>
+</ul>
+<p><strong>A : Instrumental Variables(☆)</strong></p>
+<ul>
+<li>다른 변수로 관찰되지 않은 교란요인의 영향을 없애는 방법</li>
+</ul>
+</section>
+<section id="what-is-an-instrument" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-an-instrument">2. What is an Instrument?</h2>
+<p>도구 변수란, 처치변수 T와에는 영향을 주면서 그 이외의 변수에는 영향을 주거나 받지 않는 변수를 의미합니다.</p>
+<section id="assumption" class="level3">
+<h3 class="anchored" data-anchor-id="assumption">2.1 Assumption</h3>
+<p><strong>1. Relevance</strong></p>
+<ul>
+<li>도구변수 Z는 처치변수 T에 인과적 영향(상관성 존재)을 끼칩니다.</li>
+</ul>
+<p><img src="img1.png" class="img-fluid"></p>
+<p><strong>2. Exclusion Restriction</strong></p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="img2.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="img3.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<ul>
+<li>결과변수 Y에 대한 도구변수 Z 인과적 영향은 처치변수 T에 의해 완전히 중재됩니다.</li>
+<li>도구 변수 Z가 결과변수 Y에 영향을 미치기 위해선 반드시 처치변수 T를 통해야 합니다.</li>
+</ul>
+<p><strong>3. Instrumental Unconfoundedness</strong></p>
+<ul>
+<li>도구변수 Z에서 결과변수 Y간의 backdoor paths는 없습니다.</li>
+<li>도구변수 Z와 관찰되지 않은 교란 요인 U의 관계는 없습니다.</li>
+</ul>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="img4.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="img5.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img src="img6.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<ul>
+<li>도구변수 Z와 관찰되지 않은 교란 요인 U의 관계가 없으므로 관찰된 교란 변수(W)를 차단하여 Instrumental variables를 사용할 수 있습니다.</li>
+</ul>
+</section>
+</section>
+<section id="no-nonparametric-identification-of-the-ate" class="level2">
+<h2 class="anchored" data-anchor-id="no-nonparametric-identification-of-the-ate">3. No Nonparametric Identification of the ATE</h2>
+<p>Q : 도구 변수가 인과관계를 식별할 수 있다면, 왜 Chapter 6. Non-parametiric Identification에서 보지 않았을까요?</p>
+<p>A : 도구변수는 Non-parametiric Identification 방법이 아니기 때문입니다.</p>
+<ul>
+<li>가정이 필요 없을때 Non-parametiric Identification을 가질 수 있는 데 도구변수에는 3가정이 존재합니다.</li>
+</ul>
+<p>&gt; (FYI) Nonparametric Identification을 만족하는 조건</p>
+<p><img src="img7.png" class="img-fluid"></p>
+<ul>
+<li>[처치변수 T]와 [결과변수 Y의 ancestor이면서 처치변수 T의 자식노드인 어느 노드]와의 path는 차단할 수 있습니다.</li>
+</ul>
+</section>
+<section id="warm-up-binary-linear-setting" class="level2">
+<h2 class="anchored" data-anchor-id="warm-up-binary-linear-setting">4. Warm-Up: Binary Linear Setting</h2>
+<ul>
+<li>Assumption
+<ul>
+<li><span class="math inline">\(Y:= \delta T + \alpha_u U\)</span></li>
+</ul></li>
+<li>Setting
+<ul>
+<li>처치변수 T와 도구변수 Z는 binary</li>
+</ul></li>
+<li>Associational difference for the Z-Y relationship :</li>
+</ul>
+<p><span class="math inline">\(E[Y | Z = 1] - E[Y | Z = 0]\)</span></p>
+<p><span class="math inline">\(= E[\delta T + \alpha_u U | Z = 1] -E[\delta T + \alpha_u U| Z = 0]\)</span> ← exclusion restriction(2번째가정) and linear outcome assumptions</p>
+<p><span class="math inline">\(= \delta(E[T | Z = 1] - E[T | Z = 0]) + \alpha_u (E[U|Z=1] - E[U|Z=0])\)</span></p>
+<p><span class="math inline">\(= \delta(E[T | Z = 1] - E[T | Z = 0]) + \alpha_u (E[U] - E[U])\)</span> ← instrumental unconfoundedness assumption(3번째가정)</p>
+<p><span class="math inline">\(= \delta(E[T | Z = 1] - E[T | Z = 0])\)</span></p>
+<ul>
+<li>Wald estimand :</li>
+</ul>
+<p><span class="math inline">\(\delta=\frac{Cov(Y,Z) }{Cov(T,Z) }\)</span></p>
+<p>Relevance Assumption으로 <span class="math inline">\(E[T | Z = 1] \not= E[T | Z = 0]\)</span> 을 만족합니다.</p>
+<p><img src="img8.png" class="img-fluid"></p>
+<p>도구변수 Z에서 결과변수 Y로 가는 backdoor path는 존재하지 않으므로 각 path의 영향을 살펴봅니다.</p>
+<p>또한 Causal effect가 있는 directed path를 계수들의 곱으로 표현할 수 있습니다.</p>
+<p>이를 대입하면 <span class="math inline">\(\delta = \frac{\alpha_z \delta}{\alpha_z}\)</span> 으로 변경할 수 있습니다.</p>
+<ul>
+<li>Wald estimator :</li>
+</ul>
+<p><span class="math inline">\(\hat\delta=\frac{\frac{1}{n_1}\sum_{i:z_i=1}Y_i -\frac{1}{n_0}\sum_{i:z_i=0}Y_i }{\frac{1}{n_1}\sum_{i:z_i=1}T_i -\frac{1}{n_0}\sum_{i:z_i=0}T_i }\)</span></p>
+<p>Z→Y의 영향을 구한 후 Z→T의 영향을 나누어서 계산합니다.</p>
+</section>
+<section id="continuous-linear-setting" class="level2">
+<h2 class="anchored" data-anchor-id="continuous-linear-setting">5. Continuous Linear Setting</h2>
+<ul>
+<li>Assumption
+<ul>
+<li><span class="math inline">\(Y:= \delta T + \alpha_u U\)</span></li>
+</ul></li>
+<li>Setting
+<ul>
+<li>처치변수 T와 도구변수 Z는 continuous</li>
+</ul></li>
+<li>Associational difference for the Z-Y relationship :</li>
+</ul>
+<p><span class="math inline">\(Cov(Y,Z) = E[YZ]E[Y]E[Z]\)</span></p>
+<p><span class="math inline">\(= E[(\delta T + \alpha_u U )Z] -E[\delta T + \alpha_u U]E[ Z]\)</span> ← exclusion restriction(2번째가정) and linear outcome assumptions</p>
+<p><span class="math inline">\(= \delta E[TZ] + \alpha_u E[UZ] - \delta E[T]E[Z] - \alpha_u E[U]E[Z]\)</span></p>
+<p><span class="math inline">\(= \delta (E[TZ] - E[T]E[Z]) + \alpha_u (E[UZ] - E[U]E[Z])\)</span></p>
+<p><span class="math inline">\(= \delta Cov(T,Z) + \alpha_u Cov(U,Z)\)</span></p>
+<p><span class="math inline">\(= \delta Cov(T,Z)\)</span> ← instrumental unconfoundedness assumption(3번째가정)</p>
+<ul>
+<li>Wald estimand :</li>
+</ul>
+<p><span class="math inline">\(\delta=\frac{Cov(Y,Z) }{Cov(T,Z) }\)</span></p>
+<p>Relevance Assumption으로 <span class="math inline">\(Cov(T,Z) \not=0\)</span> 을 만족합니다.</p>
+<ul>
+<li>Wald estimator :</li>
+</ul>
+<p><span class="math inline">\(\hat\delta=\frac{\hat{Cov}(Y,Z) }{\hat{Cov}(T,Z) }\)</span></p>
+<section id="two-stage-least-squares-estimator" class="level3">
+<h3 class="anchored" data-anchor-id="two-stage-least-squares-estimator"><strong>Two-stage least squares estimator</strong></h3>
+<ol type="1">
+<li>Linearly regress <span class="math inline">\(T\)</span> on <span class="math inline">\(Z\)</span> to estimate <span class="math inline">\(E[T | Z ]\)</span> . This gives us the projection of <span class="math inline">\(T\)</span> onto <span class="math inline">\(Z\)</span>: <span class="math inline">\(\hat T\)</span>.</li>
+<li>Linearly regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(\hat T\)</span> to estimate <span class="math inline">\(E[\hat T | Z ]\)</span> . Obtain our estimate <span class="math inline">\(\hat \delta\)</span> as the fitted coefficient in front of <span class="math inline">\(\hat T\)</span>.</li>
+</ol>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="img9.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="img10.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p><span class="math inline">\(\hat T\)</span>는 <span class="math inline">\(U\)</span>에 대한 함수가 아니므로 <span class="math inline">\(U\)</span>에서 <span class="math inline">\(T\)</span>로가는 path가 사라져서 backdoor path가 제거됩니다.</p>
+<p>※ 예시</p>
+<pre><code>import numpy as np
+import pandas as pd
+import statsmodels.formula.api as sm
+
+np.random.seed(12345) # 동일한 결과를 위해 시드 설정
+num = 10000 # 데이터 수
+
+U = np.random.normal(size = num) # Unobserved Factors
+Z = np.random.normal(size = num) # Instrumental Variable
+
+# T는 U와 Z의 자식노드
+T = 3.0*U + 6.0*Z + np.random.normal(size = num) # Treatment
+
+# Y는 T와 U의 지식노드
+Y = 15.0*U + 9.0*T + np.random.normal(size = num) # Outcome
+
+data = pd.DataFrame({'T' : T, 'U' : U, 'Y' : Y})</code></pre>
+<ul>
+<li>단순비교</li>
+</ul>
+<pre><code># 단순 비교
+sod_model = sm.ols('Y ~ T', data).fit()
+# 교란 변수를 누락하였기에 인과 효과가 잘못 추정됨
+sod_model.summary().tables[1]</code></pre>
+<table class="table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>&nbsp;</th>
+<th>coef&nbsp;</th>
+<th>std err</th>
+<th>&nbsp;t</th>
+<th>P&gt;|t|</th>
+<th>[0.025</th>
+<th>0.975]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intercept</td>
+<td>-0.1277</td>
+<td>0.134</td>
+<td>-0.953</td>
+<td>0.341</td>
+<td>-0.390</td>
+<td>0.135</td>
+</tr>
+<tr class="even">
+<td>T</td>
+<td>9.9905</td>
+<td>0.020</td>
+<td>505.906</td>
+<td>0.000</td>
+<td>9.952</td>
+<td>10.029</td>
+</tr>
+</tbody>
+</table>
+<p>교란변수를 통제하지 않았을 때 인과효과는 9.9905로 나옴 0.9905만큼의 error가 발생합니다.</p>
+<p><span class="math inline">\(Y = Intercept + T + e\)</span></p>
+<ul>
+<li>도구변수 활용</li>
+</ul>
+<p><span class="math display">\[ (T → Y)의 인과효과 = \frac {(Z → Y) path의 영향} {(Z → T) path의 영향} \]</span></p>
+<pre><code># first stage model(Z -&gt; T)
+Z_to_T = sm.ols('T ~ Z', data).fit()
+# reduced model(Z -&gt; Y)
+Z_to_Y = sm.ols('Y ~ Z', data).fit()</code></pre>
+<pre><code># first stage model
+Z_to_T.summary().tables[1]</code></pre>
+<table class="table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>&nbsp;</th>
+<th>coef&nbsp;</th>
+<th>std err</th>
+<th>&nbsp;t</th>
+<th>P&gt;|t|</th>
+<th>[0.025</th>
+<th>0.975]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intercept</td>
+<td>-0.0349</td>
+<td>0.032</td>
+<td>-1.103</td>
+<td>0.270</td>
+<td>-0.097</td>
+<td>0.027</td>
+</tr>
+<tr class="even">
+<td>T</td>
+<td>6.0207</td>
+<td>0.032</td>
+<td>189.711</td>
+<td>0.000</td>
+<td>5.958</td>
+<td>6.083</td>
+</tr>
+</tbody>
+</table>
+<pre><code># reduced model
+Z_to_Y.summary().tables[1]</code></pre>
+<table class="table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>&nbsp;</th>
+<th>coef&nbsp;</th>
+<th>std err</th>
+<th>&nbsp;t</th>
+<th>P&gt;|t|</th>
+<th>[0.025</th>
+<th>0.975]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intercept</td>
+<td>-0.4725</td>
+<td>0.429</td>
+<td>-1.100</td>
+<td>0.271</td>
+<td>-1.314</td>
+<td>0.369</td>
+</tr>
+<tr class="even">
+<td>T</td>
+<td>54.3108</td>
+<td>0.431</td>
+<td>126.122</td>
+<td>0.000</td>
+<td>53.467</td>
+<td>55.155</td>
+</tr>
+</tbody>
+</table>
+<pre><code>Z_to_Y.params.Z/Z_to_T.params.Z</code></pre>
+<p>계산결과 9.020754651013464로 실제 인과효과인 9에 근사합니다.</p>
+<ul>
+<li>2SLS</li>
+</ul>
+<p>인과 효과의 유의성, 신뢰구간을 확인하기 위해 2SLS를 사용합니다.</p>
+<pre><code># first stage
+t_hat = Z_to_T.predict()
+data['T_hat'] =  t_hat
+
+# second stage
+That_to_Y = sm.ols('Y ~ T_hat', data).fit()
+# second stage model
+That_to_Y.summary().tables[1]</code></pre>
+<table class="table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>&nbsp;</th>
+<th>coef&nbsp;</th>
+<th>std err</th>
+<th>&nbsp;t</th>
+<th>P&gt;|t|</th>
+<th>[0.025</th>
+<th>0.975]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Intercept</td>
+<td>-0.1575</td>
+<td>0.429</td>
+<td>-0.367</td>
+<td>0.714</td>
+<td>-0.999</td>
+<td>0.684</td>
+</tr>
+<tr class="even">
+<td>T</td>
+<td>9.0208</td>
+<td>0.072</td>
+<td>126.122</td>
+<td>0.000</td>
+<td>8.881</td>
+<td>9.161</td>
+</tr>
+</tbody>
+</table>
+<pre><code>That_to_Y.params.T_hat</code></pre>
+<p>추정 인과효과는 9.020754651013458이며, p-value가 매우 작아 인과효과가 유의하다고 판단할 수 있습니다.</p>
+</section>
+</section>
+<section id="nonparametric-identification-of-the-late" class="level2">
+<h2 class="anchored" data-anchor-id="nonparametric-identification-of-the-late">6. Nonparametric Identification of the LATE</h2>
+<p>앞에서 Linear setting에서 ATE를 계산하는 법을 봤습니다. 그런데 이건 너무 강력한 가정입니다.</p>
+<p>nonparametric한 상황(분포에 대한 가정이 없는 상황)에서 ATE를 구할 수는 없을까요? 완전한 ATE는 아니지만 구할 수 있습니다!</p>
+<section id="iv-관련-notation" class="level3">
+<h3 class="anchored" data-anchor-id="iv-관련-notation">IV 관련 Notation</h3>
+<p>본격적으로 들어가기 앞서 몇 가지 표기법을 정리합시다</p>
+<ul>
+<li><span class="math inline">\(Z\)</span>: 도구변수 (instrumental variable)</li>
+<li><span class="math inline">\(T\)</span>: 처치변수 (treatment variable)</li>
+<li><span class="math inline">\(Y\)</span>: 결과, 종속변수 (dependent variable)</li>
+</ul>
+<p><span class="math inline">\(Z \rightarrow T \rightarrow Y\)</span>로 가는 인과가 있다고 할 때,</p>
+<ul>
+<li><span class="math inline">\(Y(1) \triangleq Y(T=1)\)</span></li>
+<li><span class="math inline">\(T(1) \triangleq T(Z=1)\)</span></li>
+<li><span class="math inline">\(Y(Z=1)\)</span>처럼 <span class="math inline">\(Z\)</span>에 intervene했을 때의 potential outcome <span class="math inline">\(Y\)</span>의 값은 별다른 축약형을 가지지 않습니다.</li>
+</ul>
+</section>
+<section id="principal-strata" class="level3">
+<h3 class="anchored" data-anchor-id="principal-strata">Principal Strata</h3>
+<p><span class="math inline">\(Z\)</span>가 <span class="math inline">\(T\)</span>에 어떻게 영향을 주느냐에 따라 데이터를 4가지 그룹으로 나눌 수 있습니다.</p>
+<ul>
+<li>Complier: <span class="math inline">\(Z\)</span>가 시키는대로 하는 사람들.</li>
+</ul>
+<p><span class="math display">\[ T(1)=T(Z=1)=1 \qquad T(0)=T(Z=0)=0 \]</span></p>
+<ul>
+<li>Defier: <span class="math inline">\(Z\)</span>가 시키는 거 반대로만 하는 청개구리들.</li>
+<li><span class="math display">\[ T(1)=T(Z=1)=0 \qquad T(0)=T(Z=0)=1 \]</span></li>
+<li>Always-taker: <span class="math inline">\(Z\)</span>에 상관 없이 treatment를 받는 사람들.</li>
+<li><span class="math display">\[ T(1)=T(Z=1)=1 \qquad T(0)=T(Z=0)=1 \]</span></li>
+<li>Never-taker: <span class="math inline">\(Z\)</span>에 상관 없이 treatment를 안 받는 사람들.</li>
+<li><span class="math display">\[ T(1)=T(Z=1)=0 \qquad T(0)=T(Z=0)=0 \]</span></li>
+</ul>
+<p>💡 이 때, 위에 2개 그룹과 아래 2개 그룹은 다른 causal graph를 가집니다.</p>
+<p><img src="img11.png" class="img-fluid"></p>
+</section>
+<section id="late-구하기" class="level3">
+<h3 class="anchored" data-anchor-id="late-구하기">LATE 구하기</h3>
+<p>IV를 써도, unobserved confounding이 있다면 nonparametric한 상황에서의 ATE를 구할 수는 없습니다.</p>
+<p>하지만 약간의 가정을 추가해서 <strong>LATE (Local Average Treatment Effect)</strong> 또는 <strong>CACE (Complier Average Causal Effect)</strong>라고 불리는 걸 구할 수는 있습니다.</p>
+<p>💡 LATE (또는 CACE)는 아래와 같이 정의됩니다.</p>
+<p><span class="math inline">\(\mathbb{E}[Y(T=1)-Y(T=0)\:|\:T(Z=1)=1,\:T(Z=0)=0]\)</span></p>
+<p>LATE를 구하기 위해서는 monotonicity(단조성)이라는 가정을 덧붙여야 합니다.</p>
+<p><span class="math inline">\(\forall i, \space T_i(Z=1) \geq T_i(Z=0)\)</span></p>
+<p>다르게 말하자면, 우리 데이터에 defier가 없다는 가정입니다.</p>
+<p>Relevance, exclusion restriction, instrumental unconfoundedness + monotonicity 가정이 만족될 때, LATE는 Wald estimand와 같습니다.</p>
+<p><span class="math inline">\(\mathbb{E}[Y(1)-Y(0)\:|\:T(1)=1,\:T(0)=0]= \frac{\mathbb{E}[Y|Z=1]-\mathbb{E}[Y|Z=0]}{\mathbb{E}[T|Z=1]-\mathbb{E}[T|Z=0]}\)</span></p>
+<hr>
+<ul>
+<li>혹시 유도 과정이 알고 싶나요?</li>
+</ul>
+<p><span class="math inline">\(Z\)</span>가 <span class="math inline">\(Y\)</span>에 끼치는 causal effect는 아래와 같습니다.</p>
+<p><span class="math inline">\(E[Y(Z=1)-Y(Z=0)]\)</span></p>
+<p>우리가 앞서 배웠던 4가지 그룹을 생각해볼까요? <span class="math inline">\(Z\)</span>와 <span class="math inline">\(T\)</span>의 값에 따라 아래와 같이 풀어 쓸 수 있습니다.</p>
+<p><span class="math inline">\(\begin{aligned} \mathbb{E}[…] &amp;= \mathbb{E}[…|T(1)=1,T(0)=0]\:P(T(1)=1,T(0)=0) \quad (complier) \\ &amp;+ \mathbb{E}[…|T(1)=0,T(0)=1]\:P(T(1)=0,T(0)=1) \quad (defier) \\ &amp;+ \mathbb{E}[…|T(1)=1,T(0)=1]\:P(T(1)=1,T(0)=1) \quad (always-taker) \\ &amp;+ \mathbb{E}[…|T(1)=0,T(0)=0]\:P(T(1)=0,T(0)=0) \quad (never-taker) \end{aligned}\)</span></p>
+<p>여기서 몇 가지 항은 자동으로 소거됩니다.</p>
+<p><span class="math inline">\(\begin{aligned} \mathbb{E}[…] &amp;= \mathbb{E}[…|T(1)=1,T(0)=0]\:P(T(1)=1,T(0)=0) \quad (complier) \\ &amp;+ \mathbb{E}[…|T(1)=0,T(0)=1]\:P(T(1)=0,T(0)=1) \quad (*defier) \\ &amp;+ \mathbb{E}[…|T(1)=1,T(0)=1]\:P(T(1)=1,T(0)=1) \quad (**always-taker) \\ &amp;+ \mathbb{E}[…|T(1)=0,T(0)=0]\:P(T(1)=0,T(0)=0) \quad (**never-taker) \end{aligned}\)</span></p>
+<p>*Defier의 경우, monotonicity 가정에 의해 존재하지 않습니다. 따라서 깔끔하게 무시 가능합니다.</p>
+<p>**Always-taker와 **Never-taker의 경우, <span class="math inline">\(Z\)</span>와 <span class="math inline">\(T\)</span> 사이에 (나아가 <span class="math inline">\(Z\)</span>와 <span class="math inline">\(Y\)</span> 사이에) causal effect가 존재하지 않습니다. 따라서 이 항들도 깔끔하게 무시합시다.</p>
+<p>이를 정리하면 다음과 같습니다.</p>
+<p><span class="math inline">\(\mathbb{E}[Y(Z=1)-Y(Z=0)|T(1)=1,T(0)=0]=\frac{\mathbb{E}[Y(Z=1)-Y(Z=0)]}{P(T(1)=1,T(0)=0)}\)</span></p>
+<p>이 때, complier는 <span class="math inline">\(Z\)</span>의 값과 <span class="math inline">\(T\)</span>의 값이 같으므로, 좌항의 <span class="math inline">\(Y(Z=0)\)</span>과 <span class="math inline">\(Y(Z=1)\)</span>를 <span class="math inline">\(Y(T=0)\)</span><strong>와</strong> <span class="math inline">\(Y(T=1)\)</span>로 대체할 수 있습니다. 그리고 instrumental unconfoundedness에 의해 우항도 다시 쓸 수 있습니다.</p>
+<p><span class="math inline">\(\mathbb{E}[Y(T=1)-Y(T=0)|T(1)=1,T(0)=0] =\frac{\mathbb{E}[Y|Z=1]-\mathbb{E}[Y|Z=0]}{P(T(1)=1,T(0)=0)}\)</span></p>
+<p>여기에서 <span class="math inline">\(P(T(1)=1,T(0)=0)\)</span>를 자세히 살펴봅시다. 전체 집단에서 <span class="math inline">\((T=1|Z=0)\)</span>인 집단과 <span class="math inline">\((T=0|Z=1)\)</span>인 집단을 제외한 게 <span class="math inline">\((T(1)=1, T(0)=0)\)</span>인 집단이겠죠? 따라서 우항은 아래와 같이 다시 쓸 수 있습니다.</p>
+<p><span class="math inline">\(\begin{aligned} &amp;=\frac{\mathbb{E}[Y|Z=1]-\mathbb{E}[Y|Z=0]}{1-P(T=1|Z=0)-P(T=0|Z=1)} \\ &amp;=\frac{\mathbb{E}[Y|Z=1]-\mathbb{E}[Y|Z=0]}{1-P(T=1|Z=0)-(1-P(T=1|Z=1))} \\ &amp;=\frac{\mathbb{E}[Y|Z=1]-\mathbb{E}[Y|Z=0]}{P(T=1|Z=1)-P(T=1|Z=0)} \end{aligned}\)</span></p>
+<p>그리고 마지막으로, <span class="math inline">\(T\)</span>가 binary이므로 <span class="math inline">\(T=1\)</span>에 대한 확률은 기대값으로 바꿀 수 있습니다.</p>
+<p><span class="math inline">\(\begin{aligned} &amp;=\frac{\mathbb{E}[Y|Z=1]-\mathbb{E}[Y|Z=0]}{P(T=1|Z=1)-P(T=1|Z=0)} \\ &amp;= \frac{\mathbb{E}[Y|Z=1]-\mathbb{E}[Y|Z=0]}{\mathbb{E}[T|Z=1]-\mathbb{E}[T|Z=0]} \quad (Wald\;estimand) \end{aligned}\)</span></p>
+<hr>
+<p>💡 관점을 약간 바꿔 볼 수도 있습니다.</p>
+<p><strong>Q. Wald estimand (</strong><span class="math inline">\(Z\rightarrow Y\)</span> 인과 / <span class="math inline">\(Z\rightarrow T\)</span> 인과) 는 무엇을 나타내는 지표일까요?</p>
+<p>→ <span class="math inline">\(Z\)</span>가 <span class="math inline">\(T\)</span>에 어떤 식으로 영향을 주느냐에 따라, 집단을 4개 sub-population으로 나눌 수 있습니다. Wald estimand는 이 중 complier 집단의 ATE.</p>
+<p>→ 좀 더 강한 가정 (<span class="math inline">\(T\)</span>와 <span class="math inline">\(Y\)</span>가 linearity한 관계) 이 만족할 때는, 전체 집단의 ATE로 생각할 수도 있습니다.</p>
+<p>LATE에도 다음과 같은 한계가 있습니다</p>
+<ul>
+<li>monotonicity가 항상 충족되는 건 아닙니다.</li>
+<li>상황에 따라, 전체 집단의 ATE가 필요하지 Local ATE가 궁금하지 않은 경우도 많습니다.</li>
+</ul>
+</section>
+</section>
+<section id="iv-in-more-general-settings" class="level2">
+<h2 class="anchored" data-anchor-id="iv-in-more-general-settings">7. IV in More General Settings</h2>
+<p>앞서서 <span class="math inline">\(Y\)</span>가 <span class="math inline">\(T\)</span>에 대한 linear equation으로 주어지는 경우를 다뤘었습니다. 이를 좀 더 확장해서 <span class="math inline">\(Y\)</span>가 <span class="math inline">\(T\)</span>에 대해 좀 더 복잡한 함수로 표현되는 경우도 생각해 볼 수 있습니다.</p>
+<p><span class="math display">\[ Y:=f(T,W)+U \]</span></p>
+<p>위와 같이 나타내며, 딥러닝 등을 이용해 <span class="math inline">\(f\)</span>를 모델링할 수 있습니다.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{namgoon &amp; hojae2024,
+  author = {Namgoon \&amp; Hojae, Minsang},
+  title = {10\textbackslash. {Instrumental} {Variables}},
+  date = {2024-01-08},
+  url = {https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Instrumental_Variables/Instrumental_Variables.html},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-namgoon &amp; hojae2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Namgoon &amp; Hojae, Minsang. 2024. <span>“10\. Instrumental
+Variables.”</span> January 8, 2024. <a href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Instrumental_Variables/Instrumental_Variables.html">https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst/posts/Introduction_to_causal_inference_Instrumental_Variables/Instrumental_Variables.html</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
