@@ -20,4 +20,4 @@ execute:
 
 
 # Default fields for citation
-citation: true
+citation: false
