@@ -2,6 +2,10 @@ project:
   type: website
   
 website:
+  comments:
+      utterances:
+        repo: quarto-dev/quarto-docs
+        theme: dark-blue
   title: "PseudoLab Causal Inference Team"
   description: "데이터 분석가가 인과추론을 공부하고 실무에 적용하면서 느낀 생각을 정리한 자료입니다."
   search: true
