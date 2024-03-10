@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.551">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="sohee kim">
-<meta name="dcterms.date" content="2024-01-04">
-<meta name="description" content="Introduction to Causal Inference 강의 chapter 5 소개">
+<meta name="author" content="신진수">
+<meta name="dcterms.date" content="2024-03-05">
+<meta name="description" content="한국에서 인과추론 실무자를 위한 첫 기본서">
 
-<title>PseudoLab Causal Inference Team - 06. Randomised Experiments</title>
+<title>가짜연구소 인과추론팀 Blog - 실무로 통하는 인과추론 with 파이썬 출간 안내</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -50,7 +50,13 @@ ul.task-list li input[type="checkbox"] {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -59,34 +65,35 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="PseudoLab Causal Inference Team">
-<meta property="og:description" content="현업 데이터 분석가가 인과추론을 공부하고 현업에 적용하면서 느낀 생각을 정리한 자료입니다.">
-<meta property="og:image" content="images/pseudo_lab_eng.png">
-<meta property="og:site-name" content="PseudoLab Causal Inference Team">
+<meta property="og:title" content="가짜연구소 인과추론팀 Blog">
+<meta property="og:description" content="가짜연구소 인과추론팀의 인과추론 블로그입니다.">
+<meta property="og:image" content="https://CausalInferenceLab.github.io/posts/실무로 통하는 인과추론 with 파이썬/images/book_image.png">
+<meta property="og:site_name" content="가짜연구소 인과추론팀 Blog">
+<meta property="og:image:height" content="3647">
+<meta property="og:image:width" content="3104">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../images/causal_inference_team_logo.jpg" alt="" class="navbar-logo">
     </a>
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">PseudoLab Causal Inference Team</span>
+    <span class="navbar-title">가짜연구소 인과추론팀 Blog</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -96,19 +103,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html" rel="" target="">
- <span class="menu-text">about</span></a>
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">about</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/CausalInferenceLab/Causal-Inference-Study-for-Analyst" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://causalinferencelab.github.io/"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -116,14 +123,14 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">06. Randomised Experiments</h1>
+      <h1 class="title">실무로 통하는 인과추론 with 파이썬 출간 안내</h1>
                   <div>
         <div class="description">
-          <p>Introduction to Causal Inference 강의 chapter 5 소개</p>
+          <p>한국에서 인과추론 실무자를 위한 첫 기본서</p>
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">Randomised Experiments</div>
+                <div class="quarto-category">실무로 통하는 인과추론 with 파이썬</div>
               </div>
                   </div>
   </div>
@@ -134,14 +141,14 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>sohee kim </p>
+               <p>신진수 </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 4, 2024</p>
+        <p class="date">March 5, 2024</p>
       </div>
     </div>
     
@@ -157,9 +164,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#contents" id="toc-contents" class="nav-link active" data-scroll-target="#contents"><strong>Contents</strong></a></li>
-  <li><a href="#randomized-experiments" id="toc-randomized-experiments" class="nav-link" data-scroll-target="#randomized-experiments"><strong>(1)</strong> <strong>Randomized Experiments</strong></a></li>
-  <li><a href="#frontdoor-adjustment" id="toc-frontdoor-adjustment" class="nav-link" data-scroll-target="#frontdoor-adjustment"><strong>(2)</strong>&nbsp;<strong>Frontdoor Adjustment</strong></a></li>
+  <li><a href="#책-소개" id="toc-책-소개" class="nav-link active" data-scroll-target="#책-소개">책 소개</a></li>
+  <li><a href="#추천의-말" id="toc-추천의-말" class="nav-link" data-scroll-target="#추천의-말">추천의 말</a></li>
+  <li><a href="#causal-inference-for-the-brave-and-true와의-차이" id="toc-causal-inference-for-the-brave-and-true와의-차이" class="nav-link" data-scroll-target="#causal-inference-for-the-brave-and-true와의-차이">Causal Inference for the brave and true와의 차이</a></li>
+  <li><a href="#번역서-컨텐츠-소통-채널" id="toc-번역서-컨텐츠-소통-채널" class="nav-link" data-scroll-target="#번역서-컨텐츠-소통-채널">번역서 컨텐츠 &amp; 소통 채널</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
     </div>
@@ -169,158 +178,72 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>안녕하세요, 가짜연구소 Causal Inference 팀의 김소희입니다.&nbsp;</p>
-<p>Introduction to Causal Inference 강의의 다섯 번째 챕터이며, 해당 챕터에서 다루는 내용은 아래와 같습니다.</p>
-<section id="contents" class="level3">
-<h3 class="anchored" data-anchor-id="contents"><strong>Contents</strong></h3>
-<ul>
-<li>Randomized Experiments</li>
-<li>Frontdoor adjustment</li>
-</ul>
-<p>◦ 강의 영상 링크 : <a href="https://www.youtube.com/watch?v=z91LnTDyhtI&amp;list=PLoazKTcS0Rzb6bb9L508cyJ1z-U9iWkA0&amp;index=38" title="Chapter 5 - Randomised Experiments">Chapter 5 - Randomised Experiments</a></p>
-<p>&nbsp; &nbsp; 작성된 내용 중 개선점이나 잘못된 부분이 있다면 댓글로 알려주세요!</p>
-<hr>
+
+<p>이 포스트는 <a href="https://jinsooshin.tistory.com/12">저자의 블로그</a>에서도 만나보실 수 있습니다.</p>
+<div class="columns">
+<div class="column" style="width:30%;">
+<section id="book" class="level2">
+<h2 class="anchored" data-anchor-id="book">Book</h2>
+<p><a href="https://www.yes24.com/Product/Goods/125196916"><img src="https://image.yes24.com/goods/125196916/XL.png" class="img-fluid"></a></p>
 </section>
-<section id="randomized-experiments" class="level3">
-<h3 class="anchored" data-anchor-id="randomized-experiments"><strong>(1)</strong> <strong>Randomized Experiments</strong></h3>
-<blockquote class="blockquote">
-<p><strong>Randomized experiments are magic</strong></p>
-</blockquote>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:65%;">
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <ul>
-<li><strong>Observational study</strong> : 관측되지 않은 confounders의 존재가능성 때문에, unconfoundedness를 보장받거나 backdoor criterion가 존재하는지 알 수 없습니다.</li>
-<li><strong>Randomized experiments</strong> : unobserved confounding의 가능성을 차단함으로써 unconfoundedness를 보장받고 backdoor criterion이 만족되는지 알 수 있게 됩니다.</li>
+<li>안녕하세요, “실무로 통하는 인과추론 with 파이썬”을 번역한 신진수입니다.</li>
+<li>가짜연구소 인과추론팀과 함께 번역한 이 책은 종이책/E-book 모두 출간되었습니다. 책 이미지를 클릭해주세요!</li>
 </ul>
-<p>&nbsp; &nbsp; &nbsp; &nbsp;⇒ <strong>Randomization</strong>은 Association is causation을 성립하게 만들어줍니다!</p>
-<ul>
-<li><strong>Randomized Control Trial (RCT)</strong></li>
-</ul>
+</section>
+</div>
+</div>
+<section id="책-소개" class="level2">
+<h2 class="anchored" data-anchor-id="책-소개">책 소개</h2>
+<p>모든 기업에서의 화두는 “제품의 성장”일 것입니다. 데이터 분석가와 과학자들은 데이터를 활용해 고객 경험을 개선함으로써 제품 성장을 이끌고 있죠. 이 과정에서 원인에 개입해 그 효과를 분석하는 인과추론은 중요한 역할을 합니다. 인과추론은 더 중요해지고 있지만, 한국어 자료는 매우 부족합니다.</p>
 <blockquote class="blockquote">
-<p><strong>1. 2장에 나온 예시</strong>&nbsp;<br>
-&nbsp; &nbsp; ◦ 변수 소개<br>
-&nbsp; &nbsp; &nbsp; &nbsp; - <span class="math inline">\(T\)</span> (Treatment) : 신발을 신고 잔다<br>
-&nbsp; &nbsp; &nbsp; &nbsp; - <span class="math inline">\(Y\)</span> (Outcome) : 다음 날 두통 여부<br>
-&nbsp; &nbsp; &nbsp; &nbsp; - <span class="math inline">\(X\)</span> (Confounder) : 전날 밤 술에 취했는지 여부&nbsp;<br>
-&nbsp; &nbsp; ◦ Observational study : 신발에 신고 자는 그룹(<span class="math inline">\(T=1\)</span>) vs 벗고 자는 그룹(<span class="math inline">\(T=0\)</span>)의 그룹을 있는 그대로 나눕니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; - 어떤 문제가 생길까요? Treatment / Control group간 비교 가능하지 않습니다!<br>
-&nbsp; &nbsp; &nbsp; &nbsp; ⇒ 즉, 신발 신고 잔 그룹(<span class="math inline">\(T=1\)</span>) 중, 전날 술에 취한 사람의 비율(confounding)이 신발 벗고 잔 그룹에 비해<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 훨씬 높은 것을 볼 수 있어요.</p>
-<p><img src="img1.png" class="img-fluid"></p>
-<p>&nbsp; &nbsp; ◦ Randomized experiment : 신발을 신고 잘지 벗고 잘지 여부를(treatment를) 동전 던지기로 결정합니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;⇒ 동전 앞뒷면이 나올 확률이 같으므로, 신발 신은 그룹과 벗은 그룹 내 전날 술에 취한 사람의 비율이&nbsp;<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 거의 같아지게 됩니다.</p>
-<p><img src="img2.png" class="img-fluid"></p>
-</blockquote>
-<ul>
-<li>Randomized Experiments에 대한 3가지 관점&nbsp;</li>
-</ul>
-<blockquote class="blockquote">
-<p><strong>1. Comparability and Covariate balance</strong></p>
-<p>&nbsp; ◦ 처치 여부에 대한 랜덤화 : 처치 집단과 통제 집단의 다른 모든 조건을 같게 만들고(confounders 분포를 포함),&nbsp;<br>
-&nbsp; &nbsp; &nbsp; &nbsp; 딱 하나 처치 여부만 다르게 합니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; → 따라서 처치 집단과 통제 집단의 결과에 차이가 생길 경우 이를 처치 여부 때문이라고 할 수 있게 됩니다.<br>
-&nbsp; &nbsp; ◦ 처치 여부를 랜덤화 하는 것은 unobserved covariates까지도 covariate balance를 갖게 하는 효과를 가집니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; 그렇기 때문에 <span class="math inline">\(T\)</span>가 <span class="math inline">\(X\)</span>에 의해 결정되지 않아요. (<span class="math inline">\(T{\perp \!\!\! \perp} X\)</span>)<br>
-&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<span class="math display">\[P(X|T=1)\stackrel{d}{=}P(X) \quad and \quad P(X|T=0)\stackrel{d}{=}P(X)\]</span></p>
-<p>&nbsp; &nbsp; ◦ <strong>Covariate balance</strong> : 처치 집단과 통제 집단에서 covariates <span class="math inline">\(X\)</span>의 분포가 같음<br>
-&nbsp; &nbsp; &nbsp; &nbsp; <span class="math display">\[P(X | T=1) \stackrel{d}{=} P(X|T=0)\]</span><br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;→ “Covariate balance 이면, association is causation입니다”</p>
-<p>&nbsp; &nbsp; ◦Covariate balance에 대한 부분을 <span class="math inline">\(P(y|do(t)) = P(y|t)\)</span>을 통해 증명할 수 있는데요. 과정은 아래와 같습니다.</p>
-<p><img src="img3.png" class="img-fluid"></p>
-<p>&nbsp; &nbsp; <strong>◦ Randomization ⇒ Covariate balance ⇒ “Association is causation”</strong></p>
-<p><strong>2. Exchangeability</strong></p>
-<p>&nbsp; ◦ Exchangeability 의미 : Treatment 여부에 따라 아래와 같은 성질이 달라지지 않습니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; - 그룹의 구성<br>
-&nbsp; &nbsp; &nbsp; &nbsp; - 평균적 결과</p>
-<p>&nbsp; &nbsp; ◦&nbsp;Exchangeability의 형식적 정의와 “Association is causation”의 도출과정은 아래와 같아요 &lt; textbook p.51 &gt;<br>
-&nbsp; &nbsp; &nbsp; <span class="math display">\[E[Y(0)|T=0] = E[Y(0)|T=1]\]</span> <span class="math display">\[E[Y(1)|T=1] = E[Y(1)|T=0]\]</span></p>
-<p>&nbsp; &nbsp; ◦ Treatment/Control 그룹이 교환 가능 : 앞면이 나온 사람을 처치 집단에 넣기로 하든 뒷면이 나온 사람을<br>
-&nbsp; &nbsp; &nbsp; &nbsp; 처치 집단에 넣기로 하든 각 그룹의 Y에 대한 기댓값은 같습니다.</p>
-<p><img src="img4.png" class="img-fluid"></p>
-<p><strong>3. No backdoor paths</strong></p>
-<p>&nbsp; &nbsp; ◦ T를 randomize하면 T는 더이상 인과적 parents를 가지지 않게 됩니다.&nbsp;<br>
-&nbsp; &nbsp; &nbsp; &nbsp; - <span class="math inline">\(X\)</span> → <span class="math inline">\(T\)</span>로 가는 edge가 사라져서 backdoor path가 끊김<br>
-&nbsp; &nbsp; &nbsp; &nbsp; - Unobserved variables도 마찬가지로 path가 끊김</p>
-<p><img src="img5.png" class="img-fluid"></p>
+<p>이런 맥락에서 이 책은 “여전히 한국어 학습자료가 많지 않은 상황에서 인과추론에 입문하고자 하는 분들에게 가뭄에 단비 같은 자료가 될 것입니다”(박지용 교수님 서문 인용). 이 책을 통해, 독자 여러분들이 인과추론의 이해를 한층 더 높이고 인과추론에 대한 문턱을 낮춤으로써, 개인의 삶과 조직에서의 의사결정에 큰 도움이 되기를 바랍니다.</p>
 </blockquote>
 </section>
-<section id="frontdoor-adjustment" class="level3">
-<h3 class="anchored" data-anchor-id="frontdoor-adjustment"><strong>(2)</strong>&nbsp;<strong>Frontdoor Adjustment</strong></h3>
-<ul>
-<li>Backdoor adjustment를 다시 리마인드 해봅시다!</li>
-</ul>
-<p>&nbsp; &nbsp; &nbsp; &nbsp; → &nbsp;왼쪽처럼 빨간색 점선(backdoor path)를 통한 non-causal association이 존재할 때,<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="math inline">\(W\_2\)</span>와 <span class="math inline">\(C\)</span>에 대해 각각 conditioning 함으로써 그 path를 차단할 수 있습니다.</p>
-<p><img src="img6.png" class="img-fluid"></p>
-<ul>
-<li>Frontdoor Adjustment 도입 배경 : <strong>Unobserved Confounders</strong> <span class="math inline">\(W\)</span></li>
-</ul>
+<section id="추천의-말" class="level2">
+<h2 class="anchored" data-anchor-id="추천의-말">추천의 말</h2>
 <blockquote class="blockquote">
-<p>&nbsp; &nbsp; ◦ Q : <span class="math inline">\(W\)</span>는 unobserved confounder이므로 conditioning을 할 수 없는 경우가 생깁니다. 이 경우 backdoor path를&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 막을 수 없게 되는데요, 여전히 <span class="math inline">\(T → Y\)</span>에 대한 casual effect를 identify 할 수 있을까요?<br>
-&nbsp;<br>
-&nbsp; &nbsp; ◦ A : “Frontdoor path”를 통해 가능합니다.<br>
-</p>
-<p><img src="img7.png" class="img-fluid"></p>
-<p>&nbsp; &nbsp; ◦&nbsp; 직관 :<br>
-&nbsp; &nbsp; &nbsp; &nbsp;- 아래 그림에서 Backdoor path는 <span class="math inline">\(T → W → Y\)</span>의 Confounding association 입니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp;- 우리가 관심이 있는 Causal association이 <span class="math inline">\(M\)</span>를 통하고 있습니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; → <span class="math inline">\(M\)</span>에 집중하면, Causal association을 분리할 수 있습니다.&nbsp;</p>
-<p><img src="img8.png" class="img-fluid"></p>
+<p>이 책은 통계와 머신러닝에 관한 수학과 이론에 치우치지 않으면서 인과추론의 핵심 개념을 이해하기 쉽게 설명하며, 최신 연구 결과들까지도 충실히 담고 있습니다. 또한 파이썬 실습을 통해 실무적이고 실전적인 학습을 균형 있게 다루는 만큼, 곁에 두고 필요할 때 찾아볼 수 있는 지침서이자 참고서로서도 손색이 없습니다. 인과추론에 입문하는 연구자들과 현업 데이터 분석가 여러분께 강력하게 권합니다. &lt;박지용 - 조지아대학교 경영정보학 교수&gt;</p>
 </blockquote>
-<ul>
-<li><strong>Frontdoor Adjustment 3가지 Step</strong>&nbsp;</li>
-</ul>
 <blockquote class="blockquote">
-<p>0. Frontdoor Adjustment 과정<br>
-&nbsp; &nbsp; ◦&nbsp; <span class="math inline">\(T → M\)</span>에 대한 인과 효과 Identify<br>
-&nbsp; &nbsp; ◦&nbsp; <span class="math inline">\(M → Y\)</span>에 대한 인과 효과 Identify<br>
-&nbsp; &nbsp; ◦&nbsp; 앞의 2개의 스텝을 합쳐서, <span class="math inline">\(T→ Y\)</span>에 대한 인과 효과를 Identify</p>
-<p><img src="img9.png" class="img-fluid"></p>
-<p><strong>1. Frontdoor Adjustment : Step 1</strong>&nbsp; &lt; <span class="math inline">\(T → M\)</span>에 대한 인과 효과 Identify &gt;&nbsp;<br>
-&nbsp; &nbsp; ◦&nbsp; <span class="math inline">\(T → M\)</span>으로 가는 path에는 <span class="math inline">\(Y\)</span>가 <span class="math inline">\(T→W→Y→M path\)</span>에서 collider로 backdoor path를 막고 있어요.<br>
-&nbsp; &nbsp; ◦&nbsp; 따라서 <span class="math inline">\(T → M\)</span>으로 가는 association은 causal association만 존재하게 됩니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;⇒ Empty set을 adjustment set으로 사용해, 아래와 같이 bacdkoor adjustment로 identify 가능합니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="math display">\[P(m|do(t)) = P(m|t)\]</span></p>
-<p><strong>2. Frontdoor Adjustment : Step 2</strong>&nbsp; &lt; <span class="math inline">\(M → Y\)</span>에 대한 인과 효과 Identify &gt;&nbsp;<br>
-&nbsp; &nbsp; ◦&nbsp; <span class="math inline">\(M→ Y\)</span>에 <span class="math inline">\(M→T→W→Y\)</span>의 backdoorpath가 존재하지만, 여기서는 <span class="math inline">\(T\)</span>에 대해 conditioning해서<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;backdoor path를 막을 수 있어요.<br>
-&nbsp; &nbsp; ◦&nbsp; Frontdoor adjustment는 backdoor adjustment를 응용한 버전이라고도 볼 수 있어요.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; <span class="math display">\[P(y|do(m)) = \sum_tP(y|m,t)P(t)\]</span><br>
-&nbsp; &nbsp; &nbsp; &nbsp; ⇒ <span class="math inline">\(T\)</span>를 sufficient adjustment set으로 사용해서 backdoor adjustment 적용할 수 있습니다.</p>
-<p><strong>3. Frontdoor Adjustment : Step 3</strong>&nbsp; &lt; 앞의 2개의 스텝을 합쳐서, <span class="math inline">\(T→ Y\)</span>에 대한 인과 효과를 Identify &gt;&nbsp;</p>
-<p>&nbsp; &nbsp; ◦&nbsp; <span class="math inline">\(T → Y\)</span> 의 인과 효과 규명을 위해 step1, 2를 chaining 하게 되면 아래와 식과 같습니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="math display">\[P(y|do(t)) = \sum_mP(m|do(t))P(y|do(m))\]</span></p>
-<p><img src="img10.png" class="img-fluid"></p>
+<p>크래프톤에서 퍼블리싱하는 수많은 게임 사용자의 데이터를 해석하는 데 있어 인과추론은 핵심적인 역할을 합니다. 이 책은 이러한 중요한 주제를 실용적이고 접근하기 쉬운 방식으로 설명하며, 데이터 과학자가 실제 문제에 적용할 수 있는 귀중한 지식을 제공합니다. 데이터 분석을 포함한 다양한 엔지니어링 부서를 맡고 있는 부서장으로서 이 책을 강력히 추천합니다. &lt;이석찬 - 크래프톤 엔지니어링 본부장&gt;</p>
 </blockquote>
-<ul>
-<li>Frontdoor Adjustment Criterion</li>
-</ul>
 <blockquote class="blockquote">
-<p>◦ 만약 (<span class="math inline">\(T\)</span>, <span class="math inline">\(M\)</span>, <span class="math inline">\(Y\)</span>)가 frontdoor criterion를 만족시키고, positivity를 가정한 경우, step1과 step2의 공식을<br>
-&nbsp; &nbsp; &nbsp;step3와 합친식은 아래와 같습니다.<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br>
-&nbsp; &nbsp; &nbsp; &nbsp;<span class="math display">\[ P(y | do(t)) = \sum_mP(m|t)\sum_{t'}P(y|m, t')P(t') \]</span></p>
-<p>◦ 변수 세트 <span class="math inline">\(M\)</span>은 <span class="math inline">\(T\)</span>와 <span class="math inline">\(Y\)</span>에 관해, 다음 조건들이 참이면 frontdoor criterion을 만족시킨다고 할 수 있어요.</p>
-<p>&nbsp; &nbsp; &nbsp;- <span class="math inline">\(M\)</span>이 <span class="math inline">\(T → Y\)</span>의 효과를 완전하게 매개<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (complete mediation, 예시 : 모든 <span class="math inline">\(T\)</span>에서 <span class="math inline">\(Y\)</span>로 가는 causal path가 <span class="math inline">\(M\)</span>을 지나는 경우)<br>
-&nbsp; &nbsp; &nbsp;-&nbsp;<span class="math inline">\(T\)</span>에서 <span class="math inline">\(M\)</span>으로 가는 unblocked backdoor path가 없음<br>
-&nbsp; &nbsp; &nbsp;- <span class="math inline">\(M\)</span>에서 <span class="math inline">\(Y\)</span>로 가는 모든 backdoor path가 <span class="math inline">\(T\)</span>에 의해서 blocked</p>
-<p><img src="img11.png" class="img-fluid"></p>
+<p>이 책은 제가 넷플릭스의 추천 알고리즘팀과 우버의 마케팅 응용과학팀에서 실무에 적용했던 성향점수 역확률 가중치, 메타러너, 스위치백, 도구변수 등과 같은 다양한 인과추론 방법론을 소개합니다. 특히 대부분의 인과추론 입문서가 경제학 배경지식을 요구하거나 전공 과목 교과서처럼 구성된 것과 달리, 이 책은 복잡한 수식과 증명보다는 파이썬 코드와 실무 예제를 중심으로 구성되어 있습니다. 따라서 경제학적 배경지식이 없는 데이터 관련 실무진들이나 다른 전공 학생들도 인과추론 방법론의 개념을 쉽게 이해하고 실습해볼 수 있습니다. &lt;이정윤 - 우버 마케팅 응용과학팀 시니어 매니저, CausalML 오픈소스 운영자&gt;</p>
 </blockquote>
-<p><strong>To be continued)</strong>&nbsp; 다음은 <strong>Nonparametric Identification</strong> 에 대해 배울 예정입니다.</p>
+</section>
+<section id="causal-inference-for-the-brave-and-true와의-차이" class="level2">
+<h2 class="anchored" data-anchor-id="causal-inference-for-the-brave-and-true와의-차이">Causal Inference for the brave and true와의 차이</h2>
+<p>✔ 마테우스의 두 책을 번역한 사람으로서 <a href="https://github.com/CausalInferenceLab/Causal-Inference-with-Python">Causal Inference for the brave and true</a>와 다음과 같은 차이가 있습니다.</p>
+<ul>
+<li>마케팅 및 금융 사례를 바탕으로 실무자인 데이터 분석가/과학자의 관점에서 내용이 재구성되어 독자 입장에서 이해하기 쉬울 거예요.</li>
+<li>실무자가 고려해야할 부분에 대한 내용인 1) 실험 설계/방법론 선택 2) 결과의 신뢰성/해석이 추가되었습니다(ex. 10장 스위치백 실험). 이 과정에서 원저자의 조언도 함께 반영되어 있습니다.</li>
+<li>인과추론의 핵심인 식별 가정(ex. 1.6 인과효과 식별)에 대한 설명과 수식이 더 구체적으로 기술되어 있으며, 실험 방법론에 대해 다양한 관점(ex. 8.3 이중차분법 식별)에서 접근합니다.</li>
+<li>제가 데이터 분석가로 근무하며 다양한 분석과 실험을 통해, 저의 생각이 담긴 “에필로그”가 들어가있습니다.</li>
+</ul>
+</section>
+<section id="번역서-컨텐츠-소통-채널" class="level2">
+<h2 class="anchored" data-anchor-id="번역서-컨텐츠-소통-채널">번역서 컨텐츠 &amp; 소통 채널</h2>
+<p>인과추론이나 실무 용어에 익숙하지 않은 분들을 위해 주석을 추가했지만, 독자분들이 어려워할 수 있는 부분들이 있을 것이라고 생각됩니다.(ex. 4.3 FWL 정리, 8.7 시차 도입 설계 등). 번역서의 내용을 더 잘 이해하실 수 있도록 도움이 될 추가 자료와 컨텐츠를 제공할 예정이니 걱정하지 않으셔도 됩니다. 또한, 이 책에 언급된 논문과 모든 자료/소스 코드는 Github에 정리해 두었습니다. 제가 꼼꼼하게 정리했지만, 만약 누락되거나 잘못된 부분이 있다면, 해당 블로그 및 다음 채널을 통해 알려주세요!</p>
+<ul>
+<li><a href="https://causalinferencelab.github.io/">가짜연구소 인과추론팀 Blog</a></li>
+<li><a href="https://jinsooshin.tistory.com/">역자 블로그</a></li>
+<li><a href="https://discord.gg/HeHbFAvmSZ">가짜연구소 Discord</a></li>
+</ul>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>한국에서 실무자 관점의 인과추론을 소개하는 첫 서적인 만큼, 인과추론 커뮤니티를 이끌어 가는 사람 중 한 명으로서, 접근성 있는 번역을 통해 사회적 책임을 다하려고 노력했습니다. 그럼에도 부족한 부분이 있을 수 있습니다. 이는 제 미흡함에서 비롯된 것이므로, 독자 여러분과 공유한 채널을 통해 지속적으로 소통하며 개선해 나갈 예정입니다. 그럼 책을 통해 만나요!</p>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{kim2024,
-  author = {kim, sohee},
-  title = {06\textbackslash. {Randomised} {Experiments}},
-  date = {2024-01-04},
-  langid = {en}
-}
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-kim2024" class="csl-entry quarto-appendix-citeas" role="listitem">
-kim, sohee. 2024. <span>“06\. Randomised Experiments.”</span> January 4,
-2024.
-</div></div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -362,6 +285,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       } else {
         el.classList.add('notransition');
       }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
     }
   }
   const toggleColorMode = (alternate) => {
@@ -430,13 +380,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -515,10 +467,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/CausalInferenceLab\.github\.io\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -528,8 +497,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -541,7 +519,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -585,6 +686,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -610,6 +712,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -669,7 +797,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<script src="https://utteranc.es/client.js" repo="quarto-dev/quarto-docs" issue-term="pathname" theme="dark-blue" crossorigin="anonymous" async="">
+</script>
 </div> <!-- /content -->
+
 
 
 

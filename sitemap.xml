@@ -1,67 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_Graphical_Models/Graphical_Models.html</loc>
-    <lastmod>2024-01-19T15:50:07.060Z</lastmod>
+    <loc>https://CausalInferenceLab.github.io/about.html</loc>
+    <lastmod>2024-03-10T14:34:08.074Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_Causal_Discovery/Causal_Discovery.html</loc>
-    <lastmod>2024-01-19T15:50:06.068Z</lastmod>
+    <loc>https://CausalInferenceLab.github.io/posts/실무로 통하는 인과추론 with 파이썬/2024-03-05 번역서_출간안내.html</loc>
+    <lastmod>2024-03-10T14:34:08.074Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html</loc>
-    <lastmod>2024-01-19T15:50:05.160Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_Estimation/Estimation.html</loc>
-    <lastmod>2024-01-19T15:50:03.884Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_Library/causal_inference_library.html</loc>
-    <lastmod>2024-01-19T15:50:02.932Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_Causal_Models/Causal_Models.html</loc>
-    <lastmod>2024-01-19T15:50:02.064Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_Unobserved_confounding_Analysis/Unobserved_Confounding_Analysis.html</loc>
-    <lastmod>2024-01-19T15:50:01.048Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/index.html</loc>
-    <lastmod>2024-01-19T15:49:59.608Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/about.html</loc>
-    <lastmod>2024-01-19T15:49:57.852Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_Instrumental_Variables/Instrumental_Variables.html</loc>
-    <lastmod>2024-01-19T15:50:00.236Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_intro/index.html</loc>
-    <lastmod>2024-01-19T15:50:01.320Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_Potential_Outcomes/Potential_Outcomes.html</loc>
-    <lastmod>2024-01-19T15:50:02.584Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_DID/DID.html</loc>
-    <lastmod>2024-01-19T15:50:03.400Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_Motivation/Motivation.html</loc>
-    <lastmod>2024-01-19T15:50:04.396Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_RCT/RCT.html</loc>
-    <lastmod>2024-01-19T15:50:05.576Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/posts/Introduction_to_causal_inference_Nonparametric_Identification/Nonparametric_Identification.html</loc>
-    <lastmod>2024-01-19T15:50:06.524Z</lastmod>
+    <loc>https://CausalInferenceLab.github.io/index.html</loc>
+    <lastmod>2024-03-10T14:34:08.074Z</lastmod>
   </url>
 </urlset>

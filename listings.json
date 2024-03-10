@@ -2,20 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/entertainment_basic_study_1/1. Randomised Controlled Trial.html",
-      "/posts/Introduction_to_causal_inference_Causal_Discovery/Causal_Discovery.html",
-      "/posts/Introduction_to_causal_inference_DID/DID.html",
-      "/posts/Introduction_to_causal_inference_Instrumental_Variables/Instrumental_Variables.html",
-      "/posts/Introduction_to_causal_inference_Unobserved_confounding_Analysis/Unobserved_Confounding_Analysis.html",
-      "/posts/Introduction_to_causal_inference_Estimation/Estimation.html",
-      "/posts/Introduction_to_causal_inference_Nonparametric_Identification/Nonparametric_Identification.html",
-      "/posts/Introduction_to_causal_inference_RCT/RCT.html",
-      "/posts/Introduction_to_causal_inference_Causal_Models/Causal_Models.html",
-      "/posts/Introduction_to_causal_inference_Graphical_Models/Graphical_Models.html",
-      "/posts/Introduction_to_causal_inference_Potential_Outcomes/Potential_Outcomes.html",
-      "/posts/Introduction_to_causal_inference_Motivation/Motivation.html",
-      "/posts/Introduction_to_causal_inference_Library/causal_inference_library.html",
-      "/posts/Introduction_to_causal_inference_intro/index.html"
+      "/posts/실무로 통하는 인과추론 with 파이썬/2024-03-05 번역서_출간안내.html"
     ]
   }
 ]
