@@ -1,0 +1,151 @@
+---
+title: "실무로 통하는 인과추론 with 파이썬 출간 안내"
+author: "신진수"
+description: |
+  한국의 데이터 실무자를 위한 인과추론 첫 기본서
+date: "03/05/2024"
+
+categories: [실무로 통하는 인과추론]
+image: "./images/book_image.png"
+---
+
+이 포스트는 [실무로 통하는 인과추론 with 파이썬 Github](https://github.com/CausalInferenceLab/causal-inference-in-python-code)에서도 만나보실 수 있습니다.
+
+::: columns
+::: {.column width="30%"}
+## Book
+[![](https://image.yes24.com/goods/125196916/XL)](https://www.yes24.com/Product/Goods/125196916)
+:::
+
+:::{.column width="5%"}
+:::
+
+::: {.column width="65%"}
+## Introduction
+- 안녕하세요, "실무로 통하는 인과추론 with 파이썬"을 번역한 신진수입니다.
+- 이 포스트는 독자 여러분들을 위해 해당 번역서에 대한 논문 및 자료를 정리한 페이지입니다. 
+:::
+:::
+
+## 번역서 온보딩을 위한 자료
+> - [인과추론의 데이터과학 Youtube](https://www.youtube.com/@causaldatascience)
+> - Causal Inference for the Brave and True ([원서](https://github.com/matheusfacure/python-causality-handbook) / [번역서](https://github.com/CausalInferenceLab/Causal-Inference-with-Python))
+
+
+## 참고 도서
+> - [Causal Inference Stanford STATS 361 강의 노트](https://web.stanford.edu/~swager/stats361.pdf)
+> - [Causal Inference for Statistics, Social, and Biomedical Sciences](https://www.amazon.com/Causal-Inference-Statistics-Biomedical-Sciences/dp/0521885884)
+> - [Causal Inference:What If](https://www.hsph.harvard.edu/miguel-hernan/wp-content/uploads/sites/1268/2024/01/hernanrobins_WhatIf_2jan24.pdf)
+> - [Causal Inference:The Mixtape](https://www.scunning.com/mixtape.html)
+
+
+## 실무로 통하는 인과추론 with 파이썬 논문 및 자료 모음
+
+### 1장-인과추론 소개
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 1.6 인과효과 식별하기 | 더 알아보기 | [Causal Inference and Data Fusion in Econometrics](https://arxiv.org/abs/1912.09104) |
+
+
+### 2장-무작위 실험 및 기초 통계 리뷰
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 2.2 A/B 테스트 사례 | 시뮬레이션 데이터와 실제 데이터 비교 | [A Randomized Assessment of Online Learning](https://www.aeaweb.org/articles?id=10.1257/aer.p20161057) |
+| 2.4 가장 위험한 수식 | 하워드 웨이너의 유명한 글 | [The Most Dangerous Equation](https://www.americanscientist.org/article/the-most-dangerous-equation) |
+| 2.5 추정값의 표준오차 | MIT의 통계학 입문 강좌 | [Introduction to statistics](https://www.youtube.com/watch?v=VPZD_aij8H0&list=PLUl4u3cNGP60uVBMaoNERc6knT_MgPKS0) |
+| 2.6 신뢰구간 | 실제 사례: 코로나19 백신의 효과 | [Efficacy and Safety of the mRNA-1273 SARS-CoV-2 Vaccine](https://www.nejm.org/doi/full/10.1056/nejmoa2035389) |
+| 2.8 p 값 | 실제 사례: 실제 사례: 대면 강의 vs. 온라인 강의 | [Is It Live or Is It Internet? Experimental Estimates of the Effects of Online Instruction on Student Learning](https://www.journals.uchicago.edu/doi/10.1086/669930) |
+| 2.10 표본 크기 계산 | 더 알아보기 | [A/B Testing Intuition Busters: Common Misunderstandings in Online Controlled Experiments](https://drive.google.com/file/d/1oK2HpKKXeQLX6gQeQpfEaCGZtNr2kR76/view) |
+
+
+### 3장-그래프 인과모델
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 3.7.2 랜덤화 재해석 | 민감도 분석과 부분 식별 | [Making Sense of Sensitivity: Extending Omitted Variable Bias](https://academic.oup.com/jrsssb/article/82/1/39/7056023) |
+| 3.8.1 충돌부를 조건부 설정 | 더 알아보기 | [DAGitty](https://www.dagitty.net/), [A Crash Course in Good and Bad Controls](https://journals.sagepub.com/doi/epub/10.1177/00491241221099552) |
+
+
+### 4장-유용한 선형회귀
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 4.1 선형회귀의 필요성 | OLS 연구 | [Difference-in-differences with variation in treatment timing](https://www.sciencedirect.com/science/article/abs/pii/S0304407621001445), [Interpreting Ols Estimands When Treatment Effects are Heterogeneous: Smaller Groups](https://direct.mit.edu/rest/article/104/3/501/97692/Interpreting-OLS-Estimands-When-Treatment-Effects), [Contamination Bias in Linear Regressions](https://arxiv.org/abs/2106.05024) |
+| 4.7.5 평균 제거와 고정효과 | 패널데이터를 사용한 인과추론 논문 | [On the Pooling of Time Series and Cross Section Data](https://www.jstor.org/stable/1913646) |
+| 4.9 중립 통제변수 | 잡음 제거 기법 | [Improving the Sensitivity of Online Controlled Experiments by Utilizing Pre-Experiment Data](http://robotics.stanford.edu/~ronnyk/2013-02CUPEDImprovingSensitivityOfControlledExperiments.pdf) |
+
+
+### 5장-성향점수
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 5.1 관리자 교육의 효과 | 민감도 분석과 부분 식별 | [Estimating Treatment Effects with Causal Forests: An Application](https://arxiv.org/abs/1902.07409) |
+| 5.3.3 성향점수 매칭 | 민감도 분석과 부분 식별 | [Why Propensity Scores Should Not Be Used for Matching](https://gking.harvard.edu/publications/why-Propensity-Scores-Should-Not-Be-Used-Formatching) |
+| 5.3.5 역확률 가중치의 분산 | 실제 사례: 인과적 콘텍스트 밴딧 | [A Contextual-Bandit Approach to Personalized News Article Recommendation](https://arxiv.org/abs/1003.0146) |
+| 5.5 이중 강건 추정 | 이중 강건 추정량 주석 | [An Introduction to the Augmented Inverse Propensity Weighted Estimator](https://www.law.berkeley.edu/files/AIPW(1).pdf) |
+| 5.5.2 결과 모델링이 쉬운 경우 | 더 알아보기 | [Comment: Performance of Double-Robust Estimators When “Inverse Probability” Weights Are Highly Variable](https://arxiv.org/pdf/0804.2965.pdf) |
+| 5.6 연속형 처치에서의 일반화 성향점수 | 연속형 처치 | [Causal inference with a continuous treatment and outcome: Alternative estimators for parametric dose-response functions with applications](https://www.proquest.com/openview/888e50198b2563222f8e2030e5a8c9e7/1?pq-origsite=gscholar&cbl=18750) |
+
+
+### 6장-이질적 처치효과
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 6.7 누적 이득 곡선 | 더 알아보기 | [Nubank fklearn](https://github.com/nubank/fklearn), [Causal inference and uplift modeling a review of the literature](https://proceedings.mlr.press/v67/gutierrez17a/gutierrez17a.pdf), [Empirical Analysis of Model Selection for Heterogeneous Causal Effect Estimation](https://arxiv.org/abs/2211.01939) |
+| 6.8 목표 변환 | 더 알아보기 | [Intelligent Credit Limit Management in Consumer Loans Based on Causal Inference](https://arxiv.org/abs/2007.05188) |
+| 6.9.2 이진 결과 | 더 알아보기 | [Causal Classification: Treatment Effect Estimation vs. Outcome Prediction](https://jmlr.org/papers/v23/19-480.html) |
+
+
+### 7장-메타러너
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 7.1 이산형 처치 메타러너 | 인과추론 라이브러리 | [EconML 공식문서](https://econml.azurewebsites.net/), [CausalML 공식문서](https://causalml.readthedocs.io/en/latest/about.html) |
+| 7.1.1 T 러너 | 더 알아보기 | [Metalearners for estimating heterogeneous treatment effects using machine learning](https://www.pnas.org/doi/full/10.1073/pnas.1804597116) |
+| 7.2.1 S 러너 | S 러너의 편향 | [Double/Debiased/Neyman Machine Learning of Treatment Effects](https://www.aeaweb.org/articles?id=10.1257/aer.p20171038) |
+| 7.2.2 이중/편향 제거 머신러닝 | 트리 기반 및 신경망 러너 | [Nonparametric Estimation of Heterogeneous Treatment Effects:From Theory to Learning Algorithms](https://proceedings.mlr.press/v130/curth21a/curth21a.pdf), [Learning Representations for Counterfactual Inference](https://proceedings.mlr.press/v48/johansson16.pdf) |
+
+
+### 8장-이중차분법
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 8.2 표준 이중차분법 | 실제 사례: 최저임금과 고용 | [Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New Jersey and Pennsylvania](https://davidcard.berkeley.edu/papers/njmin-aer.pdf) |
+| 8.2.5 추론 | 더 알아보기 | [When Should You Adjust Standard Errors for Clustering?](https://academic.oup.com/qje/article/138/1/1/6750017), [An Exact and Robust Conformal Inference Method for Counterfactual and Synthetic Controls](https://www.tandfonline.com/doi/full/10.1080/01621459.2021.1920957) |
+| 8.3 식별 가정 | 더 알아보기 | [When Is Parallel Trends Sensitive to Functional Form?](https://cowles.yale.edu/sites/default/files/2022-11/2010.04814.pdf) |
+| 8.3.2 비기대 가정과 SUTVA | 공간적 파급 효과 | [Difference-in-Differences Estimation with Spatial Spillovers](https://arxiv.org/abs/2105.03737) |
+| 8.3.5 피드백 없음 | 순차적 무시 가능성 | [Causal Inference with Time-Series Cross-Sectional Data: A Reflection](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3979613) |
+| 8.3.6 이월 효과와 시차종속변수 없음 | 순차적 무시 가능성 | [When Should We Use Unit Fixed Effects Regression Models for Causal Inference with Longitudinal Data?](https://imai.fas.harvard.edu/research/files/FEmatch.pdf) |
+| 8.6.3 최종 결과 | 이중 강건 이중차분법 | [Doubly robust difference-in-differences estimators](https://www.sciencedirect.com/science/article/abs/pii/S0304407620301901) |
+| 8.7 처치의 시차 도입 | 이중 강건 이중차분법 | [Difference-in-differences with variation in treatment timing](https://www.sciencedirect.com/science/article/abs/pii/S0304407621001445) |
+| 8.7 처치의 시차 도입 | 실제 사례: 개발도상국의 고등교육과 성장 | [Higher Education Expansion, Labor Market, and Firm Productivity in Vietnam](https://sites.google.com/view/khoavu-umn/job-market-paper) |
+| 8.7.1 시간에 따른 이질적 효과 | 더 알아보기 | [Estimating dynamic treatment effects in event studies with heterogeneous treatment effects](https://www.sciencedirect.com/science/article/abs/pii/S030440762030378X), [Two-Way Fixed Effects, the Two-Way Mundlak Regression, and Difference-in-Differences Estimators](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3906345), [Difference-in-Differences with multiple time periods](https://www.sciencedirect.com/science/article/abs/pii/S0304407620303948) |
+
+
+### 9장-통제집단합성법
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 9.4 표준 통제집단합성법 | 통제집단합성법에 대한 가정 | [Using Synthetic Controls: Feasibility, Data Requirements, and Methodological Aspects](https://www.aeaweb.org/articles?id=10.1257/jel.20191450) |
+| 9.7 추론 | 더 알아보기 | [An Exact and Robust Conformal Inference Method for Counterfactual and Synthetic Controls](https://arxiv.org/abs/1712.09089) |
+| 9.8.4 통제집단합성법과 이중차분법 | 원본 합성 이중차분법 | [Synthetic Difference-in-Differences](https://www.aeaweb.org/articles?id=10.1257/aer.20190159) |
+| 9.9 요약 | 일반화 통제집단합성법 | [Generalized Synthetic Control Method: Causal Inference with Interactive Fixed Effects Models](https://www.cambridge.org/core/journals/political-analysis/article/generalized-synthetic-control-method-causal-inference-with-interactive-fixed-effects-models/B63A8BD7C239DD4141C67DA10CD0E4F3), [A Bayesian Alternative to Synthetic Control for Comparative Case Studies](https://www.cambridge.org/core/journals/political-analysis/article/bayesian-alternative-to-synthetic-control-for-comparative-case-studies/C23BD67E4BBBB8C88ADAEAE169696A45) |
+| 9.9 요약 | 실제 사례: causalimpact 라이브러리  | [CausalImpact Github](https://github.com/google/CausalImpact?tab=readme-ov-file) |
+
+
+### 10장-스위치백 실험
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 10.2.2 무작위 탐색 | 최적화 | [Synthetic Controls for Experimental Design](https://economics.mit.edu/sites/default/files/2023-02/synthetic%20experiments.pdf), [Designing Experiments with Synthetic Controls](https://mackinstitute.wharton.upenn.edu/wp-content/uploads/2020/03/Wernerfelt-Nils-Doudchenko-Nick-Gilinson-David-and-Taylor-Sean_Designing-Experiments-with-Synthetic-Controls.pdf) |
+| 10.2.2 무작위 탐색 | 다른 실험 목표 | [Synthetic Design: An Optimization Approach to Experimental Design with Synthetic Controls](https://proceedings.neurips.cc/paper/2021/hash/48d23e87eb98cc2227b5a8c33fa00680-Abstract.html) |
+| 10.3.5 강건한 분산 | 더 적은 가정으로 m 찾기 | [Design and Analysis of Switchback Experiments](https://arxiv.org/abs/2009.00148) |
+
+
+### 11장-도구변수
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 11.9.4 밀도 불연속 테스트 | 최적화 | [Manipulation of the Running Variable in the Regression Discontinuity Design: A Density Test](https://eml.berkeley.edu/~jmccrary/mccrary2006_DCdensity.pdf) |
+| 11.10 요약 | 최적화 | [Does Compulsory School Attendance Affect Schooling and Earnings?](https://www.jstor.org/stable/2937954) |
+
+
+### 12장-더 배울 내용
+| 챕터 | 내용 | 자료 링크 | 
+| ------ |------|------|
+| 12.1 인과관계 발견 | 인과관계 발견 | [Causal Discovery Toolbox: Uncover causal relationships in Python](https://arxiv.org/abs/1903.02278) |
+| 12.3 인과적 강화학습 | 콘텍스트 밴딧 | [Contextual Bandits in a Survey Experiment on Charitable Giving: Within-Experiment Outcomes versus Policy Learning](https://arxiv.org/abs/2211.12004) |
+| 12.3 인과적 강화학습 | 미국 경제학회 웹캐스트 | [2022 Continuing Education Webcasts](https://www.aeaweb.org/conference/cont-ed/2022-webcasts) |
+| 12.4 인과 예측 | 미국 경제학회 웹캐스트 | [2019 AEA Continuing Education Webcasts](https://www.aeaweb.org/conference/cont-ed/2019-webcasts) |
+| 12.5 도메인 적응 | Concept Drift | [Learning under Concept Drift: A Review](https://ieeexplore.ieee.org/document/8496795) |
