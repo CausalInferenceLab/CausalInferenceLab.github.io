@@ -1,0 +1,18 @@
+---
+title: "가짜연구소 인과추론팀 소개"
+author: "신진수"
+description: |
+  가짜연구소 인과추론팀 및 블로그를 소개합니다
+date: "03/01/2024"
+
+categories: [인과추론팀]
+image: "./images/book_image.png"
+---
+
+
+## Introduction
+안녕하세요, 가짜연구소 인과추론팀을 이끌고 있는 신진수입니다.
+
+
+
+## 프로젝트 소개 (Ver.2024/03)
