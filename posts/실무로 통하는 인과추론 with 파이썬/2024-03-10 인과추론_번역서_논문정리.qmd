@@ -1,8 +1,8 @@
 ---
-title: "실무로 통하는 인과추론 with 파이썬 출간 안내"
+title: "실무로 통하는 인과추론 with 파이썬 자료 정리 페이지"
 author: "신진수"
 description: |
-  한국의 데이터 실무자를 위한 인과추론 첫 기본서
+  실무로 통하는 인과추론 with 독자분들을 위한 자료 정리 페이지입니다
 date: "03/05/2024"
 
 categories: [실무로 통하는 인과추론]
@@ -28,15 +28,15 @@ image: "./images/book_image.png"
 :::
 
 ## 번역서 온보딩을 위한 자료
-> - [인과추론의 데이터과학 Youtube](https://www.youtube.com/@causaldatascience)
-> - Causal Inference for the Brave and True ([원서](https://github.com/matheusfacure/python-causality-handbook) / [번역서](https://github.com/CausalInferenceLab/Causal-Inference-with-Python))
+- [인과추론의 데이터과학 Youtube](https://www.youtube.com/@causaldatascience)
+- Causal Inference for the Brave and True ([원서](https://github.com/matheusfacure/python-causality-handbook) / [번역서](https://github.com/CausalInferenceLab/Causal-Inference-with-Python))
 
 
-## 참고 도서
-> - [Causal Inference Stanford STATS 361 강의 노트](https://web.stanford.edu/~swager/stats361.pdf)
-> - [Causal Inference for Statistics, Social, and Biomedical Sciences](https://www.amazon.com/Causal-Inference-Statistics-Biomedical-Sciences/dp/0521885884)
-> - [Causal Inference:What If](https://www.hsph.harvard.edu/miguel-hernan/wp-content/uploads/sites/1268/2024/01/hernanrobins_WhatIf_2jan24.pdf)
-> - [Causal Inference:The Mixtape](https://www.scunning.com/mixtape.html)
+## 번역서 참고 도서
+- [Causal Inference Stanford STATS 361 강의 노트](https://web.stanford.edu/~swager/stats361.pdf)
+- [Causal Inference for Statistics, Social, and Biomedical Sciences](https://www.amazon.com/Causal-Inference-Statistics-Biomedical-Sciences/dp/0521885884)
+- [Causal Inference:What If](https://www.hsph.harvard.edu/miguel-hernan/wp-content/uploads/sites/1268/2024/01/hernanrobins_WhatIf_2jan24.pdf)
+- [Causal Inference:The Mixtape](https://www.scunning.com/mixtape.html)
 
 
 ## 실무로 통하는 인과추론 with 파이썬 논문 및 자료 모음
