@@ -4,7 +4,7 @@ project:
 website:
   comments:
       utterances:
-        repo: quarto-dev/quarto-docs
+        repo: CausalInferenceLab/CausalInferenceLab.github.io
         theme: dark-blue
   title: "가짜연구소 인과추론팀 Blog"
   description: "가짜연구소 인과추론팀의 인과추론 블로그입니다."
