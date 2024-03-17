@@ -1,0 +1,35 @@
+---
+title: "실무로 통하는 인과추론 with 파이썬 출간 안내"
+author: "신진수"
+description: |
+  한국의 데이터 실무자를 위한 인과추론 첫 기본서
+date: "03/17/2024"
+
+categories: [실무로 통하는 인과추론]
+image: "./images/book_image.png"
+---
+
+이 포스트는 [저자의 블로그](https://jinsooshin.tistory.com/12)에서도 만나보실 수 있습니다.
+
+::: columns
+::: {.column width="30%"}
+## Book
+[![](https://image.yes24.com/goods/125196916/XL)](https://www.yes24.com/Product/Goods/125196916)
+:::
+
+:::{.column width="5%"}
+:::
+
+::: {.column width="65%"}
+## Introduction
+- 안녕하세요, "실무로 통하는 인과추론 with 파이썬" 역자 [신진수](https://www.linkedin.com/in/jinsoo-shin-436060162/)입니다.
+- 가짜연구소 인과추론팀과 함께 번역한 이 책은 종이책/E-book 모두 출간되었습니다. 왼쪽의 책 이미지를 클릭해주세요!
+- 독자 여러분들께서 남겨주시는 개선점 및 질문은 종합해서 이 포스트에 공유드릴 예정입니다.
+:::
+:::
+
+
+## FAQ
+
+
+## 정오표
