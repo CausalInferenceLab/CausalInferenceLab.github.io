@@ -33,5 +33,5 @@ image: "./images/causal_inference_team_logo.jpg"
 | 정호재 | 롯데캐피탈 Credit Analyst | [LinkedIn](https://www.linkedin.com/in/wjdghwo/) |
 
 
-## 가짜연구소 인과추론팀 소개 (Ver.2024/03)
+## 가짜연구소 인과추론팀 프로젝트
 현재 가짜연구소 인과추론팀에서 진행되고 있는 프로젝트는 [해당 소개 페이지](https://pseudo-lab.com/6bbf03d9f11d4af687c0f03c6db39b1b)를 참고해주세요.
