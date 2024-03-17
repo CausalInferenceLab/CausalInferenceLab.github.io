@@ -2,16 +2,18 @@
 title: "가짜연구소 인과추론팀 소개"
 author: "신진수"
 description: |
-  가짜연구소 인과추론팀 및 블로그를 소개합니다
+  가짜연구소 인과추론팀 및 블로그를 소개합니다!
 date: "03/01/2024"
 
 categories: [인과추론팀]
-image: "./images/book_image.png"
+image: "./images/causal_inference_team_logo.jpg"
 ---
 
 
 ## Introduction
 안녕하세요, 가짜연구소 인과추론팀 블로그에 오신 걸 환영합니다! 가짜연구소 인과추론팀은 22년부터 데이터를 통한 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️ 한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다.
+
+- [가짜연구소 인과추론팀 소개 페이지](https://pseudo-lab.com/6bbf03d9f11d4af687c0f03c6db39b1b)
 
 
 ## 가짜연구소 인과추론팀 자료
@@ -21,7 +23,7 @@ image: "./images/book_image.png"
 - [가짜연구소 인과추론팀 Github](https://github.com/CausalInferenceLab)
 
 
-## 프로젝트 운영진 소개
+## 가짜연구소 인과추론팀 운영진 소개
 | 이름   | 소속                                              | 소개                                                                                                             |
 |:-------|:--------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|
 | 신진수 | 크래프톤 Data Analyst | [Blog](https://jinsooshin.tistory.com) / [LinkedIn](https://www.linkedin.com/in/jinsoo-shin-436060162) |
@@ -31,7 +33,5 @@ image: "./images/book_image.png"
 | 정호재 | 롯데캐피탈 Credit Analyst | [LinkedIn](https://www.linkedin.com/in/wjdghwo/) |
 
 
-## 프로젝트 소개 (Ver.2024/03)
-현재 가짜연구소 인과추론팀에서 진행되고 있는 프로젝트는 아래 페이지를 참고해주세요.
-
-- 링크 : https://pseudo-lab.com/6bbf03d9f11d4af687c0f03c6db39b1b
+## 가짜연구소 인과추론팀 소개 (Ver.2024/03)
+현재 가짜연구소 인과추론팀에서 진행되고 있는 프로젝트는 [해당 소개 페이지](https://pseudo-lab.com/6bbf03d9f11d4af687c0f03c6db39b1b)를 참고해주세요.
