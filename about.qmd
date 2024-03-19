@@ -4,12 +4,9 @@ image: images/pseudo_lab_eng.png
 about:
   template: trestles
   links:
-    - icon: twitter
-      text: Twitter
-      href: https://twitter.com/
     - icon: linkedin
       text: LinkedIn
-      href: https://www.linkedin.com/in/jinsoo-shin-436060162
+      href: https://kr.linkedin.com/company/pseudolab
     - icon: github
       text: Github
       href: https://github.com/CausalInferenceLab
@@ -17,51 +14,24 @@ about:
 
 #### about
 
-안녕하세요. 가짜연구소 Causal Inference팀입니다.
+안녕하세요. [가짜연구소](https://pseudo-lab.com/Pseudo-Lab-c42db6652c1b45c3ba4bfe157c70cf09) Causal Inference팀 신진수입니다.
 
 데이터를 통한 문제해결력을 높이기 위해 Causal Inference를 함께 학습하고 있어요✌️
 
 한국어 자료가 많지 않은 인과추론을 많은 분들이 쉽게 접하실 수 있도록 기여하고자 합니다!
 
+팀 소개는 아래 페이지를 참고해주세요!
+
+- [가짜연구소 인과추론팀 페이지](https://pseudo-lab.com/6bbf03d9f11d4af687c0f03c6db39b1b) 
+- [가짜연구소 인과추론팀 Github](https://causalinferencelab.github.io/)
+
 ------------------------------------------------------------------------
 
-#### 인과추론팀 빌더
-
-| 이름   | 소속                                              | 소개                                                                                                             |
+## 가짜연구소 인과추론팀 운영진 소개
+| 이름   | 소속                                              | 소개                                                                                                             | 
 |:-------|:--------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------|
-| 신진수 | [크래프톤](https://www.krafton.com/) Data Analyst | [Blog](https://jinsooshin.tistory.com) / [LinkedIn](https://www.linkedin.com/in/jinsoo-shin-436060162) |
-
-#### Study : 인과추론 with Entertainment
-
-| 이름   | 소속                                                                         | 소개                                                                            |
-|:-------|:-----------------------------------------------------------------------------|:--------------------------------------------------------------------------------|
-| 김소희 | [티빙](https://team.tving.com/) Data Analyst                                 | [LinkedIn](https://www.linkedin.com/in/sohee-kim-9460b6113/)                    |
-| 김지연 | [엔씨소프트](https://kr.ncsoft.com/kr/index.do) Data Analyst                 |                                                                                 |
-| 박시온 | [넥슨코리아](https://company.nexon.com/kr/) Data Analyst                     |                                                                                 |
-| 박병수 | [넥슨코리아](https://company.nexon.com/kr/) Data Analyst                     | [LinkedIn](https://www.linkedin.com/in/byeongsu-park-58249b196/)                |
-| 박이삭 | [하이브IM](https://hybecorp.com/kor/main) Data Analyst                       | [LinkedIn](https://www.linkedin.com/in/%EC%9D%B4%EC%82%AD-%EB%B0%95-75a7a916a/) |
-| 유정현 | [넥슨코리아](https://company.nexon.com/kr/) Data Analyst                     | [LinkedIn](https://www.linkedin.com/in/jeonghyun-y-750a7b1b2/)                  |
-| 임종언 | [넥슨코리아](https://company.nexon.com/kr/) Data Analyst                     |                                                                                 |
-| 조슬지 | [넷마블에프앤씨](https://company.netmarble.com/studio/list/fnc) Data Analyst | [LinkedIn](https://www.linkedin.com/in/%EC%8A%AC%EC%A7%80-%EC%A1%B0-4370251b8/) |
-
-#### Study : 인과추론 with Social Science
-
-| 이름     | 소속                                                  | 소개                                               |
-|:---------|:------------------------------------------------------|:---------------------------------------------------|
-| 박상우   | [한국은행](https://pseudo-lab.com) Data Analyst     |                                                    |
-| 정호재   | [롯데캐피탈](https://www.lottecap.com) Credit Analyst | [LinkedIn](https://www.linkedin.com/in/wjdghwo/)   |
-| 조인서   | [KOICA](https://www.koica.go.kr) Manager              | [LinkedIn](https://www.linkedin.com/in/yinseo-cho) |
-
-#### Research : 인과추론 논문쓰기
-
-| 이름     | 소속                                                  | 소개                                               |
-|:---------|:------------------------------------------------------|:---------------------------------------------------|
-| 김성수   | [가짜연구소](https://pseudo-lab.com) Data Analyst     |                                                    |
-| 김준영   | [가짜연구소](https://pseudo-lab.com) Manager              |  |
-
-#### Tech Support
-
-| 이름   | 소속                                                     | 소개                                                                            |
-|:-------|:---------------------------------------------------------|:--------------------------------------------------------------------------------|
-| 김상돈 | 베가스 Data Analyst                                      | [LinkedIn](https://www.linkedin.com/in/%EC%83%81%EB%8F%88-%EA%B9%80-b89985199/) |
-                                                                         |
+| 신진수 | 크래프톤 Data Analyst | [Blog](https://jinsooshin.tistory.com) / [LinkedIn](https://www.linkedin.com/in/jinsoo-shin-436060162) | 총괄 |
+| 김성수 | LG CNS Data Scientist | [Blog](https://fenzhan.tistory.com/) / [LinkedIn](https://www.linkedin.com/in/%EC%84%B1%EC%88%98-%EA%B9%80-50825717b/) | 
+| 박상호 | 삼성서울병원 Biostatistician | [LinkedIn](https://www.linkedin.com/in/sangho-park-4220aa22a/) |
+| 방태모 | Gmarket Data Scientist | [Blog](https://www.taemobang.com/) / [LinkedIn](https://www.linkedin.com/in/taemo/) | 
+| 정호재 | 롯데캐피탈 Credit Analyst | [LinkedIn](https://www.linkedin.com/in/wjdghwo/) |
