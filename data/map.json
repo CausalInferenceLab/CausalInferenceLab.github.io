@@ -147,7 +147,7 @@
       808,
       164
     ],
-    "label": "급행",
+    "label": "책·강의",
     "stops": [
       {
         "id": "paid-book",
@@ -274,7 +274,7 @@
   "external": {
     "id": "external",
     "title": "외부 라이브러리 기여",
-    "summary": "팀에서 연습한 기여를 DoWhy, EconML, CausalML 같은 인과추론 오픈소스로 넓힙니다. 노선의 종착역이자 다음 출발점입니다.",
+    "summary": "팀에서 연습한 기여를 DoWhy, EconML, CausalML 같은 인과추론 오픈소스로 넓힙니다. 팀에서 쌓은 경험을 밖으로 넓히는 단계입니다.",
     "level": "L4",
     "lines": [
       "ml"
