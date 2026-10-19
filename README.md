@@ -6,19 +6,21 @@
 
 ![인과추론 노선도](assets/img/metro-map.png)
 
-> **English summary.** This repository is the hub of the Pseudo-Lab Causal Inference Team. It maps our open-source repositories onto five learning levels (L0 Foundation to L4 Research) and six tracks drawn as metro lines, credits the Builders who led each project, and shows the team's history by cohort. The site is plain HTML, CSS and JavaScript that reads JSON files in `data/`, so adding a repository or a project is a one-file pull request.
+> **English summary.** This repository is the hub of the Pseudo-Lab Causal Inference Team. It shows how the team has grown (runners, projects, stars, event attendance), the current cohort, the Builders who led each project and the team's history by cohort, and it maps our repositories onto five learning levels and six tracks drawn as metro lines. The site is plain HTML, CSS and JavaScript that reads JSON files in `data/`, so adding a repository or a project is a one-file pull request.
 
-## 허브에서 할 수 있는 일
+## 허브에서 볼 수 있는 것
 
-| 메뉴 | 내용 |
+| 섹션 | 내용 |
 | --- | --- |
-| 경로 안내 | "처음 시작해요", "A/B 테스트를 해요"처럼 하고 싶은 일을 고르면 노선도 위에 경로를 표시합니다. |
-| 노선도 | 역(레포)을 누르면 소개, Builder, 기수, 이전·다음 역이 열립니다. 탑승한 역은 브라우저에 기록되어 "이어서 타기"로 다음 역을 추천합니다. |
-| 지금 운행 중 · TOP 5 | 이번 기수 프로젝트와 GitHub 스타 순위를 콘텐츠 앱처럼 가로 선반으로 보여 줍니다. |
-| 커리큘럼 | L0–L4 구역별 목표와 레포, 구역별 탑승 기록을 보여 줍니다. |
-| Builder | 프로젝트를 열고 운영한 Builder와 그 프로젝트 목록입니다. |
-| 걸어온 길 | 4기(2022 상반기)부터 지금까지 기수별 프로젝트와 Data Forum입니다. |
-| 읽을거리 | 팀이 쓴 글과 독자를 위한 자료입니다. |
+| 성장 지표 | 함께한 러너(중복 제외), 프로젝트, GitHub 스타, 행사 참가자가 기수와 함께 어떻게 늘었는지 보여 줍니다. |
+| 이번 기수 | 지금 진행 중인 프로젝트와 직전 기수가 마친 프로젝트, 각 프로젝트의 Builder와 러너 수입니다. |
+| Builder | 프로젝트를 이끈 Builder별 프로젝트 수, 함께한 러너 수, 첫 기수와 프로젝트 목록입니다. |
+| 시즌 기록 | 4기(2022 상반기)부터 기수별 프로젝트와 러너 수입니다. |
+| 행사 | Data Forum 회차별 참가자 수와 다음 행사입니다. |
+| 어디서 시작할까요 | 하고 싶은 일을 고르면 노선도 위에 경로를 안내합니다. 구역별(L0–L4) 보기도 있습니다. |
+| 레포 둘러보기 | 노선별로 거를 수 있는 레포 목록입니다(스타 순). |
+
+러너는 이름 없이 숫자로만 보여 줍니다. 이름은 Builder만 표시합니다.
 
 ## 커리큘럼: 다섯 개의 구역
 
@@ -66,12 +68,15 @@ L0–L2는 **배우는 구역**이고 무료 자료만으로 끝까지 갈 수 �
 
 | 파일 | 고치는 경우 |
 | --- | --- |
-| `data/repos.json` | 레포(역)를 추가하거나 설명·레벨·노선·상태를 바꿀 때 |
-| `data/map.json` | 노선도에서 역의 위치를 정할 때 (`stations`에 `id`, `x`, `y`) |
-| `data/projects.json` | 기수별 프로젝트를 추가할 때. 사람 이름은 Builder만 적습니다. |
+| `data/projects.json` | 기수별 프로젝트를 추가할 때. 러너는 인원수(`runners`)만 적습니다. |
+| `data/builders.json` | Builder의 LinkedIn, GitHub 아이디(프로필 사진에 쓰임), 한 줄 소개를 넣을 때 |
+| `data/growth.json` | 기수별 누적 러너 수. 프로젝트 시트를 xlsx로 내려받아 `python scripts/runners_from_sheet.py 파일.xlsx > data/growth.json`으로 만듭니다. 이름은 파일에 남지 않습니다. |
 | `data/events.json` | Data Forum 같은 행사를 추가할 때 |
+| `data/repos.json` | 레포(역)를 추가하거나 설명·레벨·노선·상태를 바꿀 때 |
+| `data/map.json` | 노선도에서 역의 위치를 정할 때 |
 | `data/routes.json` | 경로 안내 항목을 바꿀 때 |
 | `data/articles.json`, `articles/*.md` | 읽을거리를 추가할 때 |
+| `data/stats.json` | 직접 고치지 않습니다. 매주 GitHub Actions가 스타 추이와 기여자 수를 갱신합니다. |
 
 레포를 추가할 때의 예시입니다.
 
@@ -103,7 +108,7 @@ JSON을 `fetch`로 읽기 때문에 파일을 더블클릭해서 열면 데이�
 
 ## 배포
 
-`main`에 머지되면 GitHub Actions가 JSON 문법을 검사한 뒤 사이트 파일을 `gh-pages` 브랜치로 배포합니다 (`.github/workflows/deploy.yml`).
+`main`에 머지되면 GitHub Actions가 JSON 문법을 검사한 뒤 사이트 파일을 `gh-pages` 브랜치로 배포합니다 (`.github/workflows/deploy.yml`). 같은 워크플로가 매주 월요일 `scripts/update_stats.py`로 스타의 월별 추이, 기여자 수, 레포별 마지막 커밋 날짜를 모아 `data/stats.json`에 반영한 뒤 다시 배포합니다. 머지 직후 Actions 탭에서 "Run workflow"를 한 번 누르면 바로 채워집니다.
 
 ## 라이선스
 
