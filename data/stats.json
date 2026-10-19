@@ -1,0 +1,95 @@
+{
+  "updated": "2026-10-19",
+  "totals": {
+    "repos": 21,
+    "stars": 1045,
+    "contributors": null
+  },
+  "starsByMonth": [],
+  "repos": {
+    "Causal-Inference-with-Python": {
+      "stars": 482,
+      "pushed": "2026-10-19T10:27:54Z"
+    },
+    "python-causality-handbook": {
+      "stars": 2,
+      "pushed": "2023-11-01T09:21:29Z"
+    },
+    "Causal-Inference-Materials": {
+      "stars": 8,
+      "pushed": "2024-06-01T13:05:23Z"
+    },
+    "CausalInferenceLab.github.io": {
+      "stars": 36,
+      "pushed": "2026-10-19T13:52:40Z"
+    },
+    "causal-inference-in-python-code": {
+      "stars": 58,
+      "pushed": "2024-03-03T16:25:46Z"
+    },
+    "OCE-Materials": {
+      "stars": 55,
+      "pushed": "2025-03-01T05:52:11Z"
+    },
+    "Smart_Causal_Inference": {
+      "stars": 14,
+      "pushed": "2024-09-20T12:14:41Z"
+    },
+    "causal-inference-lecture": {
+      "stars": 47,
+      "pushed": "2024-10-25T14:54:33Z"
+    },
+    "causal-inference-practice": {
+      "stars": 42,
+      "pushed": "2024-09-07T15:09:52Z"
+    },
+    "Experimentation-platform-materials": {
+      "stars": 42,
+      "pushed": "2024-06-30T11:11:57Z"
+    },
+    "Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines": {
+      "stars": 10,
+      "pushed": "2025-02-18T09:47:21Z"
+    },
+    "From-Fixed-to-Flexible-Your-Guide-to-Adaptive-Designs-and-Master-Protocols": {
+      "stars": 21,
+      "pushed": "2025-08-26T11:12:59Z"
+    },
+    "Project-template": {
+      "stars": 2,
+      "pushed": "2025-02-15T10:59:07Z"
+    },
+    "Marketing_Science": {
+      "stars": 21,
+      "pushed": "2025-05-14T14:07:31Z"
+    },
+    "Lang2SQL": {
+      "stars": 141,
+      "pushed": "2026-07-25T05:15:14Z"
+    },
+    "causal-inference-with-causalML": {
+      "stars": 27,
+      "pushed": "2025-08-31T11:22:29Z"
+    },
+    "awesome-causal-inference-python": {
+      "stars": 9,
+      "pushed": "2026-02-02T08:33:15Z"
+    },
+    "causal-studio": {
+      "stars": 15,
+      "pushed": "2026-10-19T13:11:45Z"
+    },
+    "ccwr": {
+      "stars": 3,
+      "pushed": "2026-08-20T21:43:01Z"
+    },
+    "data-still-does-not-speak": {
+      "stars": 3,
+      "pushed": "2026-10-17T13:27:33Z"
+    },
+    "policy-effect-analytics-agent": {
+      "stars": 7,
+      "pushed": "2026-10-19T05:39:34Z"
+    }
+  }
+}
