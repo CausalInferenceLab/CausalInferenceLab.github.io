@@ -1,0 +1,36 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check data files
+        run: |
+          for f in data/*.json; do python3 -m json.tool "$f" > /dev/null || { echo "Invalid JSON: $f"; exit 1; }; done
+
+      - name: Collect site files
+        run: |
+          mkdir _site
+          cp -r index.html article.html 404.html .nojekyll assets data articles _site/
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages
+          force_orphan: true
