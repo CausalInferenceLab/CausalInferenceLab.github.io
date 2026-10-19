@@ -19,7 +19,7 @@
     more.innerHTML = articles.filter((x) => x !== a).map((x) =>
       `<li><a class="article-card" href="#${esc(x.slug)}"><h3>${esc(x.title)}</h3><time datetime="${esc(x.date)}">${x.date.replace(/-/g, ".")}</time></a></li>`).join("");
     if (!a) { notFound(); return; }
-    document.title = `${a.title} | 인과추론 노선도`;
+    document.title = `${a.title} | 가짜연구소 인과추론팀`;
     title.textContent = a.title;
     meta.textContent = `${a.author} · ${a.date.replace(/-/g, ".")}`;
     try {
