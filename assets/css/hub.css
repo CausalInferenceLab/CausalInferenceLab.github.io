@@ -166,7 +166,6 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .mini-bars .tr { grid-column: 1 / -1; height: 5px; border-radius: 3px; background: var(--surface-2); overflow: hidden; margin-top: -2px; }
 .mini-bars .tr i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
 .mini-bars .v { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
-.growth-note { margin-top: 12px; font-size: 13.5px; color: var(--muted); }
 
 /* Sections */
 .band { padding-block: 48px; }
@@ -174,7 +173,6 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .section-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 20px; margin-bottom: 20px; }
 .section-head h2 { font-family: var(--f-display); font-weight: 800; letter-spacing: -.025em; font-size: clamp(24px, 2.8vw, 30px); }
 .section-head p { color: var(--muted); font-size: 15px; }
-.sub-head { font-size: 16px; font-weight: 700; margin: 28px 0 12px; display: flex; align-items: center; gap: 8px; }
 
 /* Curriculum ladder (hero, right) */
 .ladder-card { background: var(--surface); border: 1px solid var(--rule); border-radius: 18px; padding: 20px 20px 16px; display: flex; flex-direction: column; min-width: 0; }
@@ -183,7 +181,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .ladder { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .rung { flex: 1 1 auto; display: flex; }
 .rung-sep { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .4px; margin: 4px 0 -2px; }
-.rung button { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 50px minmax(0, 1fr) auto; grid-template-areas: "l t c" "l g c" "l p c"; gap: 4px 12px; align-content: center; align-items: center; padding: 11px 14px; border-radius: 14px; background: var(--surface-2); border: 1.5px solid transparent;
+.rung button { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 50px minmax(0, 1fr) auto; grid-template-areas: "l t c" "l p c"; gap: 4px 12px; align-content: center; align-items: center; padding: 11px 14px; border-radius: 14px; background: var(--surface-2); border: 1.5px solid transparent;
   margin-left: calc(var(--i) * 16px); width: calc(100% - var(--i) * 16px); }
 .rung.build button { background: color-mix(in srgb, var(--accent) 11%, var(--surface)); }
 .rung button:hover { border-color: var(--ink); }
@@ -192,7 +190,6 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .rung .rt { grid-area: t; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; min-width: 0; }
 .rung .rt b { font-size: 15.5px; }
 .rung .rt span { font-size: 13px; color: var(--muted); }
-.rung .rg { grid-area: g; font-size: 13px; color: var(--ink); opacity: .8; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
 .rung .rp { grid-area: p; display: flex; flex-wrap: wrap; gap: 4px; min-width: 0; }
 .rung .rc { grid-area: c; text-align: right; font-size: 12px; color: var(--muted); line-height: 1.1; }
 .rung .rc b { display: block; font-family: var(--f-display); font-weight: 800; letter-spacing: -.02em; font-size: 24px; color: var(--ink); }
@@ -203,7 +200,6 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 @media (max-width: 560px) {
   .rung button { margin-left: calc(var(--i) * 6px); width: calc(100% - var(--i) * 6px); grid-template-columns: 42px minmax(0, 1fr) auto; padding: 10px 12px; }
   .rung .rl { font-size: 26px; }
-  .rung .rg { display: none; }
   .rung .pick:nth-child(2):not(.paid) { display: none; }
 }
 
