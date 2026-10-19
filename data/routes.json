@@ -1,0 +1,38 @@
+[
+  {
+    "id": "start",
+    "label": "처음 시작해요",
+    "description": "영상으로 감을 잡고, 번역서로 개념을 익힌 뒤, 책 코드와 산업 사례로 넘어갑니다.",
+    "stops": ["causal-studio", "Causal-Inference-with-Python", "causal-inference-in-python-code", "causal-inference-practice"]
+  },
+  {
+    "id": "experiment",
+    "label": "A/B 테스트를 해요",
+    "description": "실험의 원리부터 실험 플랫폼 사례까지, 실험으로 효과를 재는 경로입니다.",
+    "stops": ["causal-studio", "OCE-Materials", "Experimentation-platform-materials", "causal-inference-practice"]
+  },
+  {
+    "id": "ml",
+    "label": "ML로 효과를 추정해요",
+    "description": "이질적 처치효과와 메타러너를 코드로 익히고 외부 라이브러리 기여로 이어갑니다.",
+    "stops": ["Causal-Inference-with-Python", "causal-inference-with-causalML", "awesome-causal-inference-python", "external"]
+  },
+  {
+    "id": "marketing",
+    "label": "마케팅·행동 데이터를 다뤄요",
+    "description": "현업 특강과 마케팅 사이언스를 거쳐 행동 데이터를 해석하는 리딩 살롱에 합류합니다.",
+    "stops": ["Causal-Inference-with-Python", "causal-inference-lecture", "Marketing_Science", "data-still-does-not-speak"]
+  },
+  {
+    "id": "research",
+    "label": "연구·헬스케어를 해요",
+    "description": "규제 가이드라인과 적응형 설계를 읽고 target trial emulation 패키지로 이어집니다.",
+    "stops": ["Causal-Inference-with-Python", "Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines", "From-Fixed-to-Flexible-Your-Guide-to-Adaptive-Designs-and-Master-Protocols", "ccwr"]
+  },
+  {
+    "id": "build",
+    "label": "직접 만들고 싶어요",
+    "description": "데이터 에이전트를 함께 만들고, 정책 효과 분석으로 실제 질문에 답합니다.",
+    "stops": ["Causal-Inference-with-Python", "Lang2SQL", "policy-effect-analytics-agent", "external"]
+  }
+]
