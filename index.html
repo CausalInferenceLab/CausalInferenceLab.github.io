@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>인과추론 노선도</title>
+<title>가짜연구소 인과추론팀</title>
 <meta name="description" content="가짜연구소 인과추론팀의 허브. 2022년부터 기수마다 Builder와 러너가 함께 만든 인과추론 오픈소스와 활동을 한곳에 모았습니다.">
-<meta property="og:title" content="인과추론 노선도 | 가짜연구소 인과추론팀">
+<meta property="og:title" content="가짜연구소 인과추론팀 | CausalInferenceLab">
 <meta property="og:description" content="2022년부터 기수마다 함께 만든 인과추론 오픈소스. Builder, 러너, 프로젝트, 행사를 둘러보세요.">
-<meta property="og:image" content="https://causalinferencelab.github.io/assets/img/og-map.png">
+<meta property="og:image" content="https://causalinferencelab.github.io/assets/img/og-hub.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="assets/img/causal_inference_team_logo.jpg">
+<link rel="icon" href="assets/img/team-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
@@ -20,19 +20,18 @@
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 
 <header class="site-header">
-  <div class="line-stripe" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="wrap header-row">
-    <a class="brand" href="#top" aria-label="인과추론 노선도 처음으로">
-      <svg class="roundel" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="var(--ink)" stroke-width="5"/><rect x="2" y="13" width="28" height="6" rx="3" fill="var(--l-main)"/></svg>
-      <span class="brand-name">인과추론 노선도</span>
+    <a class="brand" href="#top" aria-label="가짜연구소 인과추론팀 처음으로">
+      <img class="brand-logo" src="assets/img/team-mark.png" alt="" width="34" height="34">
+      <span class="brand-text"><span class="brand-name">인과추론팀</span><span class="brand-sub">Pseudo-Lab · CausalInferenceLab</span></span>
     </a>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="#cohort">이번 기수</a>
       <a href="#builders">Builder</a>
+      <a href="#repos">오픈소스</a>
       <a href="#seasons">시즌 기록</a>
       <a href="#events">행사</a>
-      <a href="#start">시작하기</a>
-      <a href="#repos">레포</a>
+      <a href="#start">학습 경로</a>
       <a href="#join">참여하기</a>
     </nav>
   </div>
@@ -42,9 +41,16 @@
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="wrap">
       <div class="hero-head">
-        <h1 id="hero-title">2022년부터,<br>함께 만든 인과추론</h1>
+        <div>
+          <p class="eyebrow">가짜연구소 인과추론팀</p>
+          <h1 id="hero-title">2022년부터,<br>함께 만든 인과추론</h1>
+        </div>
         <div class="hero-side">
           <p class="lede">가짜연구소 인과추론팀은 반기마다 기수를 엽니다. Builder가 프로젝트를 이끌고, 러너가 14주 동안 함께 공부하고 만듭니다.</p>
+          <div class="hero-cta">
+            <a class="btn" href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub에서 보기</a>
+            <a class="btn ghost" href="#join">참여하기</a>
+          </div>
           <ul class="now" id="now"></ul>
         </div>
       </div>
@@ -72,9 +78,21 @@
     <div class="wrap">
       <div class="section-head">
         <h2 id="builders-title">Builder</h2>
-        <p>프로젝트를 열고 러너와 함께 끝까지 운행한 사람들입니다.</p>
+        <p>프로젝트를 열고 러너와 함께 끝까지 이끈 사람들입니다.</p>
       </div>
       <ul class="builders" id="builder-list"></ul>
+    </div>
+  </section>
+
+  <section class="band" id="repos" aria-labelledby="repos-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="repos-title">오픈소스</h2>
+        <p id="repos-sub">팀이 만든 레포를 GitHub 스타 순으로 모았습니다.</p>
+      </div>
+      <div class="filter" role="radiogroup" aria-label="트랙으로 거르기" id="repo-filter"></div>
+      <ul class="repo-grid" id="repo-grid"></ul>
+      <p class="more-row"><button type="button" class="btn ghost" id="repo-more" hidden></button></p>
     </div>
   </section>
 
@@ -83,6 +101,10 @@
       <div class="section-head">
         <h2 id="seasons-title">시즌 기록</h2>
         <p>4기부터 지금까지, 기수마다 열린 프로젝트와 함께한 러너 수입니다.</p>
+        <div class="rail-nav" aria-label="기수 넘기기">
+          <button type="button" data-rail="-1" aria-label="이전 기수"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button type="button" data-rail="1" aria-label="다음 기수"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
       </div>
       <div class="season-rail" id="season-rail" tabindex="0" aria-label="기수별 기록. 좌우로 스크롤할 수 있습니다."></div>
     </div>
@@ -102,7 +124,7 @@
     <div class="wrap">
       <div class="section-head">
         <h2 id="start-title">어디서 시작할까요</h2>
-        <p>하고 싶은 일을 고르면 노선도 위에 경로를 안내합니다. L0–L2는 무료 자료만으로 끝까지 갈 수 있습니다.</p>
+        <p>하고 싶은 일을 고르면 볼 순서를 안내합니다. L0–L2는 무료 자료만으로 끝까지 갈 수 있습니다.</p>
       </div>
       <div class="start-grid">
         <div class="planner">
@@ -112,32 +134,21 @@
         </div>
         <div class="map-card">
           <div class="tabs" role="tablist" aria-label="보기 방식">
-            <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="true">노선도</button>
-            <button type="button" role="tab" id="tab-zones" aria-controls="panel-zones" aria-selected="false" tabindex="-1">구역별</button>
+            <button type="button" role="tab" id="tab-zones" aria-controls="panel-zones" aria-selected="true">단계별</button>
+            <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" tabindex="-1">트랙 지도</button>
           </div>
-          <div id="panel-map" role="tabpanel" aria-labelledby="tab-map">
+          <div id="panel-zones" role="tabpanel" aria-labelledby="tab-zones">
+            <ol class="zones" id="zones"></ol>
+          </div>
+          <div id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden>
             <div class="map-scroll">
-              <svg id="metro" role="img" aria-labelledby="metro-title"><title id="metro-title">인과추론 노선도: L0부터 L4까지 6개 노선</title></svg>
+              <svg id="metro" role="img" aria-labelledby="metro-title"><title id="metro-title">인과추론 학습 지도: L0부터 L4까지 6개 트랙</title></svg>
             </div>
             <div class="vlines" id="vlines"></div>
             <ul class="line-legend" id="line-legend"></ul>
           </div>
-          <div id="panel-zones" role="tabpanel" aria-labelledby="tab-zones" hidden>
-            <ol class="zones" id="zones"></ol>
-          </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="band" id="repos" aria-labelledby="repos-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="repos-title">레포 둘러보기</h2>
-        <p>GitHub 스타 순입니다. 노선을 골라 좁혀 보세요.</p>
-      </div>
-      <div class="filter" role="radiogroup" aria-label="노선으로 거르기" id="repo-filter"></div>
-      <ul class="repo-grid" id="repo-grid"></ul>
     </div>
   </section>
 
