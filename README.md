@@ -1,22 +1,21 @@
-# 가짜연구소 인과추론팀 (CausalInferenceLab)
+# Causal Inference Hub
 
-가짜연구소 인과추론팀의 허브입니다. 2022년부터 기수마다 Builder와 러너가 함께 만든 오픈소스, 팀이 걸어온 길, 처음 오는 사람을 위한 학습 경로(L0–L4)를 한곳에 모았습니다.
+가짜연구소 인과추론팀(CausalInferenceLab)의 허브입니다. 2022년부터 기수마다 Builder와 러너가 함께 만든 인과추론 오픈소스를 L0부터 L4까지 하나의 커리큘럼으로 엮고, [Python으로 하는 인과추론](https://causalinferencelab.github.io/Causal-Inference-with-Python/), [Causal Studio](https://causalinferencelab.github.io/causal-studio/), [ccwr](https://github.com/CausalInferenceLab/ccwr) 같은 팀의 사이트로 이어 줍니다.
 
 **사이트: https://causalinferencelab.github.io**
 
-![가짜연구소 인과추론팀 허브](assets/img/hub-preview.png)
+![Causal Inference Hub](assets/img/hub-preview.png)
 
-> **English summary.** This repository is the hub of the Pseudo-Lab Causal Inference Team. It shows how the team has grown (runners, projects, stars, event attendance), the current cohort, the Builders who led each project and the team's history by cohort, and it groups our repositories into five learning levels and six topic tracks. The site is plain HTML, CSS and JavaScript that reads JSON files in `data/`, so adding a repository or a project is a one-file pull request.
+> **English summary.** This repository is the Causal Inference Hub of the Pseudo-Lab Causal Inference Team. It links to the team's sites (the Korean Brave and True webbook, Causal Studio, the ccwr R package), shows how the team has grown (runners, projects, stars, event attendance) and the Builders who led each project, and groups our repositories into five learning levels and six topic tracks. The site is plain HTML, CSS and JavaScript that reads JSON files in `data/`, so adding a repository or a project is a one-file pull request.
 
 ## 허브에서 볼 수 있는 것
 
 | 위치 | 내용 |
 | --- | --- |
-| 첫 화면 | 왼쪽은 함께한 러너(중복 제외), 프로젝트, GitHub 스타, 행사 참가자가 기수와 함께 늘어난 추이이고, 오른쪽은 L0–L4 커리큘럼 한눈에 보기입니다. |
-| 커리큘럼 탭 | 팀 레포 전체를 L0부터 L4까지 챕터로 나눈 가로 목록입니다. 목표를 고르면 볼 순서대로 번호가 붙습니다. |
+| 첫 화면 | 위쪽 배너에서 대표 사이트(웹북, 영상, R 패키지)로 바로 갑니다. 아래 왼쪽은 함께한 러너(중복 제외), 프로젝트, GitHub 스타, 행사 참가자의 추이, 오른쪽은 L0–L4 커리큘럼 한눈에 보기입니다. |
+| 커리큘럼 탭 | 팀 레포 전체를 L0부터 L4까지 챕터로 나눈 가로 목록입니다. 목표를 고르면 그 경로의 레포만 순서대로 보여 줍니다. |
 | 기여 탭 | Builder × 기수 표입니다. 칸 하나가 프로젝트 하나이고, 색은 트랙, 숫자와 진하기는 러너 수입니다. |
 | 트랙 지도 탭 | 같은 레포를 여섯 개 트랙의 지도로 그린 보기입니다. |
-| 이번 기수 | 지금 진행 중인 프로젝트와 직전 기수가 마친 프로젝트입니다. |
 | 행사 | Data Forum 회차별 참가자 수와 다음 행사입니다. |
 
 러너는 이름 없이 숫자로만 보여 줍니다. 이름은 Builder만 표시합니다.
@@ -67,6 +66,7 @@ L0–L2는 **배우는 단계**이고 무료 자료만으로 끝까지 갈 수 �
 
 | 파일 | 고치는 경우 |
 | --- | --- |
+| `data/featured.json` | 첫 화면 배너의 대표 사이트 링크를 바꿀 때 |
 | `data/projects.json` | 기수별 프로젝트를 추가할 때. 러너는 인원수(`runners`)만 적습니다. |
 | `data/builders.json` | Builder의 LinkedIn, GitHub 아이디(프로필 사진에 쓰임), 한 줄 소개를 넣을 때 |
 | `data/growth.json` | 기수별 누적 러너 수. 프로젝트 시트를 xlsx로 내려받아 `python scripts/runners_from_sheet.py 파일.xlsx > data/growth.json`으로 만듭니다. 이름은 파일에 남지 않습니다. |

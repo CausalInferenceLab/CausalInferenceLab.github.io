@@ -40,7 +40,7 @@
 
   /* ---------- data ---------- */
   async function load() {
-    const names = ["repos", "lines", "levels", "map", "routes", "projects", "events", "articles", "builders", "growth", "stats"];
+    const names = ["repos", "lines", "levels", "map", "routes", "projects", "events", "articles", "builders", "growth", "stats", "featured"];
     const data = await Promise.all(names.map((n) => getJSON(`data/${n}.json`)));
     const d = Object.fromEntries(names.map((n, i) => [n, data[i]]));
     d.repos.forEach((r) => {
@@ -52,7 +52,7 @@
     (d.map.paid || []).forEach((p) => state.repos.set(p.id, { repo: p.id, kind: "paid", status: "paid", builders: [], cohorts: [], ...p }));
     state.lineList = d.lines;
     d.lines.forEach((l) => state.lines.set(l.id, l));
-    Object.assign(state, { levels: d.levels, map: d.map, routes: d.routes, projects: d.projects, events: d.events, articles: d.articles, builders: d.builders, growth: d.growth, stats: d.stats });
+    Object.assign(state, { levels: d.levels, map: d.map, routes: d.routes, projects: d.projects, events: d.events, articles: d.articles, builders: d.builders, growth: d.growth, stats: d.stats, featured: d.featured });
 
     const pos = new Map(d.map.stations.map((s) => [s.id, s]));
     d.lines.forEach((l) => {
@@ -139,7 +139,8 @@
     const box = tile.querySelector(".spark");
     if (!box) return;
     const svgEl = box.querySelector("svg");
-    const w = Math.max(120, box.clientWidth), h = 64;
+    svgEl.removeAttribute("viewBox");
+    const w = Math.max(120, box.clientWidth), h = Math.max(48, Math.round(svgEl.getBoundingClientRect().height) || 64);
     svgEl.setAttribute("viewBox", `0 0 ${w} ${h}`);
     const { pts, html } = sparkSVG(t.series, w, h);
     svgEl.innerHTML = html;
@@ -210,10 +211,6 @@
       if (t.series.length > 1) drawSpark(el, t);
       if (animate) { const v = el.querySelector(".tile-value"); countUp(v, t.value, t.unit); }
     });
-    const builders = new Set(state.projects.map((p) => p.builder).filter(Boolean)).size;
-    const repos = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot").length;
-    const contributors = state.stats.totals && state.stats.totals.contributors;
-    $("#growth-note").textContent = `Builder ${builders}명, 기수 ${new Set(state.projects.map((p) => p.cohort)).size}개, 레포 ${repos}개${contributors ? `, GitHub 기여자 ${fmt(contributors)}명` : ""}. 러너는 같은 사람을 한 번만 셉니다.`;
   }
 
   /* ---------- curriculum: ladder in the hero ---------- */
@@ -241,7 +238,6 @@
         <button type="button" data-level="${lv.id}">
           <span class="rl">${lv.id}</span>
           <span class="rt"><b>${esc(lv.name)}</b><span>${esc(lv.question)}</span></span>
-          <span class="rg">${esc(lv.goal)}</span>
           <span class="rp">${picks}${paid}</span>
           <span class="rc"><b>${free.length}</b>레포</span>
         </button></li>`;
@@ -319,7 +315,7 @@
     const depot = [...state.repos.values()].filter((r) => r.status === "depot");
     const learnable = repos.filter((r) => (r.lines || []).length);
     const done = learnable.filter((r) => state.ridden.has(r.repo)).length;
-    $("#curriculum-sub").textContent = `팀이 만든 레포 ${repos.length}개를 L0부터 L4까지 순서대로 놓았습니다.`;
+    $("#curriculum-sub").textContent = `팀 레포 ${repos.length}개를 단계 순서로 놓았습니다.`;
     $("#n-course").textContent = repos.length;
     $("#shelf-foot").innerHTML = `${done ? `<span class="done-n">학습 완료 ${done} / ${learnable.length}</span> ` : ""}카드를 누르면 자세한 정보와 링크가 열립니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
     shelf.scrollLeft = keepScroll ? prevLeft : 0;
@@ -506,46 +502,9 @@
     scrollShelfTo($(`#shelf [data-chap="${levelId}"]`), false);
   }
 
-  /* ---------- now + current cohort ---------- */
-  function cohortItems(cohort) {
-    const items = state.projects.filter((p) => p.cohort === cohort).map((p) => {
-      const r = p.repo && state.repos.get(p.repo);
-      return { title: r ? r.title : p.name, name: p.name, builder: p.builder, runners: p.runners, repo: r ? r.repo : null, link: p.link, summary: r ? r.summary : "", line: primaryLine(r) };
-    });
-    return items;
-  }
-
-  function projectCard(it, live) {
-    const title = it.repo ? `<button type="button" data-open="${esc(it.repo)}">${esc(it.title)}</button>` : it.link ? `<a href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.title)}</a>` : esc(it.title);
-    const person = it.builder ? `<div class="person" data-line="${it.line}">${avatarHTML(it.builder)}<div><div class="nm">${nameLink(it.builder)}</div><div class="rl">Builder</div></div></div>` : `<div class="person"><div class="rl">Builder 정보 준비 중</div></div>`;
-    const count = it.runners ? `<span class="count">러너 <b>${it.runners}</b>명</span>` : "";
-    const sub = it.name && !it.name.startsWith(it.title) ? `<span>${esc(it.name)}</span>` : "";
-    return `<li class="proj${live ? " live" : ""}" data-line="${it.line}">
-      <div class="proj-top">${live ? `<span class="live-tag">진행 중</span>` : ""}${sub}</div>
-      <h3>${title}</h3>
-      ${it.summary ? `<p class="sum">${esc(it.summary)}</p>` : `<p class="sum">팀 레포 밖에서 진행한 프로젝트입니다.${it.link ? ` <a href="${esc(it.link)}" target="_blank" rel="noopener">프로젝트 기록 보기</a>` : ""}</p>`}
-      <div class="proj-foot">${person}${count}</div>
-    </li>`;
-  }
-
-  function renderCohort() {
-    const cur = currentCohort();
-    const curProjects = state.projects.filter((p) => p.cohort === cur);
-    const term = curProjects[0] ? curProjects[0].term : "";
-    const items = cohortItems(cur);
-    [...state.repos.values()].filter((r) => r.status === "running" && !items.some((i) => i.repo === r.repo)).forEach((r) => {
-      items.push({ title: r.title, name: r.title, builder: r.builders[0], runners: null, repo: r.repo, summary: r.summary, line: primaryLine(r) });
-    });
-    const prev = cohortItems(cur - 1);
-    $("#cohort-title").textContent = `이번 기수: ${cur}기`;
-    $("#cohort-sub").textContent = `${term}에 진행 중인 프로젝트와, 직전 기수가 마친 프로젝트입니다.`;
-    $("#cohort-body").innerHTML = `<ul class="proj-grid">${items.map((i) => projectCard(i, true)).join("")}</ul>` +
-      (prev.length ? `<h3 class="sub-head">${cur - 1}기에 마친 프로젝트</h3><ul class="proj-grid">${prev.map((i) => projectCard(i, false)).join("")}</ul>` : "");
-    wireAvatars($("#cohort-body"));
-
-    const next = state.events.find((e) => e.upcoming);
-    $("#now").innerHTML = `<li><a href="#cohort"><span class="dot" aria-hidden="true"></span>${cur}기 진행 중: 프로젝트 ${items.length}개</a></li>` +
-      (next ? `<li><a href="#events"><span class="soon" aria-hidden="true"></span>${Number(next.date.slice(5, 7))}월 ${Number(next.date.slice(8))}일 5th Data Forum</a></li>` : "");
+  /* ---------- featured sites (hero) ---------- */
+  function renderFeatured() {
+    $("#featured").innerHTML = (state.featured || []).map((f) => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener"><span class="tag">${esc(f.tag)}</span><span class="t">${esc(f.title)}</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>`).join("");
   }
 
   /* ---------- events ---------- */
@@ -760,7 +719,7 @@
   }
   function navSpy() {
     if (!("IntersectionObserver" in window)) return;
-    const ids = ["curriculum", "cohort", "events", "reading", "join"];
+    const ids = ["curriculum", "events", "reading", "join"];
     const seen = new Map();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
@@ -784,7 +743,7 @@
     $("#shelf").addEventListener("scroll", shelfSpy, { passive: true });
     renderMatrix();
     renderLegend(); renderMap(); wireTabs();
-    renderCohort(); renderEvents(); renderArticles();
+    renderFeatured(); renderEvents(); renderArticles();
     if (location.hash === "#contrib") selectTab("tab-contrib");
     navSpy();
     refreshStars();

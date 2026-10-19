@@ -1,0 +1,17 @@
+[
+  {
+    "tag": "웹북",
+    "title": "Python으로 하는 인과추론",
+    "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/"
+  },
+  {
+    "tag": "영상",
+    "title": "Causal Studio",
+    "url": "https://causalinferencelab.github.io/causal-studio/"
+  },
+  {
+    "tag": "R 패키지",
+    "title": "ccwr",
+    "url": "https://github.com/CausalInferenceLab/ccwr"
+  }
+]
