@@ -4,10 +4,16 @@
     "title": "영상으로 여는 인과추론",
     "summary": "영상으로 먼저 보고 Binder나 Colab 노트북으로 따라 하는 인과추론 입문 스튜디오입니다. 첫 챕터 '왜 인과추론인가'가 공개되어 있습니다.",
     "level": "L0",
-    "lines": ["main"],
+    "lines": [
+      "main"
+    ],
     "status": "active",
-    "builders": ["조해창"],
-    "cohorts": [12],
+    "builders": [
+      "조해창"
+    ],
+    "cohorts": [
+      12
+    ],
     "site": "https://causalinferencelab.github.io/causal-studio",
     "stars": 15
   },
@@ -16,44 +22,68 @@
     "title": "Brave & True 한국어판",
     "summary": "『Causal Inference for The Brave and True』 한국어 번역입니다. 1–16장과 21장을 Jupyter Book으로 읽고 코드를 실행할 수 있습니다.",
     "level": "L1",
-    "lines": ["main", "ml", "research"],
+    "lines": [
+      "main",
+      "ml",
+      "research"
+    ],
     "status": "stable",
-    "builders": ["신진수"],
-    "cohorts": [4, 5, 6],
+    "builders": [
+      "신진수"
+    ],
+    "cohorts": [
+      4,
+      5,
+      6
+    ],
     "site": "https://causalinferencelab.github.io/Causal-Inference-with-Python/",
-    "stars": 480
+    "stars": 482
   },
   {
     "repo": "OCE-Materials",
     "title": "온라인 통제 실험",
     "summary": "온라인 통제 실험(A/B 테스트) 연구자로 거듭나기 프로젝트의 스터디 자료입니다.",
     "level": "L1",
-    "lines": ["exp"],
+    "lines": [
+      "exp"
+    ],
     "status": "stable",
-    "builders": ["방태모"],
-    "cohorts": [8],
-    "stars": 54
+    "builders": [
+      "방태모"
+    ],
+    "cohorts": [
+      8
+    ],
+    "stars": 55
   },
   {
     "repo": "causal-inference-in-python-code",
     "title": "책 예제 코드",
     "summary": "『실무로 통하는 인과추론 with 파이썬』의 장별 예제 코드와 데이터입니다.",
     "level": "L2",
-    "lines": ["main"],
+    "lines": [
+      "main"
+    ],
     "status": "stable",
     "builders": [],
     "cohorts": [],
-    "stars": 57
+    "stars": 58
   },
   {
     "repo": "Smart_Causal_Inference",
     "title": "책 스터디 노트",
     "summary": "『실무로 통하는 인과추론 with 파이썬』을 함께 읽고 장별로 정리한 Jupyter Book입니다.",
     "level": "L2",
-    "lines": ["main"],
+    "lines": [
+      "main"
+    ],
     "status": "stable",
-    "builders": ["박상호"],
-    "cohorts": [8],
+    "builders": [
+      "박상호"
+    ],
+    "cohorts": [
+      8
+    ],
     "site": "https://causalinferencelab.github.io/Smart_Causal_Inference/intro.html",
     "stars": 14
   },
@@ -62,10 +92,16 @@
     "title": "산업 사례 템플릿",
     "summary": "인과 그래프부터 RDD까지 기법마다 산업 사례를 붙여 템플릿으로 만든 14주 프로젝트입니다.",
     "level": "L2",
-    "lines": ["main"],
+    "lines": [
+      "main"
+    ],
     "status": "stable",
-    "builders": ["김성수"],
-    "cohorts": [8],
+    "builders": [
+      "김성수"
+    ],
+    "cohorts": [
+      8
+    ],
     "stars": 42
   },
   {
@@ -73,10 +109,16 @@
     "title": "CausalML 스터디",
     "summary": "책의 이론을 uber/causalml 코드로 다시 구현하며 이론에서 코드까지 잇는 스터디입니다.",
     "level": "L2",
-    "lines": ["ml"],
+    "lines": [
+      "ml"
+    ],
     "status": "stable",
-    "builders": ["박이삭"],
-    "cohorts": [10],
+    "builders": [
+      "박이삭"
+    ],
+    "cohorts": [
+      10
+    ],
     "stars": 27
   },
   {
@@ -84,10 +126,16 @@
     "title": "메서드 코드북",
     "summary": "실무에 바로 쓸 수 있도록 짧고 정확하게 정리한 인과추론 파이썬 코드 모음입니다.",
     "level": "L2",
-    "lines": ["ml"],
+    "lines": [
+      "ml"
+    ],
     "status": "active",
-    "builders": ["권명석"],
-    "cohorts": [11],
+    "builders": [
+      "권명석"
+    ],
+    "cohorts": [
+      11
+    ],
     "stars": 9
   },
   {
@@ -95,32 +143,46 @@
     "title": "실험 플랫폼 자료",
     "summary": "국내외 실험 플랫폼 구축 사례와 참고 자료를 정리한 저장소입니다.",
     "level": "L2",
-    "lines": ["exp"],
+    "lines": [
+      "exp"
+    ],
     "status": "stable",
     "builders": [],
     "cohorts": [],
-    "stars": 41
+    "stars": 42
   },
   {
     "repo": "causal-inference-lecture",
     "title": "특강·발표 자료",
     "summary": "책의 장마다 현업 연사가 진행한 특강과 발표 자료 모음입니다.",
     "level": "L2",
-    "lines": ["behavior"],
+    "lines": [
+      "behavior"
+    ],
     "status": "stable",
-    "builders": ["신진수"],
-    "cohorts": [8],
-    "stars": 46
+    "builders": [
+      "신진수"
+    ],
+    "cohorts": [
+      8
+    ],
+    "stars": 47
   },
   {
     "repo": "Marketing_Science",
     "title": "마케팅 사이언스",
     "summary": "마케팅 데이터 분석과 베이지안 통계를 함께 공부한 프로젝트입니다.",
     "level": "L2",
-    "lines": ["behavior"],
+    "lines": [
+      "behavior"
+    ],
     "status": "stable",
-    "builders": ["권남택"],
-    "cohorts": [10],
+    "builders": [
+      "권남택"
+    ],
+    "cohorts": [
+      10
+    ],
     "stars": 21
   },
   {
@@ -128,10 +190,14 @@
     "title": "데이터는 여전히 말하지 않는다",
     "summary": "『행동 데이터 분석』 코드를 재현하고 해석을 서로 리뷰하는 14주 리딩 살롱입니다. 공개 분석 사례 1–2건을 목표로 합니다.",
     "level": "L2",
-    "lines": ["behavior"],
+    "lines": [
+      "behavior"
+    ],
     "status": "running",
     "builders": [],
-    "cohorts": [13],
+    "cohorts": [
+      13
+    ],
     "site": "https://pseudo-lab.com/projects/25cd8f79-6911-4ed9-baf0-446b90e62c26?tab=home",
     "stars": 3
   },
@@ -140,10 +206,19 @@
     "title": "Lang2SQL",
     "summary": "사람과 대화하며 함께 분석하는 발화 기반 데이터 에이전트입니다.",
     "level": "L3",
-    "lines": ["ai"],
+    "lines": [
+      "ai"
+    ],
     "status": "active",
-    "builders": ["이동욱", "최세영"],
-    "cohorts": [10, 11, 12],
+    "builders": [
+      "이동욱",
+      "최세영"
+    ],
+    "cohorts": [
+      10,
+      11,
+      12
+    ],
     "stars": 141
   },
   {
@@ -151,21 +226,32 @@
     "title": "정책 효과 분석 에이전트",
     "summary": "공공데이터로 화제가 된 정책의 효과를 검증합니다. 분석 계획을 먼저 공개하고, 근거가 없으면 판단할 수 없다고 말합니다.",
     "level": "L3",
-    "lines": ["main", "ai"],
+    "lines": [
+      "main",
+      "ai"
+    ],
     "status": "running",
-    "builders": ["신진수"],
+    "builders": [
+      "신진수"
+    ],
     "cohorts": [],
-    "stars": 4
+    "stars": 7
   },
   {
     "repo": "Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines",
     "title": "RWE 규제 가이드라인",
     "summary": "FDA 등 규제기관의 Real-World Evidence 가이드라인을 인과추론 관점에서 읽은 스터디입니다.",
     "level": "L4",
-    "lines": ["research"],
+    "lines": [
+      "research"
+    ],
     "status": "stable",
-    "builders": ["박상호"],
-    "cohorts": [9],
+    "builders": [
+      "박상호"
+    ],
+    "cohorts": [
+      9
+    ],
     "site": "https://causalinferencelab.github.io/Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines/intro.html",
     "stars": 10
   },
@@ -174,10 +260,16 @@
     "title": "적응형 설계",
     "summary": "적응형 임상시험 설계와 마스터 프로토콜을 다룬 스터디 자료입니다.",
     "level": "L4",
-    "lines": ["research"],
+    "lines": [
+      "research"
+    ],
     "status": "stable",
-    "builders": ["박상호"],
-    "cohorts": [9],
+    "builders": [
+      "박상호"
+    ],
+    "cohorts": [
+      9
+    ],
     "stars": 21
   },
   {
@@ -185,10 +277,16 @@
     "title": "ccwr",
     "summary": "Clone-censor-weight 방식으로 target trial emulation을 재현 가능하게 수행하는 R 패키지입니다.",
     "level": "L4",
-    "lines": ["research"],
+    "lines": [
+      "research"
+    ],
     "status": "active",
-    "builders": ["박상호"],
-    "cohorts": [12],
+    "builders": [
+      "박상호"
+    ],
+    "cohorts": [
+      12
+    ],
     "site": "https://causalinferencelab.github.io/ccwr/",
     "stars": 3
   },
