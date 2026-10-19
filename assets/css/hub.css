@@ -1,6 +1,6 @@
-/* Layout: people and growth first. A hero with four growth tiles, then the current cohort,
-   Builders, season history and events; the metro map sits further down as the "where to start" tool.
-   The six line colours stay as the visual system (header stripe, line badges, map). */
+/* Layout: the team first. A hero with four growth tiles, then the current cohort, Builders,
+   open source, season history and events; the learning-path tool sits further down.
+   The six track colours mark repos by topic (card edges, dots, the track map). */
 :root {
   --paper: #F1F3F6;
   --surface: #FFFFFF;
@@ -82,18 +82,12 @@ code, .mono { font-family: var(--f-code); font-size: .86em; }
 /* Header */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); }
 .site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--rule); }
-.line-stripe { display: flex; height: 5px; }
-.line-stripe i { flex: 1; }
-.line-stripe i:nth-child(1) { background: var(--l-main); }
-.line-stripe i:nth-child(2) { background: var(--l-ml); }
-.line-stripe i:nth-child(3) { background: var(--l-research); }
-.line-stripe i:nth-child(4) { background: var(--l-exp); }
-.line-stripe i:nth-child(5) { background: var(--l-behavior); }
-.line-stripe i:nth-child(6) { background: var(--l-ai); }
 .header-row { display: flex; align-items: center; gap: 24px; min-height: 60px; }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; flex-shrink: 0; }
-.roundel { width: 30px; height: 30px; }
-.brand-name { font-family: var(--f-display); font-size: 22px; letter-spacing: .5px; }
+.brand-logo { width: 34px; height: 34px; display: block; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-name { font-family: var(--f-display); font-size: 21px; letter-spacing: .5px; }
+.brand-sub { font-size: 11.5px; color: var(--muted); letter-spacing: .2px; }
 .site-nav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin-left: auto; }
 .site-nav::-webkit-scrollbar { display: none; }
 .site-nav a { color: var(--muted); text-decoration: none; padding: 8px 10px; border-radius: 8px; white-space: nowrap; font-size: 15px; font-weight: 500; }
@@ -109,7 +103,10 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .hero-head { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px 48px; align-items: end; }
 @media (max-width: 900px) { .hero-head { grid-template-columns: minmax(0, 1fr); } }
 .hero h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(42px, 6.4vw, 80px); line-height: 1.04; letter-spacing: -.5px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 12px; }
+.eyebrow::before { content: ""; width: 22px; height: 3px; border-radius: 2px; background: currentColor; }
 .lede { font-size: 17px; color: var(--muted); max-width: 34em; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .now { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .now a { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 14px 6px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--rule); color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 600; }
 .now a:hover { border-color: var(--ink); }
@@ -198,6 +195,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .builder-stats dd { margin: 0; font-family: var(--f-display); font-size: 22px; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .builder ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14px; }
 .builder li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 8px; }
+.builder .more { align-self: flex-start; font-size: 13.5px; color: var(--muted); }
 .builder .co { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; padding-top: 1px; }
 .builder li a, .builder li button { color: var(--ink); }
 .linkish { all: unset; cursor: pointer; text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
@@ -206,6 +204,11 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 /* Season rail */
 .season-rail { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 260px); gap: 0; overflow-x: auto; padding-bottom: 12px; scroll-snap-type: x proximity; }
+.rail-nav { margin-left: auto; display: flex; gap: 6px; align-self: center; }
+.rail-nav button { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; border: 1.5px solid var(--rule); background: var(--surface); color: var(--ink); cursor: pointer; }
+.rail-nav button:hover:not(:disabled) { border-color: var(--ink); }
+.rail-nav button:disabled { opacity: .35; cursor: default; }
+.rail-nav svg { width: 16px; height: 16px; }
 .season { scroll-snap-align: start; padding: 0 18px 0 0; display: flex; flex-direction: column; }
 .season-bar { height: 96px; display: flex; align-items: flex-end; gap: 6px; margin-bottom: 10px; }
 .season-bar i { display: block; width: 28px; border-radius: 4px 4px 0 0; background: var(--accent); min-height: 4px; }
@@ -225,6 +228,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .ep.event { border-style: dashed; background: transparent; }
 @media (max-width: 640px) {
   .season-rail { display: flex; flex-direction: column-reverse; overflow: visible; gap: 26px; }
+  .rail-nav { display: none; }
   .season-head { order: -1; margin-bottom: 8px; }
   .season { padding: 0; }
   .season-bar { height: auto; }
@@ -260,7 +264,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .chip { font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--rule); background: var(--surface); color: var(--ink); padding: 7px 14px; border-radius: 999px; min-height: 40px; display: inline-flex; align-items: center; gap: 6px; }
 .chip:hover { border-color: var(--ink); }
 .chip[aria-checked="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
-.chip .num { width: 20px; height: 20px; font-size: 12px; }
+.chip .num { width: 10px; height: 10px; }
 .route-steps { list-style: none; margin: 18px 0 0; padding: 0; }
 .route-steps li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; align-items: start; position: relative; padding-bottom: 14px; }
 .route-steps li:not(:last-child)::before { content: ""; position: absolute; left: 13px; top: 26px; bottom: 0; width: 3px; background: var(--c, var(--rule)); border-radius: 2px; }
@@ -308,7 +312,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 #metro .step-b { fill: var(--ink); }
 .line-legend { list-style: none; margin: 8px 0 0; padding: 0 16px; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); }
 .line-legend li { display: flex; align-items: center; gap: 6px; }
-.num { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--c); color: var(--on-line); font-family: var(--f-display); font-size: 14px; line-height: 1; flex-shrink: 0; }
+.num { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--c); flex-shrink: 0; }
 
 /* Vertical lines replace the map on phones */
 .vlines { display: none; padding: 0 16px; }
@@ -360,7 +364,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .status.running { background: var(--live); color: var(--surface); }
 .status.active { background: var(--surface-2); color: var(--ink); }
 .card h3 { font-size: 17px; line-height: 1.35; }
-.card .repo { font-family: var(--f-code); font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.card .repo { font-family: var(--f-code); font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.more-row { margin-top: 16px; text-align: center; }
 .card .sum { font-size: 14px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .card-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--muted); }
 .card-foot .who { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -386,6 +391,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .btn:hover { opacity: .88; }
 .btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--rule); }
 .btn.ghost:hover { border-color: var(--ink); }
+button.btn { font: inherit; font-weight: 600; font-size: 15px; cursor: pointer; }
 .join-foot { margin-top: 18px; color: var(--muted); }
 
 /* Footer */
@@ -407,7 +413,7 @@ dialog.station::backdrop { background: rgba(10, 14, 20, .55); }
 .station .repo { font-family: var(--f-code); font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
 .station .tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .tag-line { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 3px 10px 3px 3px; border-radius: 999px; background: var(--surface-2); }
-.tag-line .num { width: 20px; height: 20px; font-size: 12px; }
+.tag-line .num { width: 10px; height: 10px; }
 .station dl { margin: 0; display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 6px 12px; font-size: 14px; }
 .station dt { color: var(--muted); }
 .station dd { margin: 0; }

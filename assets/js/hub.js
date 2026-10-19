@@ -15,7 +15,7 @@
     running: "진행 중: 이번 기수에 운영 중인 프로젝트",
     active: "최근 업데이트: 올해 코드나 내용이 갱신된 레포",
     stable: "완결: 내용이 마무리되어 오류 수정 위주로 관리",
-    depot: "차량기지: 허브 운영과 보관용 레포"
+    depot: "운영·보관: 허브 운영과 보관용 레포"
   };
 
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -26,7 +26,7 @@
   const state = {
     repos: new Map(), lines: new Map(), lineList: [], levels: [], map: null, routes: [],
     projects: [], events: [], articles: [], builders: [], growth: null, stats: null,
-    ridden: new Set(), order: new Map(), route: "start", filter: "all"
+    ridden: new Set(), order: new Map(), route: "start", filter: "all", showAll: false
   };
 
   function loadRidden() { try { state.ridden = new Set(JSON.parse(localStorage.getItem(RIDE_KEY) || "[]")); } catch (e) { state.ridden = new Set(); } }
@@ -211,7 +211,7 @@
       if (animate) { const v = el.querySelector(".tile-value"); countUp(v, t.value, t.unit); }
     });
     const builders = new Set(state.projects.map((p) => p.builder).filter(Boolean)).size;
-    const repos = [...state.repos.values()].filter((r) => !r.kind).length;
+    const repos = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot").length;
     const contributors = state.stats.totals && state.stats.totals.contributors;
     $("#growth-note").textContent = `Builder ${builders}명, 기수 ${new Set(state.projects.map((p) => p.cohort)).size}개, 레포 ${repos}개${contributors ? `, GitHub 기여자 ${fmt(contributors)}명` : ""}. 러너는 같은 사람을 한 번만 셉니다.`;
   }
@@ -248,13 +248,13 @@
     });
     const prev = cohortItems(cur - 1);
     $("#cohort-title").textContent = `이번 기수: ${cur}기`;
-    $("#cohort-sub").textContent = `${term} 운행 중인 프로젝트와, 직전 기수가 마친 프로젝트입니다.`;
+    $("#cohort-sub").textContent = `${term}에 진행 중인 프로젝트와, 직전 기수가 마친 프로젝트입니다.`;
     $("#cohort-body").innerHTML = `<ul class="proj-grid">${items.map((i) => projectCard(i, true)).join("")}</ul>` +
       (prev.length ? `<h3 class="sub-head">${cur - 1}기에 마친 프로젝트</h3><ul class="proj-grid">${prev.map((i) => projectCard(i, false)).join("")}</ul>` : "");
     wireAvatars($("#cohort-body"));
 
     const next = state.events.find((e) => e.upcoming);
-    $("#now").innerHTML = `<li><a href="#cohort"><span class="dot" aria-hidden="true"></span>${cur}기 운행 중: 프로젝트 ${items.length}개</a></li>` +
+    $("#now").innerHTML = `<li><a href="#cohort"><span class="dot" aria-hidden="true"></span>${cur}기 진행 중: 프로젝트 ${items.length}개</a></li>` +
       (next ? `<li><a href="#events"><span class="soon" aria-hidden="true"></span>${Number(next.date.slice(5, 7))}월 ${Number(next.date.slice(8))}일 5th Data Forum</a></li>` : "");
   }
 
@@ -293,9 +293,10 @@
           <div><dt>함께한 러너</dt><dd>${fmt(p.runners)}</dd></div>
           <div><dt>첫 기수</dt><dd>${p.first < 99 ? p.first + "기" : "-"}</dd></div>
         </dl>
-        <ul>${p.items.map((it) => `<li><span class="co">${it.cohort ? it.cohort + "기" : "현재"}</span><span>${
+        <ul>${p.items.map((it, k) => `<li${k >= 4 ? " class=\"extra\" hidden" : ""}><span class="co">${it.cohort ? it.cohort + "기" : "현재"}</span><span>${
           it.repo ? `<button type="button" class="linkish" data-open="${esc(it.repo)}">${esc(it.name)}</button>`
           : it.link ? `<a href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.name)}</a>` : esc(it.name)}</span></li>`).join("")}</ul>
+        ${p.items.length > 4 ? `<button type="button" class="linkish more" data-expand aria-expanded="false">프로젝트 ${p.items.length - 4}개 더 보기</button>` : ""}
       </li>`;
     }).join("");
     wireAvatars($("#builder-list"));
@@ -324,10 +325,25 @@
       const runnersText = s.runners ? `러너 <b>${s.runners}</b>명` : "러너 집계 중";
       return `<div class="season${s.cohort === latest ? " current" : ""}">
         <div class="season-bar"><i style="height:${Math.max(4, pct)}%; --w:${Math.max(4, pct)}%" aria-hidden="true"></i><span>${runnersText}<br>프로젝트 ${s.items.length}개</span></div>
-        <div class="season-head"><b>${s.cohort}기</b><span>${esc(s.term)}${s.cohort === latest ? ", 운행 중" : ""}</span></div>
+        <div class="season-head"><b>${s.cohort}기</b><span>${esc(s.term)}${s.cohort === latest ? ", 진행 중" : ""}</span></div>
         <ul>${items}</ul></div>`;
     }).join("");
-    requestAnimationFrame(() => { rail.scrollLeft = rail.scrollWidth; });
+    rail.addEventListener("scroll", railEdges, { passive: true });
+    requestAnimationFrame(() => { fitRail(); rail.scrollLeft = rail.scrollWidth; railEdges(); });
+  }
+
+  /* Size season columns so a whole number fits the rail: no half-cut column at the edge. */
+  function fitRail() {
+    const rail = $("#season-rail");
+    if (getComputedStyle(rail).gridAutoFlow.indexOf("column") < 0) { rail.style.gridAutoColumns = ""; return; }
+    const cols = Math.max(1, Math.floor(rail.clientWidth / 236));
+    rail.style.gridAutoColumns = `${rail.clientWidth / cols}px`;
+  }
+  function railEdges() {
+    const rail = $("#season-rail");
+    const [prev, next] = document.querySelectorAll("[data-rail]");
+    prev.disabled = rail.scrollLeft <= 4;
+    next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4;
   }
 
   /* ---------- events ---------- */
@@ -391,8 +407,7 @@
     svg("text", { x: ex.from[0], y: ex.from[1] - 12, class: "express-l" }, tracks).textContent = ex.label;
     m.lines.forEach((ln) => {
       const g = svg("g", { class: "badge", "data-line": ln.line, "data-track": ln.line, "aria-hidden": "true" }, tracks);
-      svg("circle", { cx: ln.badge[0], cy: ln.badge[1], r: 15 }, g);
-      svg("text", { x: ln.badge[0], y: ln.badge[1] + 1 }, g).textContent = state.lines.get(ln.line).number;
+      svg("circle", { cx: ln.badge[0], cy: ln.badge[1], r: 9 }, g);
     });
 
     const stations = svg("g", {}, root);
@@ -441,7 +456,7 @@
         const at = ids.indexOf("causal-inference-in-python-code") + 1;
         ids.splice(at, 0, ...(state.map.express.stops || []).map((s) => s.id));
       }
-      return `<div class="vline" data-line="${l.id}"><h3><span class="num" aria-hidden="true">${l.number}</span>${l.number}호선 ${esc(l.name)}</h3><ol>${ids.map((id) => {
+      return `<div class="vline" data-line="${l.id}"><h3><span class="num" aria-hidden="true"></span>${esc(l.name)}</h3><ol>${ids.map((id) => {
         const r = state.repos.get(id);
         const cls = [r.kind === "paid" ? "paid" : "", state.ridden.has(id) ? "on" : ""].filter(Boolean).join(" ");
         return `<li class="${cls}" data-vst="${esc(id)}"><button type="button" data-open="${esc(id)}">${esc(r.mapLabel || r.title)}</button>${r.level ? `<span class="lv">${r.level}</span>` : ""}</li>`;
@@ -450,14 +465,14 @@
   }
 
   function renderLegend() {
-    $("#line-legend").innerHTML = state.lineList.map((l) => `<li data-line="${l.id}"><span class="num">${l.number}</span>${esc(l.name)}</li>`).join("") +
-      `<li><svg width="28" height="6" aria-hidden="true"><path d="M2 3H26" stroke="var(--l-main)" stroke-width="3" stroke-dasharray="5 6" stroke-linecap="round"/></svg>급행: 유료 가속 옵션</li>`;
+    $("#line-legend").innerHTML = state.lineList.map((l) => `<li data-line="${l.id}"><span class="num" aria-hidden="true"></span>${esc(l.name)}</li>`).join("") +
+      `<li><svg width="28" height="6" aria-hidden="true"><path d="M2 3H26" stroke="var(--l-main)" stroke-width="3" stroke-dasharray="5 6" stroke-linecap="round"/></svg>책·강의 (유료)</li>`;
   }
 
   /* ---------- route planner ---------- */
   function renderRouteChips() {
     const box = $("#route-chips");
-    const all = [...state.routes, { id: "all", label: "전체 노선 보기" }];
+    const all = [...state.routes, { id: "all", label: "전체 보기" }];
     box.innerHTML = all.map((r) => `<button type="button" class="chip" role="radio" data-route="${r.id}" aria-checked="${r.id === state.route}">${esc(r.label)}</button>`).join("");
     box.addEventListener("click", (e) => {
       const b = e.target.closest("[data-route]");
@@ -482,7 +497,7 @@
     if (!route) {
       root.classList.remove("routing");
       steps.innerHTML = "";
-      note.textContent = `여섯 개 노선의 역 ${state.map.stations.length}곳을 모두 보여 줍니다.`;
+      note.textContent = `여섯 개 트랙의 레포와 자료 ${state.map.stations.length}개를 모두 보여 줍니다.`;
       return;
     }
     root.classList.add("routing");
@@ -538,7 +553,7 @@
         <span class="zl">${lv.id}</span><span class="zn">${esc(lv.name)}</span><span class="zq">${esc(lv.question)}</span>
         <p class="zg">${esc(lv.goal)}</p>
         <ul>${repos.map((r) => `<li><button type="button" data-open="${esc(r.repo)}" data-line="${primaryLine(r)}"><i class="mini${state.ridden.has(r.repo) ? " on" : ""}" aria-hidden="true"></i><span>${esc(r.title)}</span></button></li>`).join("")}${extra}</ul>
-        <span class="zq">탑승 ${ridden} / ${repos.length}</span>
+        <span class="zq">학습 완료 ${ridden} / ${repos.length}</span>
       </li>`;
     }).join("");
   }
@@ -548,7 +563,7 @@
     const line = primaryLine(r);
     const who = r.builders && r.builders.length ? r.builders.join(", ") : "";
     const status = statusLabel[r.status] ? `<span class="status ${r.status}">${statusLabel[r.status]}</span>` : "";
-    const nums = (r.lines || []).map((id) => `<span class="num" data-line="${id}" title="${state.lines.get(id).number}호선 ${esc(state.lines.get(id).name)}">${state.lines.get(id).number}</span>`).join("");
+    const nums = (r.lines || []).map((id) => `<span class="num" data-line="${id}" title="${esc(state.lines.get(id).name)} 트랙"></span>`).join("");
     return `<button type="button" class="card" data-line="${line}" data-open="${esc(r.repo)}">
       <span class="card-top">${nums}${r.level ? `<span class="lv">${r.level}</span>` : ""}${status}</span>
       <h3>${esc(r.title)}</h3><span class="repo">${esc(r.repo)}</span>
@@ -559,12 +574,13 @@
 
   function renderFilter() {
     const box = $("#repo-filter");
-    const opts = [{ id: "all", label: "전체" }, ...state.lineList.map((l) => ({ id: l.id, label: `${l.number}호선 ${l.name}`, line: l })), { id: "depot", label: "차량기지" }];
-    box.innerHTML = opts.map((o) => `<button type="button" class="chip" role="radio" data-filter="${o.id}" aria-checked="${o.id === state.filter}">${o.line ? `<span class="num" data-line="${o.id}" aria-hidden="true">${o.line.number}</span>${esc(o.line.name)}` : esc(o.label)}</button>`).join("");
+    const opts = [{ id: "all", label: "전체" }, ...state.lineList.map((l) => ({ id: l.id, label: l.name, line: l })), { id: "depot", label: "운영·보관" }];
+    box.innerHTML = opts.map((o) => `<button type="button" class="chip" role="radio" data-filter="${o.id}" aria-checked="${o.id === state.filter}">${o.line ? `<span class="num" data-line="${o.id}" aria-hidden="true"></span>${esc(o.line.name)}` : esc(o.label)}</button>`).join("");
     box.addEventListener("click", (e) => {
       const b = e.target.closest("[data-filter]");
       if (!b) return;
       state.filter = b.dataset.filter;
+      state.showAll = false;
       box.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-checked", String(c === b)));
       renderRepos();
     });
@@ -575,7 +591,14 @@
     const list = [...state.repos.values()].filter((r) => !r.kind)
       .filter((r) => (f === "all" ? r.status !== "depot" : f === "depot" ? r.status === "depot" : (r.lines || []).includes(f)))
       .sort((a, b) => (b.stars || 0) - (a.stars || 0));
-    $("#repo-grid").innerHTML = list.map((r) => `<li>${cardHTML(r)}</li>`).join("");
+    const LIMIT = 8;
+    const cut = f === "all" && !state.showAll && list.length > LIMIT;
+    $("#repo-grid").innerHTML = (cut ? list.slice(0, LIMIT) : list).map((r) => `<li>${cardHTML(r)}</li>`).join("");
+    const more = $("#repo-more");
+    more.hidden = !cut;
+    more.textContent = `레포 ${list.length}개 모두 보기`;
+    const all = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot");
+    $("#repos-sub").textContent = `팀이 만든 레포 ${all.length}개, GitHub 스타 ${fmt(totalStars())}개. 스타 순으로 보여 줍니다.`;
   }
 
   /* ---------- articles ---------- */
@@ -592,11 +615,11 @@
     if (!r) return;
     const line = primaryLine(r);
     const lv = state.levels.find((l) => l.id === r.level);
-    const lineTags = (r.lines || []).map((lid) => { const l = state.lines.get(lid); return `<span class="tag-line" data-line="${lid}"><span class="num">${l.number}</span>${esc(l.name)}</span>`; }).join("");
-    const extraTag = r.kind === "paid" ? `<span class="status active">급행: 유료</span>` : statusLabel[r.status] ? `<span class="status ${r.status}">${statusLabel[r.status]}</span>` : "";
+    const lineTags = (r.lines || []).map((lid) => { const l = state.lines.get(lid); return `<span class="tag-line" data-line="${lid}"><span class="num" aria-hidden="true"></span>${esc(l.name)}</span>`; }).join("");
+    const extraTag = r.kind === "paid" ? `<span class="status active">유료</span>` : statusLabel[r.status] ? `<span class="status ${r.status}">${statusLabel[r.status]}</span>` : "";
     const builders = (r.builders || []).map(nameLink).join(", ");
     const rows = [
-      lv ? `<dt>구역</dt><dd>${lv.id} ${esc(lv.name)}: ${esc(lv.question)}</dd>` : "",
+      lv ? `<dt>단계</dt><dd>${lv.id} ${esc(lv.name)}: ${esc(lv.question)}</dd>` : "",
       builders ? `<dt>Builder</dt><dd>${builders}</dd>` : "",
       r.cohorts && r.cohorts.length ? `<dt>기수</dt><dd>${r.cohorts.join("·")}기</dd>` : "",
       statusText[r.status] ? `<dt>상태</dt><dd>${statusText[r.status]}</dd>` : "",
@@ -613,7 +636,7 @@
       const prev = ids[i - 1] && state.repos.get(ids[i - 1]);
       const next = ids[i + 1] && state.repos.get(ids[i + 1]);
       const l = state.lines.get(lid);
-      return `<div class="adjacent" data-line="${lid}">${prev ? `<button type="button" data-open="${esc(prev.repo)}">${l.number}호선 이전 역<b>${esc(prev.title)}</b></button>` : `<span></span>`}${next ? `<button type="button" class="next" data-open="${esc(next.repo)}">${l.number}호선 다음 역<b>${esc(next.title)}</b></button>` : `<span></span>`}</div>`;
+      return `<div class="adjacent" data-line="${lid}">${prev ? `<button type="button" data-open="${esc(prev.repo)}">${esc(l.name)} 트랙 이전<b>${esc(prev.title)}</b></button>` : `<span></span>`}${next ? `<button type="button" class="next" data-open="${esc(next.repo)}">${esc(l.name)} 트랙 다음<b>${esc(next.title)}</b></button>` : `<span></span>`}</div>`;
     }).join("");
     const canRide = !r.kind || r.kind === "external";
     const ridden = state.ridden.has(r.repo);
@@ -628,7 +651,7 @@
         ${rows ? `<dl>${rows}</dl>` : ""}
         <div class="links">${links}</div>
         ${adjacent}
-        ${canRide ? `<button type="button" class="ride" aria-pressed="${ridden}" data-ride="${esc(r.repo)}">${ridden ? "탑승 완료" : "탑승 완료로 표시"}</button>` : ""}
+        ${canRide ? `<button type="button" class="ride" aria-pressed="${ridden}" data-ride="${esc(r.repo)}">${ridden ? "학습 완료" : "학습 완료로 표시"}</button>` : ""}
       </div>`;
     const d = dialog();
     if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
@@ -646,6 +669,21 @@
 
   function wire() {
     document.addEventListener("click", (e) => {
+      const expand = e.target.closest("[data-expand]");
+      if (expand) {
+        const open = expand.getAttribute("aria-expanded") !== "true";
+        expand.closest(".builder").querySelectorAll("li.extra").forEach((li) => { li.hidden = !open; });
+        expand.setAttribute("aria-expanded", String(open));
+        expand.textContent = open ? "접기" : `프로젝트 ${expand.closest(".builder").querySelectorAll("li.extra").length}개 더 보기`;
+        return;
+      }
+      if (e.target.closest("#repo-more")) { state.showAll = true; renderRepos(); return; }
+      const step = e.target.closest("[data-rail]");
+      if (step) {
+        const rail = $("#season-rail"), col = rail.firstElementChild ? rail.firstElementChild.getBoundingClientRect().width : 240;
+        rail.scrollBy({ left: Number(step.dataset.rail) * col, behavior: reduceMotion ? "auto" : "smooth" });
+        return;
+      }
       const ride = e.target.closest("[data-ride]");
       if (ride) { toggleRide(ride.dataset.ride); return; }
       if (e.target.closest("[data-close]")) { closeStation(); return; }
@@ -656,7 +694,8 @@
     let t;
     window.addEventListener("resize", () => {
       clearTimeout(t);
-      t = setTimeout(() => document.querySelectorAll("#growth .tile").forEach((el, i) => { if (growthTiles[i] && growthTiles[i].series.length > 1) drawSpark(el, growthTiles[i]); }), 120);
+      t = setTimeout(() => { fitRail(); railEdges(); }, 120);
+      setTimeout(() => document.querySelectorAll("#growth .tile").forEach((el, i) => { if (growthTiles[i] && growthTiles[i].series.length > 1) drawSpark(el, growthTiles[i]); }), 120);
     });
   }
 
