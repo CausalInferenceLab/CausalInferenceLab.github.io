@@ -1,0 +1,44 @@
+[
+  {
+    "id": "main",
+    "number": 1,
+    "name": "본선",
+    "tagline": "입문에서 실전까지",
+    "description": "영상으로 시작해 번역서, 책 코드, 산업 사례 템플릿을 거쳐 정책 효과 분석까지 이어지는 기본 노선입니다."
+  },
+  {
+    "id": "ml",
+    "number": 2,
+    "name": "ML선",
+    "tagline": "이질적 처치효과와 메타러너",
+    "description": "CATE, 메타러너, Double ML처럼 머신러닝으로 효과를 추정하는 방법을 코드로 익히고 외부 라이브러리 기여로 이어집니다."
+  },
+  {
+    "id": "research",
+    "number": 3,
+    "name": "연구선",
+    "tagline": "헬스케어와 규제 연구",
+    "description": "Real-World Evidence, 적응형 임상 설계, target trial emulation처럼 연구 현장의 인과추론을 다룹니다."
+  },
+  {
+    "id": "exp",
+    "number": 4,
+    "name": "실험선",
+    "tagline": "A/B 테스트와 실험 플랫폼",
+    "description": "온라인 통제 실험의 원리부터 실험 플랫폼 구축 사례까지, 실험으로 효과를 측정하는 노선입니다."
+  },
+  {
+    "id": "behavior",
+    "number": 5,
+    "name": "행동·마케팅선",
+    "tagline": "행동 데이터와 마케팅 효과",
+    "description": "현업 연사의 특강, 마케팅 사이언스, 행동 데이터 분석 리딩 살롱으로 실제 데이터를 해석하는 힘을 기릅니다."
+  },
+  {
+    "id": "ai",
+    "number": 6,
+    "name": "AI선",
+    "tagline": "사람과 협업하는 데이터 에이전트",
+    "description": "분석을 키우는 도구를 직접 만듭니다. 발화 기반 데이터 에이전트와 정책 효과 분석 에이전트가 운행 중입니다."
+  }
+]

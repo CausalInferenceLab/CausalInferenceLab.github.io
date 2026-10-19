@@ -1,0 +1,47 @@
+[
+  {
+    "order": 1,
+    "name": "1st Data Forum - 인과추론으로 네트워킹하기",
+    "date": "2024-05-25",
+    "participants": 82,
+    "link": "https://chanrankim.notion.site/5796845674494f808356a7def8828855",
+    "year": 2024,
+    "upcoming": false
+  },
+  {
+    "order": 2,
+    "name": "2nd Data Forum - 2025 Meetup for Product & Data",
+    "date": null,
+    "participants": 102,
+    "link": "https://chanrankim.notion.site/2025-Meetup-for-Product-Data-1a3963ffa3ee80aa9d6dcff4c463a094",
+    "year": 2025,
+    "upcoming": false
+  },
+  {
+    "order": 3,
+    "name": "3rd Data Forum - 2025 Product DNA Open Forum",
+    "date": null,
+    "participants": 71,
+    "link": "https://chanrankim.notion.site/2025-Product-DNA-Open-Forum-267963ffa3ee80449e32de2bfe413012",
+    "year": 2025,
+    "upcoming": false
+  },
+  {
+    "order": 4,
+    "name": "4th Data Forum",
+    "date": "2026-06-13",
+    "participants": 75,
+    "link": "https://pseudo-lab.com/events/c712aa07-9a86-4626-8d40-4362d7ad5d29",
+    "year": 2026,
+    "upcoming": false
+  },
+  {
+    "order": 5,
+    "name": "5th Data Forum - AI 시대, 만드는 속도에서 증명하는 힘으로",
+    "date": "2026-11-21",
+    "participants": null,
+    "link": null,
+    "year": 2026,
+    "upcoming": true
+  }
+]
