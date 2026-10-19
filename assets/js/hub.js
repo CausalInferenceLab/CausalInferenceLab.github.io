@@ -46,15 +46,15 @@
 
   /* ---------- data ---------- */
   async function load() {
-    const [repos, lines, levels, map, routes, projects, events, articles] = await Promise.all([
+    const [repos, lines, levels, map, routes, projects, events, articles, books] = await Promise.all([
       "data/repos.json", "data/lines.json", "data/levels.json", "data/map.json", "data/routes.json",
-      "data/projects.json", "data/events.json", "data/articles.json"
+      "data/projects.json", "data/events.json", "data/articles.json", "data/books.json"
     ].map(getJSON));
     repos.forEach((r) => state.repos.set(r.repo, r));
     state.repos.set(map.external.id, { repo: map.external.id, external: true, status: "external", builders: [], cohorts: [], ...map.external });
     state.lineList = lines;
     lines.forEach((l) => state.lines.set(l.id, l));
-    Object.assign(state, { levels, map, routes, projects, events, articles });
+    Object.assign(state, { levels, map, routes, projects, events, articles, books });
 
     // Station order on each line follows the map: left to right, then top to bottom.
     const pos = new Map(map.stations.map((s) => [s.id, s]));
@@ -439,6 +439,38 @@
   }
 
   /* ---------- articles ---------- */
+  function renderBooks() {
+    $("#book-list").innerHTML = state.books.map((b) => {
+      const r = state.repos.get(b.repo) || {};
+      const lv = state.levels.find((l) => l.id === r.level);
+      const lineTags = (r.lines || []).map((lid) => {
+        const l = state.lines.get(lid);
+        return l ? `<span class="tag-line" data-line="${lid}"><span class="num">${l.number}</span>${esc(l.name)}</span>` : "";
+      }).join("");
+      const facts = (b.facts || []).map((f) => `<div><dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd></div>`).join("");
+      const parts = (b.parts || []).map((p) => `<li><a href="${esc(p.href)}"><span class="part-label">${esc(p.label)}</span><span class="part-title">${esc(p.title)}</span><span class="part-range">${esc(p.range)}</span></a></li>`).join("");
+      const links = (b.links || []).map((l, i) => `<a class="btn${i ? " ghost" : ""}" href="${esc(l.url)}">${esc(l.label)}</a>`).join("");
+      return `<article class="book" aria-labelledby="book-${esc(b.id)}">
+        <a class="book-cover" href="${esc(b.url)}" aria-label="${esc(b.title)} 웹북 열기">
+          <span class="cover-team">가짜연구소 인과추론팀</span>
+          <span class="cover-title">${esc(b.title)}</span>
+          <span class="cover-sub">${esc(b.original)}<br>한국어판</span>
+          <img class="cover-mark" src="assets/img/books/causal-lab-mark.png" alt="" width="80" height="92" loading="lazy">
+        </a>
+        <div class="book-info">
+          <div class="tags">${lv ? `<span class="lv">${esc(lv.id)}</span>` : ""}${lineTags}</div>
+          <h3 id="book-${esc(b.id)}">${esc(b.title)}</h3>
+          <p class="book-byline">${esc(b.original)} 한국어판 · ${esc(b.byline)}</p>
+          <p class="book-sum">${esc(b.summary)}</p>
+          ${facts ? `<dl class="book-facts">${facts}</dl>` : ""}
+          ${parts ? `<ol class="book-parts">${parts}</ol>` : ""}
+          ${(b.features || []).length ? `<p class="book-features">${b.features.map(esc).join(" · ")}</p>` : ""}
+          <div class="book-links">${links}${r.repo ? `<button type="button" class="btn ghost" data-open="${esc(r.repo)}">노선도에서 보기</button>` : ""}</div>
+        </div>
+      </article>`;
+    }).join("");
+  }
+
   function renderArticles() {
     $("#article-list").innerHTML = state.articles.map((a) => `
       <li><a class="article-card" href="article.html#${esc(a.slug)}">
@@ -469,7 +501,9 @@
     ].join("");
     const links = r.external
       ? r.links.map((l, i) => `<a class="btn${i ? " ghost" : ""}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("")
-      : `<a class="btn" href="${esc(repoUrl(r))}" target="_blank" rel="noopener">GitHub에서 보기</a>${r.site ? `<a class="btn ghost" href="${esc(r.site)}" target="_blank" rel="noopener">사이트 열기</a>` : ""}`;
+      : r.site && r.siteLabel
+        ? `<a class="btn" href="${esc(r.site)}">${esc(r.siteLabel)}</a><a class="btn ghost" href="${esc(repoUrl(r))}" target="_blank" rel="noopener">GitHub에서 보기</a>`
+        : `<a class="btn" href="${esc(repoUrl(r))}" target="_blank" rel="noopener">GitHub에서 보기</a>${r.site ? `<a class="btn ghost" href="${esc(r.site)}" target="_blank" rel="noopener">사이트 열기</a>` : ""}`;
     const adjacent = (r.lines || []).map((lid) => {
       const ids = state.order.get(lid) || [];
       const i = ids.indexOf(r.repo);
@@ -535,7 +569,7 @@
     wire();
     try { await load(); } catch (err) { fail(err); return; }
     renderStats(); renderLegend(); renderRouteChips(); renderMap();
-    renderRunning(); renderContinue(); renderTop5(); renderZones(); renderLineShelves();
+    renderRunning(); renderContinue(); renderTop5(); renderBooks(); renderZones(); renderLineShelves();
     renderBuilders(); renderJourney(); renderArticles();
     refreshStars();
   }

@@ -5,7 +5,7 @@
 
 ## 번역서 온보딩 자료
 - [인과추론의 데이터과학 Youtube](https://www.youtube.com/@causaldatascience)
-- Causal Inference for the Brave and True ([원서](https://github.com/matheusfacure/python-causality-handbook) / [번역서](https://github.com/CausalInferenceLab/Causal-Inference-with-Python))
+- Causal Inference for the Brave and True ([원서](https://github.com/matheusfacure/python-causality-handbook) / [번역서](https://github.com/CausalInferenceLab/Causal-Inference-with-Python) / [웹북](https://causalinferencelab.github.io/Causal-Inference-with-Python/))
 
 ## 번역서 참고 도서
 - [Causal Inference Stanford STATS 361 강의 노트](https://web.stanford.edu/~swager/stats361.pdf)

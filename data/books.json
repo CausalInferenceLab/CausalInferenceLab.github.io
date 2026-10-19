@@ -1,0 +1,29 @@
+[
+  {
+    "id": "brave-and-true",
+    "repo": "Causal-Inference-with-Python",
+    "title": "Python으로 하는 인과추론",
+    "original": "Causal Inference for The Brave and True",
+    "byline": "Matheus Facure 지음 · 가짜연구소 인과추론팀 옮김",
+    "summary": "인과추론의 기초부터 실무 응용까지 모든 실습을 파이썬으로 하는 책입니다. 원저자의 동의를 받아 원서 전체를 옮겼고, 회원 가입 없이 웹에서 무료로 읽을 수 있습니다. 노트북을 내려받으면 코드를 그대로 실행해 볼 수 있습니다.",
+    "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/",
+    "facts": [
+      { "label": "구성", "value": "25장 + 부록 5편" },
+      { "label": "형식", "value": "웹북 · 주피터 노트북" },
+      { "label": "용어", "value": "『실무로 통하는 인과추론 with 파이썬』과 통일" },
+      { "label": "개정", "value": "2026년 10월" }
+    ],
+    "parts": [
+      { "label": "1부", "title": "인과추론의 기초", "range": "1–16장", "href": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html" },
+      { "label": "2부", "title": "인과추론의 실무 응용", "range": "17–25장", "href": "https://causalinferencelab.github.io/Causal-Inference-with-Python/17-Predictive-Models-101.html" },
+      { "label": "부록", "title": "더 깊이 보기", "range": "5편", "href": "https://causalinferencelab.github.io/Causal-Inference-with-Python/Debiasing-with-Orthogonalization.html" },
+      { "label": "용어집", "title": "한국어 용어 찾기", "range": "원어 · 등장 장", "href": "https://causalinferencelab.github.io/Causal-Inference-with-Python/glossary.html" }
+    ],
+    "features": ["한국어·영어 용어 검색", "장별 GitHub 댓글", "다크 모드"],
+    "links": [
+      { "label": "웹북 읽기", "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/" },
+      { "label": "1장부터", "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html" },
+      { "label": "GitHub", "url": "https://github.com/CausalInferenceLab/Causal-Inference-with-Python" }
+    ]
+  }
+]
