@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>가짜연구소 인과추론팀</title>
-<meta name="description" content="가짜연구소 인과추론팀의 허브. 2022년부터 기수마다 Builder와 러너가 함께 만든 인과추론 오픈소스와 활동을 한곳에 모았습니다.">
-<meta property="og:title" content="가짜연구소 인과추론팀 | CausalInferenceLab">
-<meta property="og:description" content="2022년부터 기수마다 함께 만든 인과추론 오픈소스. Builder, 러너, 프로젝트, 행사를 둘러보세요.">
+<title>Causal Inference Hub | 가짜연구소 인과추론팀</title>
+<meta name="description" content="가짜연구소 인과추론팀이 2022년부터 함께 만든 인과추론 오픈소스와 커리큘럼을 한곳에 모은 허브입니다.">
+<meta property="og:title" content="Causal Inference Hub | 가짜연구소 인과추론팀">
+<meta property="og:description" content="웹북, 영상, R 패키지까지. 2022년부터 함께 만든 인과추론 오픈소스와 L0–L4 커리큘럼.">
 <meta property="og:image" content="https://causalinferencelab.github.io/assets/img/og-hub.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/img/team-mark.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/css/hub.css">
 </head>
 <body>
@@ -21,14 +21,13 @@
 
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="#top" aria-label="가짜연구소 인과추론팀 처음으로">
+    <a class="brand" href="#top" aria-label="Causal Inference Hub 처음으로">
       <img class="brand-logo" src="assets/img/team-mark.png" alt="" width="34" height="34">
-      <span class="brand-text"><span class="brand-name">인과추론팀</span><span class="brand-sub">Pseudo-Lab · CausalInferenceLab</span></span>
+      <span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span>
     </a>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="#curriculum">커리큘럼</a>
       <a href="#contrib">기여</a>
-      <a href="#cohort">이번 기수</a>
       <a href="#events">행사</a>
       <a href="#reading">읽을거리</a>
       <a href="#join">참여하기</a>
@@ -38,32 +37,36 @@
 
 <main id="main">
   <section class="hero" id="top" aria-labelledby="hero-title">
-    <div class="wrap hero-grid">
-      <div class="hero-main">
-        <p class="eyebrow">가짜연구소 인과추론팀</p>
-        <h1 id="hero-title">2022년부터,<br>함께 만든 인과추론</h1>
-        <p class="lede">반기마다 기수를 열어 Builder가 프로젝트를 이끌고 러너가 14주 동안 함께 만듭니다. 그렇게 쌓인 오픈소스가 L0부터 L4까지 이어지는 커리큘럼이 됩니다.</p>
-        <div class="hero-cta">
-          <a class="btn" href="#curriculum">커리큘럼 보기</a>
-          <a class="btn ghost" href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a>
-          <a class="btn ghost" href="#join">참여하기</a>
+    <div class="wrap">
+      <div class="banner">
+        <div class="banner-main">
+          <p class="banner-kicker"><span>Pseudo-Lab</span><span class="sep" aria-hidden="true"></span>인과추론팀 <b>Causal-Lab</b></p>
+          <h1 id="hero-title">Causal Inference Hub</h1>
+          <p class="banner-lede">2022년부터 기수마다 함께 만든 인과추론 오픈소스를 <br>L0부터 L4까지 하나의 커리큘럼으로 엮었습니다.</p>
+          <div class="banner-cta">
+            <a class="pill solid" href="#curriculum">커리큘럼 보기</a>
+            <a class="pill" href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a>
+            <a class="pill" href="#join">참여하기</a>
+          </div>
         </div>
-        <ul class="now" id="now"></ul>
+        <div class="banner-side">
+          <img class="banner-mark" src="assets/img/team-mark.png" alt="" width="132" height="132">
+          <ul class="featured" id="featured" aria-label="대표 사이트"></ul>
+        </div>
+      </div>
+      <div class="hero-grid">
         <ul class="growth" id="growth" aria-label="팀의 성장 지표">
           <li class="tile"><span class="tile-label">함께한 러너</span><span class="tile-value">102명</span></li>
           <li class="tile"><span class="tile-label">프로젝트</span><span class="tile-value">23개</span></li>
           <li class="tile"><span class="tile-label">GitHub 스타</span><span class="tile-value">1,045</span></li>
           <li class="tile"><span class="tile-label">행사 참가자</span><span class="tile-value">330명</span></li>
         </ul>
-        <p class="growth-note" id="growth-note"></p>
-      </div>
-      <aside class="ladder-card" aria-labelledby="ladder-title">
-        <div class="ladder-head">
+        <aside class="ladder-card" aria-labelledby="ladder-title">
           <h2 id="ladder-title">인과추론 커리큘럼</h2>
-        </div>
-        <p class="ladder-sub">팀 오픈소스를 다섯 단계로 엮었습니다. L0–L2는 무료 자료만으로 끝까지 갈 수 있습니다.</p>
-        <ol class="ladder" id="ladder"></ol>
-      </aside>
+          <p class="ladder-sub">L0–L2는 무료 자료만으로 끝까지 갈 수 있습니다.</p>
+          <ol class="ladder" id="ladder"></ol>
+        </aside>
+      </div>
     </div>
   </section>
 
@@ -115,16 +118,6 @@
           <ul class="line-legend" id="line-legend"></ul>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="band" id="cohort" aria-labelledby="cohort-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="cohort-title">이번 기수</h2>
-        <p id="cohort-sub"></p>
-      </div>
-      <div id="cohort-body"></div>
     </div>
   </section>
 
