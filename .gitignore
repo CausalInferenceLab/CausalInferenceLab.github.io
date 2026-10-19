@@ -1,6 +1,3 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-
-/.quarto/
+.DS_Store
+_site/
+node_modules/
