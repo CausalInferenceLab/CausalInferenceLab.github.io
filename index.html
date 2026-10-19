@@ -74,8 +74,8 @@
         <p id="curriculum-sub">팀이 만든 레포를 단계 순서로 놓았습니다.</p>
       </div>
       <div class="tabs big" role="tablist" aria-label="보기 방식">
-        <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="true">커리큘럼</button>
-        <button type="button" role="tab" id="tab-contrib" aria-controls="panel-contrib" aria-selected="false" tabindex="-1">기여</button>
+        <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="true">커리큘럼<span class="tab-n" id="n-course"></span></button>
+        <button type="button" role="tab" id="tab-contrib" aria-controls="panel-contrib" aria-selected="false" tabindex="-1">기여<span class="tab-n" id="n-contrib"></span></button>
         <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" tabindex="-1">트랙 지도</button>
       </div>
 
@@ -85,11 +85,15 @@
           <div class="route-chips" role="radiogroup" aria-label="목표 고르기" id="route-chips"></div>
         </div>
         <p class="route-note" id="route-note" aria-live="polite"></p>
-        <div class="chapters" id="chapters" role="tablist" aria-label="단계로 이동"></div>
-        <div class="shelf-wrap">
-          <button type="button" class="shelf-arrow prev" data-shelf="-1" aria-label="이전 레포"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <ol class="shelf" id="shelf" tabindex="0" aria-label="단계별 레포. 좌우로 스크롤할 수 있습니다."></ol>
-          <button type="button" class="shelf-arrow next" data-shelf="1" aria-label="다음 레포"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="shelf-bar">
+          <div class="chapters" id="chapters" role="group" aria-label="단계로 이동"></div>
+          <div class="shelf-nav">
+            <button type="button" data-shelf="-1" aria-label="이전 레포"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button type="button" data-shelf="1" aria-label="다음 레포"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+        <div class="shelf-wrap" id="shelf-wrap">
+          <ol class="shelf" id="shelf" tabindex="0" aria-label="레포 목록. 좌우로 스크롤할 수 있습니다."></ol>
         </div>
         <p class="shelf-foot" id="shelf-foot"></p>
       </div>

@@ -73,7 +73,7 @@
         if (typeof g.stargazers_count === "number") r.stars = g.stargazers_count;
         if (g.pushed_at) r.pushed = g.pushed_at;
       });
-      renderGrowth(false); renderLadder(); renderShelf();
+      renderGrowth(false); renderLadder(); renderShelf(true);
     } catch (e) { /* offline or rate limited: keep the snapshot */ }
   }
 
@@ -118,7 +118,7 @@
     return [
       { key: "runners", label: "함께한 러너", unit: "명", value: lastR ? lastR.y : 0, series: runners, delta: lastR ? `${lastR.x}에 새로 ${lastR.add}명` : "", tip: (p) => `${p.x}까지 ${fmt(p.y)}명` },
       { key: "projects", label: "프로젝트", unit: "개", value: lastP ? lastP.y : 0, series: projects, delta: lastP ? `${lastP.x} +${lastP.add}개` : "", tip: (p) => `${p.x}까지 ${fmt(p.y)}개` },
-      { key: "stars", label: "GitHub 스타", unit: "", value: totalStars(), series: stars, delta: "", empty: "월별 추이는 매주 자동으로 쌓입니다.", tip: (p) => `${p.x} ${fmt(p.y)}` },
+      { key: "stars", label: "GitHub 스타", unit: "", value: totalStars(), series: stars, delta: `레포 ${[...state.repos.values()].filter((r) => !r.kind && r.status !== "depot").length}개 합계`, plain: true, empty: "월별 추이는 매주 자동으로 쌓입니다.", tip: (p) => `${p.x} ${fmt(p.y)}` },
       { key: "events", label: "행사 참가자", unit: "명", value: ppl, series: events, delta: next ? `다음: ${dot(next.date.slice(5))} 5th Data Forum` : "", plain: true, tip: (p) => `${p.x}까지 ${fmt(p.y)}명` }
     ];
   }
@@ -254,7 +254,10 @@
     return state.levels.flatMap((lv) => levelItems(lv.id).map((r) => ({ r, level: lv.id })));
   }
 
-  function episodeHTML(r, level, k, top) {
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const currentRoute = () => state.routes.find((r) => r.id === state.route);
+
+  function episodeHTML(r, level, k, top, step) {
     const id = r.repo;
     const line = primaryLine(r);
     const rank = top.indexOf(id);
@@ -267,11 +270,12 @@
     const who = (r.builders || []);
     const people = who.length ? `<span class="who">${who.slice(0, 2).map((n) => avatarHTML(n, "sm")).join("")}<span class="nm">${esc(who.join(", "))}</span></span>` : `<span class="who"><span class="nm">${r.kind === "paid" ? "한빛미디어" : r.kind === "external" ? "PyWhy · CausalML" : "팀 공동"}</span></span>`;
     const tracks = (r.lines || []).map((l) => esc(state.lines.get(l).name)).join(" · ");
-    return `<li class="ep" data-line="${line}" data-id="${esc(id)}" data-level="${level}">
-      <button type="button" data-open="${esc(id)}">
+    const lv = state.levels.find((x) => x.id === level);
+    return `<li class="ep${step ? " on" : ""}" data-line="${line}" data-id="${esc(id)}" data-level="${level}"${step ? ` data-chap="${esc(id)}"` : ""}>
+      <button type="button" data-open="${esc(id)}" aria-label="${step ? `${step}번째, ` : ""}${esc(r.title)}${lv ? `, ${lv.id} ${esc(lv.name)}` : ""}">
         <span class="ep-cover">
-          <span class="ep-no">${level} · ${String(k + 1).padStart(2, "0")}</span>
-          <span class="ep-step" aria-hidden="true"></span>
+          <span class="ep-no">${step ? `${level} ${lv ? esc(lv.name) : ""}` : `${level} · ${pad2(k + 1)}`}</span>
+          <span class="ep-step" aria-hidden="true">${step ? pad2(step) : ""}</span>
           <span class="ep-badges">${badges}</span>
           <span class="ep-repo">${r.kind ? esc(r.title) : esc(id)}</span>
           ${state.ridden.has(id) ? `<span class="ep-done" aria-label="학습 완료">✓</span>` : ""}
@@ -286,32 +290,39 @@
     </li>`;
   }
 
-  function renderShelf() {
+  function renderShelf(keepScroll = false) {
     const top = topRepos();
-    const byLevel = new Map(state.levels.map((lv) => [lv.id, []]));
-    shelfOrder().forEach((x) => byLevel.get(x.level).push(x.r));
-    const html = state.levels.map((lv) => {
-      const items = byLevel.get(lv.id);
-      const chap = `<li class="chap${lv.layer === "build" ? " build" : ""}" data-level="${lv.id}" data-chap="${lv.id}">
-        <span class="cl">${lv.id}</span><b>${esc(lv.name)}</b><span class="cq">${esc(lv.question)}</span><p>${esc(lv.goal)}</p>
-        <span class="cc">${items.length}편</span></li>`;
-      return chap + items.map((r, k) => episodeHTML(r, lv.id, k, top)).join("");
-    }).join("");
-    $("#shelf").innerHTML = html;
-    wireAvatars($("#shelf"));
-
-    $("#chapters").innerHTML = state.levels.map((lv) => {
-      const n = byLevel.get(lv.id).length;
-      return `<button type="button" role="tab" data-chapter="${lv.id}" style="flex-grow:${n + 1}" aria-selected="false"><span class="bar" aria-hidden="true"></span><b>${lv.id}</b> <span class="nm">${esc(lv.name)}</span></button>`;
-    }).join("");
+    const route = currentRoute();
+    const shelf = $("#shelf");
+    const prevLeft = shelf.scrollLeft;
+    shelf.classList.toggle("routing", !!route);
+    if (route) {
+      const items = route.stops.map((id) => state.repos.get(id)).filter(Boolean);
+      shelf.innerHTML = items.map((r, i) => episodeHTML(r, r.level || "", i, top, i + 1)).join("");
+      $("#chapters").innerHTML = items.map((r, i) => `<button type="button" data-chapter="${esc(r.repo)}" aria-current="false"><span class="bar" aria-hidden="true"></span><b>${pad2(i + 1)}</b> <span class="nm">${esc(r.title)}</span></button>`).join("");
+      $("#route-note").innerHTML = `<b>${esc(route.label)}</b>: ${esc(route.description)} 01부터 순서대로 보세요.`;
+    } else {
+      const byLevel = new Map(state.levels.map((lv) => [lv.id, levelItems(lv.id)]));
+      shelf.innerHTML = state.levels.map((lv) => {
+        const items = byLevel.get(lv.id);
+        const chap = `<li class="chap${lv.layer === "build" ? " build" : ""}" data-chap="${lv.id}">
+          <span class="cl">${lv.id}</span><b>${esc(lv.name)}</b><span class="cq">${esc(lv.question)}</span><p>${esc(lv.goal)}</p>
+          <span class="cc">${items.length}개</span></li>`;
+        return chap + items.map((r, k) => episodeHTML(r, lv.id, k, top)).join("");
+      }).join("");
+      $("#chapters").innerHTML = state.levels.map((lv) => `<button type="button" data-chapter="${lv.id}" style="flex-grow:${byLevel.get(lv.id).length + 1}" aria-current="false"><span class="bar" aria-hidden="true"></span><b>${lv.id}</b> <span class="nm">${esc(lv.name)}</span></button>`).join("");
+      $("#route-note").textContent = "L0부터 L4까지 모든 레포입니다. 목표를 고르면 볼 순서대로 추려 드립니다.";
+    }
+    wireAvatars(shelf);
 
     const repos = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot");
     const depot = [...state.repos.values()].filter((r) => r.status === "depot");
     const learnable = repos.filter((r) => (r.lines || []).length);
     const done = learnable.filter((r) => state.ridden.has(r.repo)).length;
-    $("#curriculum-sub").textContent = `팀이 만든 레포 ${repos.length}개를 L0부터 L4까지 순서대로 놓았습니다. 카드를 누르면 자세히 볼 수 있습니다.`;
-    $("#shelf-foot").innerHTML = `${done ? `학습 완료 ${done} / ${learnable.length}. ` : ""}운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
-    applyRoute(false);
+    $("#curriculum-sub").textContent = `팀이 만든 레포 ${repos.length}개를 L0부터 L4까지 순서대로 놓았습니다.`;
+    $("#n-course").textContent = repos.length;
+    $("#shelf-foot").innerHTML = `${done ? `<span class="done-n">학습 완료 ${done} / ${learnable.length}</span> ` : ""}카드를 누르면 자세한 정보와 링크가 열립니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
+    shelf.scrollLeft = keepScroll ? prevLeft : 0;
     shelfSpy();
   }
 
@@ -324,25 +335,35 @@
   function shelfSpy() {
     const shelf = $("#shelf");
     const x = shelf.scrollLeft + 40;
-    let cur = state.levels[0].id;
-    shelf.querySelectorAll(".chap").forEach((c) => { if (c.offsetLeft <= x) cur = c.dataset.chap; });
-    document.querySelectorAll("[data-chapter]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.chapter === cur)));
+    const marks = [...shelf.querySelectorAll("[data-chap]")];
+    let cur = marks[0] ? marks[0].dataset.chap : "";
+    marks.forEach((c) => { if (c.offsetLeft <= x) cur = c.dataset.chap; });
+    const routing = shelf.classList.contains("routing");
+    const inView = new Set(marks.filter((c) => c.offsetLeft + c.offsetWidth / 2 > shelf.scrollLeft && c.offsetLeft + c.offsetWidth / 2 < shelf.scrollLeft + shelf.clientWidth).map((c) => c.dataset.chap));
+    document.querySelectorAll("[data-chapter]").forEach((b) => b.setAttribute("aria-current", String(routing ? inView.has(b.dataset.chapter) : b.dataset.chapter === cur)));
     const [prev, next] = document.querySelectorAll("[data-shelf]");
-    prev.disabled = shelf.scrollLeft <= 4;
-    next.disabled = shelf.scrollLeft + shelf.clientWidth >= shelf.scrollWidth - 4;
+    const atStart = shelf.scrollLeft <= 4, atEnd = shelf.scrollLeft + shelf.clientWidth >= shelf.scrollWidth - 4;
+    prev.disabled = atStart; next.disabled = atEnd;
+    const wrap = $("#shelf-wrap");
+    wrap.classList.toggle("fade-l", !atStart);
+    wrap.classList.toggle("fade-r", !atEnd);
   }
 
   /* ---------- goals (routes) ---------- */
+  function setRoute(id) {
+    state.route = id;
+    $("#route-chips").querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-checked", String(c.dataset.route === id)));
+    renderShelf();
+    applyRouteMap();
+  }
+
   function renderRouteChips() {
     const box = $("#route-chips");
     const all = [{ id: "all", label: "전체 보기" }, ...state.routes];
     box.innerHTML = all.map((r) => `<button type="button" class="chip" role="radio" data-route="${r.id}" aria-checked="${r.id === state.route}">${esc(r.label)}</button>`).join("");
     box.addEventListener("click", (e) => {
       const b = e.target.closest("[data-route]");
-      if (!b) return;
-      state.route = b.dataset.route;
-      box.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-checked", String(c === b)));
-      applyRoute(true);
+      if (b) setRoute(b.dataset.route);
     });
   }
 
@@ -351,19 +372,8 @@
     return la.find((x) => lb.includes(x)) || lb[0] || la[0];
   }
 
-  function applyRoute(scroll) {
-    const route = state.routes.find((r) => r.id === state.route);
-    const shelf = $("#shelf");
-    shelf.classList.toggle("routing", !!route);
-    shelf.querySelectorAll(".ep").forEach((el) => {
-      const i = route ? route.stops.indexOf(el.dataset.id) : -1;
-      el.classList.toggle("on", i >= 0);
-      el.querySelector(".ep-step").textContent = i >= 0 ? String(i + 1).padStart(2, "0") : "";
-    });
-    $("#route-note").textContent = route ? `${route.description} 번호 순서대로 보세요.` : "";
-    if (route && scroll) scrollShelfTo(shelf.querySelector(`.ep[data-id="${CSS.escape(route.stops[0])}"]`));
-
-    /* map tab */
+  function applyRouteMap() {
+    const route = currentRoute();
     const root = $("#metro"), marks = $("#route-marks");
     if (!root || !marks) return;
     marks.innerHTML = "";
@@ -436,9 +446,10 @@
     wireAvatars($("#matrix"));
 
     const contributors = state.stats.totals && state.stats.totals.contributors;
+    $("#n-contrib").textContent = rows.length;
     $("#contrib-sub").textContent = `Builder ${rows.length}명이 ${cohorts.length}개 기수 동안 프로젝트 ${state.projects.length}개를 열었습니다. 칸 하나가 프로젝트 하나이고, 숫자는 함께한 러너 수입니다.${contributors ? ` GitHub 기여자는 ${fmt(contributors)}명입니다.` : ""}`;
     $("#matrix-legend").innerHTML = state.lineList.map((l) => `<li data-line="${l.id}"><span class="sw" aria-hidden="true"></span>${esc(l.name)}</li>`).join("") +
-      `<li data-line="none"><span class="sw" aria-hidden="true"></span>GitHub 밖에서 진행</li><li><span class="sw live" aria-hidden="true"></span>진행 중</li><li>진할수록 러너가 많습니다</li>`;
+      `<li data-line="none"><span class="sw" aria-hidden="true"></span>팀 레포 밖에서 진행</li><li><span class="sw live" aria-hidden="true"></span>진행 중</li><li>진할수록 러너가 많습니다</li>`;
     matrixToEnd();
   }
   function matrixToEnd() { requestAnimationFrame(() => { const sc = $(".matrix-scroll"); sc.scrollLeft = sc.scrollWidth; }); }
@@ -474,6 +485,7 @@
     });
     if (id === "tab-course") shelfSpy();
     if (id === "tab-contrib") matrixToEnd();
+    paintNav();
   }
   function wireTabs() {
     const tabs = [...document.querySelectorAll("#curriculum [role=tab][aria-controls]")];
@@ -489,8 +501,9 @@
 
   function gotoLevel(levelId) {
     selectTab("tab-course");
+    if (state.route !== "all") setRoute("all");
     $("#curriculum").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
-    scrollShelfTo($(`#shelf .chap[data-chap="${levelId}"]`), false);
+    scrollShelfTo($(`#shelf [data-chap="${levelId}"]`), false);
   }
 
   /* ---------- now + current cohort ---------- */
@@ -504,13 +517,13 @@
 
   function projectCard(it, live) {
     const title = it.repo ? `<button type="button" data-open="${esc(it.repo)}">${esc(it.title)}</button>` : it.link ? `<a href="${esc(it.link)}" target="_blank" rel="noopener">${esc(it.title)}</a>` : esc(it.title);
-    const person = it.builder ? `<div class="person" data-line="${it.line}">${avatarHTML(it.builder)}<div><div class="nm">${nameLink(it.builder)}</div><div class="rl">Builder</div></div></div>` : `<div class="person"><div class="rl">Builder 정보는 곧 추가됩니다</div></div>`;
+    const person = it.builder ? `<div class="person" data-line="${it.line}">${avatarHTML(it.builder)}<div><div class="nm">${nameLink(it.builder)}</div><div class="rl">Builder</div></div></div>` : `<div class="person"><div class="rl">Builder 정보 준비 중</div></div>`;
     const count = it.runners ? `<span class="count">러너 <b>${it.runners}</b>명</span>` : "";
-    const sub = it.title !== it.name ? `<span>${esc(it.name)}</span>` : "";
+    const sub = it.name && !it.name.startsWith(it.title) ? `<span>${esc(it.name)}</span>` : "";
     return `<li class="proj${live ? " live" : ""}" data-line="${it.line}">
       <div class="proj-top">${live ? `<span class="live-tag">진행 중</span>` : ""}${sub}</div>
       <h3>${title}</h3>
-      ${it.summary ? `<p class="sum">${esc(it.summary)}</p>` : ""}
+      ${it.summary ? `<p class="sum">${esc(it.summary)}</p>` : `<p class="sum">팀 레포 밖에서 진행한 프로젝트입니다.${it.link ? ` <a href="${esc(it.link)}" target="_blank" rel="noopener">프로젝트 기록 보기</a>` : ""}</p>`}
       <div class="proj-foot">${person}${count}</div>
     </li>`;
   }
@@ -635,7 +648,7 @@
     });
     svg("g", { id: "route-marks" }, root);
     renderVLines();
-    applyRoute();
+    applyRouteMap();
   }
 
   /* ---------- articles ---------- */
@@ -700,7 +713,7 @@
   function toggleRide(id) {
     if (state.ridden.has(id)) state.ridden.delete(id); else state.ridden.add(id);
     saveRidden();
-    renderMap(); renderShelf();
+    renderMap(); renderShelf(true);
     openStation(id);
   }
 
@@ -712,7 +725,7 @@
       const lv = e.target.closest("[data-level]:not(.ep):not(.chap)");
       if (lv && lv.tagName === "BUTTON") { gotoLevel(lv.dataset.level); return; }
       const ch = e.target.closest("[data-chapter]");
-      if (ch) { scrollShelfTo($(`#shelf .chap[data-chap="${ch.dataset.chapter}"]`)); return; }
+      if (ch) { scrollShelfTo($(`#shelf [data-chap="${CSS.escape(ch.dataset.chapter)}"]`)); return; }
       const step = e.target.closest("[data-shelf]");
       if (step) {
         const shelf = $("#shelf");
@@ -735,6 +748,28 @@
     });
   }
 
+  /* Highlight the nav item for the section in view. */
+  let navCur = null;
+  function paintNav() {
+    const contribOn = $("#tab-contrib").getAttribute("aria-selected") === "true";
+    document.querySelectorAll(".site-nav a[href^='#']").forEach((a) => {
+      const href = a.getAttribute("href");
+      const on = navCur === "curriculum" ? (href === "#contrib" ? contribOn : href === "#curriculum" && !contribOn) : href === "#" + navCur;
+      if (on) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+    });
+  }
+  function navSpy() {
+    if (!("IntersectionObserver" in window)) return;
+    const ids = ["curriculum", "cohort", "events", "reading", "join"];
+    const seen = new Map();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
+      navCur = ids.find((id) => seen.get(id)) || null;
+      paintNav();
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    ids.forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+  }
+
   function fail(err) {
     console.error(err);
     $("#curriculum .wrap").insertAdjacentHTML("afterbegin", `<p class="notice">데이터를 불러오지 못했습니다. 로컬에서 볼 때는 <code>python3 -m http.server</code>로 띄운 뒤 접속해 주세요.</p>`);
@@ -751,6 +786,7 @@
     renderLegend(); renderMap(); wireTabs();
     renderCohort(); renderEvents(); renderArticles();
     if (location.hash === "#contrib") selectTab("tab-contrib");
+    navSpy();
     refreshStars();
   }
 
