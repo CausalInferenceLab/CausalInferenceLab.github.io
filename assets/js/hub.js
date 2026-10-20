@@ -637,7 +637,9 @@
     ].join("");
     const links = r.kind
       ? r.links.map((l, i) => `<a class="btn${i ? " ghost" : ""}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("")
-      : `<a class="btn" href="${esc(repoUrl(r))}" target="_blank" rel="noopener">GitHub에서 보기</a>${r.site ? `<a class="btn ghost" href="${esc(r.site)}" target="_blank" rel="noopener">사이트 열기</a>` : ""}`;
+      : r.site && r.siteLabel
+        ? `<a class="btn" href="${esc(r.site)}" target="_blank" rel="noopener">${esc(r.siteLabel)}</a><a class="btn ghost" href="${esc(repoUrl(r))}" target="_blank" rel="noopener">GitHub에서 보기</a>`
+        : `<a class="btn" href="${esc(repoUrl(r))}" target="_blank" rel="noopener">GitHub에서 보기</a>${r.site ? `<a class="btn ghost" href="${esc(r.site)}" target="_blank" rel="noopener">사이트 열기</a>` : ""}`;
     const adjacent = r.kind === "paid" ? "" : (r.lines || []).map((lid) => {
       const ids = state.order.get(lid) || [];
       const i = ids.indexOf(r.repo);
