@@ -2,7 +2,7 @@
   {
     "id": "start",
     "label": "처음 시작해요",
-    "description": "영상으로 감을 잡고, 번역서로 개념을 익힌 뒤, 책 코드와 산업 사례로 넘어갑니다.",
+    "description": "영상으로 감을 잡고, 웹북으로 개념을 익힌 뒤, 책 코드와 산업 사례로 넘어갑니다.",
     "stops": [
       "causal-studio",
       "Causal-Inference-with-Python",
