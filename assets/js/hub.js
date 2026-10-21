@@ -3,6 +3,7 @@
 
   const ORG = "CausalInferenceLab";
   const RIDE_KEY = "cil-hub-ridden";
+  const RECENT_KEY = "cil-hub-recent";
   const SVG_NS = "http://www.w3.org/2000/svg";
   const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -26,10 +27,12 @@
   const state = {
     repos: new Map(), lines: new Map(), lineList: [], levels: [], map: null, routes: [],
     projects: [], events: [], articles: [], builders: [], growth: null, stats: null,
-    ridden: new Set(), order: new Map(), route: "all"
+    ridden: new Set(), recent: [], order: new Map(), route: "all"
   };
 
   function loadRidden() { try { state.ridden = new Set(JSON.parse(localStorage.getItem(RIDE_KEY) || "[]")); } catch (e) { state.ridden = new Set(); } }
+  function loadRecent() { try { state.recent = JSON.parse(localStorage.getItem(RECENT_KEY) || "[]").filter((x) => x && x.id); } catch (e) { state.recent = []; } }
+  function saveRecent() { try { localStorage.setItem(RECENT_KEY, JSON.stringify(state.recent.slice(0, 6))); } catch (e) { /* storage unavailable */ } }
   function saveRidden() { try { localStorage.setItem(RIDE_KEY, JSON.stringify([...state.ridden])); } catch (e) { /* storage unavailable */ } }
 
   async function getJSON(path) {
@@ -73,7 +76,7 @@
         if (typeof g.stargazers_count === "number") r.stars = g.stargazers_count;
         if (g.pushed_at) r.pushed = g.pushed_at;
       });
-      renderGrowth(false); renderLadder(); renderShelf(true);
+      renderGrowth(false); renderLadder(); renderShelf(true); renderWeek();
     } catch (e) { /* offline or rate limited: keep the snapshot */ }
   }
 
@@ -251,6 +254,18 @@
   }
 
   const pad2 = (n) => String(n).padStart(2, "0");
+  const DAY = 864e5;
+  const ageDays = (iso) => (iso ? Math.max(0, Math.floor((Date.now() - Date.parse(iso)) / DAY)) : null);
+  function ago(iso) {
+    const d = ageDays(iso);
+    if (d == null) return "";
+    if (d < 1) return "오늘";
+    if (d < 7) return `${d}일 전`;
+    if (d < 31) return `${Math.floor(d / 7)}주 전`;
+    if (d < 365) return `${Math.floor(d / 30)}개월 전`;
+    return `${Math.floor(d / 365)}년 전`;
+  }
+  const learnables = () => [...state.repos.values()].filter((r) => !r.kind && (r.lines || []).length && r.status !== "depot");
   const currentRoute = () => state.routes.find((r) => r.id === state.route);
 
   function episodeHTML(r, level, k, top, step) {
@@ -260,6 +275,7 @@
     const badges = [
       rank >= 0 ? `<span class="b top">TOP ${rank + 1}</span>` : "",
       r.status === "running" ? `<span class="b live">진행 중</span>` : "",
+      r.status !== "running" && ageDays(r.pushed) != null && ageDays(r.pushed) <= 14 ? `<span class="b new">새 업데이트</span>` : "",
       r.kind === "paid" ? `<span class="b paid">유료</span>` : "",
       r.kind === "external" ? `<span class="b ext">팀 밖 오픈소스</span>` : ""
     ].join("");
@@ -277,7 +293,7 @@
           ${state.ridden.has(id) ? `<span class="ep-done" aria-label="학습 완료">✓</span>` : ""}
         </span>
         <span class="ep-body">
-          <span class="ep-track">${tracks}</span>
+          <span class="ep-track">${tracks}${r.pushed && !r.kind ? `<span class="age"> · ${ago(r.pushed)} 업데이트</span>` : ""}</span>
           <h3>${esc(r.title)}</h3>
           <span class="sum">${esc(r.summary)}</span>
           <span class="ep-foot">${people}${r.kind ? "" : `<span class="star">${icons.star}${fmt(r.stars || 0)}</span>`}</span>
@@ -307,7 +323,7 @@
         return chap + items.map((r, k) => episodeHTML(r, lv.id, k, top)).join("");
       }).join("");
       $("#chapters").innerHTML = state.levels.map((lv) => `<button type="button" data-chapter="${lv.id}" style="flex-grow:${byLevel.get(lv.id).length + 1}" aria-current="false"><span class="bar" aria-hidden="true"></span><b>${lv.id}</b> <span class="nm">${esc(lv.name)}</span></button>`).join("");
-      $("#route-note").textContent = "L0부터 L4까지 모든 레포입니다. 목표를 고르면 볼 순서대로 추려 드립니다.";
+      $("#route-note").textContent = "목표를 고르면 트랙 지도와 커리큘럼에 볼 순서가 표시됩니다.";
     }
     wireAvatars(shelf);
 
@@ -315,7 +331,7 @@
     const depot = [...state.repos.values()].filter((r) => r.status === "depot");
     const learnable = repos.filter((r) => (r.lines || []).length);
     const done = learnable.filter((r) => state.ridden.has(r.repo)).length;
-    $("#curriculum-sub").textContent = `팀 레포 ${repos.length}개를 단계 순서로 놓았습니다.`;
+    $("#curriculum-sub").textContent = `팀 레포 ${repos.length}개. 트랙 지도로 전체를 보고, 커리큘럼에서 하나씩 열어 보세요.`;
     $("#n-course").textContent = repos.length;
     $("#shelf-foot").innerHTML = `${done ? `<span class="done-n">학습 완료 ${done} / ${learnable.length}</span> ` : ""}카드를 누르면 자세한 정보와 링크가 열립니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
     shelf.scrollLeft = keepScroll ? prevLeft : 0;
@@ -404,10 +420,11 @@
     const people = new Map();
     const put = (name, cohort, item) => {
       if (!name) return;
-      if (!people.has(name)) people.set(name, { name, projects: 0, runners: 0, first: 99, line: null });
+      if (!people.has(name)) people.set(name, { name, projects: 0, runners: 0, first: 99, line: null, latest: null, latestCohort: -1 });
       const p = people.get(name);
       p.projects += 1; p.runners += item.runners || 0; p.first = Math.min(p.first, cohort);
       if (!p.line && item.line !== "none") p.line = item.line;
+      if (cohort >= p.latestCohort) { p.latestCohort = cohort; p.latest = item; }
       const key = name + "|" + cohort;
       if (!cells.has(key)) cells.set(key, []);
       cells.get(key).push(item);
@@ -424,6 +441,7 @@
     const totals = new Map(cohorts.map((c) => [c, state.projects.filter((p) => p.cohort === c).reduce((s, p) => s + (p.runners || 0), 0)]));
     const maxT = Math.max(...totals.values()) || 1;
     const rows = [...people.values()].sort((a, b) => a.first - b.first || b.projects - a.projects || a.name.localeCompare(b.name, "ko"));
+    renderPeople([...rows].sort((a, b) => b.latestCohort - a.latestCohort || b.projects - a.projects));
 
     const head = `<thead><tr><th scope="col" class="corner">Builder</th>${cohorts.map((c) => `<th scope="col" class="${c === cur ? "cur" : ""}"><b>${c}기</b><span>${esc(shortTerm(terms.get(c)))}</span></th>`).join("")}</tr>
       <tr class="totals"><th scope="row">기수별 러너</th>${cohorts.map((c) => { const t = totals.get(c); return `<td class="${c === cur ? "cur" : ""}"><span class="tb" aria-hidden="true"><i style="height:${Math.max(6, Math.round((t / maxT) * 100))}%"></i></span><span class="tn">${t ? t : "집계 중"}</span></td>`; }).join("")}</tr></thead>`;
@@ -449,6 +467,53 @@
     matrixToEnd();
   }
   function matrixToEnd() { requestAnimationFrame(() => { const sc = $(".matrix-scroll"); sc.scrollLeft = sc.scrollWidth; }); }
+
+
+  /* ---------- Builder rail (contribution tab) ---------- */
+  function renderPeople(list) {
+    const card = (p, copy) => {
+      const info = builderInfo(p.name);
+      const name = info.linkedin ? `<a href="${esc(info.linkedin)}" target="_blank" rel="noopener"${copy ? ' tabindex="-1"' : ""}>${esc(p.name)}</a>` : esc(p.name);
+      const latest = p.latest ? (p.latest.repo && state.repos.get(p.latest.repo) ? state.repos.get(p.latest.repo).title : p.latest.name) : "";
+      return `<li class="pcard" data-line="${p.line || "main"}">${avatarHTML(p.name, "lg")}
+        <div class="pc-body"><b class="pc-name">${name}</b><span class="pc-since">${p.first}기부터 Builder</span>
+          ${info.intro ? `<p class="pc-intro">${esc(info.intro)}</p>` : ""}
+          <span class="pc-stats">프로젝트 <b>${p.projects}</b> · 러너 <b>${fmt(p.runners)}</b></span>
+          ${latest ? `<span class="pc-latest">최근 · ${esc(latest)}</span>` : ""}</div></li>`;
+    };
+    $("#people-rail").innerHTML = `<div class="people-move" style="--dur:${list.length * 6}s"><ul class="people-track">${list.map((p) => card(p, false)).join("")}</ul><ul class="people-track dup" aria-hidden="true">${list.map((p) => card(p, true)).join("")}</ul></div>`;
+    wireAvatars($("#people-rail"));
+  }
+
+  /* ---------- this week (curriculum tab) ---------- */
+  const weekIndex = () => Math.floor((Date.now() - Date.UTC(2026, 0, 5)) / (7 * DAY));
+  function renderWeek() {
+    const list = learnables();
+    if (!list.length) return;
+    const ordered = state.levels.flatMap((lv) => list.filter((r) => r.level === lv.id).sort((a, b) => (b.stars || 0) - (a.stars || 0)));
+    const n = ordered.length;
+    const pick = ordered.at(((weekIndex() % n) + n) % n);
+    const lv = state.levels.find((l) => l.id === pick.level);
+    const who = (pick.builders || []).join(", ");
+    const fresh = list.filter((r) => r.pushed).sort((a, b) => Date.parse(b.pushed) - Date.parse(a.pushed)).slice(0, 4);
+    const recent = state.recent.map((x) => state.repos.get(x.id)).filter(Boolean).slice(0, 3);
+    const done = list.filter((r) => state.ridden.has(r.repo)).length;
+    const cont = recent.length ? `<div class="continue"><span class="cont-label">이어서 보기</span>${recent.map((r) => `<button type="button" class="cont-chip" data-line="${primaryLine(r)}" data-open="${esc(r.repo)}"><i aria-hidden="true"></i>${esc(r.title)}</button>`).join("")}
+      <span class="cont-progress">학습 완료 <b>${done}</b> / ${list.length}<span class="bar" aria-hidden="true"><i style="width:${Math.round((done / list.length) * 100)}%"></i></span></span></div>` : "";
+    $("#week").innerHTML = `${cont}<div class="week-grid">
+      <article class="spot" data-line="${primaryLine(pick)}">
+        <p class="spot-label">이번 주의 레포<span>월요일마다 바뀝니다</span></p>
+        <h3>${esc(pick.title)}</h3>
+        <p class="spot-meta">${lv ? `<span>${lv.id} ${esc(lv.name)}</span>` : ""}${who ? `<span>${esc(who)}</span>` : ""}${pick.stars ? `<span class="star">${icons.star}${fmt(pick.stars)}</span>` : ""}</p>
+        <p class="spot-sum">${esc(pick.summary)}</p>
+        <div class="spot-cta"><button type="button" class="btn" data-open="${esc(pick.repo)}">자세히 보기</button>${pick.site ? `<a class="btn ghost" href="${esc(pick.site)}" target="_blank" rel="noopener">${esc(pick.siteLabel || "사이트 열기")}</a>` : ""}</div>
+      </article>
+      <div class="fresh">
+        <p class="spot-label">최근 업데이트<span>매주 월요일 집계</span></p>
+        <ol>${fresh.map((r) => `<li data-line="${primaryLine(r)}"><button type="button" data-open="${esc(r.repo)}"><i aria-hidden="true"></i><span class="t">${esc(r.title)}</span><span class="d">${ago(r.pushed)}</span></button></li>`).join("")}</ol>
+      </div>
+    </div>`;
+  }
 
   /* ---------- map legend ---------- */
   function renderVLines() {
@@ -622,6 +687,10 @@
   function openStation(id) {
     const r = state.repos.get(id);
     if (!r) return;
+    if (r.kind !== "paid") {
+      state.recent = [{ id, t: Date.now() }, ...state.recent.filter((x) => x.id !== id)].slice(0, 6);
+      saveRecent(); renderWeek();
+    }
     const line = primaryLine(r);
     const lv = state.levels.find((l) => l.id === r.level);
     const lineTags = (r.lines || []).map((lid) => { const l = state.lines.get(lid); return `<span class="tag-line" data-line="${lid}"><span class="num" aria-hidden="true"></span>${esc(l.name)}</span>`; }).join("");
@@ -737,11 +806,11 @@
   }
 
   async function init() {
-    loadRidden();
+    loadRidden(); loadRecent();
     wire();
     try { await load(); } catch (err) { fail(err); return; }
     renderGrowth(); renderLadder();
-    renderRouteChips(); renderShelf();
+    renderRouteChips(); renderShelf(); renderWeek();
     $("#shelf").addEventListener("scroll", shelfSpy, { passive: true });
     renderMatrix();
     renderLegend(); renderMap(); wireTabs();
