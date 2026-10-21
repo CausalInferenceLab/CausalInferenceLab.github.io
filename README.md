@@ -2,6 +2,8 @@
 
 가짜연구소 인과추론팀(CausalInferenceLab)의 허브입니다. 2022년부터 기수마다 Builder와 러너가 함께 만든 인과추론 오픈소스를 L0부터 L4까지 하나의 커리큘럼으로 엮고, [Python으로 하는 인과추론](https://causalinferencelab.github.io/Causal-Inference-with-Python/), [Causal Studio](https://causalinferencelab.github.io/causal-studio/), [ccwr](https://github.com/CausalInferenceLab/ccwr) 같은 팀의 사이트로 이어 줍니다.
 
+다루는 범위는 인과추론에서 시작해 실험, 데이터 에이전트까지, AI 시대에 데이터로 판단하는 힘 전반입니다.
+
 **사이트: https://causalinferencelab.github.io**
 
 ![Causal Inference Hub](assets/img/hub-preview.png)
@@ -13,9 +15,10 @@
 | 위치 | 내용 |
 | --- | --- |
 | 첫 화면 | 위쪽 배너에서 대표 사이트(웹북, 영상, R 패키지)로 바로 갑니다. 아래 왼쪽은 함께한 러너(중복 제외), 프로젝트, GitHub 스타, 행사 참가자의 추이, 오른쪽은 L0–L4 커리큘럼 한눈에 보기입니다. |
-| 커리큘럼 탭 | 팀 레포 전체를 L0부터 L4까지 챕터로 나눈 가로 목록입니다. 목표를 고르면 그 경로의 레포만 순서대로 보여 줍니다. |
-| 기여 탭 | Builder × 기수 표입니다. 칸 하나가 프로젝트 하나이고, 색은 트랙, 숫자와 진하기는 러너 수입니다. |
-| 트랙 지도 탭 | 같은 레포를 여섯 개 트랙의 지도로 그린 보기입니다. |
+| 목표 고르기 | "처음 시작해요", "A/B 테스트를 해요" 같은 목표를 고르면 트랙 지도와 커리큘럼에 볼 순서가 표시됩니다. |
+| 트랙 지도 탭 | 팀 레포를 여섯 개 트랙과 L0–L4 단계 위에 그린 전체 그림입니다. |
+| 커리큘럼 탭 | 매주 월요일 바뀌는 '이번 주의 레포', 최근 업데이트, 최근에 본 레포(이어서 보기)와 L0–L4 챕터별 가로 목록입니다. |
+| 기여 탭 | 옆으로 흐르는 Builder 카드와, 칸 하나가 프로젝트 하나인 Builder × 기수 표입니다. |
 | 행사 | Data Forum 회차별 참가자 수와 다음 행사입니다. |
 
 러너는 이름 없이 숫자로만 보여 줍니다. 이름은 Builder만 표시합니다.

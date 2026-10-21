@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Causal Inference Hub | 가짜연구소 인과추론팀</title>
-<meta name="description" content="가짜연구소 인과추론팀이 2022년부터 함께 만든 인과추론 오픈소스와 커리큘럼을 한곳에 모은 허브입니다.">
+<meta name="description" content="인과추론에서 AI 시대의 데이터 리터러시까지. 가짜연구소 인과추론팀이 2022년부터 함께 만든 오픈소스와 커리큘럼을 한곳에 모은 허브입니다.">
 <meta property="og:title" content="Causal Inference Hub | 가짜연구소 인과추론팀">
 <meta property="og:description" content="웹북, 영상, R 패키지까지. 2022년부터 함께 만든 인과추론 오픈소스와 L0–L4 커리큘럼.">
 <meta property="og:image" content="https://causalinferencelab.github.io/assets/img/og-hub.png">
@@ -42,7 +42,7 @@
         <div class="banner-main">
           <p class="banner-kicker"><span>Pseudo-Lab</span><span class="sep" aria-hidden="true"></span>인과추론팀 <b>Causal-Lab</b></p>
           <h1 id="hero-title">Causal Inference Hub</h1>
-          <p class="banner-lede">2022년부터 기수마다 함께 만든 인과추론 오픈소스를 <br>L0부터 L4까지 하나의 커리큘럼으로 엮었습니다.</p>
+          <p class="banner-lede">인과추론에서 시작해 AI 시대의 데이터 리터러시까지. <br>2022년부터 함께 만든 오픈소스를 L0–L4 커리큘럼으로 엮었습니다.</p>
           <div class="banner-cta">
             <a class="pill solid" href="#curriculum">커리큘럼 보기</a>
             <a class="pill" href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a>
@@ -74,20 +74,31 @@
     <div class="wrap">
       <div class="section-head">
         <h2 id="curriculum-title">커리큘럼과 오픈소스</h2>
-        <p id="curriculum-sub">팀이 만든 레포를 단계 순서로 놓았습니다.</p>
+        <p id="curriculum-sub">트랙 지도로 전체를 보고, 커리큘럼에서 하나씩 열어 보세요.</p>
       </div>
+      <div class="goal-row">
+        <span class="goal-q">무엇을 하고 싶나요?</span>
+        <div class="route-chips" role="radiogroup" aria-label="목표 고르기" id="route-chips"></div>
+      </div>
+      <p class="route-note" id="route-note" aria-live="polite"></p>
       <div class="tabs big" role="tablist" aria-label="보기 방식">
-        <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="true">커리큘럼<span class="tab-n" id="n-course"></span></button>
+        <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="true">트랙 지도</button>
+        <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="false" tabindex="-1">커리큘럼<span class="tab-n" id="n-course"></span></button>
         <button type="button" role="tab" id="tab-contrib" aria-controls="panel-contrib" aria-selected="false" tabindex="-1">기여<span class="tab-n" id="n-contrib"></span></button>
-        <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" tabindex="-1">트랙 지도</button>
       </div>
 
-      <div id="panel-course" role="tabpanel" aria-labelledby="tab-course">
-        <div class="goal-row">
-          <span class="goal-q">무엇을 하고 싶나요?</span>
-          <div class="route-chips" role="radiogroup" aria-label="목표 고르기" id="route-chips"></div>
+      <div id="panel-map" role="tabpanel" aria-labelledby="tab-map">
+        <div class="map-card">
+          <div class="map-scroll">
+            <svg id="metro" role="img" aria-labelledby="metro-title"><title id="metro-title">인과추론 트랙 지도: L0부터 L4까지 6개 트랙</title></svg>
+          </div>
+          <div class="vlines" id="vlines"></div>
+          <ul class="line-legend" id="line-legend"></ul>
         </div>
-        <p class="route-note" id="route-note" aria-live="polite"></p>
+      </div>
+
+      <div id="panel-course" role="tabpanel" aria-labelledby="tab-course" hidden>
+        <div class="week" id="week"></div>
         <div class="shelf-bar">
           <div class="chapters" id="chapters" role="group" aria-label="단계로 이동"></div>
           <div class="shelf-nav">
@@ -102,6 +113,8 @@
       </div>
 
       <div id="panel-contrib" role="tabpanel" aria-labelledby="tab-contrib" hidden>
+        <div class="people-rail" id="people-rail" aria-label="Builder"></div>
+        <h3 class="contrib-head">기수별로 보기</h3>
         <p class="contrib-sub" id="contrib-sub"></p>
         <div class="matrix-scroll" tabindex="0" aria-label="Builder별 기수 기여표. 좌우로 스크롤할 수 있습니다.">
           <table class="matrix" id="matrix"></table>
@@ -109,15 +122,6 @@
         <ul class="matrix-legend" id="matrix-legend"></ul>
       </div>
 
-      <div id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden>
-        <div class="map-card">
-          <div class="map-scroll">
-            <svg id="metro" role="img" aria-labelledby="metro-title"><title id="metro-title">인과추론 트랙 지도: L0부터 L4까지 6개 트랙</title></svg>
-          </div>
-          <div class="vlines" id="vlines"></div>
-          <ul class="line-legend" id="line-legend"></ul>
-        </div>
-      </div>
     </div>
   </section>
 
