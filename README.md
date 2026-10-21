@@ -1,6 +1,6 @@
 # Causal Inference Hub
 
-가짜연구소 인과추론팀(CausalInferenceLab)의 허브입니다. 2022년부터 기수마다 Builder와 러너가 함께 만든 인과추론 오픈소스를 L0부터 L4까지 하나의 커리큘럼으로 엮고, [Python으로 하는 인과추론](https://causalinferencelab.github.io/Causal-Inference-with-Python/), [Causal Studio](https://causalinferencelab.github.io/causal-studio/), [ccwr](https://github.com/CausalInferenceLab/ccwr) 같은 팀의 사이트로 이어 줍니다.
+가짜연구소 인과추론팀(CausalInferenceLab)의 허브입니다. 2022년부터 기수마다 Builder와 러너가 함께 만든 인과추론 오픈소스를 L0부터 L4까지 하나의 커리큘럼으로 엮고, [Brave & True 인과추론 번역서](https://causalinferencelab.github.io/Causal-Inference-with-Python/), [Causal Studio](https://causalinferencelab.github.io/causal-studio/), [ccwr](https://github.com/CausalInferenceLab/ccwr) 같은 팀의 사이트로 이어 줍니다.
 
 **사이트: https://causalinferencelab.github.io**
 
