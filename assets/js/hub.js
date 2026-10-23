@@ -315,7 +315,7 @@
       const items = route.stops.map((id) => state.repos.get(id)).filter(Boolean);
       shelf.innerHTML = items.map((r, i) => episodeHTML(r, r.level || "", i, top, i + 1)).join("");
       $("#chapters").innerHTML = items.map((r, i) => `<button type="button" data-chapter="${esc(r.repo)}" aria-current="false"><span class="bar" aria-hidden="true"></span><b>${pad2(i + 1)}</b> <span class="nm">${esc(r.title)}</span></button>`).join("");
-      $("#route-note").innerHTML = `<b>${esc(route.label)}</b>: ${esc(route.description)} 01부터 순서대로 보세요.`;
+      renderRouteNote();
     } else {
       const byLevel = new Map(state.levels.map((lv) => [lv.id, levelItems(lv.id)]));
       shelf.innerHTML = state.levels.map((lv) => {
@@ -365,8 +365,15 @@
   }
 
   /* ---------- goals (routes) ---------- */
+  function renderRouteNote() {
+    const route = currentRoute();
+    if (!route) return;
+    const b = state.routeBegin || 0;
+    $("#route-note").innerHTML = `<b>${esc(route.label)}</b>: ${esc(route.description)} ${b ? `${pad2(b + 1)}부터 보면 됩니다. 앞의 자료는 필요할 때 보세요.` : "01부터 순서대로 보세요."}`;
+  }
   function setRoute(id, source) {
     if (source && id !== state.route) track("select_route", { route: id, source });
+    state.routeBegin = 0;
     state.route = id;
     $("#route-chips").querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-checked", String(c.dataset.route === id)));
     renderShelf();
@@ -792,25 +799,39 @@
 
   /* ---------- start-point quiz (three questions to one route) ---------- */
   const QUIZ = [
-    { key: "exp", q: "인과추론은 어느 정도 해 보셨나요?", opts: [["new", "처음이에요"], ["some", "개념은 들어 봤어요"], ["used", "업무에 써 봤어요"]] },
+    { key: "experience", q: "인과추론은 어느 정도 해 보셨나요?", opts: [["new", "처음이에요"], ["some", "개념은 들어 봤어요"], ["used", "업무에 써 봤어요"]] },
     { key: "work", q: "지금 하는 일에 가장 가까운 것은?", opts: [["exp", "A/B 테스트와 실험"], ["mkt", "마케팅·정책 효과 분석"], ["ml", "ML과 모델링"], ["research", "연구·헬스케어"], ["tools", "데이터 도구·에이전트 개발"]] },
     { key: "want", q: "허브에서 가장 얻고 싶은 것은?", opts: [["concept", "개념을 제대로 이해하기"], ["apply", "바로 쓸 코드와 사례"], ["build", "직접 만들고 기여하기"]] }
   ];
   const quiz = { step: 0, a: {} };
+  const WHY = { exp: "A/B 테스트와 실험", mkt: "마케팅·정책 효과 분석", ml: "ML과 모델링", research: "연구·헬스케어", tools: "데이터 도구·에이전트 개발" };
+  function quizReason(a, id) {
+    if (id === "build") return a.want === "build" ? "직접 만들고 기여하고 싶다고 하셔서 만드는 쪽 경로를 골랐습니다." : "데이터 도구를 만드신다고 하셔서 에이전트를 만드는 경로를 골랐습니다.";
+    if (id === "start" && a.experience === "new") return "처음이라고 하셔서 영상과 웹북으로 기초를 다지는 경로를 골랐습니다.";
+    return `${WHY[a.work] || "하시는 일"}을 고르셔서 이 경로를 추천합니다.`;
+  }
+  /* Where to start inside the route: skip the L0 primer if the basics are known,
+     and jump to the first L2 item when someone has used it at work and wants code. */
+  function quizBegin(a, stops) {
+    if (a.experience === "new") return 0;
+    if (a.experience === "used" && a.want === "apply") { const k = stops.findIndex((r) => r.level === "L2"); if (k > 0) return k; }
+    return stops.length > 1 && stops[0].level === "L0" ? 1 : 0;
+  }
   function quizRoute(a) {
     if (a.want === "build" || a.work === "tools") return "build";
     if (a.work === "research") return "research";
     if (a.work === "exp") return "experiment";
-    if (a.work === "ml") return a.exp === "new" ? "start" : "ml";
+    if (a.work === "ml") return a.experience === "new" ? "start" : "ml";
+    if (a.work === "mkt" && a.experience === "used") return "experiment";
     return "start";
   }
   function showDialog() {
     const d = dialog();
     if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
   }
-  function openQuiz() {
+  function openQuiz(retry) {
     quiz.step = 0; quiz.a = {};
-    track("quiz_start", {});
+    track("quiz_start", { retry: !!retry });
     renderQuiz(); showDialog();
   }
   function renderQuiz() {
@@ -823,21 +844,20 @@
         <p class="quiz-step"><span>${quiz.step + 1} / ${QUIZ.length}</span><span class="quiz-dots" aria-hidden="true">${QUIZ.map((_, i) => `<i class="${i <= quiz.step ? "on" : ""}"></i>`).join("")}</span></p>
         <h2 id="station-title">${esc(item.q)}</h2>
         <div class="quiz-opts" role="group" aria-label="${esc(item.q)}">${item.opts.map(([v, label]) => `<button type="button" data-quiz-pick="${v}" aria-pressed="${quiz.a[item.key] === v}">${esc(label)}</button>`).join("")}</div>
-        ${quiz.step ? `<button type="button" class="quiz-back" data-quiz-back>이전 질문</button>` : `<p class="quiz-note">답은 저장하지 않습니다.</p>`}`);
+        ${quiz.step ? `<button type="button" class="quiz-back" data-quiz-back>이전 질문</button>` : `<p class="quiz-note">답은 이름 없이 통계로만 집계합니다.</p>`}`);
       $("#station-body .quiz-opts button").focus();
       return;
     }
     const id = quizRoute(quiz.a);
     const route = state.routes.find((r) => r.id === id);
     const stops = route.stops.map((x) => state.repos.get(x)).filter(Boolean);
-    /* someone who already knows the basics can skip the L0 primer */
-    const begin = quiz.a.exp !== "new" && stops.length > 1 && stops[0].level === "L0" ? 1 : 0;
+    const begin = quizBegin(quiz.a, stops);
     $("#station-body").innerHTML = shell(`
       <p class="quiz-step"><span>추천 경로</span></p>
       <h2 id="station-title">${esc(route.label)}</h2>
-      <p>${esc(route.description)}</p>
-      <ol class="quiz-stops">${stops.map((r, i) => `<li data-line="${primaryLine(r)}"${i < begin ? ' class="skip"' : ""}><span class="n">${pad2(i + 1)}</span><span><b>${esc(r.title)}</b><span>${esc(r.level || "")}${i === begin ? " · 여기서 시작" : i < begin ? " · 필요하면" : ""}</span></span></li>`).join("")}</ol>
-      <div class="links"><button type="button" class="btn" data-quiz-go="${id}">이 순서로 보기</button><button type="button" class="btn ghost" data-quiz-restart>다시 답하기</button></div>`);
+      <p>${esc(quizReason(quiz.a, id))} ${esc(route.description)}</p>
+      <ol class="quiz-stops">${stops.map((r, i) => `<li data-line="${primaryLine(r)}"${i < begin ? ' class="is-optional"' : ""}><span class="n">${pad2(i + 1)}</span><span><b>${esc(r.title)}</b><span>${esc(r.level || "")}${i === begin ? " · 여기서 시작" : i < begin ? " · 필요하면" : ""}</span></span></li>`).join("")}</ol>
+      <div class="links"><button type="button" class="btn" data-quiz-go="${id}" data-quiz-begin="${begin}">이 순서로 보기</button><button type="button" class="btn ghost" data-quiz-restart>다시 답하기</button></div>`);
     $("#station-body [data-quiz-go]").focus();
   }
   function quizPick(v) {
@@ -847,11 +867,20 @@
     renderQuiz();
   }
   function quizBack() { quiz.step = Math.max(0, quiz.step - 1); renderQuiz(); }
-  function quizGo(id) {
+  function quizGo(id, begin) {
     closeStation();
     selectTab("tab-course");
     setRoute(id, "quiz");
-    $("#curriculum").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    state.routeBegin = begin;
+    const stops = [...document.querySelectorAll("#shelf .ep")];
+    const el = stops.at(Math.min(begin, stops.length - 1));
+    renderRouteNote();
+    $("#shelf-wrap").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+    if (el) {
+      scrollShelfTo(el, false);
+      el.classList.add("picked");
+      setTimeout(() => { el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }, reduceMotion ? 0 : 550);
+    }
   }
 
   /* ---------- finish card (one level fully marked done) ---------- */
@@ -860,7 +889,7 @@
     const items = levelItems(levelId).filter(rideable);
     return items.length > 0 && items.every((r) => state.ridden.has(r.repo));
   }
-  function drawCard(canvas, lv, items) {
+  function drawCard(canvas, lv, items, name) {
     const W = 1200, H = 630, c = canvas.getContext("2d");
     canvas.width = W; canvas.height = H;
     const g = c.createLinearGradient(0, 0, W, H);
@@ -876,10 +905,11 @@
     c.fillText(`${lv.id} 완주`, 80, 236);
     c.font = font(700, 44); c.fillText(lv.name, 80, 300);
     c.fillStyle = "rgba(255,255,255,.86)"; c.font = font(500, 30);
-    c.fillText(`“${lv.question}”에 답하는 자료 ${items.length}개를 모두 마쳤습니다.`, 80, 362);
+    c.fillText(items.length === 1 ? `“${lv.question}”에 답하는 자료를 마쳤습니다.` : `“${lv.question}”에 답하는 자료 ${items.length}개를 모두 마쳤습니다.`, 80, 362);
     c.font = font(500, 26); c.fillStyle = "rgba(255,255,255,.78)";
     items.slice(0, 3).forEach((r, i) => c.fillText(`· ${r.title}`, 80, 420 + i * 38));
     if (items.length > 3) c.fillText(`외 ${items.length - 3}개`, 80, 420 + 3 * 38);
+    if (name) { c.fillStyle = "#fff"; c.font = font(700, 34); c.fillText(name, 80, H - 104); }
     c.fillStyle = "rgba(255,255,255,.7)"; c.font = font(500, 24);
     const d = new Date(), date = `${d.getFullYear()}.${pad2(d.getMonth() + 1)}.${pad2(d.getDate())}`;
     c.fillText(`${date} · causalinferencelab.github.io`, 80, H - 60);
@@ -890,38 +920,51 @@
     const lv = state.levels.find((l) => l.id === levelId);
     if (!lv || !levelDone(levelId)) return;
     const items = levelItems(levelId).filter(rideable);
+    const next = state.levels[state.levels.indexOf(lv) + 1];
     track("finish_card_open", { level: levelId });
     $("#station-body").innerHTML = `<div class="station-band" data-line="main"></div>
       <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
       <div class="station-content" data-line="main">
         <h2 id="station-title">${lv.id} ${esc(lv.name)} 완주 카드</h2>
         <canvas class="card-canvas" width="1200" height="630" role="img" aria-label="${esc(`${lv.id} ${lv.name} 완주 카드`)}"></canvas>
-        <p class="card-note">이미지를 저장해 링크드인이나 블로그에 올려 보세요. 진도는 이 브라우저에만 저장됩니다.</p>
-        <div class="links"><button type="button" class="btn" data-card-save="${lv.id}">이미지 저장</button><button type="button" class="btn ghost" data-copy="${esc(shareUrl("/", "finish_card"))}" data-share="finish_card">허브 링크 복사</button></div>
+        <label class="card-name">카드에 넣을 이름 (선택)<input type="text" maxlength="20" autocomplete="nickname" placeholder="예: 진수" data-card-name="${lv.id}"></label>
+        <p class="card-note">이미지를 저장해 링크드인이나 블로그에 올려 보세요. 이름과 진도는 이 브라우저 밖으로 보내지 않습니다.</p>
+        <div class="links"><button type="button" class="btn" data-card-save="${lv.id}">${navigator.canShare ? "이미지 저장·공유" : "이미지 저장"}</button><button type="button" class="btn ghost" data-copy="${esc(shareUrl("/", "finish_card"))}" data-share="finish_card">허브 링크 복사</button>${next ? `<button type="button" class="btn ghost" data-next-level="${next.id}">${next.id} 이어서 보기</button>` : ""}</div>
       </div>`;
     showDialog();
     try { if (document.fonts) await document.fonts.load('800 92px "Pretendard Variable"'); } catch (e) { /* draw with fallback fonts */ }
-    drawCard($("#station-body .card-canvas"), lv, items);
+    const canvas = $("#station-body .card-canvas"), input = $("#station-body [data-card-name]");
+    drawCard(canvas, lv, items, "");
+    input.addEventListener("input", () => drawCard(canvas, lv, items, input.value.trim()));
   }
   function saveCard(levelId) {
     const canvas = $("#station-body .card-canvas");
     if (!canvas) return;
-    const a = document.createElement("a");
-    a.download = `causal-inference-hub-${levelId}.png`;
-    a.href = canvas.toDataURL("image/png");
-    document.body.appendChild(a); a.click(); a.remove();
-    track("share", { content: "finish_card", method: "download" });
+    const name = `causal-inference-hub-${levelId}.png`;
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+      const file = typeof File === "function" ? new File([blob], name, { type: "image/png" }) : null;
+      /* phones: hand the image to the share sheet; elsewhere download it */
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share({ files: [file], title: "Causal Inference Hub 완주 카드" }); track("share", { content: "finish_card", method: "share_sheet" }); return; } catch (e) { if (e && e.name === "AbortError") return; }
+      }
+      const a = document.createElement("a");
+      a.download = name; a.href = URL.createObjectURL(blob);
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      track("share", { content: "finish_card", method: "download" });
+    }, "image/png");
   }
 
   /* ---------- station dialog ---------- */
   const dialog = () => $("#station-dialog");
 
-  function openStation(id, source) {
+  function openStation(id, source, silent) {
     const r = state.repos.get(id);
     if (!r) return;
     state.openRepo = r;
-    track("open_repo", { repo: r.repo, level: r.level || "", source: source || "hub" });
-    if (r.kind !== "paid") {
+    if (!silent) track("open_repo", { repo: r.repo, level: r.level || "", source: source || "hub" });
+    if (!silent && r.kind !== "paid") {
       state.recent = [{ id, t: Date.now() }, ...state.recent.filter((x) => x.id !== id)].slice(0, 6);
       saveRecent(); renderWeek();
     }
@@ -984,10 +1027,10 @@
     track("mark_done", { repo: id, level: (rr && rr.level) || "", done: state.ridden.has(id) });
     saveRidden();
     renderMap(); renderShelf(true); renderWeek();
-    openStation(id, "dialog");
+    openStation(id, "dialog", true);
   }
 
-  const sourceOf = (el) => (el.closest("#shelf") ? "shelf" : el.closest("#week") ? "week" : el.closest("#station-body") ? "dialog" : el.closest("#roster, #top3") ? "contrib" : "hub");
+  const sourceOf = (el) => (el.closest("#shelf") ? "shelf" : el.closest(".continue") ? "continue" : el.closest(".spot") ? "spotlight" : el.closest(".fresh") ? "fresh" : el.closest("#vlines") ? "map_list" : el.closest(".p-timeline, .p-repos") ? "builder_dialog" : el.closest("#station-body") ? "dialog" : el.closest("#roster, #top3") ? "contrib" : "hub");
   const joinTarget = (href) => (/discord/.test(href) ? "discord" : /Project-template/.test(href) ? "template" : /is%3Aissue|is:issue/.test(href) ? "issue" : /pseudo-lab\.com/.test(href) ? "runner" : "other");
 
   function wire() {
@@ -996,19 +1039,21 @@
       if (fa) track("click_featured", { repo: fa.dataset.repo || "" });
       const out = e.target.closest(".pt-out");
       if (out) track("click_partner", { item: out.closest(".pt-card").querySelector("[data-goto]").dataset.goto, action: "out" });
-      const ja = e.target.closest("#join a, .join-foot a");
-      if (ja) track("click_join", { target: joinTarget(ja.getAttribute("href") || "") });
+      const ja = e.target.closest("#join a, .footer-links a[href*='discord']");
+      if (ja) track("click_join", { target: joinTarget(ja.getAttribute("href") || ""), source: ja.closest("#join") ? "join_section" : "footer" });
       const sa = e.target.closest("#station-body .links a");
       if (sa && state.openRepo) track("click_outbound", { repo: state.openRepo.repo, kind: state.openRepo.kind === "paid" ? "paid" : /github\.com/.test(sa.href) ? "github" : "site" });
       if (e.target.closest("[data-quiz-open]")) { openQuiz(); return; }
       const pick = e.target.closest("[data-quiz-pick]");
       if (pick) { quizPick(pick.dataset.quizPick); return; }
       if (e.target.closest("[data-quiz-back]")) { quizBack(); return; }
-      if (e.target.closest("[data-quiz-restart]")) { openQuiz(); return; }
+      if (e.target.closest("[data-quiz-restart]")) { openQuiz(true); return; }
       const qgo = e.target.closest("[data-quiz-go]");
-      if (qgo) { quizGo(qgo.dataset.quizGo); return; }
+      if (qgo) { quizGo(qgo.dataset.quizGo, Number(qgo.dataset.quizBegin) || 0); return; }
       const card = e.target.closest("[data-card]");
       if (card) { openCard(card.dataset.card); return; }
+      const nl = e.target.closest("[data-next-level]");
+      if (nl) { closeStation(); gotoLevel(nl.dataset.nextLevel); return; }
       const dl = e.target.closest("[data-card-save]");
       if (dl) { saveCard(dl.dataset.cardSave); return; }
       const ride = e.target.closest("[data-ride]");
@@ -1081,7 +1126,7 @@
     renderContrib();
     renderLegend(); renderMap(); wireTabs();
     renderFeatured(); renderPartner(); renderEvents(); renderArticles();
-    if (location.hash === "#contrib") selectTab("tab-contrib");
+    if (location.hash === "#contrib") { selectTab("tab-contrib"); requestAnimationFrame(() => $("#curriculum").scrollIntoView()); }
     if (location.hash === "#start" || new URLSearchParams(location.search).has("quiz")) openQuiz();
     navSpy();
     refreshStars();

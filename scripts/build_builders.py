@@ -187,6 +187,11 @@ def badge_svg(label, message):
 """
 
 
+def badge_message(p):
+    n = len(p["cohorts"])
+    return f"Builder · {p['first']}기" if n == 1 else f"Builder · {p['first']}기부터 · {n}개 기수"
+
+
 def page(p, repos, projects, terms):
     slug = p["info"]["slug"]
     url = f"{SITE}/builders/{slug}.html"
@@ -216,6 +221,7 @@ def page(p, repos, projects, terms):
         <p class="bp-since">{p['first']}기부터 Builder · {s} 중 {len(p['cohorts'])}개 기수</p>
         {f'<p class="bp-intro">{esc(intro)}</p>' if intro else ''}
         <p class="bp-links">{f'<a href="{esc(linkedin)}" target="_blank" rel="noopener">LinkedIn</a>' if linkedin else ''}<button type="button" class="btn ghost sm" data-copy="{esc(share)}" data-share="builder">이 페이지 링크 복사</button></p>
+        {'' if (intro and p["info"].get("github")) else f'<p class="bp-self">본인이신가요? <a href="https://github.com/{ORG}/CausalInferenceLab.github.io/edit/main/data/builders.json" target="_blank" rel="noopener">소개와 사진 추가하기</a></p>'}
       </div>
     </section>
     <ul class="p-stats bp-stats"><li><b>{p['projects']}</b>프로젝트</li><li><b>{len(p['cohorts'])}</b>기수</li><li><b>{p['runners']}</b>함께한 러너</li><li><b>{len(own)}</b>레포</li></ul>
@@ -226,7 +232,7 @@ def page(p, repos, projects, terms):
         <section class="bp-badge" aria-labelledby="h-badge">
           <h2 id="h-badge">Builder 배지</h2>
           <p>GitHub 프로필이나 레포 README에 붙이면 이 페이지로 연결됩니다.</p>
-          <img src="/badges/{slug}.svg" alt="CausalInferenceLab Builder {esc(s)}">
+          <img src="/badges/{slug}.svg" alt="CausalInferenceLab {esc(badge_message(p))}">
           <pre><code>{esc(badge_md)}</code></pre>
           <button type="button" class="btn sm" data-copy="{esc(badge_md)}" data-share="badge">배지 코드 복사</button>
         </section>
@@ -234,7 +240,7 @@ def page(p, repos, projects, terms):
     </div>
     <section class="bp-cta">
       <div><h2>다음 기수에 프로젝트를 열어 보세요</h2><p>러너로 시작한 Builder도 많습니다. 템플릿으로 레포를 만들고, 기수 모집 때 프로젝트를 등록하면 됩니다.</p></div>
-      <div class="bp-cta-links"><a class="btn" href="/#join" data-track="click_join" data-track-params='{{"target":"builder"}}'>참여 방법 보기</a><a class="btn ghost" href="https://github.com/{ORG}/Project-template" target="_blank" rel="noopener" data-track="click_join" data-track-params='{{"target":"template"}}'>프로젝트 템플릿</a></div>
+      <div class="bp-cta-links"><a class="btn" href="/#join" data-event="click_join" data-event-params='{{"target":"join_section","source":"builder_page"}}'>참여 방법 보기</a><a class="btn ghost" href="https://github.com/{ORG}/Project-template" target="_blank" rel="noopener" data-event="click_join" data-event-params='{{"target":"template","source":"builder_page"}}'>프로젝트 템플릿</a></div>
     </section>
   </div>
 </main>
@@ -276,7 +282,7 @@ def main():
         with open(os.path.join(ROOT, "builders", f"{slug}.html"), "w", encoding="utf-8") as f:
             f.write(page(p, repos, projects, terms))
         with open(os.path.join(ROOT, "badges", f"{slug}.svg"), "w", encoding="utf-8") as f:
-            f.write(badge_svg("CausalInferenceLab", f"Builder · {span(p['cohorts'])}"))
+            f.write(badge_svg("CausalInferenceLab", badge_message(p)))
     with open(os.path.join(ROOT, "builders", "index.html"), "w", encoding="utf-8") as f:
         f.write(index_page(ranked))
     print(f"wrote {len(ranked)} Builder pages and badges")
