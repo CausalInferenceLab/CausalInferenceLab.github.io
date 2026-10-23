@@ -1,3 +1,6 @@
 .DS_Store
 _site/
 node_modules/
+/builders/
+/badges/
+__pycache__/

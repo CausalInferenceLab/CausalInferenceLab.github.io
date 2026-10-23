@@ -1,0 +1,286 @@
+"""Build one page per Builder, an index page, and a badge for each Builder.
+
+Reads data/builders.json, data/projects.json and data/repos.json and writes
+builders/<slug>.html, builders/index.html and badges/<slug>.svg. The output is
+generated, so it is not committed; the deploy workflow runs this script before
+publishing. Run it locally to preview:
+
+    python3 scripts/build_builders.py && python3 -m http.server 8000
+
+Share images live in assets/og/builders/<slug>.jpg and are made separately by
+scripts/builder_cards.py. A page whose image is missing falls back to the hub's.
+"""
+import html
+import json
+import os
+from collections import OrderedDict
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SITE = "https://causalinferencelab.github.io"
+ORG = "CausalInferenceLab"
+
+
+def load(name):
+    with open(os.path.join(ROOT, "data", name), encoding="utf-8") as f:
+        return json.load(f)
+
+
+def esc(s):
+    return html.escape(str(s if s is not None else ""), quote=True)
+
+
+def builder_stats():
+    """Mirror builderStats() in assets/js/hub.js so the pages and the hub agree."""
+    builders = load("builders.json")
+    projects = load("projects.json")
+    repos = {r["repo"]: r for r in load("repos.json")}
+    current = max(p["cohort"] for p in projects)
+    people = OrderedDict()
+
+    def get(name):
+        if name not in people:
+            people[name] = {"name": name, "items": [], "repos": [], "runnerOf": []}
+        return people[name]
+
+    for p in projects:
+        if not p.get("builder"):
+            continue
+        r = repos.get(p.get("repo") or "")
+        get(p["builder"])["items"].append({
+            "cohort": p["cohort"], "term": p.get("term", ""), "name": p["name"], "runners": p.get("runners"),
+            "repo": r["repo"] if r else None, "title": r["title"] if r else None, "link": p.get("link"),
+            "line": (r.get("lines") or ["none"])[0] if r else "none", "retro": p.get("retro"), "live": False,
+        })
+    for r in repos.values():
+        for b in r.get("builders") or []:
+            if r["repo"] not in get(b)["repos"]:
+                get(b)["repos"].append(r["repo"])
+        if r.get("status") != "running" or any(p.get("repo") == r["repo"] for p in projects):
+            continue
+        for b in r.get("builders") or []:
+            get(b)["items"].append({
+                "cohort": current, "term": "", "name": r["title"], "runners": None, "repo": r["repo"], "title": r["title"],
+                "link": None, "line": (r.get("lines") or ["none"])[0], "retro": None, "live": True,
+            })
+    info = {b["name"]: b for b in builders}
+    for name, p in people.items():
+        p["runnerOf"] = info.get(name, {}).get("runnerOf", [])
+        p["info"] = info.get(name, {"name": name})
+        p["items"].sort(key=lambda i: i["cohort"])
+        p["cohorts"] = sorted({i["cohort"] for i in p["items"]})
+        p["projects"] = len(p["items"])
+        p["runners"] = sum(i["runners"] or 0 for i in p["items"])
+        p["first"] = p["cohorts"][0]
+        p["line"] = next((i["line"] for i in p["items"] if i["line"] != "none"), "main")
+    ranked = sorted(people.values(), key=lambda p: (-p["projects"], -p["runners"], p["first"], p["name"]))
+    for i, p in enumerate(ranked):
+        p["rank"] = i + 1
+    terms = {p["cohort"]: p.get("term", "") for p in projects}
+    return ranked, repos, projects, terms
+
+
+def span(cohorts):
+    if not cohorts:
+        return ""
+    return f"{cohorts[0]}기" if cohorts[0] == cohorts[-1] else f"{cohorts[0]}–{cohorts[-1]}기"
+
+
+def head(title, desc, url, image):
+    return f"""<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{esc(title)}</title>
+<meta name="description" content="{esc(desc)}">
+<meta property="og:title" content="{esc(title)}">
+<meta property="og:description" content="{esc(desc)}">
+<meta property="og:image" content="{esc(image)}">
+<meta property="og:url" content="{esc(url)}">
+<meta property="og:type" content="profile">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="{esc(url)}">
+<link rel="icon" href="/assets/img/team-mark.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="/assets/css/hub.css">
+</head>
+<body class="bpage">
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="/" aria-label="Causal Inference Hub 처음으로"><img class="brand-logo" src="/assets/img/team-mark.png" alt="" width="34" height="34"><span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span></a>
+    <nav class="site-nav" aria-label="주요 메뉴"><a href="/#curriculum">커리큘럼</a><a href="/builders/">Builder</a><a href="/#join">참여하기</a></nav>
+  </div>
+</header>
+"""
+
+
+FOOT = """<footer class="site-footer">
+  <div class="wrap footer-row">
+    <div><p class="footer-brand">가짜연구소 인과추론팀</p><p>러너는 이름 없이 인원수로만 표시합니다.</p></div>
+    <ul class="footer-links"><li><a href="/">허브</a></li><li><a href="/builders/">Builder 전체</a></li><li><a href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a></li></ul>
+  </div>
+</footer>
+<script src="/assets/js/track.js" defer></script>
+</body>
+</html>
+"""
+
+
+def avatar(p, size="lg"):
+    gh = p["info"].get("github")
+    img = f'<img src="https://github.com/{esc(gh)}.png?size=160" alt="" loading="lazy" onerror="this.remove()">' if gh else ""
+    return f'<span class="avatar {size}" aria-hidden="true">{esc(p["name"][:1])}{img}</span>'
+
+
+def retro_html(r):
+    if not r or not any(r.get(k) for k in ("why", "learned", "next")):
+        return ""
+    rows = "".join(f"<dt>{k}</dt><dd>{esc(r[f])}</dd>" for k, f in (("왜 만들었나", "why"), ("무엇을 배웠나", "learned"), ("다음 사람에게", "next")) if r.get(f))
+    return f'<details class="tl-retro" open><summary>회고</summary><dl>{rows}</dl></details>'
+
+
+def note_html(note):
+    return f'<span class="tl-note">{note}</span>' if note else ""
+
+
+def timeline(p, repos, projects, terms):
+    events = [dict(i, role="Builder") for i in p["items"]]
+    for x in p["runnerOf"]:
+        proj = next((q for q in projects if q["cohort"] == x["cohort"] and q["name"] == x["project"]), None)
+        r = repos.get((proj or {}).get("repo") or "")
+        events.append({"cohort": x["cohort"], "role": "러너", "name": x["project"], "repo": r["repo"] if r else None,
+                       "title": r["title"] if r else None, "link": (proj or {}).get("link"), "by": (proj or {}).get("builder"),
+                       "line": (r.get("lines") or ["none"])[0] if r else "none", "runners": None, "live": False, "retro": None})
+    events.sort(key=lambda e: (-e["cohort"], 0 if e["role"] == "Builder" else 1))
+    out = []
+    for e in events:
+        if e["role"] == "Builder":
+            facts = [f"러너 {e['runners']}명" if e.get("runners") else "", "진행 중" if e.get("live") else ""]
+        else:
+            facts = [f"Builder {esc(e['by'])}" if e.get("by") else ""]
+        link = (f'<a href="https://github.com/{ORG}/{esc(e["repo"])}" target="_blank" rel="noopener">레포 보기</a>' if e.get("repo")
+                else f'<a href="{esc(e["link"])}" target="_blank" rel="noopener">기록 보기</a>' if e.get("link") else "")
+        note = '<span class="sep" aria-hidden="true">·</span>'.join(x for x in facts + [link] if x)
+        cls = "b" if e["role"] == "Builder" else "r"
+        out.append(f'<li class="{cls}" data-line="{e["line"]}"><span class="tl-c"><b>{e["cohort"]}기</b><span>{esc(terms.get(e["cohort"], ""))}</span></span>'
+                   f'<span class="tl-body"><span class="tl-role">{e["role"]}</span><span class="tl-name">{esc(e["name"])}</span>'
+                   f'{note_html(note)}{retro_html(e.get("retro"))}</span></li>')
+    return "".join(out)
+
+
+def badge_svg(label, message):
+    def width(text):
+        return sum(11 if "가" <= ch <= "힣" else 6.6 for ch in text)
+    lw, mw = round(width(label) + 14), round(width(message) + 14)
+    w = lw + mw
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="20" role="img" aria-label="{esc(label)}: {esc(message)}">
+<title>{esc(label)}: {esc(message)}</title>
+<linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
+<clipPath id="r"><rect width="{w}" height="20" rx="3" fill="#fff"/></clipPath>
+<g clip-path="url(#r)"><rect width="{lw}" height="20" fill="#23276A"/><rect x="{lw}" width="{mw}" height="20" fill="#5B54B0"/><rect width="{w}" height="20" fill="url(#s)"/></g>
+<g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,Apple SD Gothic Neo,Noto Sans KR,sans-serif" font-size="11">
+<text x="{lw / 2}" y="14" textLength="{lw - 14}">{esc(label)}</text>
+<text x="{lw + mw / 2}" y="14" textLength="{mw - 14}">{esc(message)}</text>
+</g>
+</svg>
+"""
+
+
+def page(p, repos, projects, terms):
+    slug = p["info"]["slug"]
+    url = f"{SITE}/builders/{slug}.html"
+    s = span(p["cohorts"])
+    desc = f"{s} Builder · 프로젝트 {p['projects']}개 · 함께한 러너 {p['runners']}명. 가짜연구소 인과추론팀"
+    card = os.path.join(ROOT, "assets", "og", "builders", f"{slug}.jpg")
+    image = f"{SITE}/assets/og/builders/{slug}.jpg" if os.path.exists(card) else f"{SITE}/assets/img/og-hub.png"
+    linkedin = p["info"].get("linkedin")
+    intro = p["info"].get("intro")
+    own = [repos[r] for r in p["repos"] if r in repos]
+    badge_url = f"{SITE}/badges/{slug}.svg"
+    badge_md = f"[![CausalInferenceLab Builder]({badge_url})]({SITE}/builders/{slug}.html?utm_source=share&utm_medium=badge)"
+    share = f"{url}?utm_source=share&utm_medium=builder_page"
+    repo_cards = "".join(
+        f'<li data-line="{(r.get("lines") or ["none"])[0]}"><a href="https://github.com/{ORG}/{esc(r["repo"])}" target="_blank" rel="noopener">'
+        f'<span class="num" aria-hidden="true"></span><span><b>{esc(r["title"])}</b><span>{esc(r.get("summary", ""))}</span></span></a></li>'
+        for r in own)
+    top = rank_tag(p)
+    body = f"""<main id="main" class="bp">
+  <div class="wrap">
+    <a class="back" href="/#contrib">허브의 Builder 전체 보기</a>
+    <section class="bp-hero" data-line="{p['line']}">
+      {avatar(p)}
+      <div class="bp-id">
+        <p class="bp-kicker">{top}<span>Causal Inference Hub Builder</span></p>
+        <h1>{esc(p['name'])}</h1>
+        <p class="bp-since">{p['first']}기부터 Builder · {s} 중 {len(p['cohorts'])}개 기수</p>
+        {f'<p class="bp-intro">{esc(intro)}</p>' if intro else ''}
+        <p class="bp-links">{f'<a href="{esc(linkedin)}" target="_blank" rel="noopener">LinkedIn</a>' if linkedin else ''}<button type="button" class="btn ghost sm" data-copy="{esc(share)}" data-share="builder">이 페이지 링크 복사</button></p>
+      </div>
+    </section>
+    <ul class="p-stats bp-stats"><li><b>{p['projects']}</b>프로젝트</li><li><b>{len(p['cohorts'])}</b>기수</li><li><b>{p['runners']}</b>함께한 러너</li><li><b>{len(own)}</b>레포</li></ul>
+    <div class="bp-grid">
+      <section aria-labelledby="h-history"><h2 id="h-history">이력</h2><ol class="p-timeline">{timeline(p, repos, projects, terms)}</ol></section>
+      <aside>
+        {f'<section aria-labelledby="h-repos"><h2 id="h-repos">만든 레포</h2><ul class="bp-repos">{repo_cards}</ul></section>' if own else ''}
+        <section class="bp-badge" aria-labelledby="h-badge">
+          <h2 id="h-badge">Builder 배지</h2>
+          <p>GitHub 프로필이나 레포 README에 붙이면 이 페이지로 연결됩니다.</p>
+          <img src="/badges/{slug}.svg" alt="CausalInferenceLab Builder {esc(s)}">
+          <pre><code>{esc(badge_md)}</code></pre>
+          <button type="button" class="btn sm" data-copy="{esc(badge_md)}" data-share="badge">배지 코드 복사</button>
+        </section>
+      </aside>
+    </div>
+    <section class="bp-cta">
+      <div><h2>다음 기수에 프로젝트를 열어 보세요</h2><p>러너로 시작한 Builder도 많습니다. 템플릿으로 레포를 만들고, 기수 모집 때 프로젝트를 등록하면 됩니다.</p></div>
+      <div class="bp-cta-links"><a class="btn" href="/#join" data-track="click_join" data-track-params='{{"target":"builder"}}'>참여 방법 보기</a><a class="btn ghost" href="https://github.com/{ORG}/Project-template" target="_blank" rel="noopener" data-track="click_join" data-track-params='{{"target":"template"}}'>프로젝트 템플릿</a></div>
+    </section>
+  </div>
+</main>
+"""
+    return head(f"{p['name']} | Causal Inference Hub Builder", desc, url, image) + body + FOOT
+
+
+def rank_tag(p):
+    return f'<span class="rank-tag">Top {p["rank"]}</span>' if p["rank"] <= 3 else ""
+
+
+def index_page(ranked):
+    cards = "".join(
+        f'<li data-line="{p["line"]}"><a href="/builders/{p["info"]["slug"]}.html">{avatar(p)}'
+        f'<span class="bi-body"><b>{esc(p["name"])}</b><span>{span(p["cohorts"])} · 프로젝트 {p["projects"]}개 · 러너 {p["runners"]}명</span>'
+        f'<span class="bi-last">최근 · {esc(p["items"][-1]["name"])}</span></span>{rank_tag(p)}</a></li>'
+        for p in ranked)
+    total_projects = len(load("projects.json"))
+    body = f"""<main id="main" class="bp">
+  <div class="wrap">
+    <a class="back" href="/#contrib">허브로 돌아가기</a>
+    <h1 class="bi-title">Builder</h1>
+    <p class="bi-sub">인과추론팀에서 프로젝트를 연 사람들입니다. {len(ranked)}명이 프로젝트 {total_projects}개를 열었습니다. 이름을 누르면 이력과 배지가 있습니다.</p>
+    <ol class="bi-list">{cards}</ol>
+  </div>
+</main>
+"""
+    return head("Builder | Causal Inference Hub", f"가짜연구소 인과추론팀에서 프로젝트를 연 Builder {len(ranked)}명", f"{SITE}/builders/", f"{SITE}/assets/img/og-hub.png") + body + FOOT
+
+
+def main():
+    ranked, repos, projects, terms = builder_stats()
+    os.makedirs(os.path.join(ROOT, "builders"), exist_ok=True)
+    os.makedirs(os.path.join(ROOT, "badges"), exist_ok=True)
+    for p in ranked:
+        slug = p["info"].get("slug")
+        if not slug:
+            raise SystemExit(f"builders.json: {p['name']} has no slug")
+        with open(os.path.join(ROOT, "builders", f"{slug}.html"), "w", encoding="utf-8") as f:
+            f.write(page(p, repos, projects, terms))
+        with open(os.path.join(ROOT, "badges", f"{slug}.svg"), "w", encoding="utf-8") as f:
+            f.write(badge_svg("CausalInferenceLab", f"Builder · {span(p['cohorts'])}"))
+    with open(os.path.join(ROOT, "builders", "index.html"), "w", encoding="utf-8") as f:
+        f.write(index_page(ranked))
+    print(f"wrote {len(ranked)} Builder pages and badges")
+
+
+if __name__ == "__main__":
+    main()
