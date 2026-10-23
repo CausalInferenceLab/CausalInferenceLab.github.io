@@ -838,6 +838,21 @@
 
   function closeStation() { const d = dialog(); if (d.open) d.close(); }
 
+  /* Deep links: #station=<repo> opens that entry, so other team sites (the web book, for one) can link straight to it. */
+  const stationFromHash = () => {
+    const m = location.hash.match(/^#station=(.+)$/);
+    return m ? decodeURIComponent(m[1]) : null;
+  };
+  function openFromHash() {
+    const id = stationFromHash();
+    if (!id || !state.repos.has(id)) return;
+    const r = state.repos.get(id);
+    const lv = r.level && r.kind !== "paid" ? r.level : null;
+    $("#curriculum").scrollIntoView({ behavior: "auto" });
+    openStation(id);
+    if (lv) dialog().addEventListener("close", () => gotoItem(id), { once: true });
+  }
+
   function toggleRide(id) {
     if (state.ridden.has(id)) state.ridden.delete(id); else state.ridden.add(id);
     saveRidden();
@@ -870,6 +885,10 @@
       if (open) { e.preventDefault(); openStation(open.dataset.open); }
     });
     dialog().addEventListener("click", (e) => { if (e.target === dialog()) closeStation(); });
+    dialog().addEventListener("close", () => {
+      if (stationFromHash()) history.replaceState(null, "", location.pathname + location.search);
+    });
+    window.addEventListener("hashchange", openFromHash);
     let t;
     window.addEventListener("resize", () => {
       clearTimeout(t);
@@ -918,6 +937,7 @@
     renderLegend(); renderMap(); wireTabs();
     renderFeatured(); renderPartner(); renderEvents(); renderArticles();
     if (location.hash === "#contrib") selectTab("tab-contrib");
+    openFromHash();
     navSpy();
     refreshStars();
   }
