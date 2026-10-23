@@ -1,0 +1,105 @@
+{
+  "title": "상관일까, 인과일까?",
+  "questions": [
+    {
+      "id": "icecream",
+      "text": "아이스크림이 많이 팔린 날일수록 물놀이 사고도 많았다.",
+      "answer": "corr",
+      "why": "더운 날씨가 아이스크림 판매와 물놀이를 함께 늘립니다. 둘을 같이 움직이는 교란 요인이 있으면 관계가 있어 보여도 원인이라고 할 수 없습니다.",
+      "chapter": {
+        "title": "4장 그래프 인과 모델",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/04-Graphical-Causal-Models.html"
+      }
+    },
+    {
+      "id": "random_ui",
+      "text": "사용자를 무작위로 반씩 나눠 한쪽에만 새 추천 화면을 보여 줬더니, 그쪽 구매율이 2%p 높았다.",
+      "answer": "cause",
+      "why": "무작위 배정은 두 집단을 평균적으로 같게 만듭니다. 그래서 남은 차이는 새 화면 때문이라고 볼 수 있습니다. 표본이 충분하고 실험이 제대로 돌았다는 전제에서입니다.",
+      "chapter": {
+        "title": "2장 무작위 실험",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html"
+      }
+    },
+    {
+      "id": "push",
+      "text": "앱 알림을 켜 둔 사용자는 끈 사용자보다 30일 뒤 남아 있는 비율이 두 배 높았다.",
+      "answer": "corr",
+      "why": "원래 앱을 좋아하는 사람이 알림을 켜기 쉽습니다. 누가 알림을 켰는지가 스스로 정해졌기 때문에 선택 편향이 섞여 있습니다.",
+      "chapter": {
+        "title": "1장 인과추론 소개",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html"
+      }
+    },
+    {
+      "id": "ai_launch",
+      "text": "AI 요약 기능을 출시한 달에 매출이 10% 늘었다. 마침 연말 성수기였다.",
+      "answer": "corr",
+      "why": "출시 전후만 비교하면 같은 시기의 다른 변화(계절, 프로모션)와 효과가 섞입니다. 기능이 없던 비교 대상을 함께 놓아야 효과를 떼어 낼 수 있습니다.",
+      "chapter": {
+        "title": "13장 이중차분법",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/13-Difference-in-Differences.html"
+      }
+    },
+    {
+      "id": "hospital",
+      "text": "병원에 자주 가는 사람일수록 건강 상태가 나빴다.",
+      "answer": "corr",
+      "why": "아파서 병원에 가는 것이지 병원이 건강을 나쁘게 만드는 것이 아닙니다. 원인과 결과의 방향이 거꾸로인 경우입니다.",
+      "chapter": {
+        "title": "1장 인과추론 소개",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html"
+      }
+    },
+    {
+      "id": "did",
+      "text": "시범 지역과 비교 지역의 매출은 정책 전 3년 동안 나란히 움직였다. 정책 뒤에는 시범 지역만 올랐다.",
+      "answer": "cause",
+      "why": "정책이 없었다면 두 지역이 계속 나란히 움직였을 것이라는 평행 추세 가정이 맞다면, 벌어진 차이를 정책 효과로 읽을 수 있습니다. 이중차분법의 기본 아이디어입니다.",
+      "chapter": {
+        "title": "13장 이중차분법",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/13-Difference-in-Differences.html"
+      }
+    },
+    {
+      "id": "rdd",
+      "text": "장학금 기준 점수 바로 위와 바로 아래 학생을 비교했더니, 장학금을 받은 쪽의 졸업률이 높았다.",
+      "answer": "cause",
+      "why": "기준선 바로 근처의 학생들은 실력이 거의 같고, 받았는지 여부만 운처럼 갈립니다. 그래서 그 근처의 차이는 장학금 효과로 볼 수 있습니다. 회귀 불연속 설계입니다.",
+      "chapter": {
+        "title": "16장 회귀 불연속 설계",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/16-Regression-Discontinuity-Design.html"
+      }
+    },
+    {
+      "id": "ads",
+      "text": "광고를 본 사람의 구매율이 안 본 사람보다 높았다. 광고는 구매 가능성이 높은 사람에게 보여 주도록 설정되어 있었다.",
+      "answer": "corr",
+      "why": "타기팅 자체가 구매할 사람을 골라냈습니다. 광고를 볼 확률이 비슷한 사람끼리 비교하는 성향점수 같은 방법이 필요합니다.",
+      "chapter": {
+        "title": "11장 성향점수",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/11-Propensity-Score.html"
+      }
+    },
+    {
+      "id": "coupon_used",
+      "text": "쿠폰은 무작위로 보냈다. 그중 실제로 쿠폰을 쓴 사람만 골라 안 받은 사람과 비교했더니 구매액이 컸다.",
+      "answer": "corr",
+      "why": "보낸 것은 무작위지만 쓴 사람은 스스로 골라졌습니다. 무작위 배정 기준으로 비교하거나, 배정을 도구변수로 써서 실제로 쓴 사람의 효과를 따로 추정해야 합니다.",
+      "chapter": {
+        "title": "9장 불응과 LATE",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/09-Non-Compliance-and-LATE.html"
+      }
+    },
+    {
+      "id": "height",
+      "text": "키가 클수록 연봉이 높다는 회귀 결과가, 성별과 나이를 통제해도 그대로 남았다.",
+      "answer": "corr",
+      "why": "통제한 변수 밖에도 키와 연봉을 같이 움직이는 요인(가정 환경, 건강 등)이 남아 있을 수 있습니다. 회귀는 빠진 교란 요인이 없다는 가정이 있어야 인과로 읽힙니다.",
+      "chapter": {
+        "title": "5장 선형회귀의 터무니없는 효과",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/05-The-Unreasonable-Effectiveness-of-Linear-Regression.html"
+      }
+    }
+  ]
+}

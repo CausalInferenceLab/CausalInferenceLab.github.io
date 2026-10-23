@@ -23,6 +23,8 @@
   const fmt = (n) => Number(n).toLocaleString("ko-KR");
   const $ = (sel, root = document) => root.querySelector(sel);
   const dot = (d) => d.replace(/-/g, ".");
+  const track = (name, params) => { if (window.hubTrack) window.hubTrack(name, params); };
+  const shareUrl = (path, medium) => (window.hubShareUrl ? window.hubShareUrl(path, medium) : path);
 
   const state = {
     repos: new Map(), lines: new Map(), lineList: [], levels: [], map: null, routes: [],
@@ -363,7 +365,8 @@
   }
 
   /* ---------- goals (routes) ---------- */
-  function setRoute(id) {
+  function setRoute(id, source) {
+    if (source && id !== state.route) track("select_route", { route: id, source });
     state.route = id;
     $("#route-chips").querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-checked", String(c.dataset.route === id)));
     renderShelf();
@@ -376,7 +379,7 @@
     box.innerHTML = all.map((r) => `<button type="button" class="chip" role="radio" data-route="${r.id}" aria-checked="${r.id === state.route}">${esc(r.label)}</button>`).join("");
     box.addEventListener("click", (e) => {
       const b = e.target.closest("[data-route]");
-      if (b) setRoute(b.dataset.route);
+      if (b) setRoute(b.dataset.route, "chip");
     });
   }
 
@@ -424,7 +427,7 @@
     state.projects.forEach((p) => {
       if (!p.builder) return;
       const r = p.repo && state.repos.get(p.repo);
-      get(p.builder).items.push({ cohort: p.cohort, term: p.term, name: p.name, runners: p.runners, repo: r ? r.repo : null, title: r ? r.title : null, link: p.link, line: r ? primaryLine(r) : "none" });
+      get(p.builder).items.push({ cohort: p.cohort, term: p.term, name: p.name, runners: p.runners, repo: r ? r.repo : null, title: r ? r.title : null, link: p.link, line: r ? primaryLine(r) : "none", retro: p.retro || null });
     });
     state.repos.forEach((r) => {
       if (r.kind) return;
@@ -507,10 +510,18 @@
     $("#roster-legend").innerHTML = `<li><span class="sc on" data-line="main"></span>Builder로 연 기수, 숫자는 함께한 러너 수</li><li><span class="sc ran" data-line="main"></span>러너로 참여한 기수</li><li><span class="sc on live" data-line="main"></span>진행 중</li><li>칸은 왼쪽부터 ${cohorts[0]}기–${cohorts[cohorts.length - 1]}기</li>`;
   }
 
-  function openPerson(name) {
+  /* Three lines a Builder writes after a project; nothing shows until they do. */
+  function retroHTML(r) {
+    if (!r || !(r.why || r.learned || r.next)) return "";
+    const row = (k, v) => (v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : "");
+    return `<details class="tl-retro"><summary>회고</summary><dl>${row("왜 만들었나", r.why)}${row("무엇을 배웠나", r.learned)}${row("다음 사람에게", r.next)}</dl></details>`;
+  }
+
+  function openPerson(name, source) {
     const p = (state.people || []).find((x) => x.name === name);
     if (!p) return;
     const info = builderInfo(name);
+    track("open_builder", { builder: info.slug || name, source: source || "hub" });
     const runnerItems = p.runnerOf.map((x) => {
       const proj = state.projects.find((q) => q.cohort === x.cohort && q.name === x.project);
       const r = proj && proj.repo && state.repos.get(proj.repo);
@@ -522,7 +533,7 @@
       const facts = e.role === "Builder" ? [e.runners ? `러너 ${e.runners}명` : "", e.live ? "진행 중" : ""] : [e.by ? `Builder ${esc(e.by)}` : ""];
       const go = e.repo ? `<button type="button" data-open="${esc(e.repo)}" title="${esc(e.title)}">레포 보기</button>` : e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">기록 보기</a>` : "";
       const note = [...facts.filter(Boolean), go].filter(Boolean).join('<span class="sep" aria-hidden="true">·</span>');
-      return `<li class="${e.role === "Builder" ? "b" : "r"}" data-line="${e.line}"><span class="tl-c"><b>${e.cohort}기</b><span>${esc(terms.get(e.cohort) || "")}</span></span><span class="tl-body"><span class="tl-role">${e.role}</span><span class="tl-name">${esc(e.name)}</span>${note ? `<span class="tl-note">${note}</span>` : ""}</span></li>`;
+      return `<li class="${e.role === "Builder" ? "b" : "r"}" data-line="${e.line}"><span class="tl-c"><b>${e.cohort}기</b><span>${esc(terms.get(e.cohort) || "")}</span></span><span class="tl-body"><span class="tl-role">${e.role}</span><span class="tl-name">${esc(e.name)}</span>${note ? `<span class="tl-note">${note}</span>` : ""}${retroHTML(e.retro)}</span></li>`;
     };
     const repos = [...p.repos].map((id) => state.repos.get(id)).filter(Boolean);
     $("#station-body").innerHTML = `
@@ -531,6 +542,7 @@
       <div class="station-content person" data-line="${p.line}">
         <div class="tags">${p.rank <= 3 ? `<span class="rank-tag">Top ${p.rank}</span>` : ""}<span class="tag-line" data-line="${p.line}"><span class="num" aria-hidden="true"></span>${p.first}기부터 Builder</span></div>
         <div class="p-head">${avatarHTML(p.name, "lg")}<div><h2 id="station-title">${esc(p.name)}</h2>${info.linkedin ? `<a href="${esc(info.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ""}</div></div>
+        ${info.slug ? `<div class="p-share"><a class="btn sm" href="builders/${esc(info.slug)}.html">Builder 페이지</a><button type="button" class="btn ghost sm" data-copy="${esc(shareUrl(`/builders/${info.slug}.html`, "builder_page"))}" data-share="builder">링크 복사</button></div>` : ""}
         ${info.intro ? `<p>${esc(info.intro)}</p>` : ""}
         <ul class="p-stats"><li><b>${p.projects}</b>프로젝트</li><li><b>${p.cohorts.length}</b>기수</li><li><b>${fmt(p.runners)}</b>함께한 러너</li><li><b>${repos.length}</b>레포</li></ul>
         <h3 class="p-h">이력</h3>
@@ -556,8 +568,10 @@
     const fresh = list.filter((r) => r.pushed).sort((a, b) => Date.parse(b.pushed) - Date.parse(a.pushed)).slice(0, 4);
     const recent = state.recent.map((x) => state.repos.get(x.id)).filter(Boolean).slice(0, 3);
     const done = list.filter((r) => state.ridden.has(r.repo)).length;
+    const finished = state.levels.filter((l) => levelDone(l.id));
+    const cardChip = finished.length ? `<button type="button" class="cont-chip card" data-card="${finished[finished.length - 1].id}">${finished[finished.length - 1].id} 완주 카드</button>` : "";
     const cont = recent.length ? `<div class="continue"><span class="cont-label">이어서 보기</span>${recent.map((r) => `<button type="button" class="cont-chip" data-line="${primaryLine(r)}" data-open="${esc(r.repo)}"><i aria-hidden="true"></i>${esc(r.title)}</button>`).join("")}
-      <span class="cont-progress">학습 완료 <b>${done}</b> / ${list.length}<span class="bar" aria-hidden="true"><i style="width:${Math.round((done / list.length) * 100)}%"></i></span></span></div>` : "";
+      ${cardChip}<span class="cont-progress">학습 완료 <b>${done}</b> / ${list.length}<span class="bar" aria-hidden="true"><i style="width:${Math.round((done / list.length) * 100)}%"></i></span></span></div>` : "";
     $("#week").innerHTML = `${cont}<div class="week-grid">
       <article class="spot" data-line="${primaryLine(pick)}">
         <p class="spot-label">이번 주의 레포<span>월요일마다 바뀝니다</span></p>
@@ -659,7 +673,7 @@
     $("#featured").innerHTML = (state.featured || []).map((f) => {
       const r = f.repo && state.repos.get(f.repo);
       const stars = r && r.stars >= 10 ? `<span class="st">${icons.star}${fmt(r.stars)}</span>` : "";
-      return `<li><a href="${esc(f.url)}" target="_blank" rel="noopener"${r ? ` data-line="${primaryLine(r)}"` : ""}>
+      return `<li><a href="${esc(f.url)}" target="_blank" rel="noopener" data-repo="${esc(f.repo || "")}"${r ? ` data-line="${primaryLine(r)}"` : ""}>
         <span class="tag">${esc(f.tag)}</span>
         <span class="tx"><span class="t">${esc(f.title)}</span>${f.desc ? `<span class="d">${esc(f.desc)}</span>` : ""}</span>
         ${stars}
@@ -694,8 +708,8 @@
 
   function stationGroup(parent, id, r, cls) {
     const g = svg("g", { class: "st" + cls, "data-line": primaryLine(r), "data-st": id, tabindex: 0, role: "button", "aria-label": `${r.title} 열기` }, parent);
-    g.addEventListener("click", () => openStation(id));
-    g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openStation(id); } });
+    g.addEventListener("click", () => openStation(id, "map"));
+    g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openStation(id, "map"); } });
     return g;
   }
 
@@ -776,12 +790,137 @@
       <li><a class="article-card" href="article.html#${esc(a.slug)}"><h3>${esc(a.title)}</h3><p>${esc(a.summary)}</p><time datetime="${esc(a.date)}">${dot(a.date)}</time></a></li>`).join("");
   }
 
+  /* ---------- start-point quiz (three questions to one route) ---------- */
+  const QUIZ = [
+    { key: "exp", q: "인과추론은 어느 정도 해 보셨나요?", opts: [["new", "처음이에요"], ["some", "개념은 들어 봤어요"], ["used", "업무에 써 봤어요"]] },
+    { key: "work", q: "지금 하는 일에 가장 가까운 것은?", opts: [["exp", "A/B 테스트와 실험"], ["mkt", "마케팅·정책 효과 분석"], ["ml", "ML과 모델링"], ["research", "연구·헬스케어"], ["tools", "데이터 도구·에이전트 개발"]] },
+    { key: "want", q: "허브에서 가장 얻고 싶은 것은?", opts: [["concept", "개념을 제대로 이해하기"], ["apply", "바로 쓸 코드와 사례"], ["build", "직접 만들고 기여하기"]] }
+  ];
+  const quiz = { step: 0, a: {} };
+  function quizRoute(a) {
+    if (a.want === "build" || a.work === "tools") return "build";
+    if (a.work === "research") return "research";
+    if (a.work === "exp") return "experiment";
+    if (a.work === "ml") return a.exp === "new" ? "start" : "ml";
+    return "start";
+  }
+  function showDialog() {
+    const d = dialog();
+    if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
+  }
+  function openQuiz() {
+    quiz.step = 0; quiz.a = {};
+    track("quiz_start", {});
+    renderQuiz(); showDialog();
+  }
+  function renderQuiz() {
+    const shell = (inner) => `<div class="station-band" data-line="main"></div>
+      <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
+      <div class="station-content quiz" data-line="main">${inner}</div>`;
+    if (quiz.step < QUIZ.length) {
+      const item = QUIZ.at(quiz.step);
+      $("#station-body").innerHTML = shell(`
+        <p class="quiz-step"><span>${quiz.step + 1} / ${QUIZ.length}</span><span class="quiz-dots" aria-hidden="true">${QUIZ.map((_, i) => `<i class="${i <= quiz.step ? "on" : ""}"></i>`).join("")}</span></p>
+        <h2 id="station-title">${esc(item.q)}</h2>
+        <div class="quiz-opts" role="group" aria-label="${esc(item.q)}">${item.opts.map(([v, label]) => `<button type="button" data-quiz-pick="${v}" aria-pressed="${quiz.a[item.key] === v}">${esc(label)}</button>`).join("")}</div>
+        ${quiz.step ? `<button type="button" class="quiz-back" data-quiz-back>이전 질문</button>` : `<p class="quiz-note">답은 저장하지 않습니다.</p>`}`);
+      $("#station-body .quiz-opts button").focus();
+      return;
+    }
+    const id = quizRoute(quiz.a);
+    const route = state.routes.find((r) => r.id === id);
+    const stops = route.stops.map((x) => state.repos.get(x)).filter(Boolean);
+    /* someone who already knows the basics can skip the L0 primer */
+    const begin = quiz.a.exp !== "new" && stops.length > 1 && stops[0].level === "L0" ? 1 : 0;
+    $("#station-body").innerHTML = shell(`
+      <p class="quiz-step"><span>추천 경로</span></p>
+      <h2 id="station-title">${esc(route.label)}</h2>
+      <p>${esc(route.description)}</p>
+      <ol class="quiz-stops">${stops.map((r, i) => `<li data-line="${primaryLine(r)}"${i < begin ? ' class="skip"' : ""}><span class="n">${pad2(i + 1)}</span><span><b>${esc(r.title)}</b><span>${esc(r.level || "")}${i === begin ? " · 여기서 시작" : i < begin ? " · 필요하면" : ""}</span></span></li>`).join("")}</ol>
+      <div class="links"><button type="button" class="btn" data-quiz-go="${id}">이 순서로 보기</button><button type="button" class="btn ghost" data-quiz-restart>다시 답하기</button></div>`);
+    $("#station-body [data-quiz-go]").focus();
+  }
+  function quizPick(v) {
+    quiz.a[QUIZ.at(quiz.step).key] = v;
+    quiz.step += 1;
+    if (quiz.step === QUIZ.length) track("quiz_complete", { route: quizRoute(quiz.a), ...quiz.a });
+    renderQuiz();
+  }
+  function quizBack() { quiz.step = Math.max(0, quiz.step - 1); renderQuiz(); }
+  function quizGo(id) {
+    closeStation();
+    selectTab("tab-course");
+    setRoute(id, "quiz");
+    $("#curriculum").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  }
+
+  /* ---------- finish card (one level fully marked done) ---------- */
+  const rideable = (r) => !r.kind || r.kind === "external";
+  function levelDone(levelId) {
+    const items = levelItems(levelId).filter(rideable);
+    return items.length > 0 && items.every((r) => state.ridden.has(r.repo));
+  }
+  function drawCard(canvas, lv, items) {
+    const W = 1200, H = 630, c = canvas.getContext("2d");
+    canvas.width = W; canvas.height = H;
+    const g = c.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, "#23276A"); g.addColorStop(0.5, "#333689"); g.addColorStop(1, "#6E68BC");
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    const glow = c.createRadialGradient(W * 0.86, H * 0.18, 0, W * 0.86, H * 0.18, 520);
+    glow.addColorStop(0, "rgba(255,255,255,.18)"); glow.addColorStop(1, "rgba(255,255,255,0)");
+    c.fillStyle = glow; c.fillRect(0, 0, W, H);
+    const font = (w, px) => `${w} ${px}px "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif`;
+    c.fillStyle = "rgba(255,255,255,.82)"; c.font = font(600, 28);
+    c.fillText("Causal Inference Hub · 가짜연구소 인과추론팀", 80, 110);
+    c.fillStyle = "#fff"; c.font = font(800, 92);
+    c.fillText(`${lv.id} 완주`, 80, 236);
+    c.font = font(700, 44); c.fillText(lv.name, 80, 300);
+    c.fillStyle = "rgba(255,255,255,.86)"; c.font = font(500, 30);
+    c.fillText(`“${lv.question}”에 답하는 자료 ${items.length}개를 모두 마쳤습니다.`, 80, 362);
+    c.font = font(500, 26); c.fillStyle = "rgba(255,255,255,.78)";
+    items.slice(0, 3).forEach((r, i) => c.fillText(`· ${r.title}`, 80, 420 + i * 38));
+    if (items.length > 3) c.fillText(`외 ${items.length - 3}개`, 80, 420 + 3 * 38);
+    c.fillStyle = "rgba(255,255,255,.7)"; c.font = font(500, 24);
+    const d = new Date(), date = `${d.getFullYear()}.${pad2(d.getMonth() + 1)}.${pad2(d.getDate())}`;
+    c.fillText(`${date} · causalinferencelab.github.io`, 80, H - 60);
+    const mark = $(".banner-mark");
+    if (mark && mark.complete && mark.naturalWidth) c.drawImage(mark, W - 300, 70, 210, 210);
+  }
+  async function openCard(levelId) {
+    const lv = state.levels.find((l) => l.id === levelId);
+    if (!lv || !levelDone(levelId)) return;
+    const items = levelItems(levelId).filter(rideable);
+    track("finish_card_open", { level: levelId });
+    $("#station-body").innerHTML = `<div class="station-band" data-line="main"></div>
+      <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
+      <div class="station-content" data-line="main">
+        <h2 id="station-title">${lv.id} ${esc(lv.name)} 완주 카드</h2>
+        <canvas class="card-canvas" width="1200" height="630" role="img" aria-label="${esc(`${lv.id} ${lv.name} 완주 카드`)}"></canvas>
+        <p class="card-note">이미지를 저장해 링크드인이나 블로그에 올려 보세요. 진도는 이 브라우저에만 저장됩니다.</p>
+        <div class="links"><button type="button" class="btn" data-card-save="${lv.id}">이미지 저장</button><button type="button" class="btn ghost" data-copy="${esc(shareUrl("/", "finish_card"))}" data-share="finish_card">허브 링크 복사</button></div>
+      </div>`;
+    showDialog();
+    try { if (document.fonts) await document.fonts.load('800 92px "Pretendard Variable"'); } catch (e) { /* draw with fallback fonts */ }
+    drawCard($("#station-body .card-canvas"), lv, items);
+  }
+  function saveCard(levelId) {
+    const canvas = $("#station-body .card-canvas");
+    if (!canvas) return;
+    const a = document.createElement("a");
+    a.download = `causal-inference-hub-${levelId}.png`;
+    a.href = canvas.toDataURL("image/png");
+    document.body.appendChild(a); a.click(); a.remove();
+    track("share", { content: "finish_card", method: "download" });
+  }
+
   /* ---------- station dialog ---------- */
   const dialog = () => $("#station-dialog");
 
-  function openStation(id) {
+  function openStation(id, source) {
     const r = state.repos.get(id);
     if (!r) return;
+    state.openRepo = r;
+    track("open_repo", { repo: r.repo, level: r.level || "", source: source || "hub" });
     if (r.kind !== "paid") {
       state.recent = [{ id, t: Date.now() }, ...state.recent.filter((x) => x.id !== id)].slice(0, 6);
       saveRecent(); renderWeek();
@@ -830,6 +969,7 @@
         <div class="links">${links}${r.kind === "paid" ? `<button type="button" class="btn ghost" data-goto="${esc(r.repo)}">커리큘럼에서 위치 보기</button>` : ""}</div>
         ${adjacent}
         ${canRide ? `<button type="button" class="ride" aria-pressed="${ridden}" data-ride="${esc(r.repo)}">${ridden ? "학습 완료" : "학습 완료로 표시"}</button>` : ""}
+        ${ridden && lv && levelDone(lv.id) ? `<div class="done-banner"><span><b>${lv.id} ${esc(lv.name)}</b> 자료를 모두 마쳤습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>` : ""}
       </div>`;
     const d = dialog();
     if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
@@ -855,20 +995,44 @@
 
   function toggleRide(id) {
     if (state.ridden.has(id)) state.ridden.delete(id); else state.ridden.add(id);
+    const rr = state.repos.get(id);
+    track("mark_done", { repo: id, level: (rr && rr.level) || "", done: state.ridden.has(id) });
     saveRidden();
-    renderMap(); renderShelf(true);
-    openStation(id);
+    renderMap(); renderShelf(true); renderWeek();
+    openStation(id, "dialog");
   }
+
+  const sourceOf = (el) => (el.closest("#shelf") ? "shelf" : el.closest("#week") ? "week" : el.closest("#station-body") ? "dialog" : el.closest("#roster, #top3") ? "contrib" : "hub");
+  const joinTarget = (href) => (/discord/.test(href) ? "discord" : /Project-template/.test(href) ? "template" : /is%3Aissue|is:issue/.test(href) ? "issue" : /pseudo-lab\.com/.test(href) ? "runner" : "other");
 
   function wire() {
     document.addEventListener("click", (e) => {
+      const fa = e.target.closest("#featured a");
+      if (fa) track("click_featured", { repo: fa.dataset.repo || "" });
+      const out = e.target.closest(".pt-out");
+      if (out) track("click_partner", { item: out.closest(".pt-card").querySelector("[data-goto]").dataset.goto, action: "out" });
+      const ja = e.target.closest("#join a, .join-foot a");
+      if (ja) track("click_join", { target: joinTarget(ja.getAttribute("href") || "") });
+      const sa = e.target.closest("#station-body .links a");
+      if (sa && state.openRepo) track("click_outbound", { repo: state.openRepo.repo, kind: state.openRepo.kind === "paid" ? "paid" : /github\.com/.test(sa.href) ? "github" : "site" });
+      if (e.target.closest("[data-quiz-open]")) { openQuiz(); return; }
+      const pick = e.target.closest("[data-quiz-pick]");
+      if (pick) { quizPick(pick.dataset.quizPick); return; }
+      if (e.target.closest("[data-quiz-back]")) { quizBack(); return; }
+      if (e.target.closest("[data-quiz-restart]")) { openQuiz(); return; }
+      const qgo = e.target.closest("[data-quiz-go]");
+      if (qgo) { quizGo(qgo.dataset.quizGo); return; }
+      const card = e.target.closest("[data-card]");
+      if (card) { openCard(card.dataset.card); return; }
+      const dl = e.target.closest("[data-card-save]");
+      if (dl) { saveCard(dl.dataset.cardSave); return; }
       const ride = e.target.closest("[data-ride]");
       if (ride) { toggleRide(ride.dataset.ride); return; }
       if (e.target.closest("[data-close]")) { closeStation(); return; }
       const person = e.target.closest("[data-person]");
-      if (person) { openPerson(person.dataset.person); return; }
+      if (person) { openPerson(person.dataset.person, person.closest("#top3") ? "top3" : person.closest("#people-rail") ? "rail" : person.closest("#roster") ? "roster" : "hub"); return; }
       const go = e.target.closest("[data-goto]");
-      if (go) { gotoItem(go.dataset.goto); return; }
+      if (go) { if (go.closest("#partner-list")) track("click_partner", { item: go.dataset.goto, action: "goto" }); gotoItem(go.dataset.goto); return; }
       const lv = e.target.closest("[data-level]:not(.ep):not(.chap)");
       if (lv && lv.tagName === "BUTTON") { gotoLevel(lv.dataset.level); return; }
       const ch = e.target.closest("[data-chapter]");
@@ -882,7 +1046,7 @@
       const tabLink = e.target.closest('a[href="#contrib"]');
       if (tabLink) { e.preventDefault(); selectTab("tab-contrib"); $("#curriculum").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" }); return; }
       const open = e.target.closest("[data-open]");
-      if (open) { e.preventDefault(); openStation(open.dataset.open); }
+      if (open) { e.preventDefault(); openStation(open.dataset.open, sourceOf(open)); }
     });
     dialog().addEventListener("click", (e) => { if (e.target === dialog()) closeStation(); });
     dialog().addEventListener("close", () => {
@@ -938,6 +1102,7 @@
     renderFeatured(); renderPartner(); renderEvents(); renderArticles();
     if (location.hash === "#contrib") selectTab("tab-contrib");
     openFromHash();
+    if (location.hash === "#start" || new URLSearchParams(location.search).has("quiz")) openQuiz();
     navSpy();
     refreshStars();
   }
