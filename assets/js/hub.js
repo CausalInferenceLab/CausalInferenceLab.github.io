@@ -90,11 +90,11 @@
   function avatarHTML(name, size = "") {
     const b = builderInfo(name);
     const initial = esc((name || "?").slice(0, 1));
-    const img = b.github ? `<img src="https://github.com/${esc(b.github)}.png?size=128" alt="" loading="lazy" data-fallback="${initial}">` : initial;
-    return `<span class="avatar${size ? " " + size : ""}" aria-hidden="true">${img}</span>`;
+    const img = b.github ? `<img src="https://github.com/${esc(b.github)}.png?size=128" alt="" loading="lazy" data-fallback="${initial}">` : "";
+    return `<span class="avatar${size ? " " + size : ""}" aria-hidden="true">${initial}${img}</span>`;
   }
   function wireAvatars(root) {
-    root.querySelectorAll("img[data-fallback]").forEach((img) => img.addEventListener("error", () => { img.parentElement.textContent = img.dataset.fallback; }, { once: true }));
+    root.querySelectorAll("img[data-fallback]").forEach((img) => img.addEventListener("error", () => img.remove(), { once: true }));
   }
   function nameLink(name) {
     const b = builderInfo(name);
@@ -235,7 +235,7 @@
       const items = levelItems(lv.id);
       const free = items.filter((r) => !r.kind);
       const picks = free.slice(0, 2).map((r) => `<span class="pick" data-line="${primaryLine(r)}">${esc(r.title)}</span>`).join("");
-      const paid = items.some((r) => r.kind === "paid") ? `<span class="pick paid">책·강의</span>` : "";
+      const paid = items.some((r) => r.kind === "paid") ? `<span class="pick paid">도서·강의</span>` : "";
       const divider = i === 0 ? `<li class="rung-sep">배우기</li>` : lv.layer === "build" && state.levels[i - 1].layer !== "build" ? `<li class="rung-sep">만들기</li>` : "";
       return `${divider}<li class="rung${lv.layer === "build" ? " build" : ""}" style="--i:${i}">
         <button type="button" data-level="${lv.id}">
@@ -333,7 +333,7 @@
     const learnable = repos.filter((r) => (r.lines || []).length);
     const done = learnable.filter((r) => state.ridden.has(r.repo)).length;
     $("#curriculum-sub").textContent = `팀 레포 ${repos.length}개. 트랙 지도로 전체를 보고, 커리큘럼에서 하나씩 열어 보세요.`;
-    $("#n-course").textContent = repos.length;
+    $("#n-course").textContent = repos.length; $("#n-course").title = `레포 ${repos.length}개`;
     $("#shelf-foot").innerHTML = `${done ? `<span class="done-n">학습 완료 ${done} / ${learnable.length}</span> ` : ""}카드를 누르면 자세한 정보와 링크가 열립니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
     shelf.scrollLeft = keepScroll ? prevLeft : 0;
     shelfSpy();
@@ -473,11 +473,10 @@
 
     $("#top3").innerHTML = list.slice(0, 3).map((p) => {
       const recent = [...p.items].reverse().slice(0, 2);
-      return `<li class="tcard" data-line="${p.line}"><button type="button" data-person="${esc(p.name)}" aria-label="${esc(`Top ${p.rank} ${p.name}, 이력 보기`)}">
+      return `<li class="tcard"><button type="button" data-person="${esc(p.name)}" aria-label="${esc(`Top ${p.rank} ${p.name}, 이력 보기`)}">
         <span class="t-rank" aria-hidden="true">${p.rank}</span>
         <span class="t-head">${avatarHTML(p.name, "lg")}<span><b class="t-name">${esc(p.name)}</b><span class="t-since">${p.first}기부터 Builder · ${p.cohorts.length}개 기수</span></span></span>
         <span class="t-stats"><span><b>${p.projects}</b>프로젝트</span><span><b>${fmt(p.runners)}</b>함께한 러너</span><span><b>${p.repos.size}</b>레포</span></span>
-        ${stripHTML(p, cohorts)}
         <span class="t-recent">${recent.map((i) => `<span>${i.cohort}기 · ${esc(i.name)}</span>`).join("")}</span>
         <span class="t-more">이력 보기</span>
       </button></li>`;
@@ -493,17 +492,17 @@
     };
     $("#people-rail").innerHTML = rest.length ? `<div class="people-move" style="--dur:${rest.length * 6}s"><ul class="people-track">${rest.map((p) => card(p, false)).join("")}</ul><ul class="people-track dup" aria-hidden="true">${rest.map((p) => card(p, true)).join("")}</ul></div>` : "";
 
-    const head = `<div class="ro-head" aria-hidden="true"><span>Builder</span><span class="strip" style="--n:${cohorts.length}">${cohorts.map((c) => `<span class="sh" title="${esc(terms.get(c) || "")}">${c}</span>`).join("")}</span><span>프로젝트</span><span class="tot">러너</span></div>`;
+    const head = `<div class="ro-head" aria-hidden="true"><span>Builder</span><span class="strip" style="--n:${cohorts.length}">${cohorts.map((c) => `<span class="sh" title="${esc(terms.get(c) || "")}">${c}</span>`).join("")}</span><span>최근 프로젝트</span><span class="tot">합계</span></div>`;
     $("#roster").innerHTML = head + `<ol class="ro-list">${list.map((p) => `<li class="ro" data-line="${p.line}">
       <span class="ro-who"><span class="ro-rank">${p.rank}</span>${avatarHTML(p.name, "sm")}<span><button type="button" class="ro-name" data-person="${esc(p.name)}">${esc(p.name)}</button><span class="ro-span">${stripLabel(p)}</span></span></span>
       <span class="ro-strip" aria-label="${esc(`기수별 기여: ${p.cohorts.map((c) => `${c}기`).join(", ")}`)}">${stripHTML(p, cohorts)}</span>
-      <ul class="ro-projects">${p.items.map((i) => `<li><span class="c">${i.cohort}기</span>${i.repo ? `<button type="button" data-open="${esc(i.repo)}" title="${esc(`${i.name} · 레포: ${i.title}`)}">${esc(i.name)}</button>` : i.link ? `<a href="${esc(i.link)}" target="_blank" rel="noopener" title="${esc(i.name)}">${esc(i.name)}</a>` : `<span title="${esc(i.name)}">${esc(i.name)}</span>`}${i.live ? `<span class="live-dot">진행 중</span>` : ""}</li>`).join("")}</ul>
-      <span class="ro-total tot"><b>${fmt(p.runners)}</b><span>프로젝트 ${p.projects}</span></span>
+      <ul class="ro-projects">${p.items.slice(-3).reverse().map((i) => `<li><span class="c">${i.cohort}기</span>${i.repo ? `<button type="button" data-open="${esc(i.repo)}" title="${esc(`${i.name} · 레포: ${i.title}`)}">${esc(i.name)}</button>` : i.link ? `<a href="${esc(i.link)}" target="_blank" rel="noopener" title="${esc(i.name)}">${esc(i.name)}</a>` : `<span title="${esc(i.name)}">${esc(i.name)}</span>`}${i.live ? `<span class="live-dot">진행 중</span>` : ""}</li>`).join("")}${p.items.length > 3 ? `<li><button type="button" class="ro-more" data-person="${esc(p.name)}">이전 프로젝트 ${p.items.length - 3}개 더 보기</button></li>` : ""}</ul>
+      <span class="ro-total tot"><b>러너 ${fmt(p.runners)}명</b><span>프로젝트 ${p.projects}개</span></span>
     </li>`).join("")}</ol>`;
     wireAvatars($("#top3")); wireAvatars($("#people-rail")); wireAvatars($("#roster"));
 
     const contributors = state.stats.totals && state.stats.totals.contributors;
-    $("#n-contrib").textContent = list.length;
+    $("#n-contrib").textContent = list.length; $("#n-contrib").title = `Builder ${list.length}명`;
     $("#contrib-sub").textContent = `Builder ${list.length}명이 ${cohorts.length}개 기수 동안 프로젝트 ${state.projects.length}개를 열었습니다.${contributors ? ` GitHub 기여자는 ${fmt(contributors)}명입니다.` : ""}`;
     $("#roster-legend").innerHTML = `<li><span class="sc on" data-line="main"></span>Builder로 연 기수, 숫자는 함께한 러너 수</li><li><span class="sc ran" data-line="main"></span>러너로 참여한 기수</li><li><span class="sc on live" data-line="main"></span>진행 중</li><li>칸은 왼쪽부터 ${cohorts[0]}기–${cohorts[cohorts.length - 1]}기</li>`;
   }
@@ -521,9 +520,9 @@
     const terms = new Map(state.projects.map((q) => [q.cohort, q.term]));
     const item = (e) => {
       const facts = e.role === "Builder" ? [e.runners ? `러너 ${e.runners}명` : "", e.live ? "진행 중" : ""] : [e.by ? `Builder ${esc(e.by)}` : ""];
-      const go = e.repo ? `<button type="button" data-open="${esc(e.repo)}">레포 · ${esc(e.title)}</button>` : e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">기록 보기</a>` : "";
+      const go = e.repo ? `<button type="button" data-open="${esc(e.repo)}" title="${esc(e.title)}">레포 보기</button>` : e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">기록 보기</a>` : "";
       const note = [...facts.filter(Boolean), go].filter(Boolean).join('<span class="sep" aria-hidden="true">·</span>');
-      return `<li class="${e.role === "Builder" ? "b" : "r"}" data-line="${e.line}"><span class="tl-c"><b>${e.cohort}기</b><span>${esc(shortTerm(terms.get(e.cohort)))}</span></span><span class="tl-body"><span class="tl-role">${e.role}</span><span class="tl-name">${esc(e.name)}</span>${note ? `<span class="tl-note">${note}</span>` : ""}</span></li>`;
+      return `<li class="${e.role === "Builder" ? "b" : "r"}" data-line="${e.line}"><span class="tl-c"><b>${e.cohort}기</b><span>${esc(terms.get(e.cohort) || "")}</span></span><span class="tl-body"><span class="tl-role">${e.role}</span><span class="tl-name">${esc(e.name)}</span>${note ? `<span class="tl-note">${note}</span>` : ""}</span></li>`;
     };
     const repos = [...p.repos].map((id) => state.repos.get(id)).filter(Boolean);
     $("#station-body").innerHTML = `
@@ -592,7 +591,7 @@
 
   function renderLegend() {
     $("#line-legend").innerHTML = state.lineList.map((l) => `<li data-line="${l.id}"><span class="num" aria-hidden="true"></span>${esc(l.name)}</li>`).join("") +
-      `<li><svg width="28" height="6" aria-hidden="true"><path d="M2 3H26" stroke="var(--l-main)" stroke-width="3" stroke-dasharray="5 6" stroke-linecap="round"/></svg>책·강의 (유료)</li>`;
+      `<li><svg width="28" height="6" aria-hidden="true"><path d="M2 3H26" stroke="var(--l-main)" stroke-width="3" stroke-dasharray="5 6" stroke-linecap="round"/></svg>도서·강의 (유료)</li>`;
   }
 
   /* ---------- tabs ---------- */
@@ -630,25 +629,27 @@
     closeStation();
     selectTab("tab-course");
     if (state.route !== "all") setRoute("all");
-    $("#curriculum").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
     const el = $(`#shelf .ep[data-id="${CSS.escape(id)}"]`);
     if (!el) return;
     scrollShelfTo(el, false);
-    el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+    document.querySelectorAll("#shelf .ep.picked").forEach((x) => x.classList.remove("picked", "flash"));
+    el.classList.add("picked");
+    $("#shelf-wrap").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+    /* start the highlight once the page has arrived, so it is seen */
+    setTimeout(() => { el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }, reduceMotion ? 0 : 550);
   }
 
   /* ---------- book and lecture (hero) ---------- */
   function renderPartner() {
     const items = (state.map.paid || []).filter((p) => p.cover);
     $("#partner-list").innerHTML = items.map((p) => {
-      const lv = state.levels.find((l) => l.id === p.level);
       const out = (p.links || [])[0];
       return `<li class="pt-card">
         <button type="button" class="pt-main" data-goto="${esc(p.id)}" aria-label="${esc(`${p.type} ${p.title}, 커리큘럼 ${p.level}에서 보기`)}">
-          <img class="pt-img ${p.type === "도서" ? "book" : "wide"}" src="${esc(p.cover)}" alt="" width="${p.type === "도서" ? 30 : 60}" height="40">
-          <span class="pt-text"><b>${esc(p.title)}</b><span class="pt-lv"><span class="pt-type">${esc(p.type)}</span>커리큘럼 ${esc(p.level)}${lv ? ` ${esc(lv.name)}` : ""}</span></span>
+          <img class="pt-img ${p.type === "도서" ? "book" : "wide"}" src="${esc(p.cover)}" alt="" width="${p.type === "도서" ? 26 : 48}" height="34">
+          <span class="pt-text"><b>${esc(p.shortTitle || p.title)}</b><span class="pt-lv"><span class="pt-type">${esc(p.type)}</span><span class="pt-paid">유료</span>커리큘럼 ${esc(p.level)}에서 보기</span></span>
         </button>
-        ${out ? `<a class="pt-out" href="${esc(out.url)}" target="_blank" rel="noopener" aria-label="${esc(`${p.title} 한빛미디어에서 보기`)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>` : ""}
+        ${out ? `<a class="pt-out" href="${esc(out.url)}" target="_blank" rel="noopener" title="한빛미디어에서 보기" aria-label="${esc(`${p.title} 한빛미디어에서 보기`)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>` : ""}
       </li>`;
     }).join("");
   }
@@ -657,7 +658,7 @@
   function renderFeatured() {
     $("#featured").innerHTML = (state.featured || []).map((f) => {
       const r = f.repo && state.repos.get(f.repo);
-      const stars = r && r.stars ? `<span class="st">${icons.star}${fmt(r.stars)}</span>` : "";
+      const stars = r && r.stars >= 10 ? `<span class="st">${icons.star}${fmt(r.stars)}</span>` : "";
       return `<li><a href="${esc(f.url)}" target="_blank" rel="noopener"${r ? ` data-line="${primaryLine(r)}"` : ""}>
         <span class="tag">${esc(f.tag)}</span>
         <span class="tx"><span class="t">${esc(f.title)}</span>${f.desc ? `<span class="d">${esc(f.desc)}</span>` : ""}</span>

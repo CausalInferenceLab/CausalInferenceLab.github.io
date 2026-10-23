@@ -333,7 +333,8 @@
       "type": "강의",
       "meta": "27강 · 약 8시간",
       "cover": "assets/img/hanbit-lecture.jpg",
-      "credit": "신진수"
+      "credit": "신진수",
+      "shortTitle": "AI 인과추론 실무"
     }
   ]
 }
