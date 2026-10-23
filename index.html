@@ -84,6 +84,10 @@
         <span class="goal-q">무엇을 하고 싶나요?</span>
         <div class="route-chips" role="radiogroup" aria-label="목표 고르기" id="route-chips"></div>
       </div>
+      <div class="start-row">
+        <button type="button" class="start-btn" data-quiz-open><b>잘 모르겠다면</b> 3문항으로 시작점 찾기</button>
+        <a class="start-game" href="game.html">가볍게 몸풀기: 상관일까, 인과일까?</a>
+      </div>
       <p class="route-note" id="route-note" aria-live="polite"></p>
       <div class="tabs big" role="tablist" aria-label="보기 방식">
         <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="true">트랙 지도</button>
@@ -191,6 +195,8 @@
       <li><a href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a></li>
       <li><a href="https://pseudo-lab.com/" target="_blank" rel="noopener">가짜연구소</a></li>
       <li><a href="https://discord.gg/HeHbFAvmSZ" target="_blank" rel="noopener">Discord</a></li>
+      <li><a href="builders/">Builder</a></li>
+      <li><a href="game.html">상관일까, 인과일까?</a></li>
       <li><a href="https://github.com/CausalInferenceLab/CausalInferenceLab.github.io" target="_blank" rel="noopener">이 허브 고치기</a></li>
     </ul>
   </div>
@@ -200,6 +206,7 @@
   <div class="station-inner" id="station-body"></div>
 </dialog>
 
+<script src="assets/js/track.js" defer></script>
 <script src="assets/js/hub.js" defer></script>
 </body>
 </html>
