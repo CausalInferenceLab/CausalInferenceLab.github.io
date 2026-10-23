@@ -14,14 +14,15 @@
 | 파일 | 고치는 경우 |
 | --- | --- |
 | `data/featured.json` | 첫 화면 배너의 대표 오픈소스 링크를 바꿀 때. `repo`를 적으면 스타 수가 함께 나옵니다. |
-| `data/projects.json` | 기수별 프로젝트를 추가할 때. 러너는 인원수(`runners`)만 적습니다. |
-| `data/builders.json` | Builder의 LinkedIn, GitHub 아이디(프로필 사진에 쓰임), 한 줄 소개, Builder가 되기 전 러너로 참여한 프로젝트(`runnerOf`)를 넣을 때 |
+| `data/projects.json` | 기수별 프로젝트를 추가할 때. 러너는 인원수(`runners`)만 적습니다. Builder가 회고를 보내 주면 `"retro": {"why": "…", "learned": "…", "next": "…"}`로 넣습니다. 비어 있으면 화면에 나오지 않습니다. |
+| `data/builders.json` | Builder의 LinkedIn, GitHub 아이디(프로필 사진에 쓰임), 한 줄 소개, Builder가 되기 전 러너로 참여한 프로젝트(`runnerOf`)를 넣을 때. `slug`는 Builder 페이지 주소(`/builders/<slug>.html`)가 되므로 한 번 정하면 바꾸지 않습니다. |
 | `data/growth.json` | 기수별 누적 러너 수. 프로젝트 시트를 xlsx로 내려받아 `python scripts/runners_from_sheet.py 파일.xlsx > data/growth.json`으로 만듭니다. 이름은 파일에 남지 않습니다. |
 | `data/events.json` | Data Forum 같은 행사를 추가할 때 |
 | `data/repos.json` | 레포를 추가하거나 설명·단계·트랙·상태를 바꿀 때 |
 | `data/map.json` | 트랙 지도에서 레포의 위치를 정할 때. 책과 강의(`paid`)의 표지와 소개도 여기서 고칩니다. |
 | `data/routes.json` | 경로 안내 항목을 바꿀 때 |
 | `data/articles.json`, `articles/*.md` | 읽을거리를 추가할 때 |
+| `data/game.json` | ‘상관일까, 인과일까?’ 문항을 고칠 때. `answer`는 `corr` 또는 `cause`이고, 문항마다 웹북 장 링크(`chapter`)를 답니다. |
 | `data/stats.json` | 직접 고치지 않습니다. 매주 GitHub Actions가 스타 추이와 기여자 수를 갱신합니다. |
 
 레포를 추가할 때의 예시입니다.
@@ -42,6 +43,25 @@
 ```
 
 `stars`는 기본값이고, 사이트는 열릴 때 GitHub에서 최신 스타 수와 마지막 커밋 날짜를 불러옵니다.
+
+## Builder 페이지와 배지
+
+`builders/<slug>.html`, `builders/index.html`, `badges/<slug>.svg`는 `scripts/build_builders.py`가 데이터 파일로 만듭니다. 만들어지는 파일이라 커밋하지 않고, 배포할 때 GitHub Actions가 실행합니다. 로컬에서 보려면 먼저 실행하세요.
+
+```bash
+python3 scripts/build_builders.py
+```
+
+링크를 공유할 때 보이는 이미지(`assets/og/builders/<slug>.jpg`)는 따로 만들어 커밋합니다. Builder가 새로 생기거나 숫자가 바뀌면 다시 만들어 주세요. 이미지가 없는 페이지는 허브 기본 이미지를 씁니다.
+
+```bash
+pip install playwright && python -m playwright install chromium
+python3 scripts/builder_cards.py
+```
+
+## 이벤트 측정
+
+`assets/js/track.js`의 `hubTrack(이름, 파라미터)`가 GA4로 이벤트를 보냅니다. GA4가 설치되지 않았으면 아무 일도 하지 않습니다. 이벤트 이름과 파라미터는 PM 문서의 이벤트 사전을 따르고, 새 이벤트를 넣을 때는 사전에도 같이 적습니다. HTML에서는 `data-track="click_join" data-track-params='{"target":"builder"}'`처럼 속성만으로도 보낼 수 있습니다. 로컬에서 확인하려면 콘솔에서 `window.HUB_DEBUG = true`를 켭니다.
 
 ## 로컬에서 보기
 
