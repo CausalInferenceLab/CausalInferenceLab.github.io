@@ -1,116 +1,79 @@
 # Causal Inference Hub
 
-가짜연구소 인과추론팀(CausalInferenceLab)의 허브입니다. 2022년부터 기수마다 Builder와 러너가 함께 만든 인과추론 오픈소스를 L0부터 L4까지 하나의 커리큘럼으로 엮고, [Brave & True 인과추론 번역서](https://causalinferencelab.github.io/Causal-Inference-with-Python/), [Causal Studio](https://causalinferencelab.github.io/causal-studio/), [ccwr](https://github.com/CausalInferenceLab/ccwr) 같은 팀의 사이트로 이어 줍니다.
+**가짜연구소 인과추론팀이 2022년부터 함께 만든 오픈소스와 자료를 L0–L4 커리큘럼으로 엮은 곳입니다.**
 
-다루는 범위는 인과추론에서 시작해 실험, 데이터 에이전트까지, AI 시대에 데이터로 판단하는 힘 전반입니다.
+인과추론에서 시작해 실험, 데이터 에이전트까지, AI 시대에 데이터로 판단하는 힘을 함께 공부하고 만듭니다.
 
 **사이트: https://causalinferencelab.github.io**
 
 ![Causal Inference Hub](assets/img/hub-preview.png)
 
-> **English summary.** This repository is the Causal Inference Hub of the Pseudo-Lab Causal Inference Team. It links to the team's sites (the Korean Brave and True webbook, Causal Studio, the ccwr R package), shows how the team has grown (runners, projects, stars, event attendance) and the Builders who led each project, and groups our repositories into five learning levels and six topic tracks. The site is plain HTML, CSS and JavaScript that reads JSON files in `data/`, so adding a repository or a project is a one-file pull request.
+## 인과추론팀은
 
-## 허브에서 볼 수 있는 것
+[가짜연구소](https://pseudo-lab.com/)는 반기마다 기수를 모집해 함께 공부하고 만드는 AI·데이터 커뮤니티입니다. 인과추론팀은 4기(2022년 상반기)부터 매 기수 프로젝트를 열어 왔습니다. 프로젝트를 여는 사람을 **Builder**, 함께 참여하는 사람을 **러너**라고 부릅니다.
 
-| 위치 | 내용 |
+| 숫자로 보면 | |
 | --- | --- |
-| 첫 화면 | 위쪽 배너 오른쪽에서 대표 오픈소스(웹북, 영상, 데이터 에이전트, 온라인 실험 자료, R 패키지)로 바로 갑니다. 배너 아래쪽 카드는 커리큘럼 L2에 들어 있는 책과 강의로, 누르면 커리큘럼의 해당 위치로 이동합니다. 아래 왼쪽은 함께한 러너(중복 제외), 프로젝트, GitHub 스타, 행사 참가자의 추이, 오른쪽은 L0–L4 커리큘럼 한눈에 보기입니다. |
-| 목표 고르기 | "처음 시작해요", "A/B 테스트를 해요" 같은 목표를 고르면 트랙 지도와 커리큘럼에 볼 순서가 표시됩니다. |
-| 트랙 지도 탭 | 팀 레포를 여섯 개 트랙과 L0–L4 단계 위에 그린 전체 그림입니다. |
-| 커리큘럼 탭 | 매주 월요일 바뀌는 '이번 주의 레포', 최근 업데이트, 최근에 본 레포(이어서 보기)와 L0–L4 챕터별 가로 목록입니다. |
-| 기여 탭 | 프로젝트 수와 러너 수 기준 상위 Builder 3명, 옆으로 흐르는 나머지 Builder 카드, 전체 Builder 표(기수별 기여와 프로젝트)입니다. 이름을 누르면 이력이 열립니다. |
-| 행사 | Data Forum 회차별 참가자 수와 다음 행사입니다. |
+| 함께한 러너 | 100명 이상 (중복 제외) |
+| 기수별 프로젝트 | 23개, Builder 11명 |
+| GitHub 스타 | 1,000개 이상 |
+| Data Forum | 다섯 번째 행사 준비 중, 지금까지 330명 참가 |
 
-러너는 이름 없이 숫자로만 보여 줍니다. 이름은 Builder만 표시합니다.
+## 이런 분께 맞습니다
 
-## 커리큘럼: 다섯 단계
+- **인과추론을 처음 공부한다면:** 영상과 노트북으로 시작해 번역서로 개념을 익히는 길이 있습니다. 여기까지는 모두 무료입니다.
+- **현업에서 A/B 테스트나 효과 분석을 한다면:** 온라인 실험 자료, 산업 사례 템플릿, 현업 특강 자료를 바로 쓸 수 있습니다.
+- **직접 만들고 싶다면:** 데이터 에이전트, 연구용 R 패키지 같은 진행 중인 프로젝트에 기여하고, 다음 기수에 Builder로 프로젝트를 열 수 있습니다.
 
-L0–L2는 **배우는 단계**이고 무료 자료만으로 끝까지 갈 수 있습니다. L3–L4는 **만드는 단계**입니다. 책과 강의는 L2에 유료 자료로 따로 표시합니다.
+## 대표 오픈소스
 
-| 단계 | 질문 | 대표 레포 |
+| 구분 | 이름 | 한 줄 소개 |
 | --- | --- | --- |
-| L0 Foundation | 왜 인과추론인가 | [causal-studio](https://github.com/CausalInferenceLab/causal-studio) |
-| L1 Theory & Concept | 어떻게 추정하나 | [Causal-Inference-with-Python](https://github.com/CausalInferenceLab/Causal-Inference-with-Python), [OCE-Materials](https://github.com/CausalInferenceLab/OCE-Materials) |
-| L2 Application | 내 데이터에 어떻게 쓰나 | [causal-inference-in-python-code](https://github.com/CausalInferenceLab/causal-inference-in-python-code), [causal-inference-practice](https://github.com/CausalInferenceLab/causal-inference-practice), [causal-inference-lecture](https://github.com/CausalInferenceLab/causal-inference-lecture) 외 |
-| L3 Amplification | 분석을 어떻게 키우나 | [Lang2SQL](https://github.com/CausalInferenceLab/Lang2SQL), [policy-effect-analytics-agent](https://github.com/CausalInferenceLab/policy-effect-analytics-agent) |
-| L4 Research | 무엇이 아직 안 풀렸나 | [ccwr](https://github.com/CausalInferenceLab/ccwr), RWE 가이드라인·적응형 설계 스터디 |
+| 웹북 | [Brave & True 인과추론 번역서](https://causalinferencelab.github.io/Causal-Inference-with-Python/) | 『Causal Inference for The Brave and True』 원서 25장과 부록을 모두 옮긴 웹북 |
+| 영상 | [Causal Studio](https://causalinferencelab.github.io/causal-studio/) | 영상과 노트북으로 여는 인과추론 입문 |
+| 에이전트 | [Lang2SQL](https://github.com/CausalInferenceLab/Lang2SQL) | 사람과 대화하며 함께 분석하는 데이터 에이전트 |
+| 강의 자료 | [온라인 실험 이해하기](https://github.com/CausalInferenceLab/OCE-Materials) | A/B 테스트와 온라인 통제 실험 스터디 자료 |
+| R 패키지 | [ccwr](https://github.com/CausalInferenceLab/ccwr) | Clone-censor-weight 방식의 target trial emulation 패키지 |
 
-## 여섯 개의 트랙
+팀 레포 전체는 허브의 트랙 지도와 커리큘럼 탭에서 볼 수 있습니다.
 
-| 트랙 | 다루는 것 |
-| --- | --- |
-| 입문·기본 | 입문 영상에서 번역서, 책 코드, 산업 사례 템플릿, 정책 효과 분석까지 |
-| ML | 이질적 처치효과와 메타러너, 외부 라이브러리 기여 |
-| 연구 | Real-World Evidence, 적응형 임상 설계, target trial emulation |
-| 실험 | 온라인 통제 실험과 실험 플랫폼 |
-| 행동·마케팅 | 현업 특강, 마케팅 사이언스, 행동 데이터 리딩 살롱 |
-| AI 에이전트 | 사람과 협업하는 데이터 에이전트 |
+## 커리큘럼: L0–L4
 
-## 레포의 상태
+L0–L2는 **배우는 단계**로, 무료 자료만으로 끝까지 갈 수 있습니다. L3–L4는 **만드는 단계**입니다.
 
-| 상태 | 기준 |
-| --- | --- |
-| 진행 중 | 이번 기수에 진행 중인 프로젝트 |
-| 최근 업데이트 | 올해 코드나 내용이 갱신된 레포 |
-| 완결 | 내용이 마무리되어 오류 수정 위주로 관리하는 레포 |
-| 운영·보관 | 허브 운영(이 레포, 프로젝트 템플릿)과 보관용 레포 |
+| 단계 | 질문 | 대표 자료 |
+| --- | --- | --- |
+| L0 Foundation | 왜 인과추론인가 | [Causal Studio](https://github.com/CausalInferenceLab/causal-studio) |
+| L1 Theory & Concept | 어떻게 추정하나 | [Brave & True 인과추론 번역서](https://github.com/CausalInferenceLab/Causal-Inference-with-Python), [온라인 실험 이해하기](https://github.com/CausalInferenceLab/OCE-Materials) |
+| L2 Application | 내 데이터에 어떻게 쓰나 | [책 예제 코드](https://github.com/CausalInferenceLab/causal-inference-in-python-code), [산업 사례 템플릿](https://github.com/CausalInferenceLab/causal-inference-practice), [특강·발표 자료](https://github.com/CausalInferenceLab/causal-inference-lecture) 외 |
+| L3 Amplification | 분석을 어떻게 키우나 | [Lang2SQL](https://github.com/CausalInferenceLab/Lang2SQL), [정책 효과 분석 에이전트](https://github.com/CausalInferenceLab/policy-effect-analytics-agent) |
+| L4 Research | 무엇이 아직 안 풀렸나 | [ccwr](https://github.com/CausalInferenceLab/ccwr), RWE 가이드라인·적응형 설계 스터디, 외부 오픈소스 기여 |
+
+자료는 주제에 따라 여섯 트랙(입문·기본, ML, 연구, 실험, 행동·마케팅, AI 에이전트)으로도 나뉩니다. 허브에서 "처음 시작해요", "A/B 테스트를 해요" 같은 목표를 고르면 볼 순서를 안내합니다.
+
+## 한빛미디어와 함께
+
+팀이 번역한 『[실무로 통하는 인과추론 with 파이썬](https://www.hanbit.co.kr/store/books/look.php?p_code=B6208936856)』(한빛미디어, 2024)과 그 내용을 실무로 잇는 온라인 강의 「[데이터 실무자의 사고력 강화: AI 인과추론 실무](https://www.hanbit.co.kr/product/C0781073345)」가 커리큘럼 L2에 들어 있습니다. 책의 장별 예제 코드와 발표 자료는 무료 레포로 공개되어 있습니다.
+
+## 행사: Data Forum
+
+현업과 학계가 만나는 Data Forum을 2024년부터 열고 있습니다. 회차별 내용과 다음 행사 일정은 허브의 행사 섹션에 있습니다.
 
 ## 참여하는 방법
 
-1. **러너로 참여**: 가짜연구소 기수 모집 때 인과추론팀 프로젝트에 러너로 참여합니다.
-2. **첫 기여**: 진행 중인 레포의 이슈를 보고 PR을 보냅니다. 오탈자 하나, 예제 하나도 기여입니다.
-3. **Builder로 프로젝트 열기**: 다음 기수에 프로젝트를 열고, [Project-template](https://github.com/CausalInferenceLab/Project-template)으로 레포를 만든 뒤 이 허브에 추가합니다.
+1. **러너로 참여:** 가짜연구소 기수 모집 때 인과추론팀 프로젝트에 러너로 들어와 14주 동안 함께 공부하고 만듭니다.
+2. **첫 기여:** 진행 중인 레포의 [열린 이슈](https://github.com/search?q=org%3ACausalInferenceLab+is%3Aissue+is%3Aopen&type=issues)를 보고 PR을 보냅니다. 오탈자 하나, 예제 하나도 기여입니다.
+3. **Builder로 프로젝트 열기:** 다음 기수에 직접 프로젝트를 엽니다. 레포는 [Project-template](https://github.com/CausalInferenceLab/Project-template)으로 시작합니다.
 
 질문은 [가짜연구소 디스코드](https://discord.gg/HeHbFAvmSZ)에 남겨 주세요.
 
-## 허브에 내용 더하기
+## English summary
 
-사이트는 빌드 도구 없이 `data/` 폴더의 JSON 파일을 읽어 그립니다. 대부분의 수정은 파일 하나를 고치는 PR이면 됩니다.
+The Causal Inference Hub gathers the open-source work of the Pseudo-Lab Causal Inference Team since 2022 into one L0–L4 curriculum: from a video primer and the Korean edition of *Causal Inference for The Brave and True*, through applied templates and online-experiment materials, to a data agent (Lang2SQL) and a research R package (ccwr). Each cohort, Builders open projects and runners join them; the hub shows those projects, the people who led them, and how to take part.
 
-| 파일 | 고치는 경우 |
-| --- | --- |
-| `data/featured.json` | 첫 화면 배너의 대표 오픈소스 링크를 바꿀 때. `repo`를 적으면 스타 수가 함께 나옵니다. |
-| `data/projects.json` | 기수별 프로젝트를 추가할 때. 러너는 인원수(`runners`)만 적습니다. |
-| `data/builders.json` | Builder의 LinkedIn, GitHub 아이디(프로필 사진에 쓰임), 한 줄 소개, Builder가 되기 전 러너로 참여한 프로젝트(`runnerOf`)를 넣을 때 |
-| `data/growth.json` | 기수별 누적 러너 수. 프로젝트 시트를 xlsx로 내려받아 `python scripts/runners_from_sheet.py 파일.xlsx > data/growth.json`으로 만듭니다. 이름은 파일에 남지 않습니다. |
-| `data/events.json` | Data Forum 같은 행사를 추가할 때 |
-| `data/repos.json` | 레포를 추가하거나 설명·단계·트랙·상태를 바꿀 때 |
-| `data/map.json` | 트랙 지도에서 레포의 위치를 정할 때. 책과 강의(`paid`)의 표지와 소개도 여기서 고칩니다. |
-| `data/routes.json` | 경로 안내 항목을 바꿀 때 |
-| `data/articles.json`, `articles/*.md` | 읽을거리를 추가할 때 |
-| `data/stats.json` | 직접 고치지 않습니다. 매주 GitHub Actions가 스타 추이와 기여자 수를 갱신합니다. |
+## 허브를 고치려면
 
-레포를 추가할 때의 예시입니다.
-
-```json
-{
-  "repo": "new-repo-name",
-  "title": "허브에 보일 이름",
-  "summary": "한두 문장 소개",
-  "level": "L2",
-  "lines": ["main"],
-  "status": "running",
-  "builders": ["Builder 이름"],
-  "cohorts": [13],
-  "site": "https://causalinferencelab.github.io/new-repo-name/",
-  "stars": 0
-}
-```
-
-`stars`는 기본값이고, 사이트는 열릴 때 GitHub에서 최신 스타 수와 마지막 커밋 날짜를 불러옵니다.
-
-## 로컬에서 보기
-
-```bash
-python3 -m http.server 8000
-# http://localhost:8000
-```
-
-JSON을 `fetch`로 읽기 때문에 파일을 더블클릭해서 열면 데이터가 보이지 않습니다.
-
-## 배포
-
-`main`에 머지되면 GitHub Actions가 JSON 문법을 검사한 뒤 사이트 파일을 `gh-pages` 브랜치로 배포합니다 (`.github/workflows/deploy.yml`). 같은 워크플로가 매주 월요일 `scripts/update_stats.py`로 스타의 월별 추이, 기여자 수, 레포별 마지막 커밋 날짜를 모아 `data/stats.json`에 반영한 뒤 다시 배포합니다. 머지 직후 Actions 탭에서 "Run workflow"를 한 번 누르면 바로 채워집니다.
+허브는 `data/` 폴더의 JSON 파일을 읽어 그리는 정적 사이트입니다. 레포나 프로젝트를 더하는 방법, 로컬에서 보는 법, 배포 방식은 [CONTRIBUTING.md](CONTRIBUTING.md)에 있습니다.
 
 ## 라이선스
 
