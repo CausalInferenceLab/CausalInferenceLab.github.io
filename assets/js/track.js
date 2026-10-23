@@ -21,13 +21,13 @@
       t.remove(); return ok;
     }
   };
-  /* Any element with data-track sends that event on click; data-track-params holds flat JSON. */
+  /* Any element with data-event sends that event on click; data-event-params holds flat JSON. */
   document.addEventListener("click", (e) => {
-    const el = e.target.closest("[data-track]");
+    const el = e.target.closest("[data-event]");
     if (!el) return;
     let params = {};
-    try { params = JSON.parse(el.dataset.trackParams || "{}"); } catch (err) { params = {}; }
-    window.hubTrack(el.dataset.track, params);
+    try { params = JSON.parse(el.dataset.eventParams || "{}"); } catch (err) { params = {}; }
+    window.hubTrack(el.dataset.event, params);
   });
   /* Buttons with data-copy copy their value and confirm in place. */
   document.addEventListener("click", async (e) => {
