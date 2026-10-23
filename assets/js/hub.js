@@ -285,11 +285,12 @@
     const lv = state.levels.find((x) => x.id === level);
     return `<li class="ep${step ? " on" : ""}" data-line="${line}" data-id="${esc(id)}" data-level="${level}"${step ? ` data-chap="${esc(id)}"` : ""}>
       <button type="button" data-open="${esc(id)}" aria-label="${step ? `${step}번째, ` : ""}${esc(r.title)}${lv ? `, ${lv.id} ${esc(lv.name)}` : ""}">
-        <span class="ep-cover">
+        <span class="ep-cover${r.cover ? " has-art" : ""}">
+          ${r.cover ? `<img class="ep-art ${r.type === "도서" ? "book" : "wide"}" src="${esc(r.cover)}" alt="" loading="lazy">` : ""}
           <span class="ep-no">${step ? `${level} ${lv ? esc(lv.name) : ""}` : `${level} · ${pad2(k + 1)}`}</span>
           <span class="ep-step" aria-hidden="true">${step ? pad2(step) : ""}</span>
           <span class="ep-badges">${badges}</span>
-          <span class="ep-repo">${r.kind ? esc(r.title) : esc(id)}</span>
+          <span class="ep-repo">${r.kind === "paid" ? esc(r.meta || "") : r.kind ? esc(r.title) : esc(id)}</span>
           ${state.ridden.has(id) ? `<span class="ep-done" aria-label="학습 완료">✓</span>` : ""}
         </span>
         <span class="ep-body">
@@ -409,80 +410,138 @@
     });
   }
 
-  /* ---------- contribution matrix ---------- */
+  /* ---------- contribution: Builder stats, top 3, rail, roster ---------- */
   const shortTerm = (t) => (t || "").replace(/^20(\d\d) /, "$1 ").replace("상반기", "상").replace("하반기", "하");
+  const span = (list) => (list.length ? (list[0] === list[list.length - 1] ? `${list[0]}기` : `${list[0]}–${list[list.length - 1]}기`) : "");
 
-  function renderMatrix() {
+  function builderStats() {
     const cur = currentCohort();
-    const cohorts = [...new Set(state.projects.map((p) => p.cohort))].sort((a, b) => a - b);
-    const terms = new Map(state.projects.map((p) => [p.cohort, p.term]));
-    const cells = new Map();
     const people = new Map();
-    const put = (name, cohort, item) => {
-      if (!name) return;
-      if (!people.has(name)) people.set(name, { name, projects: 0, runners: 0, first: 99, line: null, latest: null, latestCohort: -1 });
-      const p = people.get(name);
-      p.projects += 1; p.runners += item.runners || 0; p.first = Math.min(p.first, cohort);
-      if (!p.line && item.line !== "none") p.line = item.line;
-      if (cohort >= p.latestCohort) { p.latestCohort = cohort; p.latest = item; }
-      const key = name + "|" + cohort;
-      if (!cells.has(key)) cells.set(key, []);
-      cells.get(key).push(item);
+    const get = (name) => {
+      if (!people.has(name)) people.set(name, { name, items: [], runnerOf: [], repos: new Set(), line: null });
+      return people.get(name);
     };
     state.projects.forEach((p) => {
+      if (!p.builder) return;
       const r = p.repo && state.repos.get(p.repo);
-      put(p.builder, p.cohort, { name: p.name, runners: p.runners, repo: r ? r.repo : null, link: p.link, line: r ? primaryLine(r) : "none" });
+      get(p.builder).items.push({ cohort: p.cohort, term: p.term, name: p.name, runners: p.runners, repo: r ? r.repo : null, title: r ? r.title : null, link: p.link, line: r ? primaryLine(r) : "none" });
     });
     state.repos.forEach((r) => {
+      if (r.kind) return;
+      (r.builders || []).forEach((b) => get(b).repos.add(r.repo));
       if (r.status !== "running" || state.projects.some((p) => p.repo === r.repo)) return;
-      (r.builders || []).forEach((b) => put(b, cur, { name: r.title, runners: null, repo: r.repo, line: primaryLine(r), live: true }));
+      (r.builders || []).forEach((b) => get(b).items.push({ cohort: cur, term: "", name: r.title, runners: null, repo: r.repo, title: r.title, line: primaryLine(r), live: true }));
     });
-    const maxR = Math.max(...state.projects.map((p) => p.runners || 0)) || 1;
-    const totals = new Map(cohorts.map((c) => [c, state.projects.filter((p) => p.cohort === c).reduce((s, p) => s + (p.runners || 0), 0)]));
-    const maxT = Math.max(...totals.values()) || 1;
-    const rows = [...people.values()].sort((a, b) => a.first - b.first || b.projects - a.projects || a.name.localeCompare(b.name, "ko"));
-    renderPeople([...rows].sort((a, b) => b.latestCohort - a.latestCohort || b.projects - a.projects));
+    state.builders.forEach((b) => { if (people.has(b.name)) people.get(b.name).runnerOf = (b.runnerOf || []).slice(); });
+    const list = [...people.values()].map((p) => {
+      p.items.sort((x, y) => x.cohort - y.cohort);
+      p.cohorts = [...new Set(p.items.map((i) => i.cohort))];
+      p.projects = p.items.length;
+      p.runners = p.items.reduce((s, i) => s + (i.runners || 0), 0);
+      p.first = p.cohorts[0];
+      p.line = (p.items.find((i) => i.line !== "none") || {}).line || "main";
+      p.byCohort = new Map(p.cohorts.map((c) => [c, p.items.filter((i) => i.cohort === c)]));
+      return p;
+    });
+    list.sort((x, y) => y.projects - x.projects || y.runners - x.runners || x.first - y.first || x.name.localeCompare(y.name, "ko"));
+    list.forEach((p, i) => { p.rank = i + 1; });
+    return list;
+  }
 
-    const head = `<thead><tr><th scope="col" class="corner">Builder</th>${cohorts.map((c) => `<th scope="col" class="${c === cur ? "cur" : ""}"><b>${c}기</b><span>${esc(shortTerm(terms.get(c)))}</span></th>`).join("")}</tr>
-      <tr class="totals"><th scope="row">기수별 러너</th>${cohorts.map((c) => { const t = totals.get(c); return `<td class="${c === cur ? "cur" : ""}"><span class="tb" aria-hidden="true"><i style="height:${Math.max(6, Math.round((t / maxT) * 100))}%"></i></span><span class="tn">${t ? t : "집계 중"}</span></td>`; }).join("")}</tr></thead>`;
-    const body = `<tbody>${rows.map((p) => `<tr><th scope="row"><span class="mp" data-line="${p.line || "main"}">${avatarHTML(p.name, "sm")}<span><span class="mn">${nameLink(p.name)}</span><span class="ms">프로젝트 ${p.projects} · 러너 ${fmt(p.runners)}</span></span></span></th>${cohorts.map((c) => {
-      const list = cells.get(p.name + "|" + c) || [];
-      return `<td class="${c === cur ? "cur" : ""}">${list.map((it) => {
-        const alpha = it.runners ? (0.38 + 0.62 * (it.runners / maxR)).toFixed(2) : 1;
-        const label = `${c}기 ${it.name}${it.runners ? `, 러너 ${it.runners}명` : ""}${it.live ? ", 진행 중" : ""}`;
-        const inner = it.runners ? it.runners : "";
-        const attrs = `class="cell${it.live ? " live" : ""}${alpha >= 0.62 ? " hi" : ""}" data-line="${it.line}" style="--a:${alpha}" title="${esc(label)}" aria-label="${esc(label)}"`;
-        return it.repo ? `<button type="button" ${attrs} data-open="${esc(it.repo)}">${inner}</button>`
-          : it.link ? `<a ${attrs} href="${esc(it.link)}" target="_blank" rel="noopener">${inner}</a>` : `<span ${attrs}>${inner}</span>`;
-      }).join("")}</td>`;
-    }).join("")}</tr>`).join("")}</tbody>`;
-    $("#matrix").innerHTML = `<caption class="sr">Builder별 기수 기여표. 칸 하나가 프로젝트 하나이고 숫자는 함께한 러너 수입니다.</caption>${head}${body}`;
-    wireAvatars($("#matrix"));
+  /* One cell per cohort: filled = Builder that cohort (number = runners), ring = joined as a runner. */
+  function stripHTML(p, cohorts) {
+    const ranAs = new Set(p.runnerOf.map((x) => x.cohort));
+    return `<span class="strip" style="--n:${cohorts.length}">${cohorts.map((c) => {
+      const its = p.byCohort.get(c);
+      if (its) {
+        const n = its.reduce((s, i) => s + (i.runners || 0), 0);
+        const live = its.some((i) => i.live);
+        const label = `${c}기 Builder: ${its.map((i) => i.title || i.name).join(", ")}${n ? `, 러너 ${n}명` : ""}${live ? ", 진행 중" : ""}`;
+        return `<span class="sc on${live ? " live" : ""}" data-line="${its[0].line}" title="${esc(label)}">${n || ""}</span>`;
+      }
+      if (ranAs.has(c)) return `<span class="sc ran" title="${esc(`${c}기 러너로 참여`)}"></span>`;
+      return `<span class="sc"></span>`;
+    }).join("")}</span>`;
+  }
+
+  function renderContrib() {
+    const list = builderStats();
+    state.people = list;
+    const cohorts = [...new Set(state.projects.map((p) => p.cohort))].sort((a, b) => a - b);
+    const terms = new Map(state.projects.map((p) => [p.cohort, p.term]));
+    const stripLabel = (p) => `${span(p.cohorts)}${p.cohorts.length > 1 ? ` 중 ${p.cohorts.length}개 기수` : ""}`;
+
+    $("#top3").innerHTML = list.slice(0, 3).map((p) => {
+      const recent = [...p.items].reverse().slice(0, 2);
+      return `<li class="tcard" data-line="${p.line}"><button type="button" data-person="${esc(p.name)}" aria-label="${esc(`기여 ${p.rank}위 ${p.name}, 이력 보기`)}">
+        <span class="t-rank" aria-hidden="true">${p.rank}</span>
+        <span class="t-head">${avatarHTML(p.name, "lg")}<span><b class="t-name">${esc(p.name)}</b><span class="t-since">${p.first}기부터 Builder · ${p.cohorts.length}개 기수</span></span></span>
+        <span class="t-stats"><span><b>${p.projects}</b>프로젝트</span><span><b>${fmt(p.runners)}</b>함께한 러너</span><span><b>${p.repos.size}</b>레포</span></span>
+        ${stripHTML(p, cohorts)}
+        <span class="t-recent">${recent.map((i) => `<span>${i.cohort}기 · ${esc(i.name)}</span>`).join("")}</span>
+        <span class="t-more">이력 보기</span>
+      </button></li>`;
+    }).join("");
+
+    const rest = list.slice(3);
+    const card = (p, copy) => {
+      const latest = p.items[p.items.length - 1];
+      return `<li class="pcard" data-line="${p.line}"><button type="button" data-person="${esc(p.name)}"${copy ? ' tabindex="-1"' : ""}>${avatarHTML(p.name, "lg")}
+        <span class="pc-body"><b class="pc-name">${esc(p.name)}</b><span class="pc-since">${p.first}기부터 Builder</span>
+          <span class="pc-stats">프로젝트 <b>${p.projects}</b> · 러너 <b>${fmt(p.runners)}</b></span>
+          ${latest ? `<span class="pc-latest">최근 · ${esc(latest.name)}</span>` : ""}</span></button></li>`;
+    };
+    $("#people-rail").innerHTML = rest.length ? `<div class="people-move" style="--dur:${rest.length * 6}s"><ul class="people-track">${rest.map((p) => card(p, false)).join("")}</ul><ul class="people-track dup" aria-hidden="true">${rest.map((p) => card(p, true)).join("")}</ul></div>` : "";
+
+    const head = `<div class="ro-head" aria-hidden="true"><span>Builder</span><span class="strip" style="--n:${cohorts.length}">${cohorts.map((c) => `<span class="sh" title="${esc(terms.get(c) || "")}">${c}</span>`).join("")}</span><span>프로젝트</span><span class="tot">러너</span></div>`;
+    $("#roster").innerHTML = head + `<ol class="ro-list">${list.map((p) => `<li class="ro" data-line="${p.line}">
+      <span class="ro-who"><span class="ro-rank">${p.rank}</span>${avatarHTML(p.name, "sm")}<span><button type="button" class="ro-name" data-person="${esc(p.name)}">${esc(p.name)}</button><span class="ro-span">${stripLabel(p)}</span></span></span>
+      <span class="ro-strip" aria-label="${esc(`기수별 기여: ${p.cohorts.map((c) => `${c}기`).join(", ")}`)}">${stripHTML(p, cohorts)}</span>
+      <ul class="ro-projects">${p.items.map((i) => `<li><span class="c">${i.cohort}기</span>${i.repo ? `<button type="button" data-open="${esc(i.repo)}" title="${esc(`${i.name} · 레포: ${i.title}`)}">${esc(i.name)}</button>` : i.link ? `<a href="${esc(i.link)}" target="_blank" rel="noopener" title="${esc(i.name)}">${esc(i.name)}</a>` : `<span title="${esc(i.name)}">${esc(i.name)}</span>`}${i.live ? `<span class="live-dot">진행 중</span>` : ""}</li>`).join("")}</ul>
+      <span class="ro-total tot"><b>${fmt(p.runners)}</b><span>프로젝트 ${p.projects}</span></span>
+    </li>`).join("")}</ol>`;
+    wireAvatars($("#top3")); wireAvatars($("#people-rail")); wireAvatars($("#roster"));
 
     const contributors = state.stats.totals && state.stats.totals.contributors;
-    $("#n-contrib").textContent = rows.length;
-    $("#contrib-sub").textContent = `Builder ${rows.length}명이 ${cohorts.length}개 기수 동안 프로젝트 ${state.projects.length}개를 열었습니다. 칸 하나가 프로젝트 하나이고, 숫자는 함께한 러너 수입니다.${contributors ? ` GitHub 기여자는 ${fmt(contributors)}명입니다.` : ""}`;
-    $("#matrix-legend").innerHTML = state.lineList.map((l) => `<li data-line="${l.id}"><span class="sw" aria-hidden="true"></span>${esc(l.name)}</li>`).join("") +
-      `<li data-line="none"><span class="sw" aria-hidden="true"></span>팀 레포 밖에서 진행</li><li><span class="sw live" aria-hidden="true"></span>진행 중</li><li>진할수록 러너가 많습니다</li>`;
-    matrixToEnd();
+    $("#n-contrib").textContent = list.length;
+    $("#contrib-sub").textContent = `Builder ${list.length}명이 ${cohorts.length}개 기수 동안 프로젝트 ${state.projects.length}개를 열었습니다.${contributors ? ` GitHub 기여자는 ${fmt(contributors)}명입니다.` : ""}`;
+    $("#roster-legend").innerHTML = `<li><span class="sc on" data-line="main"></span>Builder로 연 기수, 숫자는 함께한 러너 수</li><li><span class="sc ran" data-line="main"></span>러너로 참여한 기수</li><li><span class="sc on live" data-line="main"></span>진행 중</li><li>칸은 왼쪽부터 ${cohorts[0]}기–${cohorts[cohorts.length - 1]}기</li>`;
   }
-  function matrixToEnd() { requestAnimationFrame(() => { const sc = $(".matrix-scroll"); sc.scrollLeft = sc.scrollWidth; }); }
 
-
-  /* ---------- Builder rail (contribution tab) ---------- */
-  function renderPeople(list) {
-    const card = (p, copy) => {
-      const info = builderInfo(p.name);
-      const name = info.linkedin ? `<a href="${esc(info.linkedin)}" target="_blank" rel="noopener"${copy ? ' tabindex="-1"' : ""}>${esc(p.name)}</a>` : esc(p.name);
-      const latest = p.latest ? (p.latest.repo && state.repos.get(p.latest.repo) ? state.repos.get(p.latest.repo).title : p.latest.name) : "";
-      return `<li class="pcard" data-line="${p.line || "main"}">${avatarHTML(p.name, "lg")}
-        <div class="pc-body"><b class="pc-name">${name}</b><span class="pc-since">${p.first}기부터 Builder</span>
-          ${info.intro ? `<p class="pc-intro">${esc(info.intro)}</p>` : ""}
-          <span class="pc-stats">프로젝트 <b>${p.projects}</b> · 러너 <b>${fmt(p.runners)}</b></span>
-          ${latest ? `<span class="pc-latest">최근 · ${esc(latest)}</span>` : ""}</div></li>`;
+  function openPerson(name) {
+    const p = (state.people || []).find((x) => x.name === name);
+    if (!p) return;
+    const info = builderInfo(name);
+    const runnerItems = p.runnerOf.map((x) => {
+      const proj = state.projects.find((q) => q.cohort === x.cohort && q.name === x.project);
+      const r = proj && proj.repo && state.repos.get(proj.repo);
+      return { cohort: x.cohort, role: "러너", name: x.project, title: r ? r.title : null, repo: r ? r.repo : null, link: proj && proj.link, by: proj && proj.builder, line: r ? primaryLine(r) : "none" };
+    });
+    const events = [...p.items.map((i) => ({ ...i, role: "Builder" })), ...runnerItems].sort((a, b) => b.cohort - a.cohort || (a.role === "Builder" ? -1 : 1));
+    const terms = new Map(state.projects.map((q) => [q.cohort, q.term]));
+    const item = (e) => {
+      const facts = e.role === "Builder" ? [e.runners ? `러너 ${e.runners}명` : "", e.live ? "진행 중" : ""] : [e.by ? `Builder ${esc(e.by)}` : ""];
+      const go = e.repo ? `<button type="button" data-open="${esc(e.repo)}">레포 · ${esc(e.title)}</button>` : e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">기록 보기</a>` : "";
+      const note = [...facts.filter(Boolean), go].filter(Boolean).join('<span class="sep" aria-hidden="true">·</span>');
+      return `<li class="${e.role === "Builder" ? "b" : "r"}" data-line="${e.line}"><span class="tl-c"><b>${e.cohort}기</b><span>${esc(shortTerm(terms.get(e.cohort)))}</span></span><span class="tl-body"><span class="tl-role">${e.role}</span><span class="tl-name">${esc(e.name)}</span>${note ? `<span class="tl-note">${note}</span>` : ""}</span></li>`;
     };
-    $("#people-rail").innerHTML = `<div class="people-move" style="--dur:${list.length * 6}s"><ul class="people-track">${list.map((p) => card(p, false)).join("")}</ul><ul class="people-track dup" aria-hidden="true">${list.map((p) => card(p, true)).join("")}</ul></div>`;
-    wireAvatars($("#people-rail"));
+    const repos = [...p.repos].map((id) => state.repos.get(id)).filter(Boolean);
+    $("#station-body").innerHTML = `
+      <div class="station-band" data-line="${p.line}"></div>
+      <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
+      <div class="station-content person" data-line="${p.line}">
+        <div class="tags"><span class="rank-tag">기여 ${p.rank}위</span><span class="tag-line" data-line="${p.line}"><span class="num" aria-hidden="true"></span>${p.first}기부터 Builder</span></div>
+        <div class="p-head">${avatarHTML(p.name, "lg")}<div><h2 id="station-title">${esc(p.name)}</h2>${info.linkedin ? `<a href="${esc(info.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ""}</div></div>
+        ${info.intro ? `<p>${esc(info.intro)}</p>` : ""}
+        <ul class="p-stats"><li><b>${p.projects}</b>프로젝트</li><li><b>${p.cohorts.length}</b>기수</li><li><b>${fmt(p.runners)}</b>함께한 러너</li><li><b>${repos.length}</b>레포</li></ul>
+        <h3 class="p-h">이력</h3>
+        <ol class="p-timeline">${events.map(item).join("")}</ol>
+        ${repos.length ? `<h3 class="p-h">관련 레포</h3><div class="p-repos">${repos.map((r) => `<button type="button" data-open="${esc(r.repo)}" data-line="${primaryLine(r)}"><span class="num" aria-hidden="true"></span>${esc(r.title)}</button>`).join("")}</div>` : ""}
+      </div>`;
+    wireAvatars($("#station-body"));
+    const d = dialog();
+    if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
+    $("#station-body .station-close").focus();
   }
 
   /* ---------- this week (curriculum tab) ---------- */
@@ -545,7 +604,6 @@
       $("#" + x.getAttribute("aria-controls")).hidden = !on;
     });
     if (id === "tab-course") shelfSpy();
-    if (id === "tab-contrib") matrixToEnd();
     paintNav();
   }
   function wireTabs() {
@@ -565,6 +623,34 @@
     if (state.route !== "all") setRoute("all");
     $("#curriculum").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
     scrollShelfTo($(`#shelf [data-chap="${levelId}"]`), false);
+  }
+
+  /* Jump to one card on the curriculum shelf and mark it briefly. */
+  function gotoItem(id) {
+    closeStation();
+    selectTab("tab-course");
+    if (state.route !== "all") setRoute("all");
+    $("#curriculum").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    const el = $(`#shelf .ep[data-id="${CSS.escape(id)}"]`);
+    if (!el) return;
+    scrollShelfTo(el, false);
+    el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+  }
+
+  /* ---------- book and lecture (hero) ---------- */
+  function renderPartner() {
+    const items = (state.map.paid || []).filter((p) => p.cover);
+    $("#partner-list").innerHTML = items.map((p) => {
+      const lv = state.levels.find((l) => l.id === p.level);
+      const out = (p.links || [])[0];
+      return `<li class="pt-card">
+        <button type="button" class="pt-main" data-goto="${esc(p.id)}" aria-label="${esc(`${p.type} ${p.title}, 커리큘럼 ${p.level}에서 보기`)}">
+          <img class="pt-img ${p.type === "도서" ? "book" : "wide"}" src="${esc(p.cover)}" alt="" width="${p.type === "도서" ? 44 : 84}" height="${p.type === "도서" ? 56 : 56}">
+          <span class="pt-text"><span class="pt-type">${esc(p.type)}</span><b>${esc(p.title)}</b><span class="pt-lv">커리큘럼 ${esc(p.level)}${lv ? ` ${esc(lv.name)}` : ""}</span></span>
+        </button>
+        ${out ? `<a class="pt-out" href="${esc(out.url)}" target="_blank" rel="noopener" aria-label="${esc(`${p.title} 한빛미디어에서 보기`)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>` : ""}
+      </li>`;
+    }).join("");
   }
 
   /* ---------- featured sites (hero) ---------- */
@@ -698,6 +784,8 @@
     const builders = (r.builders || []).map(nameLink).join(", ");
     const rows = [
       lv ? `<dt>단계</dt><dd>${lv.id} ${esc(lv.name)}: ${esc(lv.question)}</dd>` : "",
+      r.kind === "paid" && r.type ? `<dt>형태</dt><dd>${esc(r.type)} · ${esc(r.meta || "")} · 한빛미디어</dd>` : "",
+      r.kind === "paid" && r.credit ? `<dt>${r.type === "강의" ? "강사" : "만든 사람"}</dt><dd>${esc(r.credit)}</dd>` : "",
       builders ? `<dt>Builder</dt><dd>${builders}</dd>` : "",
       r.cohorts && r.cohorts.length ? `<dt>기수</dt><dd>${r.cohorts.join("·")}기</dd>` : "",
       statusText[r.status] ? `<dt>상태</dt><dd>${statusText[r.status]}</dd>` : "",
@@ -725,11 +813,12 @@
       <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
       <div class="station-content" data-line="${line}">
         <div class="tags">${lineTags}${extraTag}</div>
+        ${r.cover ? `<img class="station-art ${r.type === "도서" ? "book" : "wide"}" src="${esc(r.cover)}" alt="">` : ""}
         <h2 id="station-title">${esc(r.title)}</h2>
         ${r.kind ? "" : `<span class="repo">${ORG}/${esc(r.repo)}</span>`}
         <p>${esc(r.summary)}</p>
         ${rows ? `<dl>${rows}</dl>` : ""}
-        <div class="links">${links}</div>
+        <div class="links">${links}${r.kind === "paid" ? `<button type="button" class="btn ghost" data-goto="${esc(r.repo)}">커리큘럼에서 위치 보기</button>` : ""}</div>
         ${adjacent}
         ${canRide ? `<button type="button" class="ride" aria-pressed="${ridden}" data-ride="${esc(r.repo)}">${ridden ? "학습 완료" : "학습 완료로 표시"}</button>` : ""}
       </div>`;
@@ -752,6 +841,10 @@
       const ride = e.target.closest("[data-ride]");
       if (ride) { toggleRide(ride.dataset.ride); return; }
       if (e.target.closest("[data-close]")) { closeStation(); return; }
+      const person = e.target.closest("[data-person]");
+      if (person) { openPerson(person.dataset.person); return; }
+      const go = e.target.closest("[data-goto]");
+      if (go) { gotoItem(go.dataset.goto); return; }
       const lv = e.target.closest("[data-level]:not(.ep):not(.chap)");
       if (lv && lv.tagName === "BUTTON") { gotoLevel(lv.dataset.level); return; }
       const ch = e.target.closest("[data-chapter]");
@@ -812,9 +905,9 @@
     renderGrowth(); renderLadder();
     renderRouteChips(); renderShelf(); renderWeek();
     $("#shelf").addEventListener("scroll", shelfSpy, { passive: true });
-    renderMatrix();
+    renderContrib();
     renderLegend(); renderMap(); wireTabs();
-    renderFeatured(); renderEvents(); renderArticles();
+    renderFeatured(); renderPartner(); renderEvents(); renderArticles();
     if (location.hash === "#contrib") selectTab("tab-contrib");
     navSpy();
     refreshStars();

@@ -48,6 +48,10 @@
             <a class="pill" href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a>
             <a class="pill" href="#join">참여하기</a>
           </div>
+          <div class="partner" aria-labelledby="partner-title">
+            <p class="partner-k" id="partner-title"><b>With 한빛미디어</b><span>팀이 번역한 책과 그 위에 만든 강의, 둘 다 커리큘럼 L2에 있습니다.</span></p>
+            <ul class="partner-list" id="partner-list"></ul>
+          </div>
         </div>
         <div class="banner-side">
           <img class="banner-mark" src="assets/img/team-mark.png" alt="" width="132" height="132">
@@ -113,13 +117,17 @@
       </div>
 
       <div id="panel-contrib" role="tabpanel" aria-labelledby="tab-contrib" hidden>
-        <div class="people-rail" id="people-rail" aria-label="Builder"></div>
-        <h3 class="contrib-head">기수별로 보기</h3>
-        <p class="contrib-sub" id="contrib-sub"></p>
-        <div class="matrix-scroll" tabindex="0" aria-label="Builder별 기수 기여표. 좌우로 스크롤할 수 있습니다.">
-          <table class="matrix" id="matrix"></table>
+        <div class="contrib-top">
+          <h3 class="contrib-head">가장 많이 기여한 Builder</h3>
+          <p class="contrib-note">Builder로 연 프로젝트 수, 그다음 함께한 러너 수 순입니다. 카드를 누르면 이력이 열립니다.</p>
         </div>
-        <ul class="matrix-legend" id="matrix-legend"></ul>
+        <ol class="top3" id="top3"></ol>
+        <h3 class="contrib-head">함께한 Builder</h3>
+        <div class="people-rail" id="people-rail" aria-label="함께한 Builder"></div>
+        <h3 class="contrib-head">전체 Builder</h3>
+        <p class="contrib-sub" id="contrib-sub"></p>
+        <div class="roster" id="roster"></div>
+        <ul class="roster-legend" id="roster-legend"></ul>
       </div>
 
     </div>

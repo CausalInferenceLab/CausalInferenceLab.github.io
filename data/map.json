@@ -302,30 +302,38 @@
       ],
       "links": [
         {
-          "label": "책 정보 보기",
-          "url": "https://product.kyobobook.co.kr/detail/S000212577153"
+          "label": "한빛미디어에서 보기",
+          "url": "https://www.hanbit.co.kr/store/books/look.php?p_code=B6208936856"
         },
         {
           "label": "무료 예제 코드",
           "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code"
         }
-      ]
+      ],
+      "type": "도서",
+      "meta": "2024 · 464쪽",
+      "cover": "assets/img/hanbit-book.jpg",
+      "credit": "마테우스 파쿠레 지음, 신진수·가짜연구소 인과추론팀 옮김"
     },
     {
       "id": "paid-lecture",
-      "title": "온라인 강의",
+      "title": "데이터 실무자의 사고력 강화: AI 인과추론 실무",
       "mapLabel": "온라인 강의 (유료)",
-      "summary": "「데이터 실무자의 사고력 강화: AI 인과추론 실무」. 실험 결과를 비즈니스 결정으로 옮기는 과정을 다루는 27강 영상 강의입니다.",
+      "summary": "한빛미디어 온라인 강의. 책에서 익힌 기법을 실험 설계, 준실험, Causal ML로 이어 가며 분석 결과를 비즈니스 결정으로 옮기는 과정을 다룹니다.",
       "level": "L2",
       "lines": [
         "main"
       ],
       "links": [
         {
-          "label": "강의 정보 보기",
+          "label": "한빛미디어에서 보기",
           "url": "https://www.hanbit.co.kr/product/C0781073345"
         }
-      ]
+      ],
+      "type": "강의",
+      "meta": "27강 · 약 8시간",
+      "cover": "assets/img/hanbit-lecture.jpg",
+      "credit": "신진수"
     }
   ]
 }
