@@ -76,7 +76,7 @@
         if (typeof g.stargazers_count === "number") r.stars = g.stargazers_count;
         if (g.pushed_at) r.pushed = g.pushed_at;
       });
-      renderGrowth(false); renderLadder(); renderShelf(true); renderWeek();
+      renderGrowth(false); renderLadder(); renderShelf(true); renderWeek(); renderFeatured();
     } catch (e) { /* offline or rate limited: keep the snapshot */ }
   }
 
@@ -473,7 +473,7 @@
 
     $("#top3").innerHTML = list.slice(0, 3).map((p) => {
       const recent = [...p.items].reverse().slice(0, 2);
-      return `<li class="tcard" data-line="${p.line}"><button type="button" data-person="${esc(p.name)}" aria-label="${esc(`기여 ${p.rank}위 ${p.name}, 이력 보기`)}">
+      return `<li class="tcard" data-line="${p.line}"><button type="button" data-person="${esc(p.name)}" aria-label="${esc(`Top ${p.rank} ${p.name}, 이력 보기`)}">
         <span class="t-rank" aria-hidden="true">${p.rank}</span>
         <span class="t-head">${avatarHTML(p.name, "lg")}<span><b class="t-name">${esc(p.name)}</b><span class="t-since">${p.first}기부터 Builder · ${p.cohorts.length}개 기수</span></span></span>
         <span class="t-stats"><span><b>${p.projects}</b>프로젝트</span><span><b>${fmt(p.runners)}</b>함께한 러너</span><span><b>${p.repos.size}</b>레포</span></span>
@@ -530,7 +530,7 @@
       <div class="station-band" data-line="${p.line}"></div>
       <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
       <div class="station-content person" data-line="${p.line}">
-        <div class="tags"><span class="rank-tag">기여 ${p.rank}위</span><span class="tag-line" data-line="${p.line}"><span class="num" aria-hidden="true"></span>${p.first}기부터 Builder</span></div>
+        <div class="tags">${p.rank <= 3 ? `<span class="rank-tag">Top ${p.rank}</span>` : ""}<span class="tag-line" data-line="${p.line}"><span class="num" aria-hidden="true"></span>${p.first}기부터 Builder</span></div>
         <div class="p-head">${avatarHTML(p.name, "lg")}<div><h2 id="station-title">${esc(p.name)}</h2>${info.linkedin ? `<a href="${esc(info.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ""}</div></div>
         ${info.intro ? `<p>${esc(info.intro)}</p>` : ""}
         <ul class="p-stats"><li><b>${p.projects}</b>프로젝트</li><li><b>${p.cohorts.length}</b>기수</li><li><b>${fmt(p.runners)}</b>함께한 러너</li><li><b>${repos.length}</b>레포</li></ul>
@@ -645,8 +645,8 @@
       const out = (p.links || [])[0];
       return `<li class="pt-card">
         <button type="button" class="pt-main" data-goto="${esc(p.id)}" aria-label="${esc(`${p.type} ${p.title}, 커리큘럼 ${p.level}에서 보기`)}">
-          <img class="pt-img ${p.type === "도서" ? "book" : "wide"}" src="${esc(p.cover)}" alt="" width="${p.type === "도서" ? 44 : 84}" height="${p.type === "도서" ? 56 : 56}">
-          <span class="pt-text"><span class="pt-type">${esc(p.type)}</span><b>${esc(p.title)}</b><span class="pt-lv">커리큘럼 ${esc(p.level)}${lv ? ` ${esc(lv.name)}` : ""}</span></span>
+          <img class="pt-img ${p.type === "도서" ? "book" : "wide"}" src="${esc(p.cover)}" alt="" width="${p.type === "도서" ? 30 : 60}" height="40">
+          <span class="pt-text"><b>${esc(p.title)}</b><span class="pt-lv"><span class="pt-type">${esc(p.type)}</span>커리큘럼 ${esc(p.level)}${lv ? ` ${esc(lv.name)}` : ""}</span></span>
         </button>
         ${out ? `<a class="pt-out" href="${esc(out.url)}" target="_blank" rel="noopener" aria-label="${esc(`${p.title} 한빛미디어에서 보기`)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>` : ""}
       </li>`;
@@ -655,7 +655,15 @@
 
   /* ---------- featured sites (hero) ---------- */
   function renderFeatured() {
-    $("#featured").innerHTML = (state.featured || []).map((f) => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener"><span class="tag">${esc(f.tag)}</span><span class="t">${esc(f.title)}</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>`).join("");
+    $("#featured").innerHTML = (state.featured || []).map((f) => {
+      const r = f.repo && state.repos.get(f.repo);
+      const stars = r && r.stars ? `<span class="st">${icons.star}${fmt(r.stars)}</span>` : "";
+      return `<li><a href="${esc(f.url)}" target="_blank" rel="noopener"${r ? ` data-line="${primaryLine(r)}"` : ""}>
+        <span class="tag">${esc(f.tag)}</span>
+        <span class="tx"><span class="t">${esc(f.title)}</span>${f.desc ? `<span class="d">${esc(f.desc)}</span>` : ""}</span>
+        ${stars}
+        <svg class="out" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>`;
+    }).join("");
   }
 
   /* ---------- events ---------- */
