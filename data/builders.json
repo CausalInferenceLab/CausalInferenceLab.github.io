@@ -1,13 +1,13 @@
 [
-  { "name": "신진수", "linkedin": "https://www.linkedin.com/in/jinsoo-shin-436060162/", "github": "jsshin2022", "intro": "" },
-  { "name": "김성수", "linkedin": "https://www.linkedin.com/in/%EC%84%B1%EC%88%98-%EA%B9%80-50825717b/", "github": "", "intro": "" },
-  { "name": "방태모", "linkedin": "https://www.linkedin.com/in/taemo/", "github": "", "intro": "" },
-  { "name": "박상호", "linkedin": "https://www.linkedin.com/in/shstat1729/", "github": "", "intro": "" },
-  { "name": "이동욱", "linkedin": "https://www.linkedin.com/in/dwlee-1995-lkdin/", "github": "", "intro": "" },
-  { "name": "박이삭", "linkedin": "https://www.linkedin.com/in/%EC%9D%B4%EC%82%AD-%EB%B0%95-75a7a916a/", "github": "", "intro": "" },
-  { "name": "권남택", "linkedin": "https://www.linkedin.com/in/namtaek-kwon/", "github": "", "intro": "" },
-  { "name": "권명석", "linkedin": "https://www.linkedin.com/in/myeongseok-gwon-b41414312/", "github": "", "intro": "" },
-  { "name": "김상원", "linkedin": "https://www.linkedin.com/in/sangwon-kim-1438ba221/", "github": "", "intro": "" },
-  { "name": "최세영", "linkedin": "https://www.linkedin.com/in/seyoung4503/", "github": "", "intro": "" },
-  { "name": "조해창", "linkedin": "https://www.linkedin.com/in/hae-chang-cho/", "github": "", "intro": "" }
+  {"name": "신진수", "linkedin": "https://www.linkedin.com/in/jinsoo-shin-436060162/", "github": "jsshin2022", "intro": "", "runnerOf": [{"cohort": 8, "project": "Kafka - Zero to Hero 실시간 성장하기"}, {"cohort": 10, "project": "Marketing Science"}]},
+  {"name": "김성수", "linkedin": "https://www.linkedin.com/in/%EC%84%B1%EC%88%98-%EA%B9%80-50825717b/", "github": "", "intro": "", "runnerOf": [{"cohort": 4, "project": "Casual하게 Causality 이해하기"}, {"cohort": 5, "project": "Casual하지 않게 Causality 이해하기"}, {"cohort": 6, "project": "Case로 Causality 이해하기"}, {"cohort": 8, "project": "실무로 통하는 인과추론 with 파이썬 특강"}]},
+  {"name": "방태모", "linkedin": "https://www.linkedin.com/in/taemo/", "github": "", "intro": "", "runnerOf": [{"cohort": 8, "project": "실무로 통하는 인과추론 with 파이썬 특강"}]},
+  {"name": "박상호", "linkedin": "https://www.linkedin.com/in/shstat1729/", "github": "", "intro": "", "runnerOf": [{"cohort": 8, "project": "실무로 통하는 인과추론 with 파이썬 특강"}]},
+  {"name": "이동욱", "linkedin": "https://www.linkedin.com/in/dwlee-1995-lkdin/", "github": "", "intro": "", "runnerOf": []},
+  {"name": "박이삭", "linkedin": "https://www.linkedin.com/in/%EC%9D%B4%EC%82%AD-%EB%B0%95-75a7a916a/", "github": "", "intro": "", "runnerOf": [{"cohort": 7, "project": "Gamifying Causal Inference with Game"}, {"cohort": 8, "project": "실무로 통하는 인과추론 with 파이썬 특강"}]},
+  {"name": "권남택", "linkedin": "https://www.linkedin.com/in/namtaek-kwon/", "github": "", "intro": "", "runnerOf": []},
+  {"name": "권명석", "linkedin": "https://www.linkedin.com/in/myeongseok-gwon-b41414312/", "github": "", "intro": "", "runnerOf": [{"cohort": 12, "project": "Causal Studio: Causal Inference Handbook & Visualization"}]},
+  {"name": "김상원", "linkedin": "https://www.linkedin.com/in/sangwon-kim-1438ba221/", "github": "", "intro": "", "runnerOf": []},
+  {"name": "최세영", "linkedin": "https://www.linkedin.com/in/seyoung4503/", "github": "", "intro": "", "runnerOf": [{"cohort": 11, "project": "Lang2SQL"}]},
+  {"name": "조해창", "linkedin": "https://www.linkedin.com/in/hae-chang-cho/", "github": "", "intro": "", "runnerOf": [{"cohort": 11, "project": "Awesome Causal Inference with Python"}]}
 ]
