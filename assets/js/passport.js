@@ -33,10 +33,13 @@
       el.id = "hub-toast"; el.className = "toast"; el.setAttribute("role", "status"); el.setAttribute("aria-live", "polite");
       document.body.appendChild(el);
     }
-    el.innerHTML = `<span class="stamp sm on" aria-hidden="true">${esc(stamp.mark)}</span><span><b>스탬프를 받았습니다: ${esc(stamp.name)}</b><span>${n} / ${STAMPS.length}</span></span><button type="button" data-passport>여권 보기</button>`;
+    el.innerHTML = `<span class="stamp sm on" aria-hidden="true">${esc(stamp.mark)}</span><span><b>스탬프 획득 · ${esc(stamp.name)}</b><span>${n}/${STAMPS.length}</span></span><button type="button" data-passport="toast">여권 보기</button>`;
     el.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove("show"), 4200);
+    const hide = () => { toastTimer = setTimeout(() => el.classList.remove("show"), 4200); };
+    clearTimeout(toastTimer); hide();
+    /* stay while the pointer or keyboard is on it */
+    el.onmouseenter = el.onfocusin = () => clearTimeout(toastTimer);
+    el.onmouseleave = el.onfocusout = () => { clearTimeout(toastTimer); hide(); };
   }
 
   window.hubStamp = (id) => {
@@ -52,16 +55,18 @@
     paintCounts(); toast(stamp, n);
     return true;
   };
-  /* Counters for stamps that need several actions (Builder visits). */
-  window.hubCount = (key, need, stampId) => {
+  /* Distinct things seen (Builders), so reloading one page three times does not count. */
+  window.hubSeen = (key, value, need, stampId) => {
     const d = load();
-    d.counts = d.counts || {};
-    d.counts[key] = (d.counts[key] || 0) + 1;
+    d.seen = d.seen || {};
+    const list = new Set(d.seen[key] || []);
+    list.add(value);
+    d.seen[key] = [...list];
     save(d);
-    if (d.counts[key] >= need) window.hubStamp(stampId);
+    if (list.size >= need) window.hubStamp(stampId);
   };
 
-  function passportDialog() {
+  function passportDialog(source) {
     let dlg = document.getElementById("passport-dialog");
     if (!dlg) {
       dlg = document.createElement("dialog");
@@ -85,16 +90,18 @@
       </div></div>`;
     if (!dlg.open) { if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", ""); }
     dlg.querySelector(".station-close").focus();
-    if (window.hubTrack) window.hubTrack("passport_open", { count: n });
+    if (window.hubTrack) window.hubTrack("passport_open", { count: n, source: source || "header" });
   }
   window.openPassport = passportDialog;
 
   document.addEventListener("click", (e) => {
-    if (e.target.closest("[data-passport]")) { e.preventDefault(); passportDialog(); }
+    const b = e.target.closest("[data-passport]");
+    if (b) { e.preventDefault(); passportDialog(b.dataset.passport || "header"); }
   });
   document.addEventListener("DOMContentLoaded", () => {
     paintCounts();
     /* a Builder page view counts toward the Builder stamp */
-    if (/^\/builders\/[^/]+\.html$/.test(location.pathname)) window.hubCount("builder_views", 3, "builder");
+    const m = location.pathname.match(/^\/builders\/([^/]+)\.html$/);
+    if (m) window.hubSeen("builders", m[1], 3, "builder");
   });
 })();

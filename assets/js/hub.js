@@ -530,7 +530,7 @@
     if (!p) return;
     const info = builderInfo(name);
     track("open_builder", { builder: info.slug || name, source: source || "hub" });
-    if (window.hubCount) window.hubCount("builder_views", 3, "builder");
+    if (window.hubSeen) window.hubSeen("builders", info.slug || name, 3, "builder");
     const runnerItems = p.runnerOf.map((x) => {
       const proj = state.projects.find((q) => q.cohort === x.cohort && q.name === x.project);
       const r = proj && proj.repo && state.repos.get(proj.repo);
@@ -814,7 +814,7 @@
     const now = new Date();
     const streak = rec.last === today || rec.last === today - 1 ? rec.streak || 0 : 0;
     const head = `<div class="daily-head"><h2 id="daily-title">오늘의 한 문제</h2><p class="daily-date">${now.getMonth() + 1}월 ${now.getDate()}일 · 매일 바뀝니다</p>
-      ${streak ? `<p class="daily-streak"><b>${streak}일</b> 연속${rec.best > streak ? ` · 최고 ${rec.best}일` : ""}</p>` : `<p class="daily-streak quiet">사흘 연속 풀면 스탬프</p>`}</div>`;
+      ${streak ? `<p class="daily-streak"><b>${streak}일</b> 연속${streak < 3 ? ` · ${3 - streak}일 더 풀면 스탬프` : rec.best > streak ? ` · 최고 ${rec.best}일` : ""}</p>` : `<p class="daily-streak quiet">사흘 연속 풀면 스탬프</p>`}</div>`;
     if (!ans) {
       box.innerHTML = `${head}<div class="daily-body">
         <p class="daily-q">${esc(q.text)}</p>
@@ -824,10 +824,11 @@
     }
     box.innerHTML = `${head}<div class="daily-body">
       <p class="daily-q">${esc(q.text)}</p>
-      <p class="daily-verdict ${ans.correct ? "ok" : "no"}">${ans.correct ? "맞았습니다" : "아쉽습니다"}<span>정답: ${DAILY_LABEL[q.answer]}</span></p>
+      <p class="daily-claim"><span>이렇게 말해도 될까요?</span>“${esc(q.claim)}”</p>
+      <p class="daily-verdict ${ans.correct ? "ok" : "no"}">${ans.correct ? "맞았습니다" : "아쉽습니다"}<span>내 답: ${DAILY_LABEL[ans.pick] || ""} · 정답: ${DAILY_LABEL[q.answer]}</span></p>
       <p class="daily-why">${esc(q.why)}</p>
-      <p class="daily-more"><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener">${esc(q.chapter.title)} 읽기</a><a href="game.html">10문제 더 풀기</a><a href="lab.html">실험실에서 직접 해 보기</a></p>
-      <p class="daily-next">내일 새 문제가 열립니다.</p></div>`;
+      <p class="daily-more"><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "daily", chapter: q.chapter.url.split("/").pop().slice(0, 2) }))}'>${esc(q.chapter.title)} 읽기</a><a href="game.html">10문제 더 풀기</a><a href="lab.html">실험실에서 직접 해 보기</a></p>
+      <p class="daily-next">자정에 새 문제가 열립니다.</p></div>`;
   }
   function answerDaily(pick) {
     const pool = (state.daily && state.daily.questions) || [];
@@ -1013,7 +1014,7 @@
     const r = state.repos.get(id);
     if (!r) return;
     state.openRepo = r;
-    if (!silent) { track("open_repo", { repo: r.repo, level: r.level || "", source: source || "hub" }); stamp("first_open"); }
+    if (!silent) { track("open_repo", { repo: r.repo, level: r.level || "", source: source || "hub" }); if (source !== "deeplink") stamp("first_open"); }
     if (!silent && r.kind !== "paid") {
       state.recent = [{ id, t: Date.now() }, ...state.recent.filter((x) => x.id !== id)].slice(0, 6);
       saveRecent(); renderWeek();
