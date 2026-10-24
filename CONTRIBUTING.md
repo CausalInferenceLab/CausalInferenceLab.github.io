@@ -23,6 +23,7 @@
 | `data/routes.json` | 경로 안내 항목을 바꿀 때 |
 | `data/articles.json`, `articles/*.md` | 읽을거리를 추가할 때 |
 | `data/game.json` | ‘상관일까, 인과일까?’ 문항을 고칠 때. `answer`는 `corr` 또는 `cause`이고, 문항마다 웹북 장 링크(`chapter`)를 답니다. |
+| `data/daily.json` | 오늘의 한 문제 문항을 더하거나 고칠 때. 형식은 `game.json`과 같고, 날짜마다 순서대로 돌아갑니다. 인과와 상관 문항을 비슷한 수로 맞춥니다. |
 | `data/stats.json` | 직접 고치지 않습니다. 매주 GitHub Actions가 스타 추이와 기여자 수를 갱신합니다. |
 
 레포를 추가할 때의 예시입니다.
@@ -58,6 +59,10 @@ python3 scripts/build_builders.py
 pip install playwright && python -m playwright install chromium
 python3 scripts/builder_cards.py
 ```
+
+## 학습 여권과 실험실
+
+스탬프 정의는 `assets/js/passport.js`의 `STAMPS`에 있습니다. 다른 페이지에서는 `window.hubStamp("lab")`처럼 부르면 되고, 이미 받은 스탬프는 다시 주지 않습니다. 기록은 `localStorage`에만 남습니다. 교란 실험실(`lab.html`, `assets/js/lab.js`)의 데이터는 페이지에서 만드는 가상 사용자입니다.
 
 ## 이벤트 측정
 
