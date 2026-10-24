@@ -6,7 +6,7 @@
   const body = document.getElementById("article-body");
   const more = document.getElementById("article-more");
   const after = document.getElementById("article-after");
-  let articles = [], builders = [];
+  let articles = [], builders = [], paid = [];
 
   function notFound() {
     title.textContent = "글을 찾을 수 없습니다";
@@ -28,7 +28,10 @@
     const slugOk = b && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(b.slug || "");
     const series = a.series ? articles.filter((x) => x.series === a.series && !x.url).sort((x, y) => (x.episode || 0) - (y.episode || 0)) : [];
     const i = series.indexOf(a), prev = series[i - 1], next = series[i + 1];
-    after.innerHTML = `<div class="writer"><span class="k">글쓴이</span><b>${esc(a.author)}</b>${slugOk ? `<a href="builders/${esc(b.slug)}.html">Builder 페이지</a>` : ""}</div>
+    /* the book and lecture this post belongs with, one click to Hanbit */
+    const rel = (a.related || []).map((id) => paid.find((p) => p.id === id)).filter(Boolean);
+    const relHTML = rel.length ? `<div class="post-related"><p class="k">이 글과 이어지는 책·강의</p><ul>${rel.map((p) => { const out = (p.links || [])[0]; const url = out && /^https:\/\//.test(out.url) ? out.url : ""; return url ? `<li><a href="${esc(url)}" target="_blank" rel="noopener" data-event="click_partner" data-event-params='${esc(JSON.stringify({ item: p.id, action: "out", source: "article" }))}'><img src="${esc(p.cover)}" alt="" width="${p.type === "도서" ? 30 : 52}" height="40"><span><b>${esc(p.shortTitle || p.title)}</b><span>${esc(p.type)} · ${esc(p.type === "도서" ? "인과추론팀 옮김" : `강사 ${p.credit || ""}`)} · 한빛미디어</span></span></a></li>` : ""; }).join("")}</ul></div>` : "";
+    after.innerHTML = relHTML + `<div class="writer"><span class="k">글쓴이</span><b>${esc(a.author)}</b>${slugOk ? `<a href="builders/${esc(b.slug)}.html">Builder 페이지</a>` : ""}</div>
       ${prev || next ? `<nav class="series-nav" aria-label="연재 이동">${prev ? `<a href="#${esc(prev.slug)}"><span>이전 편</span>${esc(prev.title)}</a>` : "<span></span>"}${next ? `<a class="next" href="#${esc(next.slug)}"><span>다음 편</span>${esc(next.title)}</a>` : ""}</nav>` : ""}`;
     try {
       const res = await fetch(`articles/${a.slug}.md`, { cache: "no-cache" });
@@ -46,7 +49,11 @@
       });
       body.querySelectorAll('a[href^="http"]').forEach((l) => { l.target = "_blank"; l.rel = "noopener"; });
       window.scrollTo(0, 0);
-      if (window.hubStamp) window.hubStamp("post");
+      /* the post stamp is for reading to the end, and so it does not cover the text on arrival */
+      if (window.hubStamp && "IntersectionObserver" in window) {
+        const io = new IntersectionObserver((es) => { if (es.some((x) => x.isIntersecting)) { io.disconnect(); window.hubStamp("post"); } });
+        io.observe(after);
+      }
     } catch (e) {
       body.innerHTML = "<p>본문을 불러오지 못했습니다. 잠시 후 다시 열어 주세요.</p>";
     }
@@ -54,9 +61,10 @@
 
   Promise.all([
     fetch("data/articles.json", { cache: "no-cache" }).then((r) => r.json()),
-    fetch("data/builders.json", { cache: "no-cache" }).then((r) => r.json()).catch(() => [])
+    fetch("data/builders.json", { cache: "no-cache" }).then((r) => r.json()).catch(() => []),
+    fetch("data/map.json", { cache: "no-cache" }).then((r) => r.json()).then((m) => m.paid || []).catch(() => [])
   ])
-    .then(([list, people]) => { articles = list; builders = people; show(); })
+    .then(([list, people, books]) => { articles = list; builders = people; paid = books; show(); })
     .catch(notFound);
   window.addEventListener("hashchange", show);
 })();

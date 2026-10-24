@@ -6,7 +6,11 @@
     "date": "2024-03-18",
     "author": "신진수",
     "series": "번역 노트: 실무로 통하는 인과추론",
-    "episode": 3
+    "episode": 3,
+    "related": [
+      "paid-book",
+      "paid-lecture"
+    ]
   },
   {
     "slug": "book-references",
@@ -15,7 +19,11 @@
     "date": "2024-03-11",
     "author": "신진수",
     "series": "번역 노트: 실무로 통하는 인과추론",
-    "episode": 2
+    "episode": 2,
+    "related": [
+      "paid-book",
+      "paid-lecture"
+    ]
   },
   {
     "slug": "book-release",
@@ -24,6 +32,10 @@
     "date": "2024-03-05",
     "author": "신진수",
     "series": "번역 노트: 실무로 통하는 인과추론",
-    "episode": 1
+    "episode": 1,
+    "related": [
+      "paid-book",
+      "paid-lecture"
+    ]
   }
 ]

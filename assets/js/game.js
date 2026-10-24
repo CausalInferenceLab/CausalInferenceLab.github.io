@@ -72,7 +72,8 @@
       <p class="gm-lede">${t.html ? t.body : esc(t.body)}</p>
       ${chapters.length ? `<div class="gm-review"><h3>다시 볼 장</h3><ul>${chapters.map((c) => `<li><a href="${esc(c.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "game_review", chapter: c.url.split("/").pop().slice(0, 2) }))}'>${esc(c.title)}</a></li>`).join("")}</ul></div>` : ""}
       <div class="gm-cta">
-        <a class="btn" href="./?quiz=1">3문항으로 내 시작점 찾기</a>
+        <a class="btn" href="https://causalinferencelab.github.io/Causal-Inference-with-Python/">웹북에서 이어 읽기</a>
+        <a class="btn ghost" href="./?quiz=1">3문항으로 내 시작점 찾기</a>
         <button type="button" class="btn ghost" data-share-game>${navigator.share ? "공유하기" : "결과와 링크 복사"}</button>
         <button type="button" class="btn ghost" data-restart>다시 하기</button>
       </div>`;

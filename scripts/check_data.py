@@ -130,6 +130,8 @@ def main():
             err(w, "author is required (the name shown on the post)")
         if a.get("episode") is not None and not is_int(a.get("episode")):
             err(w, "episode must be a whole number")
+        if not all(isinstance(x, str) and TOKEN.fullmatch(x) for x in a.get("related") or []):
+            err(w, "related must be a list of ids from map.json paid items")
         if a.get("weekOf") is not None and not DATE.fullmatch(str(a["weekOf"])):
             err(w, "weekOf must be the Monday of that week, like 2026-11-02")
         if not (isinstance(a.get("slug"), str) and re.fullmatch(r"[A-Za-z0-9-]+", a["slug"])):

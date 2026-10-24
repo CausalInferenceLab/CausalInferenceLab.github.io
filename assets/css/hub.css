@@ -440,7 +440,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .ro-total span { font-size: 12px; color: var(--muted); white-space: nowrap; }
 .roster-legend { list-style: none; margin: 0 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); }
 .roster-legend li { display: flex; align-items: center; gap: 6px; }
-@media (max-width: 600px) { .rail-head, .people-rail { display: none; } }
+
 @media (max-width: 760px) {
   .ro-head { display: none; }
   .ro { grid-template-columns: minmax(0, 1fr) auto; gap: 10px 12px; padding: 14px 16px; }
@@ -1332,3 +1332,45 @@ button.btn.sm { font-size: 14px; }
 .pp-go:focus-visible, .pp-claim:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 @media (max-width: 520px) { .pp-list li { grid-template-columns: auto minmax(0, 1fr); } .pp-act { grid-column: 1 / -1; justify-content: flex-start; } }
 #shelf .ep-track { color: color-mix(in srgb, var(--c) 70%, var(--ink)); }
+
+/* ==========================================================================
+   People first: Builder section under the hero; partner cards go to Hanbit
+   ========================================================================== */
+.builders-band { padding-block: 40px 56px; }
+.builders-band .section-head h2 { font-size: clamp(26px, 3vw, 34px); }
+.contrib-stats { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 10px; font-size: 14.5px; color: var(--muted); }
+.contrib-stats b { font-family: var(--f-display); font-size: 17px; font-weight: 800; color: var(--ink); margin-right: 1px; font-variant-numeric: tabular-nums; }
+.contrib-cta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.contrib-cta .btn { margin-top: 0; }
+@media (max-width: 600px) {
+  .people-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .people-grid .pcard > button { padding: 12px; gap: 8px; }
+  .people-grid .pcard .avatar.lg { width: 36px; height: 36px; font-size: 15px; }
+  .people-grid .pc-latest, .people-grid .pc-stats { display: none; }
+  .contrib-cta .btn { flex: 1 1 auto; justify-content: center; }
+}
+/* partner cards: the whole card opens Hanbit, a small link shows where it sits in the curriculum */
+.pt-main { text-decoration: none; border-radius: 12px; }
+.pt-arrow { width: 13px; height: 13px; margin-left: auto; flex-shrink: 0; opacity: .8; }
+.pt-goto { font: inherit; font-size: 12px; font-weight: 700; flex-shrink: 0; padding: 0 12px; border: 0; border-left: 1px solid rgba(255, 255, 255, .14); background: none; color: rgba(255, 255, 255, .78); cursor: pointer; border-radius: 0 12px 12px 0; white-space: nowrap; }
+.pt-goto:hover { background: rgba(255, 255, 255, .1); color: #fff; }
+.pt-goto:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+/* curriculum on phones: two materials per level, the rest one tap away */
+.lv-more { display: none; }
+@media (max-width: 720px) {
+  .lv:not(.route):not(.open) .lv-items > li:nth-child(n+3) { display: none; }
+  .lv:not(.route):not(.open) .lv-more { display: block; }
+  .lv-more { width: 100%; margin-top: 10px; font: inherit; font-size: 14px; font-weight: 700; min-height: 44px; border: 0; border-radius: 12px; background: var(--surface-2); color: var(--ink); cursor: pointer; }
+}
+/* related book and lecture on posts and Builder pages */
+.post-related { padding: 16px 18px; border-radius: 16px; background: var(--surface); }
+.post-related .k { font-size: 13px; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
+.post-related ul, .post-related-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.post-related a, .post-related-list a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); color: var(--ink); text-decoration: none; }
+.post-related a:hover, .post-related-list a:hover { box-shadow: 0 6px 20px rgba(20, 22, 43, .08); }
+.post-related img, .post-related-list img { height: 40px; width: auto; border-radius: 3px; object-fit: cover; flex-shrink: 0; }
+.post-related a > span, .post-related-list a > span { display: flex; flex-direction: column; min-width: 0; }
+.post-related b, .post-related-list b { font-size: 15px; }
+.post-related a > span > span, .post-related-list a > span > span { font-size: 13px; color: var(--muted); }
+.p-timeline li { grid-template-columns: 78px minmax(0, 1fr); }

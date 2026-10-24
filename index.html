@@ -28,9 +28,9 @@
       <span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span>
     </a>
     <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="#contrib">Builder</a>
       <a href="#curriculum">커리큘럼</a>
       <a href="#posts">연재</a>
-      <a href="#contrib">Builder</a>
       <a href="#events">행사</a>
       <a href="#join">참여하기</a>
     </nav>
@@ -47,11 +47,11 @@
           <h1 id="hero-title">Causal Inference Hub</h1>
           <p class="banner-lede">인과추론에서 시작해 AI 시대의 데이터 리터러시까지. <br>2022년부터 함께 만든 오픈소스와 자료를 L0–L4 커리큘럼으로 엮었습니다.</p>
           <div class="banner-cta">
-            <button type="button" class="pill solid" data-quiz-open>3문항으로 시작점 찾기</button>
+            <a class="pill solid" href="https://causalinferencelab.github.io/Causal-Inference-with-Python/">웹북으로 시작하기</a>
             <a class="pill" href="#curriculum">커리큘럼 보기</a>
           </div>
           <div class="partner" aria-labelledby="partner-title">
-            <p class="partner-k" id="partner-title"><b>With 한빛미디어</b><span>팀이 옮긴 책과 그 내용을 실무로 잇는 강의입니다. 둘 다 커리큘럼 L2에 들어 있습니다.</span></p>
+            <p class="partner-k" id="partner-title"><b>With 한빛미디어 · 팀이 옮긴 책과 그 책으로 만든 강의</b><span>팀이 옮긴 책과 그 내용을 실무로 잇는 강의입니다. 둘 다 커리큘럼 L2에 들어 있습니다.</span></p>
             <ul class="partner-list" id="partner-list"></ul>
           </div>
           <p class="academy" id="academy"></p>
@@ -61,14 +61,29 @@
           <ul class="featured" id="featured" aria-label="대표 사이트"></ul>
         </div>
       </div>
-      <div class="hero-grid">
-        <ul class="growth" id="growth" aria-label="팀의 성장 지표">
-          <li class="tile"><span class="tile-label">함께한 러너</span><span class="tile-value">102명</span></li>
-          <li class="tile"><span class="tile-label">프로젝트</span><span class="tile-value">23개</span></li>
-          <li class="tile"><span class="tile-label">GitHub 스타</span><span class="tile-value">1,045</span></li>
-          <li class="tile"><span class="tile-label">행사 참가자</span><span class="tile-value">330명</span></li>
-        </ul>
+    </div>
+  </section>
+
+  <section class="band builders-band" id="contrib" aria-labelledby="contrib-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="contrib-title">이 허브를 만든 사람들</h2>
+        <p id="contrib-sub"></p>
+        <p class="contrib-stats" id="contrib-stats"></p>
+        <div class="contrib-cta"><a class="btn" href="#join" data-event="click_join" data-event-params='{"target":"join_section","source":"builder_section"}'>다음 기수 Builder 되기</a><a class="btn ghost" href="builders/">Builder 전체 보기</a></div>
       </div>
+      <ol class="top3" id="top3"></ol>
+      <h3 class="contrib-head rail-head">함께한 Builder</h3>
+      <div class="people-rail" id="people-rail" aria-label="함께한 Builder"></div>
+      <details class="fold" id="medal-fold">
+        <summary><span>메달과 발표 무대</span><small>기수가 쌓이면 메달이 바뀌고, 학회 발표로 이어집니다</small></summary>
+        <section class="medal-ladder" id="medal-ladder" aria-label="Builder 메달"></section>
+      </details>
+      <details class="fold" id="roster-fold">
+        <summary><span>전체 Builder 이력</span><small>누가 어느 기수에 무엇을 열었는지</small></summary>
+        <ul class="roster-legend" id="roster-legend"></ul>
+        <div class="roster" id="roster"></div>
+      </details>
     </div>
   </section>
 
@@ -125,27 +140,6 @@
         <p>팀원이 쓰는 인과추론 이야기입니다. 이번 주 포스트는 월요일마다 바뀝니다.</p>
       </div>
       <div id="post-box"></div>
-    </div>
-  </section>
-
-  <section class="band" id="contrib" aria-labelledby="contrib-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="contrib-title">Builder</h2>
-        <p id="contrib-sub"></p>
-      </div>
-      <ol class="top3" id="top3"></ol>
-      <h3 class="contrib-head rail-head">함께한 Builder</h3>
-      <div class="people-rail" id="people-rail" aria-label="함께한 Builder"></div>
-      <details class="fold" id="medal-fold">
-        <summary><span>메달과 발표 무대</span><small>기수가 쌓이면 메달이 바뀌고, 학회 발표로 이어집니다</small></summary>
-        <section class="medal-ladder" id="medal-ladder" aria-label="Builder 메달"></section>
-      </details>
-      <details class="fold" id="roster-fold">
-        <summary><span>전체 Builder 이력</span><small>누가 어느 기수에 무엇을 열었는지</small></summary>
-        <ul class="roster-legend" id="roster-legend"></ul>
-        <div class="roster" id="roster"></div>
-      </details>
     </div>
   </section>
 
