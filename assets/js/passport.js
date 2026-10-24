@@ -11,6 +11,7 @@
   const STAMPS = [
     { id: "first_open", group: "learn", kind: "auto", mark: "첫", name: "첫 걸음", how: "커리큘럼에서 자료 하나를 열어 보세요.", href: "/#curriculum" },
     { id: "post", group: "learn", kind: "auto", mark: "글", name: "연재 독자", how: "연재 글을 하나 읽어 보세요.", href: "/#posts" },
+    { id: "webbook", group: "learn", kind: "auto", mark: "책", name: "웹북 독자", how: "웹북 『Python으로 하는 인과추론』에서 한 장을 끝까지 읽어 보세요.", href: "/Causal-Inference-with-Python/" },
     { id: "builder", group: "learn", kind: "auto", mark: "B", name: "Builder 탐방", how: "Builder 세 명의 이력이나 페이지를 열어 보세요.", href: "/#contrib" },
     { id: "comment", group: "together", kind: "self", mark: "말", name: "레포에 한마디", how: "관심 있는 레포에 질문이나 응원을 남겨 보세요.", go: `${REPO}/discussions`, goLabel: "토론 게시판" },
     { id: "event_photo", group: "together", kind: "self", mark: "찰", name: "행사 사진 후기", how: "Data Forum 같은 팀 행사 사진과 한 줄 후기를 올려 보세요.", go: `${REPO}/discussions/new/choose`, goLabel: "후기 올리기" },
@@ -121,10 +122,25 @@
       if (toastEl && dlg && toastEl.parentNode !== dlg) dlg.appendChild(toastEl);
     }
   });
+  /* #passport (the web book links here) opens the passport */
+  function openFromHash() {
+    if (location.hash !== "#passport") return;
+    history.replaceState(history.state, "", location.pathname + location.search);
+    passportDialog("link");
+    const dlg = document.getElementById("passport-dialog");
+    if (toastEl && dlg && toastEl.parentNode && toastEl.parentNode !== dlg) dlg.appendChild(toastEl);
+  }
+  window.addEventListener("hashchange", openFromHash);
   document.addEventListener("DOMContentLoaded", () => {
     paintCounts();
     /* a Builder page view counts toward the Builder stamp */
     const m = location.pathname.match(/^\/builders\/([^/]+)\.html$/);
     if (m) window.hubSeen("builders", m[1], 3, "builder");
+    /* the web book (same origin) keeps finished chapters in cil-book-read: one is enough for the stamp */
+    try {
+      const read = JSON.parse(localStorage.getItem("cil-book-read") || "{}");
+      if (read && typeof read === "object" && Object.keys(read).length) window.hubStamp("webbook");
+    } catch (e) { /* storage unavailable */ }
+    openFromHash();
   });
 })();

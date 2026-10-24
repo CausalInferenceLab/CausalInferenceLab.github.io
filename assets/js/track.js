@@ -52,7 +52,7 @@
   const HUB_PATHS = /^\/(?:$|index\.html$|article\.html$|404\.html$|game\.html$|lab\.html$|assets\/|data\/|articles\/|builders\/|badges\/)/;
   const WEBBOOK = "Causal-Inference-with-Python";
   const SPOTS = [
-    ["#featured", "featured"], [".partner", "partner"], ["#station-dialog", "station"], ["#daily", "daily"],
+    ["#featured", "featured"], [".partner", "partner"], ["#station-dialog", "station"], ["#daily", "daily"], ["#posts", "posts"], ["#passport-dialog", "passport"],
     ["#shelf, #week, .spot", "curriculum"], [".gm", "game"], [".lab", "lab"], [".bp", "builder_page"],
     [".reader, .prose", "article"], [".site-footer", "footer"], [".banner", "banner"]
   ];

@@ -1230,9 +1230,22 @@
   /* ---------- station dialog ---------- */
   const dialog = () => $("#station-dialog");
 
+  /* Reading progress from the web book (same origin): finished chapters and the last one opened. */
+  function webbookProgress() {
+    try {
+      const read = JSON.parse(localStorage.getItem("cil-book-read") || "{}");
+      const last = JSON.parse(localStorage.getItem("cil-book-last") || "null");
+      const done = read && typeof read === "object" ? Object.keys(read).length : 0;
+      const ok = last && /^[A-Za-z0-9-]+$/.test(last.slug || "");
+      const total = ok && Number(last.total) > 0 ? Number(last.total) : 30;
+      return done || ok ? { done: Math.min(done, total), total, last: ok ? { slug: last.slug, label: String(last.label || "") } : null } : null;
+    } catch (e) { return null; }
+  }
+
   function openStation(id, source, silent) {
     const r = state.repos.get(id);
     if (!r) return;
+    const book = r.repo === "Causal-Inference-with-Python" && r.site ? webbookProgress() : null;
     state.openRepo = r;
     if (!silent) { track("open_repo", { repo: r.repo, level: r.level || "", source: source || "hub" }); if (source !== "deeplink") stamp("first_open"); }
     if (!silent && r.kind !== "paid") {
@@ -1251,11 +1264,14 @@
       builders ? `<dt>Builder</dt><dd>${builders}</dd>` : "",
       r.cohorts && r.cohorts.length ? `<dt>기수</dt><dd>${r.cohorts.join("·")}기</dd>` : "",
       statusText[r.status] ? `<dt>상태</dt><dd title="${esc(statusText[r.status].split(": ")[1] || "")}">${esc(statusText[r.status].split(": ")[0])}</dd>` : "",
+      book ? `<dt>내 진도</dt><dd>${book.total}편 중 ${book.done}편 읽음</dd>` : "",
       r.kind ? "" : `<dt>스타</dt><dd>${fmt(r.stars || 0)}</dd>`,
       r.pushed ? `<dt>마지막 커밋</dt><dd>${dot(r.pushed.slice(0, 10))}</dd>` : ""
     ].join("");
     const links = r.kind
       ? r.links.map((l, i) => `<a class="btn${i ? " ghost" : ""}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("")
+      : book && book.last
+        ? `<a class="btn" href="${esc(r.site.replace(/\/?$/, "/") + book.last.slug + ".html")}">이어 읽기${book.last.label ? ` · ${esc(book.last.label)}` : ""}</a><a class="btn ghost" href="${esc(repoUrl(r))}" target="_blank" rel="noopener">GitHub에서 보기</a>`
       : r.site && r.siteLabel
         ? `<a class="btn" href="${esc(r.site)}" target="_blank" rel="noopener">${esc(r.siteLabel)}</a><a class="btn ghost" href="${esc(repoUrl(r))}" target="_blank" rel="noopener">GitHub에서 보기</a>`
         : `<a class="btn" href="${esc(repoUrl(r))}" target="_blank" rel="noopener">GitHub에서 보기</a>${r.site ? `<a class="btn ghost" href="${esc(r.site)}" target="_blank" rel="noopener">사이트 열기</a>` : ""}`;
