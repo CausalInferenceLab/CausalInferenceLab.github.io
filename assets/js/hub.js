@@ -284,6 +284,8 @@
           : t.key === "stars" ? topStarsHTML() : `<p class="spark-empty">${esc(t.empty || "")}</p>`}
       </li>`;
     }).join("");
+    const ev = box.querySelector('.tile[data-key="events"]');
+    if (ev) ev.insertAdjacentHTML("beforeend", `<a class="tile-link" href="#events" aria-label="행사 보기"></a>`);
     box.querySelectorAll(".tile").forEach((el, i) => {
       const t = growthTiles[i];
       if (t.series.length > 1) drawSpark(el, t);
@@ -711,9 +713,24 @@
     }).join("");
   }
 
+  /* the legend doubles as a filter: pick a track to keep only its line */
   function renderLegend() {
-    $("#line-legend").innerHTML = state.lineList.map((l) => `<li data-line="${l.id}"><span class="num" aria-hidden="true"></span>${esc(l.name)}</li>`).join("") +
+    const count = (id) => [...state.repos.values()].filter((r) => (r.lines || []).includes(id)).length;
+    $("#line-legend").innerHTML = state.lineList.map((l) => `<li data-line="${l.id}"><button type="button" class="ll" data-focus-line="${l.id}" aria-pressed="false" title="${esc(l.description || "")}"><span class="num" aria-hidden="true"></span>${esc(l.name)}<span class="ll-n">${count(l.id)}</span></button></li>`).join("") +
       `<li><svg width="28" height="6" aria-hidden="true"><path d="M2 3H26" stroke="var(--l-main)" stroke-width="3" stroke-dasharray="5 6" stroke-linecap="round"/></svg>도서·강의 (유료)</li>`;
+    if (!$("#line-desc")) $("#line-legend").insertAdjacentHTML("afterend", `<p class="line-desc" id="line-desc" aria-live="polite"></p>`);
+  }
+  function focusLine(id) {
+    const root = $("#metro"), on = id && state.focusLine !== id ? id : null;
+    state.focusLine = on;
+    root.classList.toggle("focusing", !!on);
+    root.querySelectorAll(".track, .badge").forEach((el) => el.classList.toggle("faded", !!on && el.dataset.line !== on));
+    root.querySelectorAll(".st").forEach((el) => el.classList.toggle("faded", !!on && !(el.dataset.lines || "").split(" ").includes(on)));
+    document.querySelectorAll("[data-focus-line]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.focusLine === on)));
+    document.querySelectorAll(".vline").forEach((v) => v.classList.toggle("faded", !!on && v.dataset.line !== on));
+    const l = on && state.lines.get(on);
+    $("#line-desc").innerHTML = l ? `<b>${esc(l.name)}</b>: ${esc(l.description || l.tagline || "")} <button type="button" class="link-btn" data-focus-line="${on}">전체 노선 보기</button>` : "";
+    if (on) track("select_track", { track: on });
   }
 
   /* ---------- tabs ---------- */
@@ -811,23 +828,35 @@
     }
   }
 
+  const daysTo = (iso) => Math.ceil((Date.parse(`${iso}T00:00:00+09:00`) - Date.now()) / DAY);
+  function renderNextEvent() {
+    const el = $("#next-event"), next = state.events.find((e) => e.upcoming && e.date);
+    if (!el || !next) return;
+    const d = daysTo(next.date);
+    if (d < 0) return;
+    el.hidden = false;
+    el.innerHTML = `<span class="ne-k">다음 행사</span><span class="ne-d">${d === 0 ? "오늘" : `D-${d}`}</span><span class="ne-t"><b>${dot(next.date)} · ${esc(next.name)}</b><span>${next.link ? "참가 신청을 받고 있습니다" : "신청 링크는 곧 열립니다"} · 지난 ${state.events.filter((e) => !e.upcoming).length}회에 ${fmt(state.events.reduce((s, e) => s + (e.participants || 0), 0))}명이 함께했습니다</span></span><span class="ne-go" aria-hidden="true">›</span>`;
+  }
   /* the next Data Forum gets the space; past ones are one line each */
   function renderEvents() {
     const list = [...state.events].sort((a, b) => b.order - a.order);
     const next = list.find((e) => e.upcoming), past = list.filter((e) => !e.upcoming);
     const when = (e) => (e.date ? dot(e.date) : `${e.year}년`);
     const total = past.reduce((s, e) => s + (e.participants || 0), 0);
+    const maxP = Math.max(1, ...past.map((e) => e.participants || 0));
+    const dd = next && next.date ? daysTo(next.date) : null;
     const nextHTML = next ? `<li class="event next">
-        <span class="soon-tag">다음 행사</span>
+        <span class="soon-tag">다음 행사${dd != null && dd >= 0 ? ` · ${dd === 0 ? "오늘" : `D-${dd}`}` : ""}</span>
         <span class="ord">${next.order}회</span>
         <h3>${next.link ? `<a href="${esc(next.link)}" target="_blank" rel="noopener">${esc(next.name)}</a>` : esc(next.name)}</h3>
         <span class="when">${when(next)}</span>
+        <p class="ev-about">현업과 학계가 만나 인과추론과 실험, 데이터 의사결정을 이야기하는 자리입니다. 지난 ${past.length}회에 ${fmt(total)}명이 함께했습니다.</p>
         ${next.link ? `<a class="btn sm" href="${esc(next.link)}" target="_blank" rel="noopener">참가 신청하기</a>` : `<span class="ppl">신청 링크는 곧 열립니다.</span>`}
       </li>` : "";
     const pastHTML = past.map((e) => `<li class="event past">
         <span class="ord">${e.order}회</span>
         <span class="ev-name">${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">${esc(e.name)}</a>` : esc(e.name)}<span class="when">${when(e)}</span></span>
-        <span class="ev-n">${e.participants ? `<b>${fmt(e.participants)}</b>명` : ""}</span>
+        <span class="ev-n">${e.participants ? `<span class="ev-num"><b>${fmt(e.participants)}</b>명</span><i class="ev-bar" aria-hidden="true"><i style="width:${Math.round((e.participants / maxP) * 100)}%"></i></i>` : ""}</span>
       </li>`).join("");
     $("#event-list").innerHTML = nextHTML + (past.length ? `<li class="event-past"><p class="ev-sum">지난 Data Forum ${past.length}회 · 참가 ${fmt(total)}명</p><ol>${pastHTML}</ol></li>` : "");
   }
@@ -842,7 +871,7 @@
   }
 
   function stationGroup(parent, id, r, cls) {
-    const g = svg("g", { class: "st" + cls, "data-line": primaryLine(r), "data-st": id, tabindex: 0, role: "button", "aria-label": `${r.title} 열기` }, parent);
+    const g = svg("g", { class: "st" + cls, "data-line": primaryLine(r), "data-lines": (r.lines || []).join(" "), "data-st": id, tabindex: 0, role: "button", "aria-label": `${r.title} 열기` }, parent);
     g.addEventListener("click", () => openStation(id, "map"));
     g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openStation(id, "map"); } });
     return g;
@@ -1374,6 +1403,10 @@
       if (nl) { closeStation(); gotoLevel(nl.dataset.nextLevel); return; }
       const ext = e.target.closest("a[data-post][target=_blank]");
       if (ext) stamp("post");
+      const fl = e.target.closest("[data-focus-line]");
+      if (fl) { focusLine(fl.dataset.focusLine); return; }
+      const tg = e.target.closest("[data-tab-go]");
+      if (tg) { selectTab(tg.dataset.tabGo); $("#tab-map").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }); track("open_map", { source: "tab_note" }); return; }
       const stepBtn = e.target.closest("[data-step]");
       if (stepBtn) {
         state.level = stepBtn.dataset.step;
@@ -1457,7 +1490,7 @@
     const setHeader = () => { if (header) document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`); };
     setHeader(); window.addEventListener("resize", setHeader);
     renderLegend(); renderMap(); wireTabs();
-    renderFeatured(); renderPartner(); renderEvents(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
+    renderFeatured(); renderPartner(); renderEvents(); renderNextEvent(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
     /* sections fill in after the data loads, so jump again once they have their height */
     if (/^#(contrib|events|reading|join)$/.test(location.hash)) requestAnimationFrame(() => { const el = $(location.hash); if (el) el.scrollIntoView(); });
     openFromHash();
