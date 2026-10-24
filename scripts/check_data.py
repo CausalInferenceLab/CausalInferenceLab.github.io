@@ -138,6 +138,14 @@ def main():
             if s not in repos and s != "external":
                 err(w, f"stop {s!r} is not in repos.json")
 
+    for i, x in enumerate((data.get("stages.json") or {}).get("items", [])):
+        w = f"stages.json items[{i}]"
+        token(x.get("id"), w, "id")
+        if not is_int(x.get("year")):
+            err(w, "year must be a whole number")
+        if not str(x.get("url", "")).startswith("https://"):
+            err(w, "url must be an https link")
+
     for name in ("game.json", "daily.json"):
         for q in (data.get(name) or {}).get("questions", []):
             w = f"{name} {q.get('id')!r}"
