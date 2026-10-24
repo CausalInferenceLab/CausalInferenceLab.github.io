@@ -101,8 +101,9 @@
 
       <div id="panel-map" role="tabpanel" aria-labelledby="tab-map">
         <div class="map-card">
-          <div class="map-scroll">
-            <svg id="metro" role="img" aria-labelledby="metro-title"><title id="metro-title">인과추론 트랙 지도: L0부터 L4까지 6개 트랙</title></svg>
+          <p class="map-hint" id="map-hint" hidden>지도가 화면보다 넓습니다. 옆으로 밀면 L3·L4까지 보입니다.</p>
+          <div class="map-scroll" id="map-scroll">
+            <svg id="metro" role="group" aria-labelledby="metro-title"><title id="metro-title">인과추론 트랙 지도: L0부터 L4까지 6개 트랙</title></svg>
           </div>
           <div class="vlines" id="vlines"></div>
           <ul class="line-legend" id="line-legend"></ul>
