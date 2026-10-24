@@ -371,45 +371,57 @@
     </li>`;
   }
 
+  function renderPath() {
+    const box = $("#path");
+    if (!box) return;
+    const route = currentRoute();
+    const onRoute = route ? new Set(route.stops.map((id) => (state.repos.get(id) || {}).level)) : null;
+    box.innerHTML = state.levels.map((lv) => {
+      const items = levelItems(lv.id), free = items.filter((r) => !r.kind).length;
+      const makers = [...new Set(items.flatMap((r) => r.builders || []))];
+      const done = items.filter((r) => state.ridden.has(r.repo)).length;
+      const on = route ? onRoute.has(lv.id) : state.level === lv.id;
+      return `<li class="step${lv.layer === "build" ? " build" : ""}"><button type="button" data-step="${lv.id}" aria-pressed="${on}">
+        <span class="st-id">${lv.id}</span><span class="st-name">${esc(lv.name)}</span><span class="st-q">${esc(lv.question)}</span>
+        <span class="st-meta">자료 ${free}개${items.length > free ? " · 책·강의" : ""}${done ? ` · 완료 ${done}` : ""}</span>
+        ${makers.length ? `<span class="st-makers">${makers.slice(0, 4).map((n) => avatarHTML(n, "sm")).join("")}</span>` : ""}</button></li>`;
+    }).join("");
+    wireAvatars(box);
+  }
   function renderShelf() {
     const top = topRepos();
     const route = currentRoute();
     const shelf = $("#shelf");
+    state.level = state.level || "L0";
     shelf.classList.toggle("routing", !!route);
     if (route) {
       const items = route.stops.map((id) => state.repos.get(id)).filter(Boolean);
       shelf.innerHTML = `<li class="lv route"><ol class="lv-items">${items.map((r, i) => episodeHTML(r, r.level || "", i, top, i + 1)).join("")}</ol></li>`;
-      $("#chapters").innerHTML = items.map((r, i) => `<button type="button" data-chapter="${esc(r.repo)}" aria-current="false"><b>${pad2(i + 1)}</b> <span class="nm">${esc(r.title)}</span></button>`).join("");
       renderRouteNote();
     } else {
-      /* one block per level: what it answers, who built it, and its materials */
-      shelf.innerHTML = state.levels.map((lv) => {
-        const items = levelItems(lv.id);
-        const makers = [...new Set(items.flatMap((r) => r.builders || []))];
-        const free = items.filter((r) => !r.kind).length;
-        return `<li class="lv${lv.layer === "build" ? " build" : ""}" data-chap="${lv.id}">
+      const lv = state.levels.find((x) => x.id === state.level) || state.levels[0];
+      const items = levelItems(lv.id);
+      const i = state.levels.indexOf(lv), next = state.levels[i + 1];
+      shelf.innerHTML = `<li class="lv${lv.layer === "build" ? " build" : ""}" data-chap="${lv.id}">
           <div class="lv-head">
             <span class="lv-id">${lv.id}</span>
             <div class="lv-t"><h3>${esc(lv.name)}<span>${esc(lv.question)}</span></h3><p>${esc(lv.goal)}</p></div>
-            <div class="lv-side"><span class="lv-n">자료 ${free}개${items.length > free ? ` · 도서·강의 ${items.length - free}` : ""}</span>${makers.length ? `<span class="lv-makers" title="${esc(makers.join(", "))}">${makers.slice(0, 4).map((n) => avatarHTML(n, "sm")).join("")}<span>${makers.length}명이 만들었습니다</span></span>` : ""}</div>
           </div>
           <ol class="lv-items">${items.map((r, k) => episodeHTML(r, lv.id, k, top)).join("")}</ol>
-          ${items.length > 2 ? `<button type="button" class="lv-more" data-lv-more>${lv.id} 자료 ${items.length - 2}개 더 보기</button>` : ""}
+          ${next ? `<button type="button" class="lv-next" data-step="${next.id}">다음 단계 · ${next.id} ${esc(next.name)} ›</button>` : ""}
         </li>`;
-      }).join("");
-      $("#chapters").innerHTML = state.levels.map((lv) => `<button type="button" data-chapter="${lv.id}" aria-current="false"><b>${lv.id}</b> <span class="nm">${esc(lv.name)}</span></button>`).join("");
       $("#route-note").textContent = "";
     }
+    renderPath();
     wireAvatars(shelf);
 
     const repos = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot");
     const depot = [...state.repos.values()].filter((r) => r.status === "depot");
     const learnable = repos.filter((r) => (r.lines || []).length);
     const done = learnable.filter((r) => state.ridden.has(r.repo)).length;
-    $("#curriculum-sub").textContent = `L0부터 L4까지, 팀이 만든 레포 ${repos.length}개를 순서대로 엮었습니다. L0–L2는 무료 자료만으로도 끝까지 갈 수 있고, 책과 강의는 더 깊게 보고 싶을 때 고르면 됩니다.`;
+    $("#curriculum-sub").textContent = `인과추론을 어디서 시작해 어디까지 가면 되는지, 팀이 만든 레포 ${repos.length}개를 다섯 단계로 엮었습니다. L0–L2는 무료 자료만으로도 끝까지 갈 수 있습니다.`;
     $("#n-course").textContent = repos.length; $("#n-course").title = `레포 ${repos.length}개`;
     $("#shelf-foot").innerHTML = `${done ? `<span class="done-n">학습 완료 ${done} / ${learnable.length}</span> ` : ""}카드를 누르면 자세한 정보와 링크가 열립니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
-    shelfSpy();
   }
 
   function scrollShelfTo(el, smooth = true) {
@@ -584,7 +596,8 @@
           <span class="pc-stats">프로젝트 <b>${p.projects}</b> · 러너 <b>${fmt(p.runners)}</b></span>
           ${latest ? `<span class="pc-latest">최근 · ${esc(latest.name)}</span>` : ""}</span></button></li>`;
     };
-    $("#people-rail").innerHTML = rest.length ? `<ul class="people-grid">${rest.map((p) => card(p, false)).join("")}</ul>` : "";
+    /* everyone else: one row of names, each opening that person's history */
+    $("#people-rail").innerHTML = rest.length ? `<span class="crew-k">함께한 Builder ${rest.length}명</span><ul class="crew">${rest.map((p) => `<li data-line="${p.line}" data-person-row="${esc(p.name)}"><button type="button" data-person="${esc(p.name)}" title="${esc(`${tenure(p)} · 프로젝트 ${p.projects}개`)}">${avatarHTML(p.name, "sm")}<span>${esc(p.name)}</span></button></li>`).join("")}</ul>` : "";
 
     const head = `<div class="ro-head" aria-hidden="true"><span>Builder</span><span>참여한 기수</span><span>최근 프로젝트</span><span class="tot">합계</span></div>`;
     $("#roster").innerHTML = head + `<ol class="ro-list">${list.map((p) => `<li class="ro" data-line="${p.line}" data-person-row="${esc(p.name)}">
@@ -596,7 +609,7 @@
     wireAvatars($("#top3")); wireAvatars($("#people-rail")); wireAvatars($("#roster"));
 
     const contributors = state.stats.totals && state.stats.totals.contributors;
-    $("#contrib-sub").textContent = `프로젝트를 여는 사람을 Builder라고 부릅니다. ${list.length}명이 ${cohorts.length}개 기수 동안 프로젝트 ${state.projects.length}개를 열었습니다.${contributors ? ` GitHub 기여자는 ${fmt(contributors)}명입니다.` : ""}`;
+    $("#contrib-sub").textContent = `프로젝트를 연 사람(Builder) ${list.length}명 가운데 연 프로젝트 수, 그다음 함께한 러너 수가 많은 순입니다. 지금까지 ${cohorts.length}개 기수 동안 프로젝트 ${state.projects.length}개가 열렸습니다.`;
     $("#roster-legend").innerHTML = `<li><span class="cc b" data-line="main"><b>8기</b>러너 6</span>Builder로 연 기수와 함께한 러너 수</li><li><span class="cc r" data-line="main"><b>7기</b>러너</span>러너로 참여한 기수</li><li><span class="cc b live" data-line="main"><b>13기</b>진행 중</span>지금 진행 중</li>`;
     renderMedalLadder(list);
   }
@@ -729,9 +742,9 @@
 
   function gotoLevel(levelId) {
     selectTab("tab-course");
-    if (state.route !== "all") setRoute("all");
-    $("#curriculum").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
-    scrollShelfTo($(`#shelf [data-chap="${levelId}"]`), false);
+    state.level = levelId;
+    if (state.route !== "all") setRoute("all"); else renderShelf();
+    $("#path").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
   }
 
   /* Jump to one card on the curriculum shelf and mark it briefly. */
@@ -739,9 +752,10 @@
     closeStation();
     selectTab("tab-course");
     if (state.route !== "all") setRoute("all");
+    const r = state.repos.get(id);
+    if (r && r.level && r.level !== state.level) { state.level = r.level; renderShelf(); }
     const el = $(`#shelf .ep[data-id="${CSS.escape(id)}"]`);
     if (!el) return;
-    const block = el.closest(".lv"); if (block) block.classList.add("open");
     document.querySelectorAll("#shelf .ep.picked").forEach((x) => x.classList.remove("picked", "flash"));
     el.classList.add("picked");
     el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
@@ -1360,8 +1374,14 @@
       if (nl) { closeStation(); gotoLevel(nl.dataset.nextLevel); return; }
       const ext = e.target.closest("a[data-post][target=_blank]");
       if (ext) stamp("post");
-      const more = e.target.closest("[data-lv-more]");
-      if (more) { more.closest(".lv").classList.add("open"); return; }
+      const stepBtn = e.target.closest("[data-step]");
+      if (stepBtn) {
+        state.level = stepBtn.dataset.step;
+        track("select_level", { level: state.level, source: stepBtn.classList.contains("lv-next") ? "next" : "path" });
+        if (state.route !== "all") setRoute("all"); else renderShelf();
+        if (stepBtn.classList.contains("lv-next") || $("#shelf").getBoundingClientRect().top > innerHeight * 0.7) $("#path").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        return;
+      }
       const mc = e.target.closest("[data-medal-card]");
       if (mc) { openMedalCard(mc.dataset.medalCard); return; }
       const dl = e.target.closest("[data-card-save]");
