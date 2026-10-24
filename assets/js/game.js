@@ -51,7 +51,7 @@
     $("#gm-feedback").innerHTML = `
       <p class="gm-verdict ${right ? "ok" : "no"}">${right ? "맞았습니다" : "아쉽습니다"}<span>정답: ${LABEL[q.answer]}</span></p>
       <p>${esc(q.why)}</p>
-      <p class="gm-read"><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener">${esc(q.chapter.title)} 읽기</a></p>
+      <p class="gm-read"><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "game", chapter: q.chapter.url.split("/").pop().slice(0, 2) }))}'>${esc(q.chapter.title)} 읽기</a></p>
       <button type="button" class="btn" data-next>${last ? "결과 보기" : "다음 문제"}</button>`;
     $("[data-next]", root).focus();
   }
@@ -70,7 +70,7 @@
       <p class="gm-split">인과라고 말할 수 있는 문제 ${state.right.cause} / ${kinds.cause} · 상관까지만인 문제 ${state.right.corr} / ${kinds.corr}</p>
       <h2>${esc(t.head)}</h2>
       <p class="gm-lede">${t.html ? t.body : esc(t.body)}</p>
-      ${chapters.length ? `<div class="gm-review"><h3>다시 볼 장</h3><ul>${chapters.map((c) => `<li><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title)}</a></li>`).join("")}</ul></div>` : ""}
+      ${chapters.length ? `<div class="gm-review"><h3>다시 볼 장</h3><ul>${chapters.map((c) => `<li><a href="${esc(c.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "game_review", chapter: c.url.split("/").pop().slice(0, 2) }))}'>${esc(c.title)}</a></li>`).join("")}</ul></div>` : ""}
       <div class="gm-cta">
         <a class="btn" href="./?quiz=1">3문항으로 내 시작점 찾기</a>
         <button type="button" class="btn ghost" data-share-game>${navigator.share ? "공유하기" : "결과와 링크 복사"}</button>

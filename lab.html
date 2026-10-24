@@ -50,6 +50,7 @@
           <div class="lab-row naive"><span class="nm">단순 비교</span><span class="bar"><i id="bar-naive"></i></span><b id="v-naive">+0.0</b></div>
           <div class="lab-row adj"><span class="nm">충성도로 보정</span><span class="bar"><i id="bar-adj"></i></span><b id="v-adj">+0.0</b></div>
           <p class="lab-bias" id="lab-bias"></p>
+          <p class="lab-note">보정 값도 표본에 따라 ±0.5쯤 흔들립니다. ‘새 사용자 800명 뽑기’로 확인해 보세요.</p>
         </div>
 
         <div class="lab-challenge" id="lab-challenge">
@@ -60,7 +61,7 @@
 
       <section class="lab-chart" aria-labelledby="lab-chart-title">
         <h2 id="lab-chart-title">사용자 800명</h2>
-        <p class="lab-chart-sub">가로는 충성도, 세로는 30일 잔존 점수. 점선은 두 집단의 평균이고, 그 간격이 단순 비교입니다.</p>
+        <p class="lab-chart-sub">가로는 충성도, 세로는 30일 잔존 점수. 점선은 두 집단의 평균(간격이 단순 비교), 실선은 충성도가 같을 때의 두 집단(간격이 보정 값)입니다.</p>
         <svg id="lab-svg" viewBox="0 0 640 360" role="img" aria-labelledby="lab-svg-desc"><desc id="lab-svg-desc">알림을 켠 사용자와 끈 사용자의 충성도와 잔존 점수 산점도</desc></svg>
         <ul class="lab-legend"><li><span class="dot on" aria-hidden="true"></span>알림 켬</li><li><span class="dot off" aria-hidden="true"></span>알림 끔</li></ul>
       </section>
@@ -69,9 +70,9 @@
     <section class="lab-learn" aria-labelledby="lab-learn-title">
       <h2 id="lab-learn-title">여기서 본 것</h2>
       <ol>
-        <li><b>교란이 단순 비교를 부풀립니다.</b> 충성도가 알림과 잔존을 함께 움직이면, 알림 효과가 0이어도 단순 비교는 양수로 나옵니다. <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/04-Graphical-Causal-Models.html" target="_blank" rel="noopener" data-event="lab_read" data-event-params='{"chapter":"04"}'>4장 그래프 인과 모델</a></li>
-        <li><b>무작위로 켜면 편향이 사라집니다.</b> 충성도와 알림이 따로 움직이니 두 집단이 평균적으로 같아집니다. <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html" target="_blank" rel="noopener" data-event="lab_read" data-event-params='{"chapter":"02"}'>2장 무작위 실험</a></li>
-        <li><b>교란 요인을 안다면 보정할 수 있습니다.</b> 여기서는 충성도를 알기에 회귀로 보정한 값이 정답에 가깝습니다. 현실에서는 충성도처럼 다 재기 어려운 요인이 남는다는 것이 문제입니다. <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/05-The-Unreasonable-Effectiveness-of-Linear-Regression.html" target="_blank" rel="noopener" data-event="lab_read" data-event-params='{"chapter":"05"}'>5장 선형회귀</a></li>
+        <li><b>교란이 단순 비교를 부풀립니다.</b> 충성도가 알림과 잔존을 함께 움직이면, 알림 효과가 0이어도 단순 비교는 양수로 나옵니다. <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/04-Graphical-Causal-Models.html" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='{"source":"lab","chapter":"04"}'>4장 그래프 인과 모델</a></li>
+        <li><b>무작위로 켜면 편향이 사라집니다.</b> 충성도와 알림이 따로 움직이니 두 집단이 평균적으로 같아집니다. <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='{"source":"lab","chapter":"02"}'>2장 무작위 실험</a></li>
+        <li><b>교란 요인을 안다면 보정할 수 있습니다.</b> 여기서는 충성도를 알기에 회귀로 보정한 값이 정답에 가깝습니다. 현실에서는 충성도처럼 다 재기 어려운 요인이 남는다는 것이 문제입니다. <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/05-The-Unreasonable-Effectiveness-of-Linear-Regression.html" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='{"source":"lab","chapter":"05"}'>5장 선형회귀</a></li>
       </ol>
       <div class="gm-cta"><a class="btn" href="./?quiz=1">3문항으로 내 시작점 찾기</a><a class="btn ghost" href="game.html">상관일까, 인과일까? 10문제</a><button type="button" class="btn ghost" id="lab-share">실험실 링크 복사</button></div>
     </section>
