@@ -1,0 +1,340 @@
+{
+  "viewBox": [
+    1240,
+    610
+  ],
+  "zones": [
+    {
+      "level": "L0",
+      "x": 16,
+      "w": 160
+    },
+    {
+      "level": "L1",
+      "x": 184,
+      "w": 200
+    },
+    {
+      "level": "L2",
+      "x": 392,
+      "w": 420
+    },
+    {
+      "level": "L3",
+      "x": 820,
+      "w": 184
+    },
+    {
+      "level": "L4",
+      "x": 1012,
+      "w": 212
+    }
+  ],
+  "lines": [
+    {
+      "line": "main",
+      "points": [
+        [
+          56,
+          200
+        ],
+        [
+          930,
+          200
+        ]
+      ],
+      "badge": [
+        56,
+        200
+      ]
+    },
+    {
+      "line": "ai",
+      "points": [
+        [
+          830,
+          128
+        ],
+        [
+          930,
+          128
+        ]
+      ],
+      "badge": [
+        830,
+        128
+      ]
+    },
+    {
+      "line": "ml",
+      "points": [
+        [
+          290,
+          280
+        ],
+        [
+          1110,
+          280
+        ]
+      ],
+      "badge": [
+        350,
+        280
+      ]
+    },
+    {
+      "line": "research",
+      "points": [
+        [
+          290,
+          360
+        ],
+        [
+          1060,
+          360
+        ],
+        [
+          1060,
+          540
+        ]
+      ],
+      "badge": [
+        350,
+        360
+      ]
+    },
+    {
+      "line": "exp",
+      "points": [
+        [
+          310,
+          440
+        ],
+        [
+          590,
+          440
+        ]
+      ],
+      "badge": [
+        310,
+        440
+      ]
+    },
+    {
+      "line": "behavior",
+      "points": [
+        [
+          430,
+          520
+        ],
+        [
+          780,
+          520
+        ]
+      ],
+      "badge": [
+        430,
+        520
+      ]
+    }
+  ],
+  "express": {
+    "from": [
+      404,
+      164
+    ],
+    "to": [
+      808,
+      164
+    ],
+    "label": "책·강의",
+    "stops": [
+      {
+        "id": "paid-book",
+        "x": 540
+      },
+      {
+        "id": "paid-lecture",
+        "x": 720
+      }
+    ]
+  },
+  "stations": [
+    {
+      "id": "causal-studio",
+      "x": 104,
+      "y": 200,
+      "label": "below"
+    },
+    {
+      "id": "Causal-Inference-with-Python",
+      "x": 290,
+      "y": 200,
+      "y2": 360,
+      "label": "above"
+    },
+    {
+      "id": "causal-inference-in-python-code",
+      "x": 470,
+      "y": 200,
+      "label": "below"
+    },
+    {
+      "id": "Smart_Causal_Inference",
+      "x": 610,
+      "y": 200,
+      "label": "below"
+    },
+    {
+      "id": "causal-inference-practice",
+      "x": 750,
+      "y": 200,
+      "label": "below"
+    },
+    {
+      "id": "Lang2SQL",
+      "x": 872,
+      "y": 128,
+      "label": "above"
+    },
+    {
+      "id": "policy-effect-analytics-agent",
+      "x": 930,
+      "y": 128,
+      "y2": 200,
+      "label": "below"
+    },
+    {
+      "id": "causal-inference-with-causalML",
+      "x": 500,
+      "y": 280,
+      "label": "below"
+    },
+    {
+      "id": "awesome-causal-inference-python",
+      "x": 680,
+      "y": 280,
+      "label": "below"
+    },
+    {
+      "id": "external",
+      "x": 1110,
+      "y": 280,
+      "label": "below"
+    },
+    {
+      "id": "Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines",
+      "x": 1060,
+      "y": 400,
+      "label": "right"
+    },
+    {
+      "id": "From-Fixed-to-Flexible-Your-Guide-to-Adaptive-Designs-and-Master-Protocols",
+      "x": 1060,
+      "y": 470,
+      "label": "right"
+    },
+    {
+      "id": "ccwr",
+      "x": 1060,
+      "y": 540,
+      "label": "right"
+    },
+    {
+      "id": "OCE-Materials",
+      "x": 350,
+      "y": 440,
+      "label": "below"
+    },
+    {
+      "id": "Experimentation-platform-materials",
+      "x": 590,
+      "y": 440,
+      "label": "below"
+    },
+    {
+      "id": "causal-inference-lecture",
+      "x": 470,
+      "y": 520,
+      "label": "below"
+    },
+    {
+      "id": "Marketing_Science",
+      "x": 620,
+      "y": 520,
+      "label": "below"
+    },
+    {
+      "id": "data-still-does-not-speak",
+      "x": 780,
+      "y": 520,
+      "label": "below"
+    }
+  ],
+  "external": {
+    "id": "external",
+    "title": "외부 라이브러리 기여",
+    "summary": "팀에서 연습한 기여를 DoWhy, EconML, CausalML 같은 인과추론 오픈소스로 넓힙니다. 팀에서 쌓은 경험을 밖으로 넓히는 단계입니다.",
+    "level": "L4",
+    "lines": [
+      "ml"
+    ],
+    "links": [
+      {
+        "label": "PyWhy",
+        "url": "https://www.pywhy.org/"
+      },
+      {
+        "label": "uber/causalml",
+        "url": "https://github.com/uber/causalml"
+      }
+    ]
+  },
+  "paid": [
+    {
+      "id": "paid-book",
+      "title": "실무로 통하는 인과추론 with 파이썬",
+      "mapLabel": "실무 인과추론 책 (유료)",
+      "summary": "『실무로 통하는 인과추론 with 파이썬』(한빛미디어, 2024). 팀이 함께 번역한 책으로, 장별 예제 코드와 발표 자료는 무료 레포로 공개되어 있습니다.",
+      "level": "L2",
+      "lines": [
+        "main"
+      ],
+      "links": [
+        {
+          "label": "한빛미디어에서 보기",
+          "url": "https://www.hanbit.co.kr/store/books/look.php?p_code=B6208936856"
+        },
+        {
+          "label": "무료 예제 코드",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code"
+        }
+      ],
+      "type": "도서",
+      "meta": "2024 · 464쪽",
+      "cover": "assets/img/hanbit-book.jpg",
+      "credit": "마테우스 파쿠레 지음, 신진수·가짜연구소 인과추론팀 옮김"
+    },
+    {
+      "id": "paid-lecture",
+      "title": "데이터 실무자의 사고력 강화: AI 인과추론 실무",
+      "mapLabel": "온라인 강의 (유료)",
+      "summary": "한빛미디어 온라인 강의. 책에서 익힌 기법을 실험 설계, 준실험, Causal ML로 이어 가며 분석 결과를 비즈니스 결정으로 옮기는 과정을 다룹니다.",
+      "level": "L2",
+      "lines": [
+        "main"
+      ],
+      "links": [
+        {
+          "label": "한빛미디어에서 보기",
+          "url": "https://www.hanbit.co.kr/product/C0781073345"
+        }
+      ],
+      "type": "강의",
+      "meta": "27강 · 약 8시간",
+      "cover": "assets/img/hanbit-lecture.jpg",
+      "credit": "신진수",
+      "shortTitle": "AI 인과추론 실무"
+    }
+  ]
+}

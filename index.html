@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com; img-src 'self' data: blob: https://github.com https://avatars.githubusercontent.com https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://api.github.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<script src="assets/js/ga.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Causal Inference Hub | 가짜연구소 인과추론팀</title>
+<meta name="description" content="인과추론에서 AI 시대의 데이터 리터러시까지. 가짜연구소 인과추론팀이 2022년부터 함께 만든 오픈소스와 커리큘럼을 한곳에 모은 허브입니다.">
+<meta property="og:title" content="Causal Inference Hub | 가짜연구소 인과추론팀">
+<meta property="og:description" content="웹북, 영상, 데이터 에이전트, 강의 자료까지. 2022년부터 함께 만든 오픈소스와 자료를 L0–L4 커리큘럼으로 엮었습니다.">
+<meta property="og:image" content="https://causalinferencelab.github.io/assets/img/og-hub.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/team-mark.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" integrity="sha384-/uC/GIvKJ/9RN6i1izHoBY9ubYo60OAsQRNQ3NRFiNsN+N/MVQJHD5OYcZz6wvwn" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/css/hub.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="#top" aria-label="Causal Inference Hub 처음으로">
+      <img class="brand-logo" src="assets/img/team-mark.png" alt="" width="34" height="34">
+      <span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span>
+    </a>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="#curriculum">커리큘럼</a>
+      <a href="#contrib">기여</a>
+      <a href="#events">행사</a>
+      <a href="#reading">읽을거리</a>
+      <a href="#join">참여하기</a>
+    </nav>
+    <button type="button" class="pass-btn" data-passport aria-label="학습 여권 열기">여권 <b data-passport-count>0/9</b></button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div class="banner">
+        <div class="banner-main">
+          <p class="banner-kicker"><span>Pseudo-Lab</span><span class="sep" aria-hidden="true"></span>인과추론팀 <b>Causal-Lab</b></p>
+          <h1 id="hero-title">Causal Inference Hub</h1>
+          <p class="banner-lede">인과추론에서 시작해 AI 시대의 데이터 리터러시까지. <br>2022년부터 함께 만든 오픈소스와 자료를 L0–L4 커리큘럼으로 엮었습니다.</p>
+          <div class="banner-cta">
+            <a class="pill solid" href="#curriculum">커리큘럼 보기</a>
+            <a class="pill" href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a>
+            <a class="pill" href="#join">참여하기</a>
+          </div>
+          <div class="partner" aria-labelledby="partner-title">
+            <p class="partner-k" id="partner-title"><b>With 한빛미디어</b><span>팀이 옮긴 책과 그 내용을 실무로 잇는 강의입니다. 둘 다 커리큘럼 L2에 들어 있습니다.</span></p>
+            <ul class="partner-list" id="partner-list"></ul>
+          </div>
+          <p class="academy" id="academy"></p>
+        </div>
+        <div class="banner-side">
+          <img class="banner-mark" src="assets/img/team-mark.png" alt="" width="132" height="132">
+          <ul class="featured" id="featured" aria-label="대표 사이트"></ul>
+        </div>
+      </div>
+      <div class="hero-grid">
+        <ul class="growth" id="growth" aria-label="팀의 성장 지표">
+          <li class="tile"><span class="tile-label">함께한 러너</span><span class="tile-value">102명</span></li>
+          <li class="tile"><span class="tile-label">프로젝트</span><span class="tile-value">23개</span></li>
+          <li class="tile"><span class="tile-label">GitHub 스타</span><span class="tile-value">1,045</span></li>
+          <li class="tile"><span class="tile-label">행사 참가자</span><span class="tile-value">330명</span></li>
+        </ul>
+        <aside class="ladder-card" aria-labelledby="ladder-title">
+          <h2 id="ladder-title">인과추론 커리큘럼</h2>
+          <p class="ladder-sub">L0–L2는 무료 자료만으로 끝까지 갈 수 있습니다.</p>
+          <ol class="ladder" id="ladder"></ol>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="daily-band" id="daily" aria-labelledby="daily-title">
+    <div class="wrap"><div class="daily" id="daily-card"><h2 id="daily-title" class="sr">오늘의 한 문제</h2></div></div>
+  </section>
+
+  <section class="band" id="curriculum" aria-labelledby="curriculum-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="curriculum-title">커리큘럼과 오픈소스</h2>
+        <p id="curriculum-sub">트랙 지도로 전체를 보고, 커리큘럼에서 하나씩 열어 보세요.</p>
+      </div>
+      <div class="goal-row">
+        <span class="goal-q">무엇을 하고 싶나요?</span>
+        <div class="route-chips" role="radiogroup" aria-label="목표 고르기" id="route-chips"></div>
+      </div>
+      <p class="route-note" id="route-note" aria-live="polite"></p>
+      <div class="tabs big" role="tablist" aria-label="보기 방식">
+        <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="true">트랙 지도</button>
+        <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="false" tabindex="-1">커리큘럼<span class="tab-n" id="n-course"></span></button>
+        <button type="button" role="tab" id="tab-contrib" aria-controls="panel-contrib" aria-selected="false" tabindex="-1">기여<span class="tab-n" id="n-contrib"></span></button>
+      </div>
+
+      <div id="panel-map" role="tabpanel" aria-labelledby="tab-map">
+        <div class="map-card">
+          <p class="map-hint" id="map-hint" hidden>지도가 화면보다 넓습니다. 옆으로 밀면 L3·L4까지 보입니다.</p>
+          <div class="map-scroll" id="map-scroll">
+            <svg id="metro" role="group" aria-labelledby="metro-title"><title id="metro-title">인과추론 트랙 지도: L0부터 L4까지 6개 트랙</title></svg>
+          </div>
+          <div class="vlines" id="vlines"></div>
+          <ul class="line-legend" id="line-legend"></ul>
+        </div>
+      </div>
+
+      <div id="panel-course" role="tabpanel" aria-labelledby="tab-course" hidden>
+        <div class="week" id="week"></div>
+        <div class="shelf-bar">
+          <div class="chapters" id="chapters" role="group" aria-label="단계로 이동"></div>
+          <div class="shelf-nav">
+            <button type="button" data-shelf="-1" aria-label="이전 레포"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button type="button" data-shelf="1" aria-label="다음 레포"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+        <div class="shelf-wrap" id="shelf-wrap">
+          <ol class="shelf" id="shelf" tabindex="0" aria-label="레포 목록. 좌우로 스크롤할 수 있습니다."></ol>
+        </div>
+        <p class="shelf-foot" id="shelf-foot"></p>
+      </div>
+
+      <div id="panel-contrib" role="tabpanel" aria-labelledby="tab-contrib" hidden>
+        <div class="contrib-top">
+          <h3 class="contrib-head">가장 많이 기여한 Builder</h3>
+          <p class="contrib-note">Builder로 연 프로젝트 수, 그다음 함께한 러너 수 순입니다. 카드를 누르면 이력이 열립니다.</p>
+        </div>
+        <ol class="top3" id="top3"></ol>
+        <section class="medal-ladder" id="medal-ladder" aria-label="Builder 메달"></section>
+        <h3 class="contrib-head rail-head">함께한 Builder</h3>
+        <div class="people-rail" id="people-rail" aria-label="함께한 Builder"></div>
+        <h3 class="contrib-head">전체 Builder</h3>
+        <p class="contrib-sub" id="contrib-sub"></p>
+        <ul class="roster-legend" id="roster-legend"></ul>
+        <div class="roster" id="roster"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="band" id="events" aria-labelledby="events-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="events-title">행사</h2>
+        <p>현업과 학계가 만나는 Data Forum을 열고, 학회 행사에 협력합니다.</p>
+      </div>
+      <ol class="events" id="event-list"></ol>
+      <section class="stage" id="stage" aria-labelledby="stage-title"></section>
+    </div>
+  </section>
+
+  <section class="band" id="reading" aria-labelledby="reading-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="reading-title">읽을거리</h2>
+        <p>팀이 쓴 글과 독자를 위한 자료입니다.</p>
+      </div>
+      <ul class="articles" id="article-list"></ul>
+    </div>
+  </section>
+
+  <section class="band" id="join" aria-labelledby="join-title">
+    <div class="wrap join">
+      <div class="section-head">
+        <h2 id="join-title">참여하기</h2>
+        <p>러너로 시작해 기여를 쌓고, Builder로 다음 기수의 프로젝트를 엽니다.</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <h3>러너로 참여</h3>
+          <p>가짜연구소는 반기마다 기수를 모집합니다. 인과추론팀 프로젝트에 러너로 들어와 14주 동안 함께 공부하고 만듭니다.</p>
+          <a class="btn" href="https://pseudo-lab.com/" target="_blank" rel="noopener">가짜연구소 프로젝트 보기</a>
+        </li>
+        <li>
+          <h3>첫 기여 남기기</h3>
+          <p>오탈자 하나, 예제 하나도 기여입니다. 진행 중인 레포의 이슈를 보고 PR을 보내 주세요.</p>
+          <a class="btn" href="https://github.com/search?q=org%3ACausalInferenceLab+is%3Aissue+is%3Aopen&type=issues" target="_blank" rel="noopener">열린 이슈 보기</a>
+        </li>
+        <li>
+          <h3>Builder로 프로젝트 열기</h3>
+          <p>다음 기수에 직접 프로젝트를 열어 보세요. 레포는 템플릿으로 시작하고, 이 허브에는 데이터 파일 PR 한 번으로 올라갑니다.</p>
+          <a class="btn" href="https://github.com/CausalInferenceLab/Project-template" target="_blank" rel="noopener">프로젝트 템플릿</a>
+        </li>
+      </ol>
+      <p class="join-foot">질문은 <a href="https://discord.gg/HeHbFAvmSZ" target="_blank" rel="noopener">가짜연구소 디스코드</a>에 남겨 주세요.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <div>
+      <p class="footer-brand">가짜연구소 인과추론팀</p>
+      <p id="footer-note">러너 수는 팀 프로젝트 기록에서, 스타와 기여자 수는 GitHub에서 집계합니다. 방문 통계는 Google Analytics로 이름 없이 집계합니다.</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://pseudo-lab.com/" target="_blank" rel="noopener">가짜연구소</a></li>
+      <li><a href="https://discord.gg/HeHbFAvmSZ" target="_blank" rel="noopener">Discord</a></li>
+      <li><a href="builders/">Builder</a></li>
+      <li><a href="game.html">상관일까, 인과일까?</a></li>
+      <li><a href="lab.html">교란 실험실</a></li>
+      <li><a href="https://github.com/CausalInferenceLab/CausalInferenceLab.github.io" target="_blank" rel="noopener">이 허브 고치기</a></li>
+    </ul>
+  </div>
+</footer>
+
+<dialog class="station" id="station-dialog" aria-labelledby="station-title">
+  <div class="station-inner" id="station-body"></div>
+</dialog>
+
+<script src="assets/js/track.js" defer></script>
+<script src="assets/js/passport.js" defer></script>
+<script src="assets/js/hub.js" defer></script>
+</body>
+</html>
