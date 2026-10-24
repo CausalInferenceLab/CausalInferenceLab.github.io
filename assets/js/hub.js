@@ -965,8 +965,11 @@
     const ordered = [...list].sort((a, b) => (a.date < b.date ? -1 : 1));
     return ordered[((weekIndex() % ordered.length) + ordered.length) % ordered.length];
   }
+  /* posts dated in the future wait for their day (Korean time), so a series can be queued in one PR */
+  const todayKST = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+  const published = (a) => String(a.date || "") <= todayKST();
   function renderArticles() {
-    const box = $("#post-box"), list = state.articles;
+    const box = $("#post-box"), list = state.articles.filter(published);
     if (!box || !list.length) return;
     const pick = weeklyPost(list);
     const series = list.filter((a) => a.series && a.series === pick.series).sort((a, b) => (a.episode || 0) - (b.episode || 0));
