@@ -310,7 +310,8 @@
           <span class="rc"><b>${free.length}</b>레포</span>
         </button></li>`;
     }).join("");
-    $("#ladder").innerHTML = rows;
+    const box = $("#ladder");
+    if (box) box.innerHTML = rows;
   }
 
   /* ---------- curriculum: chaptered shelf ---------- */
@@ -397,7 +398,7 @@
     const depot = [...state.repos.values()].filter((r) => r.status === "depot");
     const learnable = repos.filter((r) => (r.lines || []).length);
     const done = learnable.filter((r) => state.ridden.has(r.repo)).length;
-    $("#curriculum-sub").textContent = `팀 레포 ${repos.length}개. 트랙 지도로 전체를 보고, 커리큘럼에서 하나씩 열어 보세요.`;
+    $("#curriculum-sub").textContent = `L0부터 L4까지, 팀이 만든 레포 ${repos.length}개를 순서대로 엮었습니다. L0–L2는 무료 자료만으로 끝까지 갈 수 있습니다.`;
     $("#n-course").textContent = repos.length; $("#n-course").title = `레포 ${repos.length}개`;
     $("#shelf-foot").innerHTML = `${done ? `<span class="done-n">학습 완료 ${done} / ${learnable.length}</span> ` : ""}카드를 누르면 자세한 정보와 링크가 열립니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
     shelf.scrollLeft = keepScroll ? prevLeft : 0;
@@ -582,7 +583,7 @@
           <span class="pc-stats">프로젝트 <b>${p.projects}</b> · 러너 <b>${fmt(p.runners)}</b></span>
           ${latest ? `<span class="pc-latest">최근 · ${esc(latest.name)}</span>` : ""}</span></button></li>`;
     };
-    $("#people-rail").innerHTML = rest.length ? `<div class="people-move" style="--dur:${rest.length * 6}s"><ul class="people-track">${rest.map((p) => card(p, false)).join("")}</ul><ul class="people-track dup" aria-hidden="true">${rest.map((p) => card(p, true)).join("")}</ul></div>` : "";
+    $("#people-rail").innerHTML = rest.length ? `<ul class="people-grid">${rest.map((p) => card(p, false)).join("")}</ul>` : "";
 
     const head = `<div class="ro-head" aria-hidden="true"><span>Builder</span><span>참여한 기수</span><span>최근 프로젝트</span><span class="tot">합계</span></div>`;
     $("#roster").innerHTML = head + `<ol class="ro-list">${list.map((p) => `<li class="ro" data-line="${p.line}" data-person-row="${esc(p.name)}">
@@ -594,8 +595,7 @@
     wireAvatars($("#top3")); wireAvatars($("#people-rail")); wireAvatars($("#roster"));
 
     const contributors = state.stats.totals && state.stats.totals.contributors;
-    $("#n-contrib").textContent = list.length; $("#n-contrib").title = `Builder ${list.length}명`;
-    $("#contrib-sub").textContent = `Builder ${list.length}명이 ${cohorts.length}개 기수 동안 프로젝트 ${state.projects.length}개를 열었습니다.${contributors ? ` GitHub 기여자는 ${fmt(contributors)}명입니다.` : ""}`;
+    $("#contrib-sub").textContent = `프로젝트를 여는 사람을 Builder라고 부릅니다. ${list.length}명이 ${cohorts.length}개 기수 동안 프로젝트 ${state.projects.length}개를 열었습니다.${contributors ? ` GitHub 기여자는 ${fmt(contributors)}명입니다.` : ""}`;
     $("#roster-legend").innerHTML = `<li><span class="cc b" data-line="main"><b>8기</b>러너 6</span>Builder로 연 기수와 함께한 러너 수</li><li><span class="cc r" data-line="main"><b>7기</b>러너</span>러너로 참여한 기수</li><li><span class="cc b live" data-line="main"><b>13기</b>진행 중</span>지금 진행 중</li>`;
     renderMedalLadder(list);
   }
@@ -808,22 +808,27 @@
     }
   }
 
+  /* the next Data Forum gets the space; past ones are one line each */
   function renderEvents() {
-    const list = [...state.events].sort((a, b) => (b.upcoming ? 1 : 0) - (a.upcoming ? 1 : 0) || b.order - a.order);
-    const max = Math.max(...list.map((e) => e.participants || 0)) || 1;
-    $("#event-list").innerHTML = list.map((e) => {
-      const when = e.date ? dot(e.date) : `${e.year}년`;
-      const title = e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">${esc(e.name)}</a>` : esc(e.name);
-      return `<li class="event${e.upcoming ? " upcoming" : ""}">
+    const list = [...state.events].sort((a, b) => b.order - a.order);
+    const next = list.find((e) => e.upcoming), past = list.filter((e) => !e.upcoming);
+    const when = (e) => (e.date ? dot(e.date) : `${e.year}년`);
+    const total = past.reduce((s, e) => s + (e.participants || 0), 0);
+    const nextHTML = next ? `<li class="event next">
+        <span class="soon-tag">다음 행사</span>
+        <span class="ord">${next.order}회</span>
+        <h3>${next.link ? `<a href="${esc(next.link)}" target="_blank" rel="noopener">${esc(next.name)}</a>` : esc(next.name)}</h3>
+        <span class="when">${when(next)}</span>
+        ${next.link ? `<a class="btn sm" href="${esc(next.link)}" target="_blank" rel="noopener">참가 신청하기</a>` : `<span class="ppl">신청 링크는 곧 열립니다.</span>`}
+      </li>` : "";
+    const pastHTML = past.map((e) => `<li class="event past">
         <span class="ord">${e.order}회</span>
-        ${e.upcoming ? `<span class="soon-tag">예정</span>` : ""}
-        <h3>${title}</h3>
-        <span class="when">${when}</span>
-        ${e.participants ? `<div class="ppl"><b>${fmt(e.participants)}</b>명 참가<div class="bar" aria-hidden="true"><i style="width:${Math.round((e.participants / max) * 100)}%"></i></div></div>`
-          : e.upcoming && e.link ? `<a class="btn sm" href="${esc(e.link)}" target="_blank" rel="noopener">참가 신청하기</a>` : `<div class="ppl">${e.upcoming ? "신청 링크는 곧 열립니다." : ""}</div>`}
-      </li>`;
-    }).join("");
+        <span class="ev-name">${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">${esc(e.name)}</a>` : esc(e.name)}<span class="when">${when(e)}</span></span>
+        <span class="ev-n">${e.participants ? `<b>${fmt(e.participants)}</b>명` : ""}</span>
+      </li>`).join("");
+    $("#event-list").innerHTML = nextHTML + (past.length ? `<li class="event-past"><p class="ev-sum">지난 Data Forum ${past.length}회 · 참가 ${fmt(total)}명</p><ol>${pastHTML}</ol></li>` : "");
   }
+
 
   /* ---------- metro map ---------- */
   function svg(tag, attrs = {}, parent) {
@@ -1343,8 +1348,6 @@
         shelf.scrollBy({ left: Number(step.dataset.shelf) * shelf.clientWidth * 0.8, behavior: reduceMotion ? "auto" : "smooth" });
         return;
       }
-      const tabLink = e.target.closest('a[href="#contrib"]');
-      if (tabLink) { e.preventDefault(); selectTab("tab-contrib"); $("#curriculum").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" }); return; }
       const open = e.target.closest("[data-open]");
       if (open) { e.preventDefault(); state.backTo = open.dataset.fromPerson || (open.closest(".p-repos") ? (state.lastPerson || null) : null); openStation(open.dataset.open, sourceOf(open)); }
       const back = e.target.closest("[data-back-person]");
@@ -1369,16 +1372,15 @@
   /* Highlight the nav item for the section in view. */
   let navCur = null;
   function paintNav() {
-    const contribOn = $("#tab-contrib").getAttribute("aria-selected") === "true";
     document.querySelectorAll(".site-nav a[href^='#']").forEach((a) => {
       const href = a.getAttribute("href");
-      const on = navCur === "curriculum" ? (href === "#contrib" ? contribOn : href === "#curriculum" && !contribOn) : href === "#" + navCur;
+      const on = href === "#" + navCur;
       if (on) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
     });
   }
   function navSpy() {
     if (!("IntersectionObserver" in window)) return;
-    const ids = ["curriculum", "events", "reading", "join"];
+    const ids = ["curriculum", "contrib", "events", "reading", "join"];
     const seen = new Map();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
@@ -1403,7 +1405,8 @@
     renderContrib();
     renderLegend(); renderMap(); wireTabs();
     renderFeatured(); renderPartner(); renderEvents(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
-    if (location.hash === "#contrib") { selectTab("tab-contrib"); requestAnimationFrame(() => $("#curriculum").scrollIntoView()); }
+    /* sections fill in after the data loads, so jump again once they have their height */
+    if (/^#(contrib|events|reading|join)$/.test(location.hash)) requestAnimationFrame(() => { const el = $(location.hash); if (el) el.scrollIntoView(); });
     openFromHash();
     if (location.hash === "#start" || new URLSearchParams(location.search).has("quiz")) openQuiz();
     navSpy();
