@@ -2,13 +2,22 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BEBVKYH8HL"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C5V0X2SGD3"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-BEBVKYH8HL');
+  gtag('config', 'G-C5V0X2SGD3', { page_location: location.href });
+  /* GA has the campaign from page_location; keep shared URLs free of utm_* */
+  (function () {
+    try {
+      var u = new URL(location.href), drop = [];
+      u.searchParams.forEach(function (v, k) { if (k.indexOf("utm_") === 0) drop.push(k); });
+      if (drop.length) { drop.forEach(function (k) { u.searchParams.delete(k); }); history.replaceState(history.state, "", u.pathname + u.search + u.hash); }
+    } catch (e) {}
+  })();
 </script>
+<script src="/assets/js/track.js" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>페이지를 찾을 수 없습니다 | Causal Inference Hub</title>
 <link rel="icon" href="/assets/img/team-mark.png">

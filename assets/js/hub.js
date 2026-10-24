@@ -782,6 +782,7 @@
   function openStation(id) {
     const r = state.repos.get(id);
     if (!r) return;
+    if (window.hubTrack) window.hubTrack("station_open", { repo: id, level: r.level || "", from_link: stationFromHash() === id ? "yes" : "no" });
     if (r.kind !== "paid") {
       state.recent = [{ id, t: Date.now() }, ...state.recent.filter((x) => x.id !== id)].slice(0, 6);
       saveRecent(); renderWeek();
