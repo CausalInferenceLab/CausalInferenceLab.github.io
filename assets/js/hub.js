@@ -24,6 +24,7 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const dot = (d) => d.replace(/-/g, ".");
   const track = (name, params) => { if (window.hubTrack) window.hubTrack(name, params); };
+  const stamp = (id) => { if (window.hubStamp) window.hubStamp(id); };
   const shareUrl = (path, medium) => (window.hubShareUrl ? window.hubShareUrl(path, medium) : path);
 
   const state = {
@@ -45,7 +46,7 @@
 
   /* ---------- data ---------- */
   async function load() {
-    const names = ["repos", "lines", "levels", "map", "routes", "projects", "events", "articles", "builders", "growth", "stats", "featured"];
+    const names = ["repos", "lines", "levels", "map", "routes", "projects", "events", "articles", "builders", "growth", "stats", "featured", "daily"];
     const data = await Promise.all(names.map((n) => getJSON(`data/${n}.json`)));
     const d = Object.fromEntries(names.map((n, i) => [n, data[i]]));
     d.repos.forEach((r) => {
@@ -57,7 +58,7 @@
     (d.map.paid || []).forEach((p) => state.repos.set(p.id, { repo: p.id, kind: "paid", status: "paid", builders: [], cohorts: [], ...p }));
     state.lineList = d.lines;
     d.lines.forEach((l) => state.lines.set(l.id, l));
-    Object.assign(state, { levels: d.levels, map: d.map, routes: d.routes, projects: d.projects, events: d.events, articles: d.articles, builders: d.builders, growth: d.growth, stats: d.stats, featured: d.featured });
+    Object.assign(state, { levels: d.levels, map: d.map, routes: d.routes, projects: d.projects, events: d.events, articles: d.articles, builders: d.builders, growth: d.growth, stats: d.stats, featured: d.featured, daily: d.daily });
 
     const pos = new Map(d.map.stations.map((s) => [s.id, s]));
     d.lines.forEach((l) => {
@@ -529,6 +530,7 @@
     if (!p) return;
     const info = builderInfo(name);
     track("open_builder", { builder: info.slug || name, source: source || "hub" });
+    if (window.hubCount) window.hubCount("builder_views", 3, "builder");
     const runnerItems = p.runnerOf.map((x) => {
       const proj = state.projects.find((q) => q.cohort === x.cohort && q.name === x.project);
       const r = proj && proj.repo && state.repos.get(proj.repo);
@@ -797,6 +799,54 @@
       <li><a class="article-card" href="article.html#${esc(a.slug)}"><h3>${esc(a.title)}</h3><p>${esc(a.summary)}</p><time datetime="${esc(a.date)}">${dot(a.date)}</time></a></li>`).join("");
   }
 
+  /* ---------- today's question (one a day, streak kept in this browser) ---------- */
+  const DAILY_KEY = "cil-hub-daily";
+  const dayNum = (d = new Date()) => Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / DAY);
+  const loadDaily = () => { try { return JSON.parse(localStorage.getItem(DAILY_KEY) || "{}"); } catch (e) { return {}; } };
+  const saveDaily = (d) => { try { localStorage.setItem(DAILY_KEY, JSON.stringify(d)); } catch (e) { /* storage unavailable */ } };
+  const DAILY_LABEL = { cause: "그렇게 말할 수 있다", corr: "상관까지만 말할 수 있다" };
+  function renderDaily() {
+    const pool = (state.daily && state.daily.questions) || [];
+    const box = $("#daily-card");
+    if (!pool.length || !box) return;
+    const today = dayNum(), q = pool.at(today % pool.length), rec = loadDaily();
+    const ans = rec.answers && rec.answers[today];
+    const now = new Date();
+    const streak = rec.last === today || rec.last === today - 1 ? rec.streak || 0 : 0;
+    const head = `<div class="daily-head"><h2 id="daily-title">오늘의 한 문제</h2><p class="daily-date">${now.getMonth() + 1}월 ${now.getDate()}일 · 매일 바뀝니다</p>
+      ${streak ? `<p class="daily-streak"><b>${streak}일</b> 연속${rec.best > streak ? ` · 최고 ${rec.best}일` : ""}</p>` : `<p class="daily-streak quiet">사흘 연속 풀면 스탬프</p>`}</div>`;
+    if (!ans) {
+      box.innerHTML = `${head}<div class="daily-body">
+        <p class="daily-q">${esc(q.text)}</p>
+        <p class="daily-claim"><span>이렇게 말해도 될까요?</span>“${esc(q.claim)}”</p>
+        <div class="daily-opts"><button type="button" data-daily="cause">${DAILY_LABEL.cause}</button><button type="button" data-daily="corr">${DAILY_LABEL.corr}</button></div></div>`;
+      return;
+    }
+    box.innerHTML = `${head}<div class="daily-body">
+      <p class="daily-q">${esc(q.text)}</p>
+      <p class="daily-verdict ${ans.correct ? "ok" : "no"}">${ans.correct ? "맞았습니다" : "아쉽습니다"}<span>정답: ${DAILY_LABEL[q.answer]}</span></p>
+      <p class="daily-why">${esc(q.why)}</p>
+      <p class="daily-more"><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener">${esc(q.chapter.title)} 읽기</a><a href="game.html">10문제 더 풀기</a><a href="lab.html">실험실에서 직접 해 보기</a></p>
+      <p class="daily-next">내일 새 문제가 열립니다.</p></div>`;
+  }
+  function answerDaily(pick) {
+    const pool = (state.daily && state.daily.questions) || [];
+    const today = dayNum(), q = pool.at(today % pool.length), rec = loadDaily();
+    rec.answers = rec.answers || {};
+    if (rec.answers[today]) return;
+    const correct = pick === q.answer;
+    rec.answers[today] = { pick, correct };
+    Object.keys(rec.answers).map(Number).filter((k) => k < today - 40).forEach((k) => delete rec.answers[k]);
+    rec.streak = rec.last === today - 1 ? (rec.streak || 0) + 1 : 1;
+    rec.best = Math.max(rec.best || 0, rec.streak);
+    rec.last = today;
+    saveDaily(rec);
+    track("daily_answer", { q: q.id, correct, streak: rec.streak });
+    renderDaily();
+    stamp("daily");
+    if (rec.streak >= 3) stamp("streak3");
+  }
+
   /* ---------- start-point quiz (three questions to one route) ---------- */
   const QUIZ = [
     { key: "experience", q: "인과추론은 어느 정도 해 보셨나요?", opts: [["new", "처음이에요"], ["some", "개념은 들어 봤어요"], ["used", "업무에 써 봤어요"]] },
@@ -863,7 +913,7 @@
   function quizPick(v) {
     quiz.a[QUIZ.at(quiz.step).key] = v;
     quiz.step += 1;
-    if (quiz.step === QUIZ.length) track("quiz_complete", { route: quizRoute(quiz.a), ...quiz.a });
+    if (quiz.step === QUIZ.length) { track("quiz_complete", { route: quizRoute(quiz.a), ...quiz.a }); stamp("quiz"); }
     renderQuiz();
   }
   function quizBack() { quiz.step = Math.max(0, quiz.step - 1); renderQuiz(); }
@@ -963,7 +1013,7 @@
     const r = state.repos.get(id);
     if (!r) return;
     state.openRepo = r;
-    if (!silent) track("open_repo", { repo: r.repo, level: r.level || "", source: source || "hub" });
+    if (!silent) { track("open_repo", { repo: r.repo, level: r.level || "", source: source || "hub" }); stamp("first_open"); }
     if (!silent && r.kind !== "paid") {
       state.recent = [{ id, t: Date.now() }, ...state.recent.filter((x) => x.id !== id)].slice(0, 6);
       saveRecent(); renderWeek();
@@ -1040,6 +1090,7 @@
     if (state.ridden.has(id)) state.ridden.delete(id); else state.ridden.add(id);
     const rr = state.repos.get(id);
     track("mark_done", { repo: id, level: (rr && rr.level) || "", done: state.ridden.has(id) });
+    if (state.ridden.has(id) && rr && rr.level && levelDone(rr.level)) stamp("finish");
     saveRidden();
     renderMap(); renderShelf(true); renderWeek();
     openStation(id, "dialog", true);
@@ -1058,6 +1109,8 @@
       if (ja) track("click_join", { target: joinTarget(ja.getAttribute("href") || ""), source: ja.closest("#join") ? "join_section" : "footer" });
       const sa = e.target.closest("#station-body .links a");
       if (sa && state.openRepo) track("click_outbound", { repo: state.openRepo.repo, kind: state.openRepo.kind === "paid" ? "paid" : /github\.com/.test(sa.href) ? "github" : "site" });
+      const dpick = e.target.closest("[data-daily]");
+      if (dpick) { answerDaily(dpick.dataset.daily); return; }
       if (e.target.closest("[data-quiz-open]")) { openQuiz(); return; }
       const pick = e.target.closest("[data-quiz-pick]");
       if (pick) { quizPick(pick.dataset.quizPick); return; }
@@ -1144,7 +1197,7 @@
     $("#shelf").addEventListener("scroll", shelfSpy, { passive: true });
     renderContrib();
     renderLegend(); renderMap(); wireTabs();
-    renderFeatured(); renderPartner(); renderEvents(); renderArticles();
+    renderFeatured(); renderPartner(); renderEvents(); renderArticles(); renderDaily();
     if (location.hash === "#contrib") { selectTab("tab-contrib"); requestAnimationFrame(() => $("#curriculum").scrollIntoView()); }
     openFromHash();
     if (location.hash === "#start" || new URLSearchParams(location.search).has("quiz")) openQuiz();

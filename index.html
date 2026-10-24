@@ -33,6 +33,7 @@
       <a href="#reading">읽을거리</a>
       <a href="#join">참여하기</a>
     </nav>
+    <button type="button" class="pass-btn" data-passport aria-label="학습 여권 열기">여권 <b data-passport-count>0/9</b></button>
   </div>
 </header>
 
@@ -75,6 +76,10 @@
     </div>
   </section>
 
+  <section class="daily-band" id="daily" aria-labelledby="daily-title">
+    <div class="wrap"><div class="daily" id="daily-card"><h2 id="daily-title" class="sr">오늘의 한 문제</h2></div></div>
+  </section>
+
   <section class="band" id="curriculum" aria-labelledby="curriculum-title">
     <div class="wrap">
       <div class="section-head">
@@ -87,7 +92,8 @@
       </div>
       <div class="start-row">
         <button type="button" class="start-btn" data-quiz-open><b>잘 모르겠다면</b> 3문항으로 시작점 찾기</button>
-        <a class="start-game" href="game.html">가볍게 몸풀기: 상관일까, 인과일까?</a>
+        <a class="start-game" href="game.html">몸풀기 게임: 상관일까, 인과일까?</a>
+        <a class="start-game" href="lab.html">교란 실험실: 편향을 직접 만들어 보기</a>
       </div>
       <p class="route-note" id="route-note" aria-live="polite"></p>
       <div class="tabs big" role="tablist" aria-label="보기 방식">
@@ -198,6 +204,7 @@
       <li><a href="https://discord.gg/HeHbFAvmSZ" target="_blank" rel="noopener">Discord</a></li>
       <li><a href="builders/">Builder</a></li>
       <li><a href="game.html">상관일까, 인과일까?</a></li>
+      <li><a href="lab.html">교란 실험실</a></li>
       <li><a href="https://github.com/CausalInferenceLab/CausalInferenceLab.github.io" target="_blank" rel="noopener">이 허브 고치기</a></li>
     </ul>
   </div>
@@ -208,6 +215,7 @@
 </dialog>
 
 <script src="assets/js/track.js" defer></script>
+<script src="assets/js/passport.js" defer></script>
 <script src="assets/js/hub.js" defer></script>
 </body>
 </html>

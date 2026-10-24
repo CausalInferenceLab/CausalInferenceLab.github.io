@@ -44,7 +44,7 @@ jobs:
       - name: Collect site files
         run: |
           mkdir _site
-          cp -r index.html article.html game.html 404.html .nojekyll assets data articles builders badges _site/
+          cp -r index.html article.html game.html lab.html 404.html .nojekyll assets data articles builders badges _site/
 
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4
