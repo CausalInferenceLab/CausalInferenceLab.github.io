@@ -90,6 +90,7 @@ def head(title, desc, url, image):
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<script src="/assets/js/ga.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">

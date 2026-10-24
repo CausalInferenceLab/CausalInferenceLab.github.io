@@ -1032,7 +1032,7 @@
     const r = state.repos.get(id);
     const lv = r.level && r.kind !== "paid" ? r.level : null;
     $("#curriculum").scrollIntoView({ behavior: "auto" });
-    openStation(id);
+    openStation(id, "deeplink");
     if (lv) dialog().addEventListener("close", () => gotoItem(id), { once: true });
   }
 
