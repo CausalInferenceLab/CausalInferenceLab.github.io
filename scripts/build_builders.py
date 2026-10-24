@@ -217,9 +217,52 @@ def tenure(p):
     return f"{p['first']}기 Builder" if len(c) == 1 else f"{p['first']}기부터 · {len(c)}개 기수 ({'·'.join(str(x) for x in c)}기)"
 
 
+# Medal rules, kept in step with TIERS and SPECIALS in assets/js/hub.js.
+TIERS = [
+    {"id": "honor", "min": 5, "name": "명예 Builder", "rule": "5개 기수 이상", "c": ("#9C95E8", "#33378C"), "ink": "#FFFFFF"},
+    {"id": "gold", "min": 3, "name": "베테랑 Builder", "rule": "3개 기수 이상", "c": ("#F8D978", "#B98318"), "ink": "#3A2700"},
+    {"id": "silver", "min": 2, "name": "다시 온 Builder", "rule": "2개 기수", "c": ("#E6EBF1", "#8995A6"), "ink": "#1B2230"},
+    {"id": "bronze", "min": 1, "name": "Builder", "rule": "첫 기수", "c": ("#E3A36A", "#8E5226"), "ink": "#FFFFFF"},
+]
+SPECIALS = [
+    {"id": "mentor", "name": "멘토", "rule": "러너 20명 이상과 함께", "c": ("#63D2B1", "#1B7A61"), "ink": "#FFFFFF",
+     "has": lambda p: p["runners"] >= 20},
+    {"id": "rise", "name": "러너에서 Builder로", "rule": "러너로 참여한 뒤 Builder가 됨", "c": ("#FFAE8C", "#C04F33"), "ink": "#FFFFFF",
+     "has": lambda p: any(x.get("cohort", 99) < p["first"] for x in p["runnerOf"])},
+]
+
+
+def tier_of(p):
+    return next(t for t in TIERS if len(p["cohorts"]) >= t["min"])
+
+
+def specials_of(p):
+    return [m for m in SPECIALS if m["has"](p)]
+
+
+def medal_svg(m, size, n=0, uid="m", standalone=False):
+    """Same drawing as medalSVG() in hub.js. standalone adds the namespace for a file of its own."""
+    ns = ' xmlns="http://www.w3.org/2000/svg"' if standalone else ""
+    grad = (f'<defs><linearGradient id="{uid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{m["c"][0]}"/>'
+            f'<stop offset="1" stop-color="{m["c"][1]}"/></linearGradient></defs>')
+    font = ' font-family="Pretendard Variable,Pretendard,Apple SD Gothic Neo,Noto Sans KR,sans-serif"'
+    if m.get("min"):
+        h = round(size * 84 / 64)
+        return (f'<svg{ns} class="medal" viewBox="0 0 64 84" width="{size}" height="{h}" role="img" aria-label="{esc(m["name"])} 메달">{grad}'
+                f'<path d="M15 0h15l8 32H23z" fill="#2A2E7A"/><path d="M49 0H34l-8 32h15z" fill="#A9A4F5"/>'
+                f'<circle cx="32" cy="56" r="26" fill="url(#{uid})"/><circle cx="32" cy="56" r="20.5" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.5"/>'
+                f'<ellipse cx="23" cy="44" rx="9" ry="5" fill="#fff" fill-opacity=".28" transform="rotate(-30 23 44)"/>'
+                f'<text x="32" y="61" text-anchor="middle" font-size="18" font-weight="800" fill="{m["ink"]}"{font}>{n}</text>'
+                f'<text x="32" y="71" text-anchor="middle" font-size="7.5" font-weight="700" fill="{m["ink"]}" fill-opacity=".85"{font}>기수</text></svg>')
+    glyph = (f'<text x="26" y="31" text-anchor="middle" font-size="13" font-weight="800" fill="{m["ink"]}"{font}>20+</text>' if m["id"] == "mentor"
+             else f'<path d="M26 14l9 10h-6v13h-6V24h-6z" fill="{m["ink"]}"/>')
+    return (f'<svg{ns} class="medal" viewBox="0 0 52 52" width="{size}" height="{size}" role="img" aria-label="{esc(m["name"])} 메달">{grad}'
+            f'<circle cx="26" cy="26" r="24" fill="url(#{uid})"/><circle cx="26" cy="26" r="19" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.5"/>{glyph}</svg>')
+
+
 def badge_message(p):
     n = len(p["cohorts"])
-    return f"Builder · {p['first']}기" if n == 1 else f"Builder · {p['first']}기부터 · {n}개 기수"
+    return f"Builder · {p['first']}기" if n == 1 else f"{tier_of(p)['name']} · {n}개 기수"
 
 
 def page(p, repos, projects, terms):
@@ -240,25 +283,36 @@ def page(p, repos, projects, terms):
         f'<span class="num" aria-hidden="true"></span><span><b>{esc(r["title"])}</b><span>{esc(r.get("summary", ""))}</span></span></a></li>'
         for r in own)
     top = rank_tag(p)
+    t, sp = tier_of(p), specials_of(p)
+    medal_file = f"/badges/{slug}-medal.svg"
+    ribbons = "".join(f'<li>{medal_svg(m, 30, uid="sp-" + m["id"])}<span><b>{esc(m["name"])}</b>{esc(m["rule"])}</span></li>' for m in sp)
     body = f"""<main id="main" class="bp">
   <div class="wrap">
     <a class="back" href="/builders/">Builder 전체 보기</a>
     <section class="bp-hero" data-line="{esc(token(p['line']))}">
       {avatar(p)}
       <div class="bp-id">
-        <p class="bp-kicker">{top}<span>Causal Inference Hub Builder</span></p>
+        <p class="bp-kicker">{top}<span class="bp-tier">{esc(t["name"])}</span><span>Causal Inference Hub Builder</span></p>
         <h1>{esc(p['name'])}</h1>
         <p class="bp-since">{esc(tenure(p))}</p>
         {f'<p class="bp-intro">{esc(intro)}</p>' if intro else ''}
         <p class="bp-links">{f'<a href="{esc(safe_url(linkedin))}" target="_blank" rel="noopener">LinkedIn</a>' if linkedin else ''}<button type="button" class="btn ghost sm" data-copy="{esc(share)}" data-share="builder">이 페이지 링크 복사</button></p>
         {'' if (intro and p["info"].get("github")) else f'<p class="bp-self">본인이신가요? <a href="https://github.com/{ORG}/CausalInferenceLab.github.io/edit/main/data/builders.json" target="_blank" rel="noopener">소개와 사진 추가하기</a></p>'}
       </div>
+      <span class="bp-medal">{medal_svg(t, 112, len(p["cohorts"]), uid="tier")}</span>
     </section>
     <ul class="p-stats bp-stats"><li><b>{esc(p['projects'])}</b>프로젝트</li><li><b>{len(p['cohorts'])}</b>기수</li><li><b>{esc(p['runners'])}</b>함께한 러너</li><li><b>{len(own)}</b>레포</li></ul>
     <div class="bp-grid">
       <section aria-labelledby="h-history"><h2 id="h-history">이력</h2><ol class="p-timeline">{timeline(p, repos, projects, terms)}</ol></section>
       <aside>
         {f'<section aria-labelledby="h-repos"><h2 id="h-repos">만든 레포</h2><ul class="bp-repos">{repo_cards}</ul></section>' if own else ''}
+        <section class="bp-badge bp-medals" aria-labelledby="h-medal">
+          <h2 id="h-medal">Builder 메달</h2>
+          <p class="bp-tier-line">{medal_svg(t, 40, len(p["cohorts"]), uid="tier-s")}<span><b>{esc(t["name"])}</b>Builder로 연 기수 {len(p["cohorts"])}개 · 기준: {esc(t["rule"])}</span></p>
+          {f'<ul class="p-ribbons">{ribbons}</ul>' if ribbons else ''}
+          <p>오래 함께한 Builder에게는 학회와 Data Forum에서 발표할 기회가 열립니다. <a href="/#stage">학회와 함께 여는 무대</a></p>
+          <a class="btn ghost sm" href="{esc(medal_file)}" download="causal-inference-hub-{esc(slug)}-medal.svg">메달 이미지 받기</a>
+        </section>
         <section class="bp-badge" aria-labelledby="h-badge">
           <h2 id="h-badge">Builder 배지</h2>
           <p>GitHub 프로필이나 레포 README에 붙이면 이 페이지로 연결됩니다.</p>
@@ -285,7 +339,7 @@ def rank_tag(p):
 def index_page(ranked):
     cards = "".join(
         f'<li data-line="{esc(token(p["line"]))}"><a href="/builders/{esc(p["info"]["slug"])}.html">{avatar(p)}'
-        f'<span class="bi-body"><b>{esc(p["name"])}</b><span>{esc(tenure(p))} · 프로젝트 {esc(p["projects"])}개 · 러너 {esc(p["runners"])}명</span>'
+        f'<span class="bi-body"><b>{esc(p["name"])} <span class="bi-medal" title="{esc(tier_of(p)["name"])}">{medal_svg(tier_of(p), 16, len(p["cohorts"]), uid="i" + str(p["rank"]))}</span></b><span>{esc(tier_of(p)["name"])} · {esc(tenure(p))} · 프로젝트 {esc(p["projects"])}개 · 러너 {esc(p["runners"])}명</span>'
         f'<span class="bi-last">최근 · {esc(p["items"][-1]["name"])}</span></span>{rank_tag(p)}</a></li>'
         for p in ranked)
     total_projects = len(load("projects.json"))
@@ -313,6 +367,8 @@ def main():
             f.write(page(p, repos, projects, terms))
         with open(os.path.join(ROOT, "badges", f"{slug}.svg"), "w", encoding="utf-8") as f:
             f.write(badge_svg("CausalInferenceLab", badge_message(p)))
+        with open(os.path.join(ROOT, "badges", f"{slug}-medal.svg"), "w", encoding="utf-8") as f:
+            f.write(medal_svg(tier_of(p), 256, len(p["cohorts"]), uid="g", standalone=True) + "\n")
     with open(os.path.join(ROOT, "builders", "index.html"), "w", encoding="utf-8") as f:
         f.write(index_page(ranked))
     print(f"wrote {len(ranked)} Builder pages and badges")

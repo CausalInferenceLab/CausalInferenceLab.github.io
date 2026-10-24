@@ -46,6 +46,7 @@
     d.projects.forEach((p) => { p.cohort = int(p.cohort); p.runners = p.runners == null ? null : int(p.runners); });
     d.events.forEach((e) => { e.order = int(e.order); e.year = int(e.year); e.participants = e.participants == null ? null : int(e.participants); });
     d.routes.forEach((r) => { r.id = tok(r.id); });
+    d.stages.items = (d.stages.items || []).map((x) => ({ ...x, id: tok(x.id), year: int(x.year) }));
     d.builders.forEach((b) => { (b.runnerOf || []).forEach((x) => { x.cohort = int(x.cohort); }); });
     return d;
   }
@@ -72,7 +73,7 @@
 
   /* ---------- data ---------- */
   async function load() {
-    const names = ["repos", "lines", "levels", "map", "routes", "projects", "events", "articles", "builders", "growth", "stats", "featured", "daily"];
+    const names = ["repos", "lines", "levels", "map", "routes", "projects", "events", "articles", "builders", "growth", "stats", "featured", "daily", "stages"];
     const data = await Promise.all(names.map((n) => getJSON(`data/${n}.json`)));
     const d = cleanData(Object.fromEntries(names.map((n, i) => [n, data[i]])));
     d.repos.forEach((r) => {
@@ -84,7 +85,7 @@
     (d.map.paid || []).forEach((p) => state.repos.set(p.id, { repo: p.id, kind: "paid", status: "paid", builders: [], cohorts: [], ...p }));
     state.lineList = d.lines;
     d.lines.forEach((l) => state.lines.set(l.id, l));
-    Object.assign(state, { levels: d.levels, map: d.map, routes: d.routes, projects: d.projects, events: d.events, articles: d.articles, builders: d.builders, growth: d.growth, stats: d.stats, featured: d.featured, daily: d.daily });
+    Object.assign(state, { levels: d.levels, map: d.map, routes: d.routes, projects: d.projects, events: d.events, articles: d.articles, builders: d.builders, growth: d.growth, stats: d.stats, featured: d.featured, daily: d.daily, stages: d.stages });
 
     const pos = new Map(d.map.stations.map((s) => [s.id, s]));
     d.lines.forEach((l) => {
@@ -129,6 +130,41 @@
     const b = builderInfo(name);
     return b.linkedin ? `<a href="${esc(b.linkedin)}" target="_blank" rel="noopener">${esc(name)}</a>` : esc(name);
   }
+
+  /* ---------- Builder medals ----------
+     One medal for how many cohorts someone has led, plus two special ones. The same rules
+     live in scripts/build_builders.py so the hub, Builder pages and share images agree. */
+  const TIERS = [
+    { id: "honor", min: 5, name: "명예 Builder", rule: "5개 기수 이상", c: ["#9C95E8", "#33378C"], ink: "#FFFFFF" },
+    { id: "gold", min: 3, name: "베테랑 Builder", rule: "3개 기수 이상", c: ["#F8D978", "#B98318"], ink: "#3A2700" },
+    { id: "silver", min: 2, name: "다시 온 Builder", rule: "2개 기수", c: ["#E6EBF1", "#8995A6"], ink: "#1B2230" },
+    { id: "bronze", min: 1, name: "Builder", rule: "첫 기수", c: ["#E3A36A", "#8E5226"], ink: "#FFFFFF" }
+  ];
+  const SPECIALS = [
+    { id: "mentor", name: "멘토", rule: "러너 20명 이상과 함께", c: ["#63D2B1", "#1B7A61"], ink: "#FFFFFF", has: (p) => p.runners >= 20 },
+    { id: "rise", name: "러너에서 Builder로", rule: "러너로 참여한 뒤 Builder가 됨", c: ["#FFAE8C", "#C04F33"], ink: "#FFFFFF", has: (p) => p.runnerOf.some((x) => x.cohort < p.first) }
+  ];
+  const tierOf = (p) => TIERS.find((t) => p.cohorts.length >= t.min);
+  const specialsOf = (p) => SPECIALS.filter((m) => m.has(p));
+  let medalUid = 0;
+  function medalSVG(m, size, n) {
+    const id = `mg${++medalUid}`, h = Math.round(size * (m.min ? 84 / 64 : 1));
+    const grad = `<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${m.c[0]}"/><stop offset="1" stop-color="${m.c[1]}"/></linearGradient></defs>`;
+    if (m.min) {
+      return `<svg class="medal" viewBox="0 0 64 84" width="${size}" height="${h}" aria-hidden="true" focusable="false">${grad}
+        <path d="M15 0h15l8 32H23z" fill="#2A2E7A"/><path d="M49 0H34l-8 32h15z" fill="#A9A4F5"/>
+        <circle cx="32" cy="56" r="26" fill="url(#${id})"/><circle cx="32" cy="56" r="20.5" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.5"/>
+        <ellipse cx="23" cy="44" rx="9" ry="5" fill="#fff" fill-opacity=".28" transform="rotate(-30 23 44)"/>
+        <text x="32" y="61" text-anchor="middle" font-size="18" font-weight="800" fill="${m.ink}">${n}</text>
+        <text x="32" y="71" text-anchor="middle" font-size="7.5" font-weight="700" fill="${m.ink}" fill-opacity=".85">기수</text></svg>`;
+    }
+    const glyph = m.id === "mentor"
+      ? `<text x="26" y="31" text-anchor="middle" font-size="13" font-weight="800" fill="${m.ink}">20+</text>`
+      : `<path d="M26 14l9 10h-6v13h-6V24h-6z" fill="${m.ink}"/>`;
+    return `<svg class="medal" viewBox="0 0 52 52" width="${size}" height="${size}" aria-hidden="true" focusable="false">${grad}
+      <circle cx="26" cy="26" r="24" fill="url(#${id})"/><circle cx="26" cy="26" r="19" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.5"/>${glyph}</svg>`;
+  }
+  const tierMedal = (p, size) => medalSVG(tierOf(p), size, p.cohorts.length);
 
   /* ---------- growth ---------- */
   function growthSeries() {
@@ -491,20 +527,33 @@
   }
 
   /* One cell per cohort: filled = Builder that cohort (number = runners), ring = joined as a runner. */
-  function stripHTML(p, cohorts) {
-    const ranAs = new Set(p.runnerOf.map((x) => x.cohort));
-    return `<span class="strip" style="--n:${cohorts.length}">${cohorts.map((c) => {
+  /* the cohorts someone took part in, oldest first: filled = led as Builder, outlined = joined as a runner */
+  function stripHTML(p) {
+    const ran = new Set(p.runnerOf.map((x) => x.cohort).filter((c) => !p.byCohort.has(c)));
+    const all = [...new Set([...p.cohorts, ...ran])].sort((a, b) => a - b);
+    const chips = all.map((c) => {
       const its = p.byCohort.get(c);
-      if (its) {
-        const n = its.reduce((s, i) => s + (i.runners || 0), 0);
-        const live = its.some((i) => i.live);
-        const label = `${c}기 Builder: ${its.map((i) => i.title || i.name).join(", ")}${n ? `, 러너 ${n}명` : ""}${live ? ", 진행 중" : ""}`;
-        return `<span class="sc on${live ? " live" : ""}" data-line="${its[0].line}" title="${esc(label)}">${n || ""}</span>`;
-      }
-      if (ranAs.has(c)) return `<span class="sc ran" title="${esc(`${c}기 러너로 참여`)}"></span>`;
-      return `<span class="sc"></span>`;
-    }).join("")}</span>`;
+      if (!its) return `<li class="cc r" data-line="${p.line}" title="${esc(`${c}기 러너로 참여`)}"><b>${c}기</b>러너</li>`;
+      const n = its.reduce((s, i) => s + (i.runners || 0), 0);
+      const live = its.some((i) => i.live);
+      const label = `${c}기 Builder: ${its.map((i) => i.title || i.name).join(", ")}${n ? `, 러너 ${n}명` : ""}${live ? ", 진행 중" : ""}`;
+      return `<li class="cc b${live ? " live" : ""}" data-line="${its[0].line}" title="${esc(label)}"><b>${c}기</b>${live ? "진행 중" : n ? `러너 ${n}` : "Builder"}${its.length > 1 ? `<i>· ${its.length}개</i>` : ""}</li>`;
+    }).join("");
+    return `<ul class="ro-strip" aria-label="${esc(`참여한 기수: ${all.map((c) => `${c}기`).join(", ")}`)}">${chips}</ul>`;
   }
+
+  /* medal rules and the stage they lead to, with how many people hold each */
+  function renderMedalLadder(list) {
+    const box = $("#medal-ladder");
+    if (!box) return;
+    const count = (t) => list.filter((p) => tierOf(p) === t).length;
+    const steps = [...TIERS].reverse().map((t) => `<li class="ml-step"><span class="ml-medal">${medalSVG(t, 48, t.min)}</span><b>${esc(t.name)}</b><span>${esc(t.rule)}</span><span class="ml-n">${count(t)}명</span></li>`).join("");
+    const sp = SPECIALS.map((m) => `<li>${medalSVG(m, 22)}<b>${esc(m.name)}</b><span>${esc(m.rule)} · ${list.filter((p) => m.has(p)).length}명</span></li>`).join("");
+    box.innerHTML = `<div class="ml-head"><h3 class="contrib-head">Builder 메달과 다음 무대</h3><p>Builder로 연 기수가 쌓일수록 메달이 바뀝니다. 오래 함께한 Builder에게는 학회와 Data Forum에서 발표할 기회가 열립니다.</p></div>
+      <ol class="ml-steps">${steps}<li class="ml-step stage"><a href="#stage" data-event="click_conference" data-event-params='{"conference":"all","placement":"medal_ladder"}'><span class="ml-medal"><svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#14162B"/><rect x="15" y="8" width="10" height="16" rx="5" fill="#FFD54A"/><path d="M11 19a9 9 0 0 0 18 0M20 28v5M14 33h12" fill="none" stroke="#FFD54A" stroke-width="2.4" stroke-linecap="round"/></svg></span><b>발표 무대</b><span>비즈니스 실험 심포지엄 · Data Forum</span></a></li></ol>
+      <ul class="ml-special"><li class="k">특별 메달</li>${sp}</ul>`;
+  }
+
 
   function renderContrib() {
     const list = builderStats();
@@ -515,9 +564,10 @@
 
     $("#top3").innerHTML = list.slice(0, 3).map((p) => {
       const recent = [...p.items].reverse().slice(0, 2);
-      return `<li class="tcard"><button type="button" data-person="${esc(p.name)}" aria-label="${esc(`Top ${p.rank} ${p.name}, 이력 보기`)}">
+      return `<li class="tcard" data-person-row="${esc(p.name)}"><button type="button" data-person="${esc(p.name)}" aria-label="${esc(`Top ${p.rank} ${p.name}, 이력 보기`)}">
         <span class="t-rank" aria-hidden="true">${p.rank}</span>
         <span class="t-head">${avatarHTML(p.name, "lg")}<span><b class="t-name">${esc(p.name)}</b><span class="t-since">${esc(tenure(p))}</span></span></span>
+        <span class="t-medals">${tierMedal(p, 30)}<b>${esc(tierOf(p).name)}</b>${specialsOf(p).map((m) => `<span class="t-sp" title="${esc(`${m.name}: ${m.rule}`)}">${medalSVG(m, 22)}${esc(m.name)}</span>`).join("")}</span>
         <span class="t-stats"><span><b>${p.projects}</b>프로젝트</span><span><b>${fmt(p.runners)}</b>함께한 러너</span><span><b>${p.repos.size}</b>레포</span></span>
         <span class="t-recent">${recent.map((i) => `<span>${i.cohort}기 · ${esc(i.name)}</span>`).join("")}</span>
         <span class="t-more">이력 보기</span>
@@ -527,17 +577,17 @@
     const rest = list.slice(3);
     const card = (p, copy) => {
       const latest = p.items[p.items.length - 1];
-      return `<li class="pcard" data-line="${p.line}"><button type="button" data-person="${esc(p.name)}"${copy ? ' tabindex="-1"' : ""}>${avatarHTML(p.name, "lg")}
-        <span class="pc-body"><b class="pc-name">${esc(p.name)}</b><span class="pc-since">${esc(tenure(p))}</span>
+      return `<li class="pcard" data-line="${p.line}"${copy ? "" : ` data-person-row="${esc(p.name)}"`}><button type="button" data-person="${esc(p.name)}"${copy ? ' tabindex="-1"' : ""}>${avatarHTML(p.name, "lg")}
+        <span class="pc-body"><b class="pc-name">${esc(p.name)}<span class="pc-medal" title="${esc(tierOf(p).name)}">${tierMedal(p, 16)}</span></b><span class="pc-since">${esc(tenure(p))}</span>
           <span class="pc-stats">프로젝트 <b>${p.projects}</b> · 러너 <b>${fmt(p.runners)}</b></span>
           ${latest ? `<span class="pc-latest">최근 · ${esc(latest.name)}</span>` : ""}</span></button></li>`;
     };
     $("#people-rail").innerHTML = rest.length ? `<div class="people-move" style="--dur:${rest.length * 6}s"><ul class="people-track">${rest.map((p) => card(p, false)).join("")}</ul><ul class="people-track dup" aria-hidden="true">${rest.map((p) => card(p, true)).join("")}</ul></div>` : "";
 
-    const head = `<div class="ro-head" aria-hidden="true"><span>Builder</span><span class="strip" style="--n:${cohorts.length}">${cohorts.map((c) => `<span class="sh" title="${esc(terms.get(c) || "")}">${c}</span>`).join("")}</span><span>최근 프로젝트</span><span class="tot">합계</span></div>`;
-    $("#roster").innerHTML = head + `<ol class="ro-list">${list.map((p) => `<li class="ro" data-line="${p.line}">
-      <span class="ro-who"><span class="ro-rank">${p.rank}</span>${avatarHTML(p.name, "sm")}<span><button type="button" class="ro-name" data-person="${esc(p.name)}">${esc(p.name)}</button><span class="ro-span">${esc(stripLabel(p))}</span></span></span>
-      <span class="ro-strip" aria-label="${esc(`기수별 기여: ${p.cohorts.map((c) => `${c}기`).join(", ")}`)}">${stripHTML(p, cohorts)}</span>
+    const head = `<div class="ro-head" aria-hidden="true"><span>Builder</span><span>참여한 기수</span><span>최근 프로젝트</span><span class="tot">합계</span></div>`;
+    $("#roster").innerHTML = head + `<ol class="ro-list">${list.map((p) => `<li class="ro" data-line="${p.line}" data-person-row="${esc(p.name)}">
+      <span class="ro-who"><span class="ro-rank">${p.rank}</span>${avatarHTML(p.name, "sm")}<span><button type="button" class="ro-name" data-person="${esc(p.name)}">${esc(p.name)}<span class="ro-medal" title="${esc(tierOf(p).name)}">${tierMedal(p, 16)}</span></button><span class="ro-span">${esc(tierOf(p).name)}${specialsOf(p).map((m) => ` · ${esc(m.name)}`).join("")}</span></span></span>
+      ${stripHTML(p)}
       <ul class="ro-projects">${p.items.slice(-3).reverse().map((i) => `<li><span class="c">${i.cohort}기</span>${i.repo ? `<button type="button" data-open="${esc(i.repo)}" title="${esc(`${i.name} · 레포: ${i.title}`)}">${esc(i.name)}</button>` : i.link ? `<a href="${esc(i.link)}" target="_blank" rel="noopener" title="${esc(i.name)}">${esc(i.name)}</a>` : `<span title="${esc(i.name)}">${esc(i.name)}</span>`}${i.live ? `<span class="live-dot">진행 중</span>` : ""}</li>`).join("")}${p.items.length > 3 ? `<li><button type="button" class="ro-more" data-person="${esc(p.name)}">이전 프로젝트 ${p.items.length - 3}개 더 보기</button></li>` : ""}</ul>
       <span class="ro-total tot"><b>러너 ${fmt(p.runners)}명</b><span>프로젝트 ${p.projects}개</span></span>
     </li>`).join("")}</ol>`;
@@ -546,7 +596,8 @@
     const contributors = state.stats.totals && state.stats.totals.contributors;
     $("#n-contrib").textContent = list.length; $("#n-contrib").title = `Builder ${list.length}명`;
     $("#contrib-sub").textContent = `Builder ${list.length}명이 ${cohorts.length}개 기수 동안 프로젝트 ${state.projects.length}개를 열었습니다.${contributors ? ` GitHub 기여자는 ${fmt(contributors)}명입니다.` : ""}`;
-    $("#roster-legend").innerHTML = `<li><span class="sc on" data-line="main"></span>Builder로 연 기수, 숫자는 함께한 러너 수</li><li><span class="sc ran" data-line="main"></span>러너로 참여한 기수</li><li><span class="sc on live" data-line="main"></span>진행 중</li><li>칸은 왼쪽부터 ${cohorts[0]}기–${cohorts[cohorts.length - 1]}기</li>`;
+    $("#roster-legend").innerHTML = `<li><span class="cc b" data-line="main"><b>8기</b>러너 6</span>Builder로 연 기수와 함께한 러너 수</li><li><span class="cc r" data-line="main"><b>7기</b>러너</span>러너로 참여한 기수</li><li><span class="cc b live" data-line="main"><b>13기</b>진행 중</span>지금 진행 중</li>`;
+    renderMedalLadder(list);
   }
 
   /* Three lines a Builder writes after a project; nothing shows until they do. */
@@ -556,11 +607,28 @@
     return `<details class="tl-retro"><summary>회고</summary><dl>${row("왜 만들었나", r.why)}${row("무엇을 배웠나", r.learned)}${row("다음 사람에게", r.next)}</dl></details>`;
   }
 
+  function awardHTML(p) {
+    const t = tierOf(p), sp = specialsOf(p);
+    const said = `${p.cohorts.length > 1 ? `${p.cohorts.length}개 기수(${p.cohorts.join("·")}기)` : `${p.first}기`}에서 프로젝트 ${p.projects}개를 열고${p.runners ? ` 러너 ${fmt(p.runners)}명과 함께했습니다.` : " 첫 러너를 기다리고 있습니다."}`;
+    return `<section class="p-award" data-tier="${t.id}" aria-label="${esc(`메달: ${t.name}${sp.map((m) => `, ${m.name}`).join("")}`)}">
+      <span class="p-award-medal">${tierMedal(p, 84)}</span>
+      <div class="p-award-body"><p class="k">Builder 메달</p><b class="t">${esc(t.name)}</b><p class="d">${esc(said)}</p>
+        ${sp.length ? `<ul class="p-ribbons">${sp.map((m) => `<li>${medalSVG(m, 26)}<span><b>${esc(m.name)}</b>${esc(m.rule)}</span></li>`).join("")}</ul>` : ""}
+        <button type="button" class="btn ghost sm" data-medal-card="${esc(p.name)}">메달 카드 만들기</button></div>
+    </section>`;
+  }
+  /* the person just opened stays marked in the lists behind the dialog */
+  function markPerson(name) {
+    document.querySelectorAll("[data-person-row].is-picked").forEach((el) => el.classList.remove("is-picked"));
+    document.querySelectorAll("[data-person-row]").forEach((el) => { if (el.dataset.personRow === name) el.classList.add("is-picked"); });
+  }
+
   function openPerson(name, source) {
     const p = (state.people || []).find((x) => x.name === name);
     if (!p) return;
     const info = builderInfo(name);
     state.lastPerson = name;
+    markPerson(name);
     track("open_builder", { builder: info.slug || name, source: source || "hub" });
     if (window.hubSeen) window.hubSeen("builders", info.slug || name, 3, "builder");
     const runnerItems = p.runnerOf.map((x) => {
@@ -583,6 +651,7 @@
       <div class="station-content person" data-line="${p.line}">
         <div class="tags">${p.rank <= 3 ? `<span class="rank-tag">Top ${p.rank}</span>` : ""}<span class="tag-line" data-line="${p.line}"><span class="num" aria-hidden="true"></span>${esc(tenure(p))}</span></div>
         <div class="p-head">${avatarHTML(p.name, "lg")}<div><h2 id="station-title">${esc(p.name)}</h2>${info.linkedin ? `<a href="${esc(info.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ""}</div></div>
+        ${awardHTML(p)}
         ${info.slug ? `<div class="p-share"><a class="btn sm" href="builders/${esc(info.slug)}.html">Builder 페이지</a><button type="button" class="btn ghost sm" data-copy="${esc(shareUrl(`/builders/${info.slug}.html`, "builder_page"))}" data-share="builder">링크 복사</button></div>` : ""}
         ${info.intro ? `<p>${esc(info.intro)}</p>` : ""}
         <ul class="p-stats"><li><b>${p.projects}</b>프로젝트</li><li><b>${p.cohorts.length}</b>기수</li><li><b>${fmt(p.runners)}</b>함께한 러너</li><li><b>${repos.length}</b>레포</li></ul>
@@ -723,6 +792,21 @@
   }
 
   /* ---------- events ---------- */
+  /* academic events the team works on with 한국경영정보학회 */
+  function renderStages() {
+    const st = state.stages, box = $("#stage");
+    if (!st || !box || !st.items.length) return;
+    const evp = (x, placement) => esc(JSON.stringify({ conference: x.id, placement }));
+    box.innerHTML = `<div class="stage-head"><p class="stage-k">With ${esc(st.host)}</p><h3 id="stage-title">학회와 함께 여는 무대</h3><p>${esc(st.note)}</p></div>
+      <ol class="stage-list">${st.items.map((x) => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener" data-event="click_conference" data-event-params='${evp(x, "events")}'>
+        <span class="sg-year">${x.year}</span><span class="sg-body"><b>${esc(x.name)}</b><span class="sg-en">${esc(x.en)}</span><span class="sg-about">${esc(x.about)}</span><span class="sg-when">${esc(x.when)} · ${esc(x.place)}</span></span><span class="sg-go">행사 사이트</span></a></li>`).join("")}</ol>`;
+    const hl = $("#academy");
+    if (hl) {
+      const years = (re) => st.items.filter((x) => re.test(x.id)).map((x) => x.year).sort().join("·");
+      hl.innerHTML = `<a href="#stage" data-event="click_conference" data-event-params='${esc(JSON.stringify({ conference: "all", placement: "banner" }))}'><b>With ${esc(st.host)}</b><span>비즈니스 실험 심포지엄 ${years(/^kbes/)} · 인과추론 여름 워크숍 ${years(/^kswci/)}</span></a>`;
+    }
+  }
+
   function renderEvents() {
     const list = [...state.events].sort((a, b) => (b.upcoming ? 1 : 0) - (a.upcoming ? 1 : 0) || b.order - a.order);
     const max = Math.max(...list.map((e) => e.participants || 0)) || 1;
@@ -1003,6 +1087,67 @@
     const mark = $(".banner-mark");
     if (mark && mark.complete && mark.naturalWidth) c.drawImage(mark, W - 300, 70, 210, 210);
   }
+  function drawMedal(c, cx, cy, r, m, n) {
+    const g = c.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+    g.addColorStop(0, m.c[0]); g.addColorStop(1, m.c[1]);
+    if (m.min) {
+      const k = r / 26, top = cy - 56 * k, x = (v) => cx + (v - 32) * k, y = (v) => top + v * k;
+      c.fillStyle = "#2A2E7A"; c.beginPath(); c.moveTo(x(15), y(0)); c.lineTo(x(30), y(0)); c.lineTo(x(38), y(32)); c.lineTo(x(23), y(32)); c.fill();
+      c.fillStyle = "#A9A4F5"; c.beginPath(); c.moveTo(x(49), y(0)); c.lineTo(x(34), y(0)); c.lineTo(x(26), y(32)); c.lineTo(x(41), y(32)); c.fill();
+    }
+    c.fillStyle = g; c.beginPath(); c.arc(cx, cy, r, 0, Math.PI * 2); c.fill();
+    c.strokeStyle = "rgba(255,255,255,.6)"; c.lineWidth = r * 0.06; c.beginPath(); c.arc(cx, cy, r * 0.79, 0, Math.PI * 2); c.stroke();
+    c.fillStyle = "rgba(255,255,255,.28)"; c.beginPath(); c.ellipse(cx - r * 0.35, cy - r * 0.45, r * 0.35, r * 0.19, -0.5, 0, Math.PI * 2); c.fill();
+    if (!m.min) return;
+    c.fillStyle = m.ink; c.textAlign = "center";
+    c.font = `800 ${Math.round(r * 0.72)}px "Pretendard Variable", Pretendard, sans-serif`; c.fillText(String(n), cx, cy + r * 0.2);
+    c.font = `700 ${Math.round(r * 0.28)}px "Pretendard Variable", Pretendard, sans-serif`; c.fillText("기수", cx, cy + r * 0.6);
+    c.textAlign = "left";
+  }
+  function drawMedalCard(canvas, p) {
+    const W = 1200, H = 630, c = canvas.getContext("2d"), t = tierOf(p), sp = specialsOf(p), info = builderInfo(p.name);
+    canvas.width = W; canvas.height = H;
+    const g = c.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, "#1C1F57"); g.addColorStop(0.55, "#333689"); g.addColorStop(1, "#6E68BC");
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    const glow = c.createRadialGradient(930, 300, 0, 930, 300, 360);
+    glow.addColorStop(0, "rgba(255,255,255,.22)"); glow.addColorStop(1, "rgba(255,255,255,0)");
+    c.fillStyle = glow; c.fillRect(0, 0, W, H);
+    const font = (w, px) => `${w} ${px}px "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif`;
+    c.fillStyle = "rgba(255,255,255,.82)"; c.font = font(600, 26); c.fillText("Causal Inference Hub Builder · 가짜연구소 인과추론팀", 80, 104);
+    c.fillStyle = "#FFD54A"; c.font = font(800, 34); c.fillText(t.name, 80, 186);
+    c.fillStyle = "#fff"; c.font = font(800, 96); c.fillText(p.name, 80, 292);
+    c.fillStyle = "rgba(255,255,255,.88)"; c.font = font(600, 30);
+    c.fillText(`${tenure(p)}`, 80, 352);
+    c.fillText(`프로젝트 ${p.projects}개 · 함께한 러너 ${fmt(p.runners)}명`, 80, 398);
+    sp.forEach((m, i) => {
+      const x = 80 + i * 300, y = 470;
+      drawMedal(c, x + 22, y, 22, m);
+      c.fillStyle = m.ink; c.font = font(800, 15); c.textAlign = "center"; c.fillText(m.id === "mentor" ? "20+" : "↑", x + 22, y + 6); c.textAlign = "left";
+      c.fillStyle = "#fff"; c.font = font(700, 24); c.fillText(m.name, x + 56, y + 9);
+    });
+    c.fillStyle = "rgba(255,255,255,.7)"; c.font = font(500, 22);
+    c.fillText(`causalinferencelab.github.io/builders/${info.slug || ""}`, 80, H - 56);
+    drawMedal(c, 930, 330, 150, t, p.cohorts.length);
+  }
+  async function openMedalCard(name) {
+    const p = (state.people || []).find((x) => x.name === name);
+    if (!p) return;
+    const info = builderInfo(name);
+    track("medal_card_open", { builder: info.slug || name, tier: tierOf(p).id });
+    $("#station-body").innerHTML = `<div class="station-band" data-line="${p.line}"></div>
+      <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
+      <div class="station-content" data-line="${p.line}">
+        <button type="button" class="back-person" data-back-person="${esc(p.name)}">‹ ${esc(p.name)} 이력으로</button>
+        <h2 id="station-title">${esc(p.name)} · ${esc(tierOf(p).name)} 메달 카드</h2>
+        <canvas class="card-canvas" width="1200" height="630" role="img" aria-label="${esc(`${p.name} ${tierOf(p).name} 메달 카드`)}"></canvas>
+        <p class="card-note">링크드인이나 블로그, 발표 자료에 올려 보세요. Builder 페이지 링크를 함께 붙이면 이력이 바로 열립니다.</p>
+        <div class="links"><button type="button" class="btn" data-card-save="medal:${esc(info.slug || "builder")}">${navigator.canShare ? "이미지 저장·공유" : "이미지 저장"}</button>${info.slug ? `<button type="button" class="btn ghost" data-copy="${esc(shareUrl(`/builders/${info.slug}.html`, "medal_card"))}" data-share="builder">Builder 페이지 링크 복사</button>` : ""}</div>
+      </div>`;
+    showDialog();
+    try { if (document.fonts) await document.fonts.load('800 96px "Pretendard Variable"'); } catch (e) { /* draw with fallback fonts */ }
+    drawMedalCard($("#station-body .card-canvas"), p);
+  }
   async function openCard(levelId) {
     const lv = state.levels.find((l) => l.id === levelId);
     if (!lv || !levelDone(levelId)) return;
@@ -1027,19 +1172,20 @@
   function saveCard(levelId) {
     const canvas = $("#station-body .card-canvas");
     if (!canvas) return;
-    const name = `causal-inference-hub-${levelId}.png`;
+    const medal = levelId.startsWith("medal:"), content = medal ? "medal_card" : "finish_card";
+    const name = medal ? `causal-inference-hub-builder-${levelId.slice(6)}.png` : `causal-inference-hub-${levelId}.png`;
     canvas.toBlob(async (blob) => {
       if (!blob) return;
       const file = typeof File === "function" ? new File([blob], name, { type: "image/png" }) : null;
       /* phones: hand the image to the share sheet; elsewhere download it */
       if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-        try { await navigator.share({ files: [file], title: "Causal Inference Hub 완주 카드" }); track("share", { content: "finish_card", method: "share_sheet" }); return; } catch (e) { if (e && e.name === "AbortError") return; }
+        try { await navigator.share({ files: [file], title: medal ? "Causal Inference Hub Builder 메달" : "Causal Inference Hub 완주 카드" }); track("share", { content, method: "share_sheet" }); return; } catch (e) { if (e && e.name === "AbortError") return; }
       }
       const a = document.createElement("a");
       a.download = name; a.href = URL.createObjectURL(blob);
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-      track("share", { content: "finish_card", method: "download" });
+      track("share", { content, method: "download" });
     }, "image/png");
   }
 
@@ -1161,6 +1307,8 @@
       if (card) { openCard(card.dataset.card); return; }
       const nl = e.target.closest("[data-next-level]");
       if (nl) { closeStation(); gotoLevel(nl.dataset.nextLevel); return; }
+      const mc = e.target.closest("[data-medal-card]");
+      if (mc) { openMedalCard(mc.dataset.medalCard); return; }
       const dl = e.target.closest("[data-card-save]");
       if (dl) { saveCard(dl.dataset.cardSave); return; }
       const ride = e.target.closest("[data-ride]");
@@ -1239,7 +1387,7 @@
     $("#shelf").addEventListener("scroll", shelfSpy, { passive: true });
     renderContrib();
     renderLegend(); renderMap(); wireTabs();
-    renderFeatured(); renderPartner(); renderEvents(); renderArticles(); renderDaily();
+    renderFeatured(); renderPartner(); renderEvents(); renderStages(); renderArticles(); renderDaily();
     if (location.hash === "#contrib") { selectTab("tab-contrib"); requestAnimationFrame(() => $("#curriculum").scrollIntoView()); }
     openFromHash();
     if (location.hash === "#start" || new URLSearchParams(location.search).has("quiz")) openQuiz();
