@@ -11,7 +11,7 @@
     window.dataLayer = window.dataLayer || [];
     window.gtag = function gtag() { window.dataLayer.push(arguments); };
     window.gtag("js", new Date());
-    window.gtag("config", ID, { page_location: location.href });
+    window.gtag("config", ID, { page_location: location.href, allow_google_signals: false, allow_ad_personalization_signals: false });
   }
   try {
     const u = new URL(location.href);

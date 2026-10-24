@@ -22,7 +22,33 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const fmt = (n) => Number(n).toLocaleString("ko-KR");
   const $ = (sel, root = document) => root.querySelector(sel);
-  const dot = (d) => d.replace(/-/g, ".");
+  const dot = (d) => esc(String(d ?? "").replace(/-/g, "."));
+  /* Data files come from pull requests: links must be http(s) or a site path, ids plain tokens,
+     counts whole numbers. scripts/check_data.py enforces the same in CI; this is the second line. */
+  const URL_KEYS = new Set(["url", "link", "linkedin", "site", "cover", "href", "builderUrl"]);
+  const safeUrl = (u) => {
+    if (typeof u !== "string" || !u) return u;
+    try { const x = new URL(u, location.href); return /^https?:$/.test(x.protocol) ? u : "#"; } catch (e) { return "#"; }
+  };
+  const TOKEN = /^[A-Za-z0-9_.-]+$/;
+  const tok = (v, fb = "none") => (typeof v === "string" && TOKEN.test(v) ? v : fb);
+  const int = (v) => (Number.isFinite(Number(v)) ? Math.trunc(Number(v)) : 0);
+  function cleanUrls(node) {
+    if (Array.isArray(node)) node.forEach(cleanUrls);
+    else if (node && typeof node === "object") Object.keys(node).forEach((k) => { if (URL_KEYS.has(k)) node[k] = safeUrl(node[k]); else cleanUrls(node[k]); });
+    return node;
+  }
+  function cleanData(d) {
+    Object.values(d).forEach(cleanUrls);
+    d.levels.forEach((l) => { l.id = tok(l.id); });
+    d.lines.forEach((l) => { l.id = tok(l.id); });
+    d.repos.forEach((r) => { r.level = r.level ? tok(r.level, "") : r.level; r.lines = (r.lines || []).filter((x) => TOKEN.test(x)); r.cohorts = (r.cohorts || []).map(int); if (r.stars != null) r.stars = int(r.stars); });
+    d.projects.forEach((p) => { p.cohort = int(p.cohort); p.runners = p.runners == null ? null : int(p.runners); });
+    d.events.forEach((e) => { e.order = int(e.order); e.year = int(e.year); e.participants = e.participants == null ? null : int(e.participants); });
+    d.routes.forEach((r) => { r.id = tok(r.id); });
+    d.builders.forEach((b) => { (b.runnerOf || []).forEach((x) => { x.cohort = int(x.cohort); }); });
+    return d;
+  }
   const track = (name, params) => { if (window.hubTrack) window.hubTrack(name, params); };
   const stamp = (id) => { if (window.hubStamp) window.hubStamp(id); };
   const shareUrl = (path, medium) => (window.hubShareUrl ? window.hubShareUrl(path, medium) : path);
@@ -48,10 +74,10 @@
   async function load() {
     const names = ["repos", "lines", "levels", "map", "routes", "projects", "events", "articles", "builders", "growth", "stats", "featured", "daily"];
     const data = await Promise.all(names.map((n) => getJSON(`data/${n}.json`)));
-    const d = Object.fromEntries(names.map((n, i) => [n, data[i]]));
+    const d = cleanData(Object.fromEntries(names.map((n, i) => [n, data[i]])));
     d.repos.forEach((r) => {
       const live = d.stats.repos && d.stats.repos[r.repo];
-      if (live) { r.stars = live.stars; r.pushed = live.pushed; }
+      if (live) { r.stars = int(live.stars); r.pushed = typeof live.pushed === "string" ? live.pushed : null; }
       state.repos.set(r.repo, r);
     });
     state.repos.set(d.map.external.id, { repo: d.map.external.id, kind: "external", status: "external", builders: [], cohorts: [], ...d.map.external });
@@ -812,7 +838,8 @@
     const today = dayNum(), q = pool.at(today % pool.length), rec = loadDaily();
     const ans = rec.answers && rec.answers[today];
     const now = new Date();
-    const streak = rec.last === today || rec.last === today - 1 ? rec.streak || 0 : 0;
+    rec.streak = int(rec.streak); rec.best = int(rec.best);
+    const streak = rec.last === today || rec.last === today - 1 ? rec.streak : 0;
     const head = `<div class="daily-head"><h2 id="daily-title">오늘의 한 문제</h2><p class="daily-date">${now.getMonth() + 1}월 ${now.getDate()}일 · 매일 바뀝니다</p>
       ${streak ? `<p class="daily-streak"><b>${streak}일</b> 연속${streak < 3 ? ` · ${3 - streak}일 더 풀면 스탬프` : rec.best > streak ? ` · 최고 ${rec.best}일` : ""}</p>` : `<p class="daily-streak quiet">사흘 연속 풀면 스탬프</p>`}</div>`;
     if (!ans) {
@@ -979,7 +1006,7 @@
         <h2 id="station-title">${lv.id} ${esc(lv.name)} 완주 카드</h2>
         <canvas class="card-canvas" width="1200" height="630" role="img" aria-label="${esc(`${lv.id} ${lv.name} 완주 카드`)}"></canvas>
         <label class="card-name">카드에 넣을 이름 (선택)<input type="text" maxlength="20" autocomplete="nickname" placeholder="예: 진수" data-card-name="${lv.id}"></label>
-        <p class="card-note">이미지를 저장해 링크드인이나 블로그에 올려 보세요. 이름과 진도는 이 브라우저 밖으로 보내지 않습니다.</p>
+        <p class="card-note">이미지를 저장해 링크드인이나 블로그에 올려 보세요. 이름은 이 브라우저 밖으로 보내지 않고, 학습 진도는 이름 없이 방문 통계로만 집계합니다.</p>
         <div class="links"><button type="button" class="btn" data-card-save="${lv.id}">${navigator.canShare ? "이미지 저장·공유" : "이미지 저장"}</button><button type="button" class="btn ghost" data-copy="${esc(shareUrl("/", "finish_card"))}" data-share="finish_card">허브 링크 복사</button>${next ? `<button type="button" class="btn ghost" data-next-level="${next.id}">${next.id} 이어서 보기</button>` : ""}</div>
       </div>`;
     showDialog();
@@ -1075,7 +1102,8 @@
   /* Deep links: #station=<repo> opens that entry, so other team sites (the web book, for one) can link straight to it. */
   const stationFromHash = () => {
     const m = location.hash.match(/^#station=(.+)$/);
-    return m ? decodeURIComponent(m[1]) : null;
+    if (!m) return null;
+    try { return decodeURIComponent(m[1]); } catch (e) { return null; }
   };
   function openFromHash() {
     const id = stationFromHash();

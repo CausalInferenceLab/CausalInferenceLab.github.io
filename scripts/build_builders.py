@@ -13,7 +13,9 @@ scripts/builder_cards.py. A page whose image is missing falls back to the hub's.
 import html
 import json
 import os
+import re
 from collections import OrderedDict
+from urllib.parse import urlsplit
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://causalinferencelab.github.io"
@@ -27,6 +29,23 @@ def load(name):
 
 def esc(s):
     return html.escape(str(s if s is not None else ""), quote=True)
+
+
+SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+TOKEN = re.compile(r"[A-Za-z0-9_-]+")
+
+
+def safe_url(u):
+    """Only http(s) links reach an href; anything else (javascript:, data:) becomes "#"."""
+    try:
+        return u if urlsplit(str(u)).scheme in ("http", "https") else "#"
+    except ValueError:
+        return "#"
+
+
+def token(v, fallback="none"):
+    """Ids that land in attributes (track ids) must be plain tokens."""
+    return v if isinstance(v, str) and TOKEN.fullmatch(v) else fallback
 
 
 def builder_stats():
@@ -90,6 +109,7 @@ def head(title, desc, url, image):
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com; img-src 'self' data: blob: https://github.com https://avatars.githubusercontent.com https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://api.github.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'">
 <script src="/assets/js/ga.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{esc(title)}</title>
@@ -103,7 +123,7 @@ def head(title, desc, url, image):
 <link rel="canonical" href="{esc(url)}">
 <link rel="icon" href="/assets/img/team-mark.png">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" integrity="sha384-/uC/GIvKJ/9RN6i1izHoBY9ubYo60OAsQRNQ3NRFiNsN+N/MVQJHD5OYcZz6wvwn" crossorigin="anonymous">
 <link rel="stylesheet" href="/assets/css/hub.css">
 </head>
 <body class="bpage">
@@ -132,7 +152,7 @@ FOOT = """<footer class="site-footer">
 
 def avatar(p, size="lg"):
     gh = p["info"].get("github")
-    img = f'<img src="https://github.com/{esc(gh)}.png?size=160" alt="" loading="lazy" onerror="this.remove()">' if gh else ""
+    img = f'<img src="https://github.com/{esc(gh)}.png?size=160" alt="" loading="lazy" data-fallback="1">' if gh else ""
     return f'<span class="avatar {size}" aria-hidden="true">{esc(p["name"][:1])}{img}</span>'
 
 
@@ -159,15 +179,15 @@ def timeline(p, repos, projects, terms):
     out = []
     for e in events:
         if e["role"] == "Builder":
-            facts = [f"러너 {e['runners']}명" if e.get("runners") else "", "진행 중" if e.get("live") else ""]
+            facts = [f"러너 {esc(e['runners'])}명" if e.get("runners") else "", "진행 중" if e.get("live") else ""]
         else:
             facts = [f"Builder {esc(e['by'])}" if e.get("by") else ""]
         link = (f'<a href="https://github.com/{ORG}/{esc(e["repo"])}" target="_blank" rel="noopener">레포 보기</a>' if e.get("repo")
-                else f'<a href="{esc(e["link"])}" target="_blank" rel="noopener">기록 보기</a>' if e.get("link") else "")
+                else f'<a href="{esc(safe_url(e["link"]))}" target="_blank" rel="noopener">기록 보기</a>' if e.get("link") else "")
         note = '<span class="sep" aria-hidden="true">·</span>'.join(x for x in facts + [link] if x)
         cls = "b" if e["role"] == "Builder" else "r"
-        out.append(f'<li class="{cls}" data-line="{e["line"]}"><span class="tl-c"><b>{e["cohort"]}기</b><span>{esc(terms.get(e["cohort"], ""))}</span></span>'
-                   f'<span class="tl-body"><span class="tl-role">{e["role"]}</span><span class="tl-name">{esc(e["name"])}</span>'
+        out.append(f'<li class="{cls}" data-line="{esc(token(e["line"]))}"><span class="tl-c"><b>{esc(e["cohort"])}기</b><span>{esc(terms.get(e["cohort"], ""))}</span></span>'
+                   f'<span class="tl-body"><span class="tl-role">{esc(e["role"])}</span><span class="tl-name">{esc(e["name"])}</span>'
                    f'{note_html(note)}{retro_html(e.get("retro"))}</span></li>')
     return "".join(out)
 
@@ -209,25 +229,25 @@ def page(p, repos, projects, terms):
     badge_md = f"[![CausalInferenceLab Builder]({badge_url})]({SITE}/builders/{slug}.html?utm_source=share&utm_medium=badge)"
     share = f"{url}?utm_source=share&utm_medium=builder_page"
     repo_cards = "".join(
-        f'<li data-line="{(r.get("lines") or ["none"])[0]}"><a href="https://github.com/{ORG}/{esc(r["repo"])}" target="_blank" rel="noopener">'
+        f'<li data-line="{esc(token((r.get("lines") or ["none"])[0]))}"><a href="https://github.com/{ORG}/{esc(r["repo"])}" target="_blank" rel="noopener">'
         f'<span class="num" aria-hidden="true"></span><span><b>{esc(r["title"])}</b><span>{esc(r.get("summary", ""))}</span></span></a></li>'
         for r in own)
     top = rank_tag(p)
     body = f"""<main id="main" class="bp">
   <div class="wrap">
     <a class="back" href="/#contrib">허브의 Builder 전체 보기</a>
-    <section class="bp-hero" data-line="{p['line']}">
+    <section class="bp-hero" data-line="{esc(token(p['line']))}">
       {avatar(p)}
       <div class="bp-id">
         <p class="bp-kicker">{top}<span>Causal Inference Hub Builder</span></p>
         <h1>{esc(p['name'])}</h1>
-        <p class="bp-since">{p['first']}기부터 Builder · {s} 중 {len(p['cohorts'])}개 기수</p>
+        <p class="bp-since">{esc(p['first'])}기부터 Builder · {esc(s)} 중 {len(p['cohorts'])}개 기수</p>
         {f'<p class="bp-intro">{esc(intro)}</p>' if intro else ''}
-        <p class="bp-links">{f'<a href="{esc(linkedin)}" target="_blank" rel="noopener">LinkedIn</a>' if linkedin else ''}<button type="button" class="btn ghost sm" data-copy="{esc(share)}" data-share="builder">이 페이지 링크 복사</button></p>
+        <p class="bp-links">{f'<a href="{esc(safe_url(linkedin))}" target="_blank" rel="noopener">LinkedIn</a>' if linkedin else ''}<button type="button" class="btn ghost sm" data-copy="{esc(share)}" data-share="builder">이 페이지 링크 복사</button></p>
         {'' if (intro and p["info"].get("github")) else f'<p class="bp-self">본인이신가요? <a href="https://github.com/{ORG}/CausalInferenceLab.github.io/edit/main/data/builders.json" target="_blank" rel="noopener">소개와 사진 추가하기</a></p>'}
       </div>
     </section>
-    <ul class="p-stats bp-stats"><li><b>{p['projects']}</b>프로젝트</li><li><b>{len(p['cohorts'])}</b>기수</li><li><b>{p['runners']}</b>함께한 러너</li><li><b>{len(own)}</b>레포</li></ul>
+    <ul class="p-stats bp-stats"><li><b>{esc(p['projects'])}</b>프로젝트</li><li><b>{len(p['cohorts'])}</b>기수</li><li><b>{esc(p['runners'])}</b>함께한 러너</li><li><b>{len(own)}</b>레포</li></ul>
     <div class="bp-grid">
       <section aria-labelledby="h-history"><h2 id="h-history">이력</h2><ol class="p-timeline">{timeline(p, repos, projects, terms)}</ol></section>
       <aside>
@@ -235,7 +255,7 @@ def page(p, repos, projects, terms):
         <section class="bp-badge" aria-labelledby="h-badge">
           <h2 id="h-badge">Builder 배지</h2>
           <p>GitHub 프로필이나 레포 README에 붙이면 이 페이지로 연결됩니다.</p>
-          <img src="/badges/{slug}.svg" alt="CausalInferenceLab {esc(badge_message(p))}">
+          <img src="/badges/{esc(slug)}.svg" alt="CausalInferenceLab {esc(badge_message(p))}">
           <pre><code>{esc(badge_md)}</code></pre>
           <button type="button" class="btn sm" data-copy="{esc(badge_md)}" data-share="badge">배지 코드 복사</button>
         </section>
@@ -257,8 +277,8 @@ def rank_tag(p):
 
 def index_page(ranked):
     cards = "".join(
-        f'<li data-line="{p["line"]}"><a href="/builders/{p["info"]["slug"]}.html">{avatar(p)}'
-        f'<span class="bi-body"><b>{esc(p["name"])}</b><span>{span(p["cohorts"])} · 프로젝트 {p["projects"]}개 · 러너 {p["runners"]}명</span>'
+        f'<li data-line="{esc(token(p["line"]))}"><a href="/builders/{esc(p["info"]["slug"])}.html">{avatar(p)}'
+        f'<span class="bi-body"><b>{esc(p["name"])}</b><span>{esc(span(p["cohorts"]))} · 프로젝트 {esc(p["projects"])}개 · 러너 {esc(p["runners"])}명</span>'
         f'<span class="bi-last">최근 · {esc(p["items"][-1]["name"])}</span></span>{rank_tag(p)}</a></li>'
         for p in ranked)
     total_projects = len(load("projects.json"))
@@ -280,8 +300,8 @@ def main():
     os.makedirs(os.path.join(ROOT, "badges"), exist_ok=True)
     for p in ranked:
         slug = p["info"].get("slug")
-        if not slug:
-            raise SystemExit(f"builders.json: {p['name']} has no slug")
+        if not isinstance(slug, str) or not SLUG.fullmatch(slug):
+            raise SystemExit(f"builders.json: {p['name']} has a missing or invalid slug {slug!r} (lowercase letters, digits, hyphens)")
         with open(os.path.join(ROOT, "builders", f"{slug}.html"), "w", encoding="utf-8") as f:
             f.write(page(p, repos, projects, terms))
         with open(os.path.join(ROOT, "badges", f"{slug}.svg"), "w", encoding="utf-8") as f:

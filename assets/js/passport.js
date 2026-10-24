@@ -1,5 +1,6 @@
 /* Learning passport: stamps for small actions across the hub, the game, the lab and the
-   Builder pages. Everything stays in this browser (localStorage); GA only gets stamp_earned. */
+   Builder pages. Stamps stay in this browser (localStorage); GA gets stamp_earned and
+   passport_open with counts only. */
 (() => {
   "use strict";
   const KEY = "cil-hub-stamps";

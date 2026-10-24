@@ -6,6 +6,7 @@ Uses only the standard library.
 import json
 import os
 import sys
+import urllib.parse
 import urllib.request
 from collections import Counter
 from datetime import datetime, timezone
@@ -15,11 +16,26 @@ API = "https://api.github.com"
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
 
 
+class KeepTokenOnHost(urllib.request.HTTPRedirectHandler):
+    """urllib copies Authorization to any redirect target; drop it when the host changes."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        new = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if new is not None and urllib.parse.urlsplit(newurl).hostname != urllib.parse.urlsplit(req.full_url).hostname:
+            new.remove_header("Authorization")
+        return new
+
+
+OPENER = urllib.request.build_opener(KeepTokenOnHost)
+
+
 def get(url, accept="application/vnd.github+json"):
+    if not url.startswith(API + "/"):
+        raise ValueError(f"refusing to call {url}")
     headers = {"Accept": accept, "User-Agent": "cil-hub-stats"}
     if TOKEN:
         headers["Authorization"] = f"Bearer {TOKEN}"
-    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as res:
+    with OPENER.open(urllib.request.Request(url, headers=headers), timeout=30) as res:
         return json.load(res)
 
 
