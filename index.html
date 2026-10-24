@@ -28,8 +28,8 @@
       <span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span>
     </a>
     <nav class="site-nav" aria-label="주요 메뉴">
-      <a href="#contrib">Builder</a>
       <a href="#curriculum">커리큘럼</a>
+      <a href="#contrib">Builder</a>
       <a href="#posts">연재</a>
       <a href="#events">행사</a>
       <a href="#join">참여하기</a>
@@ -64,33 +64,6 @@
     </div>
   </section>
 
-  <section class="band builders-band" id="contrib" aria-labelledby="contrib-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="contrib-title">이 허브를 만든 사람들</h2>
-        <p id="contrib-sub"></p>
-        <p class="contrib-stats" id="contrib-stats"></p>
-        <div class="contrib-cta"><a class="btn" href="#join" data-event="click_join" data-event-params='{"target":"join_section","source":"builder_section"}'>다음 기수 Builder 되기</a><a class="btn ghost" href="builders/">Builder 전체 보기</a></div>
-      </div>
-      <ol class="top3" id="top3"></ol>
-      <h3 class="contrib-head rail-head">함께한 Builder</h3>
-      <div class="people-rail" id="people-rail" aria-label="함께한 Builder"></div>
-      <details class="fold" id="medal-fold">
-        <summary><span>메달과 발표 무대</span><small>기수가 쌓이면 메달이 바뀌고, 학회 발표로 이어집니다</small></summary>
-        <section class="medal-ladder" id="medal-ladder" aria-label="Builder 메달"></section>
-      </details>
-      <details class="fold" id="roster-fold">
-        <summary><span>전체 Builder 이력</span><small>누가 어느 기수에 무엇을 열었는지</small></summary>
-        <ul class="roster-legend" id="roster-legend"></ul>
-        <div class="roster" id="roster"></div>
-      </details>
-    </div>
-  </section>
-
-  <section class="daily-band" id="daily" aria-labelledby="daily-title">
-    <div class="wrap"><div class="daily" id="daily-card"><h2 id="daily-title" class="sr">오늘의 한 문제</h2></div></div>
-  </section>
-
   <section class="band" id="curriculum" aria-labelledby="curriculum-title">
     <div class="wrap">
       <div class="section-head">
@@ -120,9 +93,11 @@
 
       <div id="panel-course" role="tabpanel" aria-labelledby="tab-course">
         <div class="progress" id="progress"></div>
-        <div class="shelf-bar">
-          <div class="chapters" id="chapters" role="group" aria-label="단계로 이동"></div>
+        <div class="path-wrap">
+          <p class="path-k"><span>배우기 L0–L2</span><span>만들기 L3–L4</span></p>
+          <ol class="path" id="path" aria-label="단계 고르기"></ol>
         </div>
+        <div class="chapters" id="chapters" hidden></div>
         <div class="shelf-wrap" id="shelf-wrap">
           <ol class="shelf" id="shelf" aria-label="단계별 자료"></ol>
         </div>
@@ -130,6 +105,29 @@
       </div>
 
 
+    </div>
+  </section>
+
+  <section class="band" id="contrib" aria-labelledby="contrib-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="contrib-title">가장 많이 기여한 사람들</h2>
+        <p id="contrib-sub"></p>
+      </div>
+      <ol class="top3" id="top3"></ol>
+      <div class="crew-row">
+        <div class="people-rail" id="people-rail" aria-label="함께한 Builder"></div>
+        <div class="contrib-cta"><a class="btn" href="#join" data-event="click_join" data-event-params='{"target":"join_section","source":"builder_section"}'>다음 기수 Builder 되기</a></div>
+      </div>
+      <details class="fold" id="medal-fold">
+        <summary><span>메달과 발표 무대</span><small>기수가 쌓이면 메달이 바뀌고, 학회 발표로 이어집니다</small></summary>
+        <section class="medal-ladder" id="medal-ladder" aria-label="Builder 메달"></section>
+      </details>
+      <details class="fold" id="roster-fold">
+        <summary><span>전체 Builder 이력</span><small>누가 어느 기수에 무엇을 열었는지</small></summary>
+        <ul class="roster-legend" id="roster-legend"></ul>
+        <div class="roster" id="roster"></div>
+      </details>
     </div>
   </section>
 

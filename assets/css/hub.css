@@ -1356,13 +1356,6 @@ button.btn.sm { font-size: 14px; }
 .pt-goto:hover { background: rgba(255, 255, 255, .1); color: #fff; }
 .pt-goto:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 
-/* curriculum on phones: two materials per level, the rest one tap away */
-.lv-more { display: none; }
-@media (max-width: 720px) {
-  .lv:not(.route):not(.open) .lv-items > li:nth-child(n+3) { display: none; }
-  .lv:not(.route):not(.open) .lv-more { display: block; }
-  .lv-more { width: 100%; margin-top: 10px; font: inherit; font-size: 14px; font-weight: 700; min-height: 44px; border: 0; border-radius: 12px; background: var(--surface-2); color: var(--ink); cursor: pointer; }
-}
 /* related book and lecture on posts and Builder pages */
 .post-related { padding: 16px 18px; border-radius: 16px; background: var(--surface); }
 .post-related .k { font-size: 13px; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
@@ -1374,3 +1367,66 @@ button.btn.sm { font-size: 14px; }
 .post-related b, .post-related-list b { font-size: 15px; }
 .post-related a > span > span, .post-related-list a > span > span { font-size: 13px; color: var(--muted); }
 .p-timeline li { grid-template-columns: 78px minmax(0, 1fr); }
+
+/* ==========================================================================
+   Curriculum at a glance: the five steps in one row, the chosen one below
+   ========================================================================== */
+.path-wrap { margin: 4px 0 14px; }
+.path-k { display: grid; grid-template-columns: 3fr 2fr; gap: 10px; font-size: 12.5px; font-weight: 800; color: var(--muted); margin-bottom: 6px; }
+.path-k span:last-child { padding-left: 4px; }
+.path { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; counter-reset: step; }
+.step { position: relative; }
+.step:not(:last-child)::after { content: ""; position: absolute; right: -9px; top: 50%; width: 8px; height: 8px; border-top: 2px solid var(--muted); border-right: 2px solid var(--muted); transform: translate(0, -50%) rotate(45deg); opacity: .5; z-index: 1; }
+.step button { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 3px; width: 100%; height: 100%; padding: 16px; border-radius: 18px; background: var(--surface); color: var(--ink); transition: box-shadow .15s ease, background .15s ease; }
+.step button:hover { box-shadow: 0 6px 20px rgba(20, 22, 43, .08); }
+.step button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.step button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.st-id { font-family: var(--f-display); font-weight: 800; font-size: 28px; line-height: 1; letter-spacing: -.02em; color: var(--accent); }
+.step.build .st-id { color: var(--l-ai); }
+.step button[aria-pressed="true"] .st-id { color: #FFD54A; }
+.st-name { font-size: 15px; font-weight: 800; margin-top: 6px; }
+.st-q { font-size: 13.5px; color: var(--muted); }
+.st-meta { font-size: 12.5px; color: var(--muted); margin-top: auto; padding-top: 8px; }
+.step button[aria-pressed="true"] .st-q, .step button[aria-pressed="true"] .st-meta { color: rgba(255, 255, 255, .78); }
+.st-makers { display: flex; margin-top: 6px; }
+.st-makers .avatar.sm { width: 22px; height: 22px; font-size: 10px; margin-left: -6px; box-shadow: 0 0 0 2px var(--surface); }
+.st-makers .avatar.sm:first-child { margin-left: 0; }
+.step button[aria-pressed="true"] .st-makers .avatar.sm { box-shadow: 0 0 0 2px var(--ink); }
+.lv-next { all: unset; box-sizing: border-box; cursor: pointer; display: block; margin-top: 16px; padding: 12px 16px; border-radius: 12px; background: var(--surface-2); font-size: 14.5px; font-weight: 700; text-align: center; }
+.lv-next:hover { background: color-mix(in srgb, var(--accent) 10%, var(--surface-2)); }
+.lv-next:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.lv .lv-head { grid-template-columns: auto minmax(0, 1fr); }
+@media (max-width: 860px) {
+  .path-k { display: none; }
+  .path { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(150px, 46%); overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * var(--gutter-l)) calc(-1 * var(--gutter-r)); padding: 2px var(--gutter-r) 6px var(--gutter-l); scroll-snap-type: x proximity; }
+  .path::-webkit-scrollbar { display: none; }
+  .step { scroll-snap-align: start; }
+  .step::after { display: none; }
+  .st-q { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+}
+
+/* Builder: the top three, then everyone else as one row of names */
+.crew-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin: 4px 0 12px; padding: 16px 20px; border-radius: 20px; background: var(--surface); }
+.crew-row .people-rail { margin: 0; flex: 1 1 520px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.crew-k { font-size: 13.5px; font-weight: 800; color: var(--muted); }
+.crew { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.crew button { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 4px; border-radius: 999px; background: var(--surface-2); font-size: 13.5px; font-weight: 700; }
+.crew button:hover { background: color-mix(in srgb, var(--c, var(--accent)) 12%, var(--surface-2)); }
+.crew button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.crew .avatar.sm { width: 26px; height: 26px; font-size: 12px; }
+.crew li.is-picked button { box-shadow: 0 0 0 2px var(--c); }
+.crew-row .contrib-cta { margin: 0; }
+@media (max-width: 600px) { .crew-row { padding: 14px; } .crew-row .contrib-cta { width: 100%; } .crew-row .contrib-cta .btn { width: 100%; justify-content: center; } }
+/* card text was inheriting a heavy weight */
+#shelf .ep > button, .lv-t p { font-weight: 400; }
+#shelf .ep h4 { font-weight: 700; }
+#shelf .who .nm, .ep-end .star { font-weight: 700; }
+@media (max-width: 600px) {
+  .top3 { gap: 8px; }
+  .tcard > button { padding: 16px; gap: 10px; }
+  .tcard .t-recent { display: none; }
+  .tcard .t-rank { font-size: 34px; }
+}
+/* the chosen step keeps the brand colour in both themes */
+.step button[aria-pressed="true"] { background: #23276A; color: #fff; }
+.step button[aria-pressed="true"] .st-makers .avatar.sm { box-shadow: 0 0 0 2px #23276A; }
