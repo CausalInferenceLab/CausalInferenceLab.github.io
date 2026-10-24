@@ -46,6 +46,7 @@
 - **상관일까, 인과일까?:** 데이터 상황 10개를 보고 상관인지 인과인지 고르는 2분짜리 게임입니다. 답마다 관련 웹북 장으로 이어집니다. [게임 하기](https://causalinferencelab.github.io/game.html)
 - **완주 카드:** 한 단계의 자료를 모두 학습 완료로 표시하면, 공유할 수 있는 완주 카드 이미지를 만들 수 있습니다.
 - **Builder 페이지:** 프로젝트를 연 Builder마다 이력, 만든 레포, 배지를 모은 페이지가 있습니다. [Builder 전체 보기](https://causalinferencelab.github.io/builders/)
+- **Builder 메달:** Builder로 연 기수가 쌓이면 메달이 바뀝니다. 첫 기수는 Builder, 2개 기수는 다시 온 Builder, 3개 기수 이상은 베테랑 Builder, 5개 기수 이상은 명예 Builder입니다. 러너 20명 이상과 함께한 멘토, 러너로 시작해 Builder가 된 사람에게는 특별 메달이 붙습니다. 메달 카드 이미지는 허브에서 바로 만들 수 있습니다.
 
 ## 커리큘럼: L0–L4
 
@@ -65,9 +66,15 @@ L0–L2는 **배우는 단계**로, 무료 자료만으로 끝까지 갈 수 있
 
 팀이 번역한 『[실무로 통하는 인과추론 with 파이썬](https://www.hanbit.co.kr/store/books/look.php?p_code=B6208936856)』(한빛미디어, 2024)과 그 내용을 실무로 잇는 온라인 강의 「[데이터 실무자의 사고력 강화: AI 인과추론 실무](https://www.hanbit.co.kr/product/C0781073345)」가 커리큘럼 L2에 들어 있습니다. 책의 장별 예제 코드와 발표 자료는 무료 레포로 공개되어 있습니다.
 
-## 행사: Data Forum
+## 행사: Data Forum과 학회 협력
 
 현업과 학계가 만나는 Data Forum을 2024년부터 열고 있습니다. 회차별 내용과 다음 행사 일정은 허브의 행사 섹션에 있습니다.
+
+한국경영정보학회가 주최하는 학회 행사에도 협력하고 있습니다. 오래 함께한 Builder에게는 이런 학회와 Data Forum에서 발표할 기회가 열립니다.
+
+- [한국 비즈니스 실험 심포지엄 2026](https://sites.google.com/view/business-experimentation2026/home) (2026.07.11, 한국과학기술회관)
+- [한국 비즈니스 실험 심포지엄 2025](https://sites.google.com/view/business-experimentation2025/home) (2025.07.12, 고려대학교 LG-POSCO 경영관)
+- [인과추론 여름 워크숍 2024](https://sites.google.com/view/causal-inference2024/home) (2024.06, 온라인)
 
 ## 참여하는 방법
 

@@ -15,7 +15,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_builders import ROOT, builder_stats, span  # noqa: E402
+from build_builders import ROOT, builder_stats, medal_svg, tenure, tier_of  # noqa: E402
 
 TEMPLATE = """<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -26,16 +26,18 @@ background:linear-gradient(118deg,#23276A 0%,#333689 46%,#5B54B0 82%,#6E68BC 100
 body:before{{content:"";position:absolute;inset:0;background:radial-gradient(60% 90% at 88% 20%,rgba(255,255,255,.16),transparent 60%)}}
 .in{{position:relative;padding:72px 80px;height:100%;display:flex;flex-direction:column}}
 .k{{font-size:28px;font-weight:600;color:rgba(255,255,255,.82)}}
-h1{{font-size:104px;font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-top:22px}}
+h1{{font-size:96px;font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-top:6px}}
 .s{{font-size:36px;font-weight:600;margin-top:14px;color:rgba(255,255,255,.9)}}
-.st{{display:flex;gap:56px;margin-top:44px}}
+.st{{display:flex;gap:56px;margin-top:34px}}
 .st div{{display:flex;flex-direction:column;font-size:24px;color:rgba(255,255,255,.75)}}
 .st b{{font-size:60px;font-weight:800;color:#fff;line-height:1.1}}
 .f{{margin-top:auto;font-size:24px;color:rgba(255,255,255,.7)}}
-img{{position:absolute;right:80px;top:72px;width:180px;height:180px}}
+.md{{position:absolute;right:96px;top:110px;filter:drop-shadow(0 18px 30px rgba(0,0,0,.35))}}.md svg{{height:400px;width:auto;display:block}}
+.tier{{display:inline-block;font-size:30px;font-weight:800;color:#FFD54A;margin-top:26px}}
 .top{{display:inline-block;margin-left:14px;font-size:22px;font-weight:800;color:#14162B;background:#FFD54A;border-radius:999px;padding:3px 14px;vertical-align:middle}}
-</style></head><body><img src="file://{mark}"><div class="in">
+</style></head><body><span class="md">{medal}</span><div class="in">
 <p class="k">Causal Inference Hub Builder · 가짜연구소 인과추론팀</p>
+<p class="tier">{tier}</p>
 <h1>{name}{top}</h1>
 <p class="s">{since}</p>
 <div class="st"><div><b>{projects}</b>프로젝트</div><div><b>{runners}</b>함께한 러너</div><div><b>{cohorts}</b>기수</div></div>
@@ -52,7 +54,6 @@ async def main():
     ranked = builder_stats()[0]
     out = os.path.join(ROOT, "assets", "og", "builders")
     os.makedirs(out, exist_ok=True)
-    mark = os.path.join(ROOT, "assets", "img", "team-mark.png")
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page(viewport={"width": 1200, "height": 630})
@@ -61,9 +62,10 @@ async def main():
             if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug or ""):
                 raise SystemExit(f"bad slug {slug!r}")
             doc = TEMPLATE.format(
-                mark=mark, name=html.escape(b["name"]), slug=slug,
+                medal=medal_svg(tier_of(b), 300, len(b["cohorts"]), uid="og"), tier=html.escape(tier_of(b)["name"]),
+                name=html.escape(b["name"]), slug=slug,
                 top=f'<span class="top">Top&nbsp;{b["rank"]}</span>' if b["rank"] <= 3 else "",
-                since=f'{span(b["cohorts"])} Builder · 최근 {html.escape(short(b["items"][-1]["name"]))}',
+                since=html.escape(tenure(b)),
                 projects=b["projects"], runners=b["runners"], cohorts=len(b["cohorts"]))
             path = os.path.join(out, f"{slug}.html")
             with open(path, "w", encoding="utf-8") as f:
