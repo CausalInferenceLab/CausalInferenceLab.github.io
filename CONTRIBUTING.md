@@ -23,7 +23,7 @@ PR을 올리기 전에 `python3 scripts/check_data.py`를 실행해 주세요. �
 | `data/repos.json` | 레포를 추가하거나 설명·단계·트랙·상태를 바꿀 때 |
 | `data/map.json` | 트랙 지도에서 레포의 위치를 정할 때. 책과 강의(`paid`)의 표지와 소개도 여기서 고칩니다. |
 | `data/routes.json` | 경로 안내 항목을 바꿀 때 |
-| `data/articles.json`, `articles/*.md` | 읽을거리를 추가할 때 |
+| `data/articles.json`, `articles/*.md` | 연재 글을 추가할 때. 아래 ‘연재 쓰기’를 보세요. |
 | `data/game.json` | ‘상관일까, 인과일까?’ 문항을 고칠 때. `answer`는 `corr` 또는 `cause`이고, 문항마다 웹북 장 링크(`chapter`)를 답니다. |
 | `data/daily.json` | 오늘의 한 문제 문항을 더하거나 고칠 때. 형식은 `game.json`과 같고, 날짜마다 순서대로 돌아갑니다. 인과와 상관 문항을 비슷한 수로 맞춥니다. |
 | `data/stats.json` | 직접 고치지 않습니다. 매주 GitHub Actions가 스타 추이와 기여자 수를 갱신합니다. |
@@ -62,9 +62,26 @@ pip install playwright && python -m playwright install chromium
 python3 scripts/builder_cards.py
 ```
 
-## 학습 여권과 실험실
+## 연재 쓰기
 
-스탬프 정의는 `assets/js/passport.js`의 `STAMPS`에 있습니다. 다른 페이지에서는 `window.hubStamp("lab")`처럼 부르면 되고, 이미 받은 스탬프는 다시 주지 않습니다. 기록은 `localStorage`에만 남습니다. 교란 실험실(`lab.html`, `assets/js/lab.js`)의 데이터는 페이지에서 만드는 가상 사용자입니다.
+허브의 ‘연재’ 섹션은 팀원이 쓰는 글을 모읍니다. 매주 월요일 ‘이번 주 포스트’가 바뀌고, 글쓴이는 작가 카드로 소개됩니다.
+
+1. `articles/<slug>.md`에 본문을 씁니다. `slug`는 영문 소문자·숫자·하이픈입니다.
+2. `data/articles.json`에 한 줄을 더합니다.
+
+```json
+{ "slug": "did-in-practice-01", "title": "이중차분법을 실무에 쓸 때", "summary": "한 줄 소개", "date": "2026-11-02",
+  "author": "Builder 이름", "series": "연재 이름", "episode": 1, "weekOf": "2026-11-02" }
+```
+
+- `author`가 `data/builders.json`의 이름과 같으면 작가 카드에 사진, 메달, Builder 페이지가 붙습니다.
+- `series`와 `episode`를 넣으면 같은 연재의 글이 순서대로 묶이고, 글 아래에 이전 편·다음 편이 생깁니다.
+- `weekOf`(그 주 월요일)를 넣으면 그 주의 ‘이번 주 포스트’로 고정됩니다. 없으면 일주일 안에 올라온 새 글, 그다음은 돌아가며 보여 줍니다.
+- 다른 블로그에 올린 글은 `"url": "https://..."`를 넣으면 그 주소로 연결됩니다(본문 파일은 필요 없습니다).
+
+## 활동 여권과 실험실
+
+스탬프 정의는 `assets/js/passport.js`의 `STAMPS`에 있습니다. `kind: "auto"`는 허브가 알아서 찍고(`window.hubStamp("post")`), `kind: "self"`는 행사 후기, 강의 후기, 레포 댓글처럼 허브 밖에서 하는 일이라 방문자가 ‘했어요’를 눌러 찍습니다. 이미 받은 스탬프는 다시 주지 않고, 기록은 `localStorage`에만 남습니다. 교란 실험실(`lab.html`, `assets/js/lab.js`)의 데이터는 페이지에서 만드는 가상 사용자입니다.
 
 ## 이벤트 측정
 

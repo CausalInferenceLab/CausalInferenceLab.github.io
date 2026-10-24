@@ -334,6 +334,7 @@
   const learnables = () => [...state.repos.values()].filter((r) => !r.kind && (r.lines || []).length && r.status !== "depot");
   const currentRoute = () => state.routes.find((r) => r.id === state.route);
 
+  /* one material: what it is, what it covers, and who made it */
   function episodeHTML(r, level, k, top, step) {
     const id = r.repo;
     const line = primaryLine(r);
@@ -342,54 +343,50 @@
       rank >= 0 ? `<span class="b top">TOP ${rank + 1}</span>` : "",
       r.status === "running" ? `<span class="b live">진행 중</span>` : "",
       r.status !== "running" && ageDays(r.pushed) != null && ageDays(r.pushed) <= 14 ? `<span class="b new">새 업데이트</span>` : "",
-      r.kind === "paid" ? `<span class="b paid">유료</span>` : "",
+      r.kind === "paid" ? `<span class="b paid">${esc(r.type || "")} · 유료</span>` : "",
       r.kind === "external" ? `<span class="b ext">팀 밖 오픈소스</span>` : ""
     ].join("");
-    const who = (r.builders || []);
-    const people = who.length ? `<span class="who">${who.slice(0, 2).map((n) => avatarHTML(n, "sm")).join("")}<span class="nm">${esc(who.join(", "))}</span></span>` : `<span class="who"><span class="nm">${r.kind === "paid" ? "한빛미디어" : r.kind === "external" ? "PyWhy · CausalML" : "팀 공동"}</span></span>`;
+    const who = r.builders || [];
+    const maker = (n) => { const p = (state.people || []).find((x) => x.name === n); return `${avatarHTML(n, "sm")}<span class="nm">${esc(n)}${p ? `<span class="mini-medal" title="${esc(tierOf(p).name)}">${tierMedal(p, 12)}</span>` : ""}</span>`; };
+    const people = who.length ? `<span class="who"><span class="k">만든 사람</span>${who.slice(0, 2).map(maker).join("")}${who.length > 2 ? `<span class="nm">외 ${who.length - 2}명</span>` : ""}</span>`
+      : `<span class="who"><span class="k">${r.kind === "paid" ? "출판" : r.kind === "external" ? "커뮤니티" : "만든 사람"}</span><span class="nm">${r.kind === "paid" ? "한빛미디어" : r.kind === "external" ? "PyWhy · CausalML" : "팀 공동"}</span></span>`;
     const tracks = (r.lines || []).map((l) => esc(state.lines.get(l).name)).join(" · ");
     const lv = state.levels.find((x) => x.id === level);
-    return `<li class="ep${step ? " on" : ""}" data-line="${line}" data-id="${esc(id)}" data-level="${level}"${step ? ` data-chap="${esc(id)}"` : ""}>
+    return `<li class="ep${step ? " on" : ""}${r.kind ? ` ${r.kind}` : ""}" data-line="${line}" data-id="${esc(id)}" data-level="${level}"${step ? ` data-chap="${esc(id)}"` : ""}>
       <button type="button" data-open="${esc(id)}" aria-label="${step ? `${step}번째, ` : ""}${esc(r.title)}${lv ? `, ${lv.id} ${esc(lv.name)}` : ""}">
-        <span class="ep-cover${r.cover ? " has-art" : ""}">
-          ${r.cover ? `<img class="ep-art ${r.type === "도서" ? "book" : "wide"}" src="${esc(r.cover)}" alt="" loading="lazy">` : ""}
-          <span class="ep-no">${step ? `${level} ${lv ? esc(lv.name) : ""}` : `${level} · ${pad2(k + 1)}`}</span>
-          <span class="ep-step" aria-hidden="true">${step ? pad2(step) : ""}</span>
-          <span class="ep-badges">${badges}</span>
-          <span class="ep-repo">${r.kind === "paid" ? esc(r.meta || "") : r.kind ? esc(r.title) : esc(id)}</span>
-          ${state.ridden.has(id) ? `<span class="ep-done" aria-label="학습 완료">✓</span>` : ""}
-        </span>
-        <span class="ep-body">
-          <span class="ep-track">${tracks}${r.pushed && !r.kind ? `<span class="age"> · ${ago(r.pushed)} 업데이트</span>` : ""}</span>
-          <h3>${esc(r.title)}</h3>
-          <span class="sum">${esc(r.summary)}</span>
-          <span class="ep-foot">${people}${r.kind ? "" : `<span class="star">${icons.star}${fmt(r.stars || 0)}</span>`}</span>
-        </span>
+        <span class="ep-top">${step ? `<span class="ep-step">${pad2(step)}</span>` : ""}<span class="ep-track"><i aria-hidden="true"></i>${step && lv ? `${lv.id} · ` : ""}${tracks || (r.kind === "paid" ? "도서·강의" : "")}</span><span class="ep-badges">${badges}</span></span>
+        <span class="ep-main">${r.cover ? `<img class="ep-thumb" src="${esc(r.cover)}" alt="" loading="lazy">` : ""}<span><h4>${esc(r.title)}</h4><span class="sum">${esc(r.summary)}</span></span></span>
+        <span class="ep-foot">${people}<span class="ep-end">${r.kind ? "" : `<span class="star">${icons.star}${fmt(r.stars || 0)}</span>`}${state.ridden.has(id) ? `<span class="ep-done" aria-label="학습 완료">✓ 완료</span>` : ""}</span></span>
       </button>
     </li>`;
   }
 
-  function renderShelf(keepScroll = false) {
+  function renderShelf() {
     const top = topRepos();
     const route = currentRoute();
     const shelf = $("#shelf");
-    const prevLeft = shelf.scrollLeft;
     shelf.classList.toggle("routing", !!route);
     if (route) {
       const items = route.stops.map((id) => state.repos.get(id)).filter(Boolean);
-      shelf.innerHTML = items.map((r, i) => episodeHTML(r, r.level || "", i, top, i + 1)).join("");
-      $("#chapters").innerHTML = items.map((r, i) => `<button type="button" data-chapter="${esc(r.repo)}" aria-current="false"><span class="bar" aria-hidden="true"></span><b>${pad2(i + 1)}</b> <span class="nm">${esc(r.title)}</span></button>`).join("");
+      shelf.innerHTML = `<li class="lv route"><ol class="lv-items">${items.map((r, i) => episodeHTML(r, r.level || "", i, top, i + 1)).join("")}</ol></li>`;
+      $("#chapters").innerHTML = items.map((r, i) => `<button type="button" data-chapter="${esc(r.repo)}" aria-current="false"><b>${pad2(i + 1)}</b> <span class="nm">${esc(r.title)}</span></button>`).join("");
       renderRouteNote();
     } else {
-      const byLevel = new Map(state.levels.map((lv) => [lv.id, levelItems(lv.id)]));
+      /* one block per level: what it answers, who built it, and its materials */
       shelf.innerHTML = state.levels.map((lv) => {
-        const items = byLevel.get(lv.id);
-        const chap = `<li class="chap${lv.layer === "build" ? " build" : ""}" data-chap="${lv.id}">
-          <span class="cl">${lv.id}</span><b>${esc(lv.name)}</b><span class="cq">${esc(lv.question)}</span><p>${esc(lv.goal)}</p>
-          <span class="cc">${items.length}개</span></li>`;
-        return chap + items.map((r, k) => episodeHTML(r, lv.id, k, top)).join("");
+        const items = levelItems(lv.id);
+        const makers = [...new Set(items.flatMap((r) => r.builders || []))];
+        const free = items.filter((r) => !r.kind).length;
+        return `<li class="lv${lv.layer === "build" ? " build" : ""}" data-chap="${lv.id}">
+          <div class="lv-head">
+            <span class="lv-id">${lv.id}</span>
+            <div class="lv-t"><h3>${esc(lv.name)}<span>${esc(lv.question)}</span></h3><p>${esc(lv.goal)}</p></div>
+            <div class="lv-side"><span class="lv-n">자료 ${free}개${items.length > free ? ` · 도서·강의 ${items.length - free}` : ""}</span>${makers.length ? `<span class="lv-makers" title="${esc(makers.join(", "))}">${makers.slice(0, 4).map((n) => avatarHTML(n, "sm")).join("")}<span>${makers.length}명이 만들었습니다</span></span>` : ""}</div>
+          </div>
+          <ol class="lv-items">${items.map((r, k) => episodeHTML(r, lv.id, k, top)).join("")}</ol>
+        </li>`;
       }).join("");
-      $("#chapters").innerHTML = state.levels.map((lv) => `<button type="button" data-chapter="${lv.id}" style="flex-grow:${byLevel.get(lv.id).length + 1}" aria-current="false"><span class="bar" aria-hidden="true"></span><b>${lv.id}</b> <span class="nm">${esc(lv.name)}</span></button>`).join("");
+      $("#chapters").innerHTML = state.levels.map((lv) => `<button type="button" data-chapter="${lv.id}" aria-current="false"><b>${lv.id}</b> <span class="nm">${esc(lv.name)}</span></button>`).join("");
       $("#route-note").textContent = "";
     }
     wireAvatars(shelf);
@@ -401,31 +398,22 @@
     $("#curriculum-sub").textContent = `L0부터 L4까지, 팀이 만든 레포 ${repos.length}개를 순서대로 엮었습니다. L0–L2는 무료 자료만으로 끝까지 갈 수 있습니다.`;
     $("#n-course").textContent = repos.length; $("#n-course").title = `레포 ${repos.length}개`;
     $("#shelf-foot").innerHTML = `${done ? `<span class="done-n">학습 완료 ${done} / ${learnable.length}</span> ` : ""}카드를 누르면 자세한 정보와 링크가 열립니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
-    shelf.scrollLeft = keepScroll ? prevLeft : 0;
     shelfSpy();
   }
 
   function scrollShelfTo(el, smooth = true) {
-    const shelf = $("#shelf");
     if (!el) return;
-    shelf.scrollTo({ left: el.offsetLeft - 4, behavior: smooth && !reduceMotion ? "smooth" : "auto" });
+    el.scrollIntoView({ behavior: smooth && !reduceMotion ? "smooth" : "auto", block: "start" });
   }
 
+  /* mark the level (or route stop) currently on screen in the level bar */
   function shelfSpy() {
-    const shelf = $("#shelf");
-    const x = shelf.scrollLeft + 40;
-    const marks = [...shelf.querySelectorAll("[data-chap]")];
-    let cur = marks[0] ? marks[0].dataset.chap : "";
-    marks.forEach((c) => { if (c.offsetLeft <= x) cur = c.dataset.chap; });
-    const routing = shelf.classList.contains("routing");
-    const inView = new Set(marks.filter((c) => c.offsetLeft + c.offsetWidth / 2 > shelf.scrollLeft && c.offsetLeft + c.offsetWidth / 2 < shelf.scrollLeft + shelf.clientWidth).map((c) => c.dataset.chap));
-    document.querySelectorAll("[data-chapter]").forEach((b) => b.setAttribute("aria-current", String(routing ? inView.has(b.dataset.chapter) : b.dataset.chapter === cur)));
-    const [prev, next] = document.querySelectorAll("[data-shelf]");
-    const atStart = shelf.scrollLeft <= 4, atEnd = shelf.scrollLeft + shelf.clientWidth >= shelf.scrollWidth - 4;
-    prev.disabled = atStart; next.disabled = atEnd;
-    const wrap = $("#shelf-wrap");
-    wrap.classList.toggle("fade-l", !atStart);
-    wrap.classList.toggle("fade-r", !atEnd);
+    const marks = [...$("#shelf").querySelectorAll("[data-chap]")];
+    if (!marks.length) return;
+    const line = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 64) + 80;
+    let cur = marks[0].dataset.chap;
+    marks.forEach((c) => { if (c.getBoundingClientRect().top <= line) cur = c.dataset.chap; });
+    document.querySelectorAll("[data-chapter]").forEach((b) => b.setAttribute("aria-current", String(b.dataset.chapter === cur)));
   }
 
   /* ---------- goals (routes) ---------- */
@@ -438,7 +426,6 @@
   function setRoute(id, source) {
     if (source && id !== state.route) track("select_route", { route: id, source });
     state.routeBegin = 0;
-    $("#week").hidden = id !== "all";
     state.route = id;
     $("#route-chips").querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-checked", String(c.dataset.route === id)));
     renderShelf();
@@ -452,7 +439,10 @@
       `<button type="button" class="chip quiz-chip" data-quiz-open>잘 모르겠어요 · 3문항으로 찾기</button>`;
     box.addEventListener("click", (e) => {
       const b = e.target.closest("[data-route]");
-      if (b) setRoute(b.dataset.route, "chip");
+      if (!b) return;
+      setRoute(b.dataset.route, "chip");
+      /* on short screens bring the route into view, it starts below the chips */
+      if ($("#shelf-wrap").getBoundingClientRect().top > innerHeight * 0.6) $("#route-note").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
     });
   }
 
@@ -667,35 +657,19 @@
 
   /* ---------- this week (curriculum tab) ---------- */
   const weekIndex = () => Math.floor((Date.now() - Date.UTC(2026, 0, 5)) / (7 * DAY));
+  /* where this visitor is: recent repos to go back to, and how much is marked done */
   function renderWeek() {
+    const box = $("#progress");
+    if (!box) return;
     const list = learnables();
-    if (!list.length) return;
-    const ordered = state.levels.flatMap((lv) => list.filter((r) => r.level === lv.id).sort((a, b) => (b.stars || 0) - (a.stars || 0)));
-    const n = ordered.length;
-    const pick = ordered.at(((weekIndex() % n) + n) % n);
-    const lv = state.levels.find((l) => l.id === pick.level);
-    const who = (pick.builders || []).join(", ");
-    const fresh = list.filter((r) => r.pushed).sort((a, b) => Date.parse(b.pushed) - Date.parse(a.pushed)).slice(0, 4);
     const recent = state.recent.map((x) => state.repos.get(x.id)).filter(Boolean).slice(0, 3);
     const done = list.filter((r) => state.ridden.has(r.repo)).length;
     const finished = state.levels.filter((l) => levelDone(l.id));
     const cardChip = finished.length ? `<button type="button" class="cont-chip card" data-card="${finished[finished.length - 1].id}">${finished[finished.length - 1].id} 완주 카드</button>` : "";
-    const cont = recent.length ? `<div class="continue"><span class="cont-label">이어서 보기</span>${recent.map((r) => `<button type="button" class="cont-chip" data-line="${primaryLine(r)}" data-open="${esc(r.repo)}"><i aria-hidden="true"></i>${esc(r.title)}</button>`).join("")}
+    box.innerHTML = recent.length ? `<div class="continue"><span class="cont-label">이어서 보기</span>${recent.map((r) => `<button type="button" class="cont-chip" data-line="${primaryLine(r)}" data-open="${esc(r.repo)}"><i aria-hidden="true"></i>${esc(r.title)}</button>`).join("")}
       ${cardChip}<span class="cont-progress">학습 완료 <b>${done}</b> / ${list.length}<span class="bar" aria-hidden="true"><i style="width:${Math.round((done / list.length) * 100)}%"></i></span></span></div>` : "";
-    $("#week").innerHTML = `${cont}<div class="week-grid">
-      <article class="spot" data-line="${primaryLine(pick)}">
-        <p class="spot-label">이번 주의 레포<span>월요일마다 바뀝니다</span></p>
-        <h3>${esc(pick.title)}</h3>
-        <p class="spot-meta">${lv ? `<span>${lv.id} ${esc(lv.name)}</span>` : ""}${who ? `<span>${esc(who)}</span>` : ""}${pick.stars ? `<span class="star">${icons.star}${fmt(pick.stars)}</span>` : ""}</p>
-        <p class="spot-sum">${esc(pick.summary)}</p>
-        <div class="spot-cta"><button type="button" class="btn" data-open="${esc(pick.repo)}">자세히 보기</button>${pick.site ? `<a class="btn ghost" href="${esc(pick.site)}" target="_blank" rel="noopener">${esc(pick.siteLabel || "사이트 열기")}</a>` : ""}</div>
-      </article>
-      <div class="fresh">
-        <p class="spot-label">최근 업데이트<span>매주 월요일 집계</span></p>
-        <ol>${fresh.map((r) => `<li data-line="${primaryLine(r)}"><button type="button" data-open="${esc(r.repo)}"><i aria-hidden="true"></i><span class="t">${esc(r.title)}</span><span class="d">${ago(r.pushed)}</span></button></li>`).join("")}</ol>
-      </div>
-    </div>`;
   }
+
 
   /* ---------- map legend ---------- */
   function renderVLines() {
@@ -756,10 +730,9 @@
     if (state.route !== "all") setRoute("all");
     const el = $(`#shelf .ep[data-id="${CSS.escape(id)}"]`);
     if (!el) return;
-    scrollShelfTo(el, false);
     document.querySelectorAll("#shelf .ep.picked").forEach((x) => x.classList.remove("picked", "flash"));
     el.classList.add("picked");
-    $("#shelf-wrap").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+    el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
     /* start the highlight once the page has arrived, so it is seen */
     setTimeout(() => { el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }, reduceMotion ? 0 : 550);
   }
@@ -917,10 +890,55 @@
   }
 
   /* ---------- articles ---------- */
-  function renderArticles() {
-    $("#article-list").innerHTML = state.articles.map((a) => `
-      <li><a class="article-card" href="article.html#${esc(a.slug)}"><h3>${esc(a.title)}</h3><p>${esc(a.summary)}</p><time datetime="${esc(a.date)}">${dot(a.date)}</time></a></li>`).join("");
+  /* ---------- 연재: this week's post and the people who write ---------- */
+  const postHref = (a) => a.url || `article.html#${a.slug}`;
+  const postLink = (a, placement, inner, cls = "") => `<a${cls ? ` class="${cls}"` : ""} href="${esc(postHref(a))}"${a.url ? ' target="_blank" rel="noopener"' : ""} data-event="read_post" data-event-params='${esc(JSON.stringify({ post: a.slug, placement }))}' data-post>${inner}</a>`;
+  function mondayKey(t) {
+    const d = new Date(t); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
   }
+  /* a post pinned to this week, else one published in the last week, else the next in turn */
+  function weeklyPost(list) {
+    const pinned = list.find((a) => a.weekOf === mondayKey(Date.now()));
+    if (pinned) return pinned;
+    const fresh = list.filter((a) => (ageDays(`${a.date}T00:00:00`) ?? 99) <= 7).sort((a, b) => (a.date < b.date ? 1 : -1))[0];
+    if (fresh) return fresh;
+    const ordered = [...list].sort((a, b) => (a.date < b.date ? -1 : 1));
+    return ordered[((weekIndex() % ordered.length) + ordered.length) % ordered.length];
+  }
+  function renderArticles() {
+    const box = $("#post-box"), list = state.articles;
+    if (!box || !list.length) return;
+    const pick = weeklyPost(list);
+    const series = list.filter((a) => a.series && a.series === pick.series).sort((a, b) => (a.episode || 0) - (b.episode || 0));
+    const byAuthor = list.filter((a) => a.author === pick.author);
+    const info = builderInfo(pick.author), person = (state.people || []).find((p) => p.name === pick.author);
+    const tier = person ? tierOf(person) : null;
+    const about = info.intro || (person ? `${tenure(person)}. 프로젝트 ${person.projects}개를 열고 러너 ${fmt(person.runners)}명과 함께했습니다.` : "인과추론팀과 함께 글을 씁니다.");
+    /* the series is already listed in the writer card, so the list holds everything else */
+    const shown = new Set(series.length > 1 ? series : [pick]);
+    const others = list.filter((a) => !shown.has(a)).sort((a, b) => (a.date < b.date ? 1 : -1));
+    box.innerHTML = `<div class="post-grid">
+      <article class="post-feature">
+        <p class="post-k"><b>이번 주 포스트</b><span>${pick.series ? `${esc(pick.series)}${pick.episode ? ` · ${pick.episode}편` : ""}` : ""}</span></p>
+        <h3>${postLink(pick, "weekly", esc(pick.title))}</h3>
+        <p class="post-sum">${esc(pick.summary)}</p>
+        <p class="post-meta">${esc(pick.author)} · ${dot(pick.date)}</p>
+        ${postLink(pick, "weekly", "글 읽기", "btn")}
+      </article>
+      <aside class="author-card" aria-label="${esc(`작가 ${pick.author}`)}">
+        <p class="post-k"><b>작가</b><span>연재 ${byAuthor.length}편</span></p>
+        <div class="au-head">${avatarHTML(pick.author, "lg")}<div><b class="au-name">${esc(pick.author)}</b>${tier ? `<span class="au-tier">${tierMedal(person, 18)}${esc(tier.name)}</span>` : ""}</div></div>
+        <p class="au-about">${esc(about)}</p>
+        ${series.length > 1 ? `<ol class="au-series">${series.map((a) => `<li${a === pick ? ' aria-current="true"' : ""}>${postLink(a, "series", `<span class="n">${a.episode || ""}편</span><span class="t">${esc(a.title)}</span>`)}</li>`).join("")}</ol>` : ""}
+        <p class="au-links">${person ? `<button type="button" class="btn ghost sm" data-person="${esc(person.name)}">Builder 이력</button>` : ""}${info.slug ? `<a class="btn ghost sm" href="builders/${esc(info.slug)}.html">Builder 페이지</a>` : ""}</p>
+      </aside>
+    </div>
+    ${others.length ? `<ul class="post-list">${others.map((a) => `<li>${postLink(a, "list", `<span class="pl-t">${esc(a.title)}</span><span class="pl-m">${esc(a.author)}${a.series ? ` · ${esc(a.series)}` : ""} · ${dot(a.date)}</span>`)}</li>`).join("")}</ul>` : ""}
+    <p class="post-cta"><b>연재를 써 보세요.</b> 글 한 편을 PR로 올리면 다음 주 포스트가 될 수 있습니다. <a href="https://github.com/${ORG}/CausalInferenceLab.github.io/blob/main/CONTRIBUTING.md#연재-쓰기" target="_blank" rel="noopener">쓰는 방법</a></p>`;
+    wireAvatars(box);
+  }
+
 
   /* ---------- today's question (one a day, streak kept in this browser) ---------- */
   const DAILY_KEY = "cil-hub-daily";
@@ -939,7 +957,7 @@
     const streak = rec.last === today || rec.last === today - 1 ? rec.streak : 0;
     const head = `<div class="daily-head"><h2 id="daily-title">오늘의 한 문제</h2><p class="daily-date">${now.getMonth() + 1}월 ${now.getDate()}일 · 매일 바뀝니다</p>
       <p class="daily-warm"><span>2분 몸풀기</span><a href="game.html">상관일까 인과일까 · 10문제</a><a href="lab.html">교란 실험실</a></p>
-      ${streak ? `<p class="daily-streak"><b>${streak}일</b> 연속${streak < 3 ? ` · ${3 - streak}일 더 풀면 스탬프` : rec.best > streak ? ` · 최고 ${rec.best}일` : ""}</p>` : `<p class="daily-streak quiet">사흘 연속 풀면 스탬프</p>`}</div>`;
+      ${streak ? `<p class="daily-streak"><b>${streak}일</b> 연속${rec.best > streak ? ` · 최고 ${rec.best}일` : ""}</p>` : ""}</div>`;
     if (!ans) {
       box.innerHTML = `${head}<div class="daily-body">
         <p class="daily-q">${esc(q.text)}</p>
@@ -969,8 +987,6 @@
     saveDaily(rec);
     track("daily_answer", { q: q.id, correct, streak: rec.streak });
     renderDaily();
-    stamp("daily");
-    if (rec.streak >= 3) stamp("streak3");
   }
 
   /* ---------- start-point quiz (three questions to one route) ---------- */
@@ -1040,7 +1056,7 @@
   function quizPick(v) {
     quiz.a[QUIZ.at(quiz.step).key] = v;
     quiz.step += 1;
-    if (quiz.step === QUIZ.length) { track("quiz_complete", { route: quizRoute(quiz.a), ...quiz.a }); stamp("quiz"); }
+    if (quiz.step === QUIZ.length) { track("quiz_complete", { route: quizRoute(quiz.a), ...quiz.a }); }
     renderQuiz();
   }
   function quizBack() { quiz.step = Math.max(0, quiz.step - 1); renderQuiz(); }
@@ -1295,7 +1311,6 @@
     if (state.ridden.has(id)) state.ridden.delete(id); else state.ridden.add(id);
     const rr = state.repos.get(id);
     track("mark_done", { repo: id, level: (rr && rr.level) || "", done: state.ridden.has(id) });
-    if (state.ridden.has(id) && rr && rr.level && levelDone(rr.level)) stamp("finish");
     saveRidden();
     renderMap(); renderShelf(true); renderWeek();
     openStation(id, "dialog", true);
@@ -1327,6 +1342,8 @@
       if (card) { openCard(card.dataset.card); return; }
       const nl = e.target.closest("[data-next-level]");
       if (nl) { closeStation(); gotoLevel(nl.dataset.nextLevel); return; }
+      const ext = e.target.closest("a[data-post][target=_blank]");
+      if (ext) stamp("post");
       const mc = e.target.closest("[data-medal-card]");
       if (mc) { openMedalCard(mc.dataset.medalCard); return; }
       const dl = e.target.closest("[data-card-save]");
@@ -1342,12 +1359,6 @@
       if (lv && lv.tagName === "BUTTON") { gotoLevel(lv.dataset.level); return; }
       const ch = e.target.closest("[data-chapter]");
       if (ch) { scrollShelfTo($(`#shelf [data-chap="${CSS.escape(ch.dataset.chapter)}"]`)); return; }
-      const step = e.target.closest("[data-shelf]");
-      if (step) {
-        const shelf = $("#shelf");
-        shelf.scrollBy({ left: Number(step.dataset.shelf) * shelf.clientWidth * 0.8, behavior: reduceMotion ? "auto" : "smooth" });
-        return;
-      }
       const open = e.target.closest("[data-open]");
       if (open) { e.preventDefault(); state.backTo = open.dataset.fromPerson || (open.closest(".p-repos") ? (state.lastPerson || null) : null); openStation(open.dataset.open, sourceOf(open)); }
       const back = e.target.closest("[data-back-person]");
@@ -1400,9 +1411,13 @@
     wire();
     try { await load(); } catch (err) { fail(err); return; }
     renderGrowth(); renderLadder();
-    renderRouteChips(); renderShelf(); renderWeek();
-    $("#shelf").addEventListener("scroll", shelfSpy, { passive: true });
     renderContrib();
+    renderRouteChips(); renderShelf(); renderWeek();
+    let spyQueued = false;
+    window.addEventListener("scroll", () => { if (spyQueued) return; spyQueued = true; requestAnimationFrame(() => { spyQueued = false; shelfSpy(); }); }, { passive: true });
+    const header = $(".site-header");
+    const setHeader = () => { if (header) document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`); };
+    setHeader(); window.addEventListener("resize", setHeader);
     renderLegend(); renderMap(); wireTabs();
     renderFeatured(); renderPartner(); renderEvents(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
     /* sections fill in after the data loads, so jump again once they have their height */

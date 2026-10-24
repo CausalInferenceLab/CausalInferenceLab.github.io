@@ -126,6 +126,12 @@ def main():
 
     for i, a in enumerate(data.get("articles.json") or []):
         w = f"articles.json[{i}]"
+        if not a.get("author"):
+            err(w, "author is required (the name shown on the post)")
+        if a.get("episode") is not None and not is_int(a.get("episode")):
+            err(w, "episode must be a whole number")
+        if a.get("weekOf") is not None and not DATE.fullmatch(str(a["weekOf"])):
+            err(w, "weekOf must be the Monday of that week, like 2026-11-02")
         if not (isinstance(a.get("slug"), str) and re.fullmatch(r"[A-Za-z0-9-]+", a["slug"])):
             err(w, f"slug must be letters, digits and hyphens, got {a.get('slug')!r}")
         if not DATE.fullmatch(str(a.get("date", ""))):
