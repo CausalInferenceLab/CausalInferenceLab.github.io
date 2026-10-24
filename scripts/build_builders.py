@@ -285,6 +285,16 @@ def page(p, repos, projects, terms):
     top = rank_tag(p)
     t, sp = tier_of(p), specials_of(p)
     medal_file = f"/badges/{slug}-medal.svg"
+    # books and lectures this Builder wrote, translated or teaches
+    books = [x for x in (load("map.json").get("paid") or []) if p["name"] in (x.get("credit") or "")]
+    def book_li(x):
+        out = next((l["url"] for l in x.get("links") or [] if str(l.get("url", "")).startswith("https://")), "")
+        role = "옮김" if x.get("type") == "도서" else "강의"
+        return (f'<li><a href="{esc(safe_url(out))}" target="_blank" rel="noopener" data-event="click_partner" '
+                f'data-event-params=\'{{"item":"{esc(token(x["id"]))}","action":"out","source":"builder_page"}}\'>'
+                f'<img src="/{esc(x["cover"])}" alt="" width="{30 if x.get("type") == "도서" else 52}" height="40">'
+                f'<span><b>{esc(x.get("shortTitle") or x["title"])}</b><span>{esc(x.get("type", ""))} · {role} · 한빛미디어</span></span></a></li>') if out else ""
+    books_html = "".join(book_li(x) for x in books)
     ribbons = "".join(f'<li>{medal_svg(m, 30, uid="sp-" + m["id"])}<span><b>{esc(m["name"])}</b>{esc(m["rule"])}</span></li>' for m in sp)
     body = f"""<main id="main" class="bp">
   <div class="wrap">
@@ -305,6 +315,7 @@ def page(p, repos, projects, terms):
     <div class="bp-grid">
       <section aria-labelledby="h-history"><h2 id="h-history">이력</h2><ol class="p-timeline">{timeline(p, repos, projects, terms)}</ol></section>
       <aside>
+        {f'<section aria-labelledby="h-books"><h2 id="h-books">이 Builder의 책·강의</h2><ul class="post-related-list">{books_html}</ul></section>' if books_html else ''}
         {f'<section aria-labelledby="h-repos"><h2 id="h-repos">만든 레포</h2><ul class="bp-repos">{repo_cards}</ul></section>' if own else ''}
         <section class="bp-badge bp-medals" aria-labelledby="h-medal">
           <h2 id="h-medal">Builder 메달</h2>

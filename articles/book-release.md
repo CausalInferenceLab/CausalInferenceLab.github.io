@@ -42,6 +42,8 @@
 - [인과추론팀 블로그](https://causalinferencelab.github.io/)
 - [신진수 블로그](https://jinsooshin.tistory.com/)
 
+책은 [한빛미디어](https://www.hanbit.co.kr/store/books/look.php?p_code=B6208936856)에서 볼 수 있고, 책의 내용을 실무로 잇는 온라인 강의 「[데이터 실무자의 사고력 강화: AI 인과추론 실무](https://www.hanbit.co.kr/product/C0781073345)」도 열려 있습니다.
+
 참고로 가짜연구소 인과추론팀은 해당 번역서를 기반으로 다양한 프로젝트를 진행하고 있습니다. 해당 프로젝트에 대한 청강은 [가짜연구소 Discord](https://discord.gg/HeHbFAvmSZ)를 확인해주세요.
 
 ## Conclusion

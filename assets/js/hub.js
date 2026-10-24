@@ -259,9 +259,19 @@
   }
 
   let growthTiles = [];
+  /* the team's numbers, said once, next to the people who made them */
+  function renderContribStats() {
+    const el = $("#contrib-stats");
+    if (!el || !growthTiles.length) return;
+    const v = Object.fromEntries(growthTiles.map((t) => [t.key, t]));
+    const part = (t, label) => (t ? `<span><b>${fmt(t.value)}</b>${label}</span>` : "");
+    el.innerHTML = [part(v.runners, "명이 러너로 참여"), part(v.projects, "개 프로젝트"), part(v.stars, " GitHub 스타"), part(v.events, "명 행사 참가")].join("");
+  }
   function renderGrowth(animate = true) {
     growthTiles = growthSeries();
     const box = $("#growth");
+    renderContribStats();
+    if (!box) return;
     box.innerHTML = growthTiles.map((t) => {
       const has = t.series.length > 1;
       const first = has ? t.series[0] : null, last = has ? t.series[t.series.length - 1] : null;
@@ -340,7 +350,7 @@
     const line = primaryLine(r);
     const rank = top.indexOf(id);
     const badges = [
-      rank >= 0 ? `<span class="b top">TOP ${rank + 1}</span>` : "",
+      rank >= 0 ? `<span class="b top">★ ${rank + 1}위</span>` : "",
       r.status === "running" ? `<span class="b live">진행 중</span>` : "",
       r.status !== "running" && ageDays(r.pushed) != null && ageDays(r.pushed) <= 14 ? `<span class="b new">새 업데이트</span>` : "",
       r.kind === "paid" ? `<span class="b paid">${esc(r.type || "")} · 유료</span>` : "",
@@ -384,6 +394,7 @@
             <div class="lv-side"><span class="lv-n">자료 ${free}개${items.length > free ? ` · 도서·강의 ${items.length - free}` : ""}</span>${makers.length ? `<span class="lv-makers" title="${esc(makers.join(", "))}">${makers.slice(0, 4).map((n) => avatarHTML(n, "sm")).join("")}<span>${makers.length}명이 만들었습니다</span></span>` : ""}</div>
           </div>
           <ol class="lv-items">${items.map((r, k) => episodeHTML(r, lv.id, k, top)).join("")}</ol>
+          ${items.length > 2 ? `<button type="button" class="lv-more" data-lv-more>${lv.id} 자료 ${items.length - 2}개 더 보기</button>` : ""}
         </li>`;
       }).join("");
       $("#chapters").innerHTML = state.levels.map((lv) => `<button type="button" data-chapter="${lv.id}" aria-current="false"><b>${lv.id}</b> <span class="nm">${esc(lv.name)}</span></button>`).join("");
@@ -395,7 +406,7 @@
     const depot = [...state.repos.values()].filter((r) => r.status === "depot");
     const learnable = repos.filter((r) => (r.lines || []).length);
     const done = learnable.filter((r) => state.ridden.has(r.repo)).length;
-    $("#curriculum-sub").textContent = `L0부터 L4까지, 팀이 만든 레포 ${repos.length}개를 순서대로 엮었습니다. L0–L2는 무료 자료만으로 끝까지 갈 수 있습니다.`;
+    $("#curriculum-sub").textContent = `L0부터 L4까지, 팀이 만든 레포 ${repos.length}개를 순서대로 엮었습니다. L0–L2는 무료 자료만으로도 끝까지 갈 수 있고, 책과 강의는 더 깊게 보고 싶을 때 고르면 됩니다.`;
     $("#n-course").textContent = repos.length; $("#n-course").title = `레포 ${repos.length}개`;
     $("#shelf-foot").innerHTML = `${done ? `<span class="done-n">학습 완료 ${done} / ${learnable.length}</span> ` : ""}카드를 누르면 자세한 정보와 링크가 열립니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
     shelfSpy();
@@ -730,6 +741,7 @@
     if (state.route !== "all") setRoute("all");
     const el = $(`#shelf .ep[data-id="${CSS.escape(id)}"]`);
     if (!el) return;
+    const block = el.closest(".lv"); if (block) block.classList.add("open");
     document.querySelectorAll("#shelf .ep.picked").forEach((x) => x.classList.remove("picked", "flash"));
     el.classList.add("picked");
     el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
@@ -738,19 +750,23 @@
   }
 
   /* ---------- book and lecture (hero) ---------- */
+  /* the book the team translated and the lecture built on it: one click to Hanbit */
   function renderPartner() {
     const items = (state.map.paid || []).filter((p) => p.cover);
     $("#partner-list").innerHTML = items.map((p) => {
       const out = (p.links || [])[0];
+      const who = p.type === "도서" ? "인과추론팀 옮김" : `강사 ${p.credit || ""}`;
       return `<li class="pt-card">
-        <button type="button" class="pt-main" data-goto="${esc(p.id)}" aria-label="${esc(`${p.type} ${p.title}, 커리큘럼 ${p.level}에서 보기`)}">
+        <a class="pt-main" href="${esc(out ? out.url : "#curriculum")}" target="_blank" rel="noopener" data-event="click_partner" data-event-params='${esc(JSON.stringify({ item: p.id, action: "out" }))}' aria-label="${esc(`${p.type} ${p.title}, 한빛미디어에서 보기`)}">
           <img class="pt-img ${p.type === "도서" ? "book" : "wide"}" src="${esc(p.cover)}" alt="" width="${p.type === "도서" ? 26 : 48}" height="34">
-          <span class="pt-text"><b>${esc(p.shortTitle || p.title)}</b><span class="pt-lv"><span class="pt-type">${esc(p.type)}</span><span class="pt-paid">유료</span>커리큘럼 ${esc(p.level)}에서 보기</span></span>
-        </button>
-        ${out ? `<a class="pt-out" href="${esc(out.url)}" target="_blank" rel="noopener" title="한빛미디어에서 보기" aria-label="${esc(`${p.title} 한빛미디어에서 보기`)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>` : ""}
+          <span class="pt-text"><b>${esc(p.shortTitle || p.title)}</b><span class="pt-lv"><span class="pt-type">${esc(p.type)}</span>${esc(who)}</span></span>
+          <svg class="pt-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button type="button" class="pt-goto" data-goto="${esc(p.id)}">커리큘럼 ${esc(p.level)}</button>
       </li>`;
     }).join("");
   }
+
 
   /* ---------- featured sites (hero) ---------- */
   function renderFeatured() {
@@ -931,7 +947,7 @@
         <div class="au-head">${avatarHTML(pick.author, "lg")}<div><b class="au-name">${esc(pick.author)}</b>${tier ? `<span class="au-tier">${tierMedal(person, 18)}${esc(tier.name)}</span>` : ""}</div></div>
         <p class="au-about">${esc(about)}</p>
         ${series.length > 1 ? `<ol class="au-series">${series.map((a) => `<li${a === pick ? ' aria-current="true"' : ""}>${postLink(a, "series", `<span class="n">${a.episode || ""}편</span><span class="t">${esc(a.title)}</span>`)}</li>`).join("")}</ol>` : ""}
-        <p class="au-links">${person ? `<button type="button" class="btn ghost sm" data-person="${esc(person.name)}">Builder 이력</button>` : ""}${info.slug ? `<a class="btn ghost sm" href="builders/${esc(info.slug)}.html">Builder 페이지</a>` : ""}</p>
+        <p class="au-links">${person ? `<button type="button" class="btn ghost sm" data-person="${esc(person.name)}">${esc(pick.author)}의 Builder 이력</button>` : ""}</p>
       </aside>
     </div>
     ${others.length ? `<ul class="post-list">${others.map((a) => `<li>${postLink(a, "list", `<span class="pl-t">${esc(a.title)}</span><span class="pl-m">${esc(a.author)}${a.series ? ` · ${esc(a.series)}` : ""} · ${dot(a.date)}</span>`)}</li>`).join("")}</ul>` : ""}
@@ -1344,6 +1360,8 @@
       if (nl) { closeStation(); gotoLevel(nl.dataset.nextLevel); return; }
       const ext = e.target.closest("a[data-post][target=_blank]");
       if (ext) stamp("post");
+      const more = e.target.closest("[data-lv-more]");
+      if (more) { more.closest(".lv").classList.add("open"); return; }
       const mc = e.target.closest("[data-medal-card]");
       if (mc) { openMedalCard(mc.dataset.medalCard); return; }
       const dl = e.target.closest("[data-card-save]");
