@@ -18,7 +18,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # Actions are pinned to commits; the token is not left in .git/config for later steps.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Refresh GitHub stats
         if: github.event_name != 'push'
@@ -31,12 +34,11 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/stats.json
             git commit -m "Update GitHub stats"
-            git push
+            git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
           fi
 
       - name: Check data files
-        run: |
-          for f in data/*.json; do python3 -m json.tool "$f" > /dev/null || { echo "Invalid JSON: $f"; exit 1; }; done
+        run: python3 scripts/check_data.py
 
       - name: Build Builder pages and badges
         run: python3 scripts/build_builders.py
@@ -47,7 +49,7 @@ jobs:
           cp -r index.html article.html game.html lab.html 404.html .nojekyll assets data articles builders badges _site/
 
       - name: Publish to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site

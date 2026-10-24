@@ -29,6 +29,8 @@
     try { params = JSON.parse(el.dataset.eventParams || "{}"); } catch (err) { params = {}; }
     window.hubTrack(el.dataset.event, params);
   });
+  /* Profile photos that fail to load leave the initial underneath (no inline onerror, so a CSP can forbid inline handlers). */
+  document.addEventListener("error", (e) => { const t = e.target; if (t && t.tagName === "IMG" && t.hasAttribute("data-fallback")) t.remove(); }, true);
   /* Buttons with data-copy copy their value and confirm in place. */
   document.addEventListener("click", async (e) => {
     const b = e.target.closest("[data-copy]");

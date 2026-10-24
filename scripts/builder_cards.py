@@ -11,6 +11,7 @@ images. Pages without an image fall back to the hub's share image.
 import asyncio
 import html
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -57,6 +58,8 @@ async def main():
         page = await browser.new_page(viewport={"width": 1200, "height": 630})
         for b in ranked:
             slug = b["info"]["slug"]
+            if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug or ""):
+                raise SystemExit(f"bad slug {slug!r}")
             doc = TEMPLATE.format(
                 mark=mark, name=html.escape(b["name"]), slug=slug,
                 top=f'<span class="top">Top&nbsp;{b["rank"]}</span>' if b["rank"] <= 3 else "",

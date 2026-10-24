@@ -17,16 +17,19 @@
     const slug = location.hash.replace(/^#/, "") || (articles[0] && articles[0].slug);
     const a = articles.find((x) => x.slug === slug);
     more.innerHTML = articles.filter((x) => x !== a).map((x) =>
-      `<li><a class="article-card" href="#${esc(x.slug)}"><h3>${esc(x.title)}</h3><time datetime="${esc(x.date)}">${x.date.replace(/-/g, ".")}</time></a></li>`).join("");
+      `<li><a class="article-card" href="#${esc(x.slug)}"><h3>${esc(x.title)}</h3><time datetime="${esc(x.date)}">${esc(String(x.date).replace(/-/g, "."))}</time></a></li>`).join("");
     if (!a) { notFound(); return; }
     document.title = `${a.title} | Causal Inference Hub`;
     title.textContent = a.title;
-    meta.textContent = `${a.author} · ${a.date.replace(/-/g, ".")}`;
+    meta.textContent = `${a.author} · ${String(a.date).replace(/-/g, ".")}`;
     try {
       const res = await fetch(`articles/${a.slug}.md`, { cache: "no-cache" });
       if (!res.ok) throw new Error(res.status);
       const md = await res.text();
-      body.innerHTML = window.marked ? window.marked.parse(md) : `<pre>${esc(md)}</pre>`;
+      /* articles come from pull requests: never render their HTML unsanitised */
+      body.innerHTML = window.marked && window.DOMPurify
+        ? window.DOMPurify.sanitize(window.marked.parse(md), { USE_PROFILES: { html: true } })
+        : `<pre>${esc(md)}</pre>`;
       body.querySelectorAll("table").forEach((t) => {
         const w = document.createElement("div");
         w.className = "table-wrap";

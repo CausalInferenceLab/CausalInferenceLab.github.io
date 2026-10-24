@@ -96,7 +96,8 @@
   async function start() {
     if (!state.qs.length) {
       const res = await fetch("data/game.json", { cache: "no-cache" });
-      state.qs = (await res.json()).questions;
+      /* links come from data/game.json: keep only https chapter links */
+      state.qs = (await res.json()).questions.map((q) => ({ ...q, chapter: { ...q.chapter, url: /^https:\/\//.test(q.chapter && q.chapter.url) ? q.chapter.url : "#" } }));
     }
     state.i = 0; state.score = 0; state.wrong = []; state.right = { corr: 0, cause: 0 };
     track("game_start", { retry: state.runs > 0 });
