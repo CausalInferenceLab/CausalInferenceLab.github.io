@@ -726,6 +726,7 @@
       x.tabIndex = on ? 0 : -1;
       $("#" + x.getAttribute("aria-controls")).hidden = !on;
     });
+    if (state.mapScroll) state.mapScroll();
     if (id === "tab-course") shelfSpy();
     paintNav();
   }
@@ -1253,6 +1254,20 @@
     $("#station-body .station-close").focus();
   }
 
+  /* tell people the map continues to the right when it is wider than the screen */
+  function watchMapScroll() {
+    const box = $("#map-scroll"), hint = $("#map-hint");
+    if (!box) return;
+    const update = () => {
+      const more = box.scrollWidth - box.clientWidth > 4;
+      hint.hidden = !more;
+      box.classList.toggle("more", more && box.scrollLeft + box.clientWidth < box.scrollWidth - 4);
+    };
+    box.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    state.mapScroll = update;
+    update();
+  }
   function closeStation() { const d = dialog(); if (d.open) d.close(); }
 
   /* Deep links: #station=<repo> opens that entry, so other team sites (the web book, for one) can link straight to it. */
@@ -1387,7 +1402,7 @@
     $("#shelf").addEventListener("scroll", shelfSpy, { passive: true });
     renderContrib();
     renderLegend(); renderMap(); wireTabs();
-    renderFeatured(); renderPartner(); renderEvents(); renderStages(); renderArticles(); renderDaily();
+    renderFeatured(); renderPartner(); renderEvents(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
     if (location.hash === "#contrib") { selectTab("tab-contrib"); requestAnimationFrame(() => $("#curriculum").scrollIntoView()); }
     openFromHash();
     if (location.hash === "#start" || new URLSearchParams(location.search).has("quiz")) openQuiz();
