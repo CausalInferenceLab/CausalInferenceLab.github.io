@@ -62,7 +62,8 @@
     const t = tier(state.score, n, state.right, kinds);
     track("game_complete", { score: state.score, total: n, cause_right: state.right.cause, corr_right: state.right.corr });
     if (window.hubStamp) { window.hubStamp("game"); if (state.score >= 8) window.hubStamp("sharp"); }
-    const chapters = [...new Map(state.wrong.map((q) => [q.chapter.url, q.chapter])).values()];
+    const chNum = (c) => parseInt(c.url.split("/").pop(), 10) || 99;
+    const chapters = [...new Map(state.wrong.map((q) => [q.chapter.url, q.chapter])).values()].sort((x, y) => chNum(x) - chNum(y));
     const share = window.hubShareUrl ? window.hubShareUrl("/game.html", "game") : location.href;
     root.innerHTML = `
       <p class="gm-kicker">결과</p>

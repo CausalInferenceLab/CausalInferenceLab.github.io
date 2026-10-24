@@ -353,7 +353,7 @@
         return chap + items.map((r, k) => episodeHTML(r, lv.id, k, top)).join("");
       }).join("");
       $("#chapters").innerHTML = state.levels.map((lv) => `<button type="button" data-chapter="${lv.id}" style="flex-grow:${byLevel.get(lv.id).length + 1}" aria-current="false"><span class="bar" aria-hidden="true"></span><b>${lv.id}</b> <span class="nm">${esc(lv.name)}</span></button>`).join("");
-      $("#route-note").textContent = "목표를 고르면 트랙 지도와 커리큘럼에 볼 순서가 표시됩니다.";
+      $("#route-note").textContent = "";
     }
     wireAvatars(shelf);
 
@@ -401,6 +401,7 @@
   function setRoute(id, source) {
     if (source && id !== state.route) track("select_route", { route: id, source });
     state.routeBegin = 0;
+    $("#week").hidden = id !== "all";
     state.route = id;
     $("#route-chips").querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-checked", String(c.dataset.route === id)));
     renderShelf();
@@ -410,7 +411,8 @@
   function renderRouteChips() {
     const box = $("#route-chips");
     const all = [{ id: "all", label: "전체 보기" }, ...state.routes];
-    box.innerHTML = all.map((r) => `<button type="button" class="chip" role="radio" data-route="${r.id}" aria-checked="${r.id === state.route}">${esc(r.label)}</button>`).join("");
+    box.innerHTML = all.map((r) => `<button type="button" class="chip" role="radio" data-route="${esc(r.id)}" aria-checked="${r.id === state.route}">${esc(r.label)}</button>`).join("") +
+      `<button type="button" class="chip quiz-chip" data-quiz-open>잘 모르겠어요 · 3문항으로 찾기</button>`;
     box.addEventListener("click", (e) => {
       const b = e.target.closest("[data-route]");
       if (b) setRoute(b.dataset.route, "chip");
@@ -450,6 +452,9 @@
   /* ---------- contribution: Builder stats, top 3, rail, roster ---------- */
   const shortTerm = (t) => (t || "").replace(/^20(\d\d) /, "$1 ").replace("상반기", "상").replace("하반기", "하");
   const span = (list) => (list.length ? (list[0] === list[list.length - 1] ? `${list[0]}기` : `${list[0]}–${list[list.length - 1]}기`) : "");
+
+  /* one way to say how long someone has been a Builder, everywhere */
+  const tenure = (p) => (p.cohorts.length === 1 ? `${p.first}기 Builder` : `${p.first}기부터 · ${p.cohorts.length}개 기수 (${p.cohorts.join("·")}기)`);
 
   function builderStats() {
     const cur = currentCohort();
@@ -506,13 +511,13 @@
     state.people = list;
     const cohorts = [...new Set(state.projects.map((p) => p.cohort))].sort((a, b) => a - b);
     const terms = new Map(state.projects.map((p) => [p.cohort, p.term]));
-    const stripLabel = (p) => `${span(p.cohorts)}${p.cohorts.length > 1 ? ` 중 ${p.cohorts.length}개 기수` : ""}`;
+    const stripLabel = (p) => tenure(p);
 
     $("#top3").innerHTML = list.slice(0, 3).map((p) => {
       const recent = [...p.items].reverse().slice(0, 2);
       return `<li class="tcard"><button type="button" data-person="${esc(p.name)}" aria-label="${esc(`Top ${p.rank} ${p.name}, 이력 보기`)}">
         <span class="t-rank" aria-hidden="true">${p.rank}</span>
-        <span class="t-head">${avatarHTML(p.name, "lg")}<span><b class="t-name">${esc(p.name)}</b><span class="t-since">${p.first}기부터 Builder · ${p.cohorts.length}개 기수</span></span></span>
+        <span class="t-head">${avatarHTML(p.name, "lg")}<span><b class="t-name">${esc(p.name)}</b><span class="t-since">${esc(tenure(p))}</span></span></span>
         <span class="t-stats"><span><b>${p.projects}</b>프로젝트</span><span><b>${fmt(p.runners)}</b>함께한 러너</span><span><b>${p.repos.size}</b>레포</span></span>
         <span class="t-recent">${recent.map((i) => `<span>${i.cohort}기 · ${esc(i.name)}</span>`).join("")}</span>
         <span class="t-more">이력 보기</span>
@@ -523,7 +528,7 @@
     const card = (p, copy) => {
       const latest = p.items[p.items.length - 1];
       return `<li class="pcard" data-line="${p.line}"><button type="button" data-person="${esc(p.name)}"${copy ? ' tabindex="-1"' : ""}>${avatarHTML(p.name, "lg")}
-        <span class="pc-body"><b class="pc-name">${esc(p.name)}</b><span class="pc-since">${p.first}기부터 Builder</span>
+        <span class="pc-body"><b class="pc-name">${esc(p.name)}</b><span class="pc-since">${esc(tenure(p))}</span>
           <span class="pc-stats">프로젝트 <b>${p.projects}</b> · 러너 <b>${fmt(p.runners)}</b></span>
           ${latest ? `<span class="pc-latest">최근 · ${esc(latest.name)}</span>` : ""}</span></button></li>`;
     };
@@ -531,7 +536,7 @@
 
     const head = `<div class="ro-head" aria-hidden="true"><span>Builder</span><span class="strip" style="--n:${cohorts.length}">${cohorts.map((c) => `<span class="sh" title="${esc(terms.get(c) || "")}">${c}</span>`).join("")}</span><span>최근 프로젝트</span><span class="tot">합계</span></div>`;
     $("#roster").innerHTML = head + `<ol class="ro-list">${list.map((p) => `<li class="ro" data-line="${p.line}">
-      <span class="ro-who"><span class="ro-rank">${p.rank}</span>${avatarHTML(p.name, "sm")}<span><button type="button" class="ro-name" data-person="${esc(p.name)}">${esc(p.name)}</button><span class="ro-span">${stripLabel(p)}</span></span></span>
+      <span class="ro-who"><span class="ro-rank">${p.rank}</span>${avatarHTML(p.name, "sm")}<span><button type="button" class="ro-name" data-person="${esc(p.name)}">${esc(p.name)}</button><span class="ro-span">${esc(stripLabel(p))}</span></span></span>
       <span class="ro-strip" aria-label="${esc(`기수별 기여: ${p.cohorts.map((c) => `${c}기`).join(", ")}`)}">${stripHTML(p, cohorts)}</span>
       <ul class="ro-projects">${p.items.slice(-3).reverse().map((i) => `<li><span class="c">${i.cohort}기</span>${i.repo ? `<button type="button" data-open="${esc(i.repo)}" title="${esc(`${i.name} · 레포: ${i.title}`)}">${esc(i.name)}</button>` : i.link ? `<a href="${esc(i.link)}" target="_blank" rel="noopener" title="${esc(i.name)}">${esc(i.name)}</a>` : `<span title="${esc(i.name)}">${esc(i.name)}</span>`}${i.live ? `<span class="live-dot">진행 중</span>` : ""}</li>`).join("")}${p.items.length > 3 ? `<li><button type="button" class="ro-more" data-person="${esc(p.name)}">이전 프로젝트 ${p.items.length - 3}개 더 보기</button></li>` : ""}</ul>
       <span class="ro-total tot"><b>러너 ${fmt(p.runners)}명</b><span>프로젝트 ${p.projects}개</span></span>
@@ -555,6 +560,7 @@
     const p = (state.people || []).find((x) => x.name === name);
     if (!p) return;
     const info = builderInfo(name);
+    state.lastPerson = name;
     track("open_builder", { builder: info.slug || name, source: source || "hub" });
     if (window.hubSeen) window.hubSeen("builders", info.slug || name, 3, "builder");
     const runnerItems = p.runnerOf.map((x) => {
@@ -566,7 +572,7 @@
     const terms = new Map(state.projects.map((q) => [q.cohort, q.term]));
     const item = (e) => {
       const facts = e.role === "Builder" ? [e.runners ? `러너 ${e.runners}명` : "", e.live ? "진행 중" : ""] : [e.by ? `Builder ${esc(e.by)}` : ""];
-      const go = e.repo ? `<button type="button" data-open="${esc(e.repo)}" title="${esc(e.title)}">레포 보기</button>` : e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">기록 보기</a>` : "";
+      const go = e.repo ? `<button type="button" data-open="${esc(e.repo)}" data-from-person="${esc(p.name)}" title="${esc(e.title)}">자료 열기</button>` : e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">기록 보기</a>` : "";
       const note = [...facts.filter(Boolean), go].filter(Boolean).join('<span class="sep" aria-hidden="true">·</span>');
       return `<li class="${e.role === "Builder" ? "b" : "r"}" data-line="${e.line}"><span class="tl-c"><b>${e.cohort}기</b><span>${esc(terms.get(e.cohort) || "")}</span></span><span class="tl-body"><span class="tl-role">${e.role}</span><span class="tl-name">${esc(e.name)}</span>${note ? `<span class="tl-note">${note}</span>` : ""}${retroHTML(e.retro)}</span></li>`;
     };
@@ -575,7 +581,7 @@
       <div class="station-band" data-line="${p.line}"></div>
       <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
       <div class="station-content person" data-line="${p.line}">
-        <div class="tags">${p.rank <= 3 ? `<span class="rank-tag">Top ${p.rank}</span>` : ""}<span class="tag-line" data-line="${p.line}"><span class="num" aria-hidden="true"></span>${p.first}기부터 Builder</span></div>
+        <div class="tags">${p.rank <= 3 ? `<span class="rank-tag">Top ${p.rank}</span>` : ""}<span class="tag-line" data-line="${p.line}"><span class="num" aria-hidden="true"></span>${esc(tenure(p))}</span></div>
         <div class="p-head">${avatarHTML(p.name, "lg")}<div><h2 id="station-title">${esc(p.name)}</h2>${info.linkedin ? `<a href="${esc(info.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ""}</div></div>
         ${info.slug ? `<div class="p-share"><a class="btn sm" href="builders/${esc(info.slug)}.html">Builder 페이지</a><button type="button" class="btn ghost sm" data-copy="${esc(shareUrl(`/builders/${info.slug}.html`, "builder_page"))}" data-share="builder">링크 복사</button></div>` : ""}
         ${info.intro ? `<p>${esc(info.intro)}</p>` : ""}
@@ -718,7 +724,7 @@
 
   /* ---------- events ---------- */
   function renderEvents() {
-    const list = [...state.events].sort((a, b) => a.order - b.order);
+    const list = [...state.events].sort((a, b) => (b.upcoming ? 1 : 0) - (a.upcoming ? 1 : 0) || b.order - a.order);
     const max = Math.max(...list.map((e) => e.participants || 0)) || 1;
     $("#event-list").innerHTML = list.map((e) => {
       const when = e.date ? dot(e.date) : `${e.year}년`;
@@ -728,7 +734,8 @@
         ${e.upcoming ? `<span class="soon-tag">예정</span>` : ""}
         <h3>${title}</h3>
         <span class="when">${when}</span>
-        ${e.participants ? `<div class="ppl"><b>${fmt(e.participants)}</b>명 참가<div class="bar" aria-hidden="true"><i style="width:${Math.round((e.participants / max) * 100)}%"></i></div></div>` : `<div class="ppl">참가 신청을 받고 있습니다.</div>`}
+        ${e.participants ? `<div class="ppl"><b>${fmt(e.participants)}</b>명 참가<div class="bar" aria-hidden="true"><i style="width:${Math.round((e.participants / max) * 100)}%"></i></div></div>`
+          : e.upcoming && e.link ? `<a class="btn sm" href="${esc(e.link)}" target="_blank" rel="noopener">참가 신청하기</a>` : `<div class="ppl">${e.upcoming ? "신청 링크는 곧 열립니다." : ""}</div>`}
       </li>`;
     }).join("");
   }
@@ -841,6 +848,7 @@
     rec.streak = int(rec.streak); rec.best = int(rec.best);
     const streak = rec.last === today || rec.last === today - 1 ? rec.streak : 0;
     const head = `<div class="daily-head"><h2 id="daily-title">오늘의 한 문제</h2><p class="daily-date">${now.getMonth() + 1}월 ${now.getDate()}일 · 매일 바뀝니다</p>
+      <p class="daily-warm"><span>2분 몸풀기</span><a href="game.html">상관일까 인과일까 · 10문제</a><a href="lab.html">교란 실험실</a></p>
       ${streak ? `<p class="daily-streak"><b>${streak}일</b> 연속${streak < 3 ? ` · ${3 - streak}일 더 풀면 스탬프` : rec.best > streak ? ` · 최고 ${rec.best}일` : ""}</p>` : `<p class="daily-streak quiet">사흘 연속 풀면 스탬프</p>`}</div>`;
     if (!ans) {
       box.innerHTML = `${head}<div class="daily-body">
@@ -854,7 +862,7 @@
       <p class="daily-claim"><span>이렇게 말해도 될까요?</span>“${esc(q.claim)}”</p>
       <p class="daily-verdict ${ans.correct ? "ok" : "no"}">${ans.correct ? "맞았습니다" : "아쉽습니다"}<span>내 답: ${DAILY_LABEL[ans.pick] || ""} · 정답: ${DAILY_LABEL[q.answer]}</span></p>
       <p class="daily-why">${esc(q.why)}</p>
-      <p class="daily-more"><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "daily", chapter: q.chapter.url.split("/").pop().slice(0, 2) }))}'>${esc(q.chapter.title)} 읽기</a><a href="game.html">10문제 더 풀기</a><a href="lab.html">실험실에서 직접 해 보기</a></p>
+      <p class="daily-more"><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "daily", chapter: q.chapter.url.split("/").pop().slice(0, 2) }))}'>${esc(q.chapter.title)} 읽기</a></p>
       <p class="daily-next">자정에 새 문제가 열립니다.</p></div>`;
   }
   function answerDaily(pick) {
@@ -900,7 +908,7 @@
     if (a.work === "research") return "research";
     if (a.work === "exp") return "experiment";
     if (a.work === "ml") return a.experience === "new" ? "start" : "ml";
-    if (a.work === "mkt" && a.experience === "used") return "experiment";
+    if (a.work === "mkt") return "marketing";
     return "start";
   }
   function showDialog() {
@@ -911,6 +919,7 @@
     quiz.step = 0; quiz.a = {};
     track("quiz_start", { retry: !!retry });
     renderQuiz(); showDialog();
+    const first = $("#station-body .quiz-opts button"); if (first) first.focus();
   }
   function renderQuiz() {
     const shell = (inner) => `<div class="station-band" data-line="main"></div>
@@ -953,7 +962,7 @@
     const stops = [...document.querySelectorAll("#shelf .ep")];
     const el = stops.at(Math.min(begin, stops.length - 1));
     renderRouteNote();
-    $("#shelf-wrap").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+    $("#route-note").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
     if (el) {
       scrollShelfTo(el, false);
       el.classList.add("picked");
@@ -1057,7 +1066,7 @@
       r.kind === "paid" && r.credit ? `<dt>${r.type === "강의" ? "강사" : "만든 사람"}</dt><dd>${esc(r.credit)}</dd>` : "",
       builders ? `<dt>Builder</dt><dd>${builders}</dd>` : "",
       r.cohorts && r.cohorts.length ? `<dt>기수</dt><dd>${r.cohorts.join("·")}기</dd>` : "",
-      statusText[r.status] ? `<dt>상태</dt><dd>${statusText[r.status]}</dd>` : "",
+      statusText[r.status] ? `<dt>상태</dt><dd title="${esc(statusText[r.status].split(": ")[1] || "")}">${esc(statusText[r.status].split(": ")[0])}</dd>` : "",
       r.kind ? "" : `<dt>스타</dt><dd>${fmt(r.stars || 0)}</dd>`,
       r.pushed ? `<dt>마지막 커밋</dt><dd>${dot(r.pushed.slice(0, 10))}</dd>` : ""
     ].join("");
@@ -1081,6 +1090,7 @@
       <div class="station-band" data-line="${line}"></div>
       <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
       <div class="station-content" data-line="${line}">
+        ${state.backTo ? `<button type="button" class="back-person" data-back-person="${esc(state.backTo)}">‹ ${esc(state.backTo)} 이력으로</button>` : ""}
         <div class="tags">${lineTags}${extraTag}</div>
         ${r.cover ? `<img class="station-art ${r.type === "도서" ? "book" : "wide"}" src="${esc(r.cover)}" alt="">` : ""}
         <h2 id="station-title">${esc(r.title)}</h2>
@@ -1173,10 +1183,13 @@
       const tabLink = e.target.closest('a[href="#contrib"]');
       if (tabLink) { e.preventDefault(); selectTab("tab-contrib"); $("#curriculum").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" }); return; }
       const open = e.target.closest("[data-open]");
-      if (open) { e.preventDefault(); openStation(open.dataset.open, sourceOf(open)); }
+      if (open) { e.preventDefault(); state.backTo = open.dataset.fromPerson || (open.closest(".p-repos") ? (state.lastPerson || null) : null); openStation(open.dataset.open, sourceOf(open)); }
+      const back = e.target.closest("[data-back-person]");
+      if (back) { openPerson(back.dataset.backPerson, "back"); return; }
     });
     dialog().addEventListener("click", (e) => { if (e.target === dialog()) closeStation(); });
     dialog().addEventListener("close", () => {
+      state.backTo = null;
       if (stationFromHash()) history.replaceState(null, "", location.pathname + location.search);
     });
     window.addEventListener("hashchange", openFromHash);

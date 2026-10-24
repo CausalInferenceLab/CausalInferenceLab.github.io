@@ -11,7 +11,7 @@
     { id: "streak3", mark: "3", name: "사흘 연속", how: "오늘의 한 문제를 3일 연속 풀어 보세요.", href: "/#daily" },
     { id: "game", mark: "몸", name: "몸풀기 완주", how: "‘상관일까, 인과일까?’ 10문제를 끝까지 풀어 보세요.", href: "/game.html" },
     { id: "sharp", mark: "감", name: "인과 감별사", how: "게임에서 8문제 이상 맞혀 보세요.", href: "/game.html" },
-    { id: "lab", mark: "실", name: "실험가", how: "교란 실험실에서 편향을 0 가까이 줄여 보세요.", href: "/lab.html" },
+    { id: "lab", mark: "실", name: "실험가", how: "교란 실험실에서 단순 비교와 진짜 효과의 차이를 1 이하로 줄여 보세요.", href: "/lab.html" },
     { id: "finish", mark: "완", name: "한 단계 완주", how: "한 단계의 자료를 모두 학습 완료로 표시해 보세요.", href: "/#curriculum" },
     { id: "builder", mark: "B", name: "Builder 탐방", how: "Builder 이력이나 페이지를 세 번 열어 보세요.", href: "/builders/" }
   ];
@@ -32,8 +32,11 @@
     if (!el) {
       el = document.createElement("div");
       el.id = "hub-toast"; el.className = "toast"; el.setAttribute("role", "status"); el.setAttribute("aria-live", "polite");
-      document.body.appendChild(el);
     }
+    /* a modal dialog puts the page behind it, so the toast goes inside the top one */
+    const open = [...document.querySelectorAll("dialog[open]")].pop();
+    const host = open || document.body;
+    if (el.parentNode !== host) host.appendChild(el);
     el.innerHTML = `<span class="stamp sm on" aria-hidden="true">${esc(stamp.mark)}</span><span><b>스탬프 획득 · ${esc(stamp.name)}</b><span>${n}/${STAMPS.length}</span></span><button type="button" data-passport="toast">여권 보기</button>`;
     el.classList.add("show");
     const hide = () => { toastTimer = setTimeout(() => el.classList.remove("show"), 4200); };
