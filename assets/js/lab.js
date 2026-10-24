@@ -78,7 +78,8 @@
       [[0, "off"], [1, "on"]].forEach(([tt, cls]) => el("line", { x1: X(-3), x2: X(3), y1: Y(a + bz * -3 + tau * tt), y2: Y(a + bz * 3 + tau * tt), class: `fit-l ${cls}` }, fitG));
       const zl = -2.2, yOn = Y(a + bz * zl + tau), yOff = Y(a + bz * zl);
       el("line", { x1: X(zl), x2: X(zl), y1: yOn, y2: yOff, class: "fit-gap" }, fitG);
-      el("text", { x: X(zl) + 6, y: (yOn + yOff) / 2 + 4, class: "fit-t" }, fitG).textContent = `같은 충성도에서의 간격 = 보정 ${fmt(tau)}`;
+      /* label in the sparse top-left corner, so it never sits on the dots or between close lines */
+      el("text", { x: L + 8, y: T + 14, class: "fit-t" }, fitG).textContent = small ? `세로 실선 = 보정 ${fmt(tau)}` : `세로 실선(같은 충성도에서의 간격) = 보정 ${fmt(tau)}`;
     }
     const means = el("g", { class: "means" });
     [["on", r.mOn, "켬 평균"], ["off", r.mOff, "끔 평균"]].forEach(([cls, m, label]) => {
@@ -97,6 +98,7 @@
       $("#lab-ch-text").textContent = "해냈습니다. 무작위로 켜면 충성도와 알림이 따로 움직여서, 단순 비교만으로도 진짜 효과에 가까워집니다. 이것이 무작위 실험이 하는 일입니다.";
       track("lab_challenge_complete", { randomized: true, conf: r.conf });
       if (window.hubStamp) window.hubStamp("lab");
+      const learn = $("#lab-learn"); if (learn) learn.open = true;
       return;
     }
     if (r.rand && r.conf >= 5) {
@@ -105,6 +107,11 @@
       $("#lab-ch-text").textContent = "힌트: 교란 강도는 5 이상으로 그대로 두고, 슬라이더가 아닌 다른 버튼을 찾아보세요.";
     }
   }
+
+  /* the sticky chart sits right under the header, whose height changes with the nav wrap */
+  const header = document.querySelector(".site-header");
+  const setHeader = () => { if (header) document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`); };
+  setHeader(); window.addEventListener("resize", setHeader);
 
   function update(source) {
     if (source === "confounding" || source === "effect") moves += 1;

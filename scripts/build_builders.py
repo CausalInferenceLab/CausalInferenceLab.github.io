@@ -127,10 +127,11 @@ def head(title, desc, url, image):
 <link rel="stylesheet" href="/assets/css/hub.css">
 </head>
 <body class="bpage">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 <header class="site-header">
   <div class="wrap header-row">
     <a class="brand" href="/" aria-label="Causal Inference Hub 처음으로"><img class="brand-logo" src="/assets/img/team-mark.png" alt="" width="34" height="34"><span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span></a>
-    <nav class="site-nav" aria-label="주요 메뉴"><a href="/#curriculum">커리큘럼</a><a href="/builders/">Builder</a><a href="/#join">참여하기</a></nav>
+    <nav class="site-nav" aria-label="주요 메뉴"><a href="/#curriculum">커리큘럼</a><a href="/game.html">게임</a><a href="/lab.html">실험실</a><a href="/builders/" aria-current="page">Builder</a><a href="/#join">참여하기</a></nav>
     <button type="button" class="pass-btn" data-passport aria-label="학습 여권 열기">여권 <b data-passport-count>0/9</b></button>
   </div>
 </header>
@@ -210,6 +211,12 @@ def badge_svg(label, message):
 """
 
 
+def tenure(p):
+    """The same wording the hub uses: "8기부터 · 3개 기수 (8·9·12기)"."""
+    c = p["cohorts"]
+    return f"{p['first']}기 Builder" if len(c) == 1 else f"{p['first']}기부터 · {len(c)}개 기수 ({'·'.join(str(x) for x in c)}기)"
+
+
 def badge_message(p):
     n = len(p["cohorts"])
     return f"Builder · {p['first']}기" if n == 1 else f"Builder · {p['first']}기부터 · {n}개 기수"
@@ -235,13 +242,13 @@ def page(p, repos, projects, terms):
     top = rank_tag(p)
     body = f"""<main id="main" class="bp">
   <div class="wrap">
-    <a class="back" href="/#contrib">허브의 Builder 전체 보기</a>
+    <a class="back" href="/builders/">Builder 전체 보기</a>
     <section class="bp-hero" data-line="{esc(token(p['line']))}">
       {avatar(p)}
       <div class="bp-id">
         <p class="bp-kicker">{top}<span>Causal Inference Hub Builder</span></p>
         <h1>{esc(p['name'])}</h1>
-        <p class="bp-since">{esc(p['first'])}기부터 Builder · {esc(s)} 중 {len(p['cohorts'])}개 기수</p>
+        <p class="bp-since">{esc(tenure(p))}</p>
         {f'<p class="bp-intro">{esc(intro)}</p>' if intro else ''}
         <p class="bp-links">{f'<a href="{esc(safe_url(linkedin))}" target="_blank" rel="noopener">LinkedIn</a>' if linkedin else ''}<button type="button" class="btn ghost sm" data-copy="{esc(share)}" data-share="builder">이 페이지 링크 복사</button></p>
         {'' if (intro and p["info"].get("github")) else f'<p class="bp-self">본인이신가요? <a href="https://github.com/{ORG}/CausalInferenceLab.github.io/edit/main/data/builders.json" target="_blank" rel="noopener">소개와 사진 추가하기</a></p>'}
@@ -278,7 +285,7 @@ def rank_tag(p):
 def index_page(ranked):
     cards = "".join(
         f'<li data-line="{esc(token(p["line"]))}"><a href="/builders/{esc(p["info"]["slug"])}.html">{avatar(p)}'
-        f'<span class="bi-body"><b>{esc(p["name"])}</b><span>{esc(span(p["cohorts"]))} · 프로젝트 {esc(p["projects"])}개 · 러너 {esc(p["runners"])}명</span>'
+        f'<span class="bi-body"><b>{esc(p["name"])}</b><span>{esc(tenure(p))} · 프로젝트 {esc(p["projects"])}개 · 러너 {esc(p["runners"])}명</span>'
         f'<span class="bi-last">최근 · {esc(p["items"][-1]["name"])}</span></span>{rank_tag(p)}</a></li>'
         for p in ranked)
     total_projects = len(load("projects.json"))

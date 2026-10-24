@@ -22,6 +22,17 @@
     ]
   },
   {
+    "id": "marketing",
+    "label": "마케팅 효과를 재요",
+    "description": "광고와 프로모션이 정말 매출을 움직였는지, 마케팅 사이언스 자료와 특강으로 따라갑니다.",
+    "stops": [
+      "causal-studio",
+      "Marketing_Science",
+      "causal-inference-lecture",
+      "data-still-does-not-speak"
+    ]
+  },
+  {
     "id": "ml",
     "label": "ML로 효과를 추정해요",
     "description": "이질적 처치효과와 메타러너를 코드로 익히고 외부 라이브러리 기여로 이어갑니다.",

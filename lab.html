@@ -19,10 +19,11 @@
 <link rel="stylesheet" href="assets/css/hub.css">
 </head>
 <body class="lpage">
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 <header class="site-header">
   <div class="wrap header-row">
     <a class="brand" href="./" aria-label="Causal Inference Hub 처음으로"><img class="brand-logo" src="assets/img/team-mark.png" alt="" width="34" height="34"><span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span></a>
-    <nav class="site-nav" aria-label="주요 메뉴"><a href="./#curriculum">커리큘럼</a><a href="game.html">게임</a><a href="builders/">Builder</a><a href="./#join">참여하기</a></nav>
+    <nav class="site-nav" aria-label="주요 메뉴"><a href="./#curriculum">커리큘럼</a><a href="game.html">게임</a><a href="lab.html" aria-current="page">실험실</a><a href="builders/">Builder</a><a href="./#join">참여하기</a></nav>
     <button type="button" class="pass-btn" data-passport aria-label="학습 여권 열기">여권 <b data-passport-count>0/9</b></button>
   </div>
 </header>
@@ -31,6 +32,11 @@
     <p class="gm-kicker">교란 실험실 · 2분</p>
     <h1>알림을 켜면 사용자가 더 남을까?</h1>
     <p class="lab-lede">가상 사용자 800명의 데이터입니다. 충성도가 높은 사용자는 알림을 더 잘 켜고, 원래 더 오래 남습니다. 슬라이더를 움직여 ‘알림 켠 사람과 끈 사람의 단순 비교’가 진짜 효과에서 얼마나 멀어지는지 보세요.</p>
+
+    <div class="lab-challenge" id="lab-challenge" aria-live="polite">
+      <p class="lab-ch-k">도전</p>
+      <p id="lab-ch-text">교란 강도를 5 이상으로 둔 채, 단순 비교와 진짜 효과의 차이를 1 이하로 줄여 보세요.</p>
+    </div>
 
     <div class="lab-grid">
       <section class="lab-panel" aria-labelledby="lab-controls">
@@ -54,27 +60,25 @@
           <p class="lab-note">보정 값도 표본에 따라 ±0.5쯤 흔들립니다. ‘새 사용자 800명 뽑기’로 확인해 보세요.</p>
         </div>
 
-        <div class="lab-challenge" id="lab-challenge">
-          <p class="lab-ch-k">도전</p>
-          <p id="lab-ch-text">교란 강도를 5 이상으로 둔 채, 단순 비교와 진짜 효과의 차이를 1 이하로 줄여 보세요.</p>
-        </div>
       </section>
 
       <section class="lab-chart" aria-labelledby="lab-chart-title">
         <h2 id="lab-chart-title">사용자 800명</h2>
         <p class="lab-chart-sub">가로는 충성도, 세로는 30일 잔존 점수. 점선은 두 집단의 평균(간격이 단순 비교), 실선은 충성도가 같을 때의 두 집단(간격이 보정 값)입니다.</p>
         <svg id="lab-svg" viewBox="0 0 640 360" role="img" aria-labelledby="lab-svg-desc"><desc id="lab-svg-desc">알림을 켠 사용자와 끈 사용자의 충성도와 잔존 점수 산점도</desc></svg>
-        <ul class="lab-legend"><li><span class="dot on" aria-hidden="true"></span>알림 켬</li><li><span class="dot off" aria-hidden="true"></span>알림 끔</li></ul>
+        <ul class="lab-legend"><li><span class="dot on" aria-hidden="true"></span>알림 켬</li><li><span class="dot off" aria-hidden="true"></span>알림 끔</li><li><span class="ln dash" aria-hidden="true"></span>집단 평균</li><li><span class="ln" aria-hidden="true"></span>같은 충성도</li></ul>
       </section>
     </div>
 
     <section class="lab-learn" aria-labelledby="lab-learn-title">
-      <h2 id="lab-learn-title">여기서 본 것</h2>
+      <details id="lab-learn">
+      <summary><h2 id="lab-learn-title">여기서 본 것</h2><span>도전을 풀면 열립니다 · 먼저 읽어도 됩니다</span></summary>
       <ol>
         <li><b>교란이 단순 비교를 부풀립니다.</b> 충성도가 알림과 잔존을 함께 움직이면, 알림 효과가 0이어도 단순 비교는 양수로 나옵니다. <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/04-Graphical-Causal-Models.html" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='{"source":"lab","chapter":"04"}'>4장 그래프 인과 모델</a></li>
         <li><b>무작위로 켜면 편향이 사라집니다.</b> 충성도와 알림이 따로 움직이니 두 집단이 평균적으로 같아집니다. <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='{"source":"lab","chapter":"02"}'>2장 무작위 실험</a></li>
         <li><b>교란 요인을 안다면 보정할 수 있습니다.</b> 여기서는 충성도를 알기에 회귀로 보정한 값이 정답에 가깝습니다. 현실에서는 충성도처럼 다 재기 어려운 요인이 남는다는 것이 문제입니다. <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/05-The-Unreasonable-Effectiveness-of-Linear-Regression.html" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='{"source":"lab","chapter":"05"}'>5장 선형회귀</a></li>
       </ol>
+      </details>
       <div class="gm-cta"><a class="btn" href="./?quiz=1">3문항으로 내 시작점 찾기</a><a class="btn ghost" href="game.html">상관일까, 인과일까? 10문제</a><button type="button" class="btn ghost" id="lab-share">실험실 링크 복사</button></div>
     </section>
   </div>
