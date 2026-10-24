@@ -132,7 +132,7 @@ def head(title, desc, url, image):
   <div class="wrap header-row">
     <a class="brand" href="/" aria-label="Causal Inference Hub 처음으로"><img class="brand-logo" src="/assets/img/team-mark.png" alt="" width="34" height="34"><span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span></a>
     <nav class="site-nav" aria-label="주요 메뉴"><a href="/#curriculum">커리큘럼</a><a href="/game.html">게임</a><a href="/lab.html">실험실</a><a href="/builders/" aria-current="page">Builder</a><a href="/#join">참여하기</a></nav>
-    <button type="button" class="pass-btn" data-passport aria-label="학습 여권 열기">여권 <b data-passport-count>0/9</b></button>
+    <button type="button" class="pass-btn" data-passport aria-label="활동 여권 열기">여권 <b data-passport-count>0/9</b></button>
   </div>
 </header>
 """

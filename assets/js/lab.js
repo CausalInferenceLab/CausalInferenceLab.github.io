@@ -97,7 +97,6 @@
       $("#lab-challenge").classList.add("done");
       $("#lab-ch-text").textContent = "해냈습니다. 무작위로 켜면 충성도와 알림이 따로 움직여서, 단순 비교만으로도 진짜 효과에 가까워집니다. 이것이 무작위 실험이 하는 일입니다.";
       track("lab_challenge_complete", { randomized: true, conf: r.conf });
-      if (window.hubStamp) window.hubStamp("lab");
       const learn = $("#lab-learn"); if (learn) learn.open = true;
       return;
     }

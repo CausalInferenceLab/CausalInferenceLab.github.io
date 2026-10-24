@@ -1,19 +1,23 @@
-/* Learning passport: stamps for small actions across the hub, the game, the lab and the
-   Builder pages. Stamps stay in this browser (localStorage); GA gets stamp_earned and
+/* Activity passport: stamps for learning on the hub and for taking part in the team
+   (reviews, comments, projects). Stamps stay in this browser (localStorage); GA gets stamp_earned and
    passport_open with counts only. */
 (() => {
   "use strict";
   const KEY = "cil-hub-stamps";
+  const REPO = "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io";
+  /* auto: the hub sees it happen. self: done outside the hub (GitHub, an event, a store),
+     so the visitor ticks it after doing it. */
+  const GROUPS = [["learn", "배우기"], ["together", "함께하기"], ["build", "기여하기"]];
   const STAMPS = [
-    { id: "first_open", mark: "첫", name: "첫 걸음", how: "커리큘럼에서 레포 하나를 열어 보세요.", href: "/#curriculum" },
-    { id: "quiz", mark: "길", name: "길잡이", how: "3문항 시작점 진단을 끝내 보세요.", href: "/?quiz=1" },
-    { id: "daily", mark: "오", name: "오늘의 한 문제", how: "허브의 오늘의 한 문제에 답해 보세요.", href: "/#daily" },
-    { id: "streak3", mark: "3", name: "사흘 연속", how: "오늘의 한 문제를 3일 연속 풀어 보세요.", href: "/#daily" },
-    { id: "game", mark: "몸", name: "몸풀기 완주", how: "‘상관일까, 인과일까?’ 10문제를 끝까지 풀어 보세요.", href: "/game.html" },
-    { id: "sharp", mark: "감", name: "인과 감별사", how: "게임에서 8문제 이상 맞혀 보세요.", href: "/game.html" },
-    { id: "lab", mark: "실", name: "실험가", how: "교란 실험실에서 단순 비교와 진짜 효과의 차이를 1 이하로 줄여 보세요.", href: "/lab.html" },
-    { id: "finish", mark: "완", name: "한 단계 완주", how: "한 단계의 자료를 모두 학습 완료로 표시해 보세요.", href: "/#curriculum" },
-    { id: "builder", mark: "B", name: "Builder 탐방", how: "Builder 이력이나 페이지를 세 번 열어 보세요.", href: "/builders/" }
+    { id: "first_open", group: "learn", kind: "auto", mark: "첫", name: "첫 걸음", how: "커리큘럼에서 자료 하나를 열어 보세요.", href: "/#curriculum" },
+    { id: "post", group: "learn", kind: "auto", mark: "글", name: "연재 독자", how: "연재 글을 하나 읽어 보세요.", href: "/#posts" },
+    { id: "builder", group: "learn", kind: "auto", mark: "B", name: "Builder 탐방", how: "Builder 세 명의 이력이나 페이지를 열어 보세요.", href: "/#contrib" },
+    { id: "comment", group: "together", kind: "self", mark: "말", name: "레포에 한마디", how: "관심 있는 레포에 질문이나 응원을 남겨 보세요.", go: `${REPO}/discussions`, goLabel: "토론 게시판" },
+    { id: "event_photo", group: "together", kind: "self", mark: "찰", name: "행사 사진 후기", how: "Data Forum 같은 팀 행사 사진과 한 줄 후기를 올려 보세요.", go: `${REPO}/discussions/new/choose`, goLabel: "후기 올리기" },
+    { id: "review", group: "together", kind: "self", mark: "평", name: "강의·책 후기", how: "AI 인과추론 실무 강의나 『실무로 통하는 인과추론』 후기를 남겨 보세요.", go: "https://www.hanbit.co.kr/product/C0781073345", goLabel: "강의 페이지" },
+    { id: "runner", group: "build", kind: "self", mark: "런", name: "러너로 참여", how: "가짜연구소 기수 모집 때 인과추론팀 프로젝트에 러너로 들어와 보세요.", go: "https://pseudo-lab.com/", goLabel: "가짜연구소" },
+    { id: "first_pr", group: "build", kind: "self", mark: "PR", name: "첫 기여", how: "진행 중인 레포에 이슈나 PR을 하나 남겨 보세요.", go: "https://github.com/search?q=org%3ACausalInferenceLab+is%3Aissue+is%3Aopen&type=issues", goLabel: "열린 이슈" },
+    { id: "open_project", group: "build", kind: "self", mark: "열", name: "Builder 되기", how: "다음 기수에 직접 프로젝트를 열어 보세요.", go: "https://github.com/CausalInferenceLab/Project-template", goLabel: "프로젝트 템플릿" }
   ];
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } };
@@ -26,13 +30,14 @@
     document.querySelectorAll("[data-passport-count]").forEach((el) => { el.textContent = `${n}/${STAMPS.length}`; });
   }
 
-  let toastTimer;
+  let toastTimer, toastEl = null;
   function toast(stamp, n) {
-    let el = document.getElementById("hub-toast");
+    let el = toastEl || document.getElementById("hub-toast");
     if (!el) {
       el = document.createElement("div");
       el.id = "hub-toast"; el.className = "toast"; el.setAttribute("role", "status"); el.setAttribute("aria-live", "polite");
     }
+    toastEl = el;
     /* a modal dialog puts the page behind it, so the toast goes inside the top one */
     const open = [...document.querySelectorAll("dialog[open]")].pop();
     const host = open || document.body;
@@ -79,28 +84,42 @@
       dlg.addEventListener("click", (e) => { if (e.target === dlg || e.target.closest("[data-passport-close]")) dlg.close(); });
     }
     const d = load(), n = earnedCount(d), got = d.stamps || {};
-    const next = STAMPS.find((s) => !got[s.id]);
+    const next = STAMPS.find((x) => !got[x.id]);
+    const row = (x) => {
+      const on = !!got[x.id];
+      const act = x.kind === "auto"
+        ? (on ? "" : `<a class="pp-go" href="${esc(x.href)}" data-passport-close>해 보기</a>`)
+        : `${x.go ? `<a class="pp-go" href="${esc(x.go)}" target="_blank" rel="noopener" data-event="passport_go" data-event-params='${esc(JSON.stringify({ stamp: x.id }))}'>${esc(x.goLabel || "하러 가기")} ↗</a>` : ""}${on ? "" : `<button type="button" class="pp-claim" data-claim="${esc(x.id)}">했어요</button>`}`;
+      return `<li class="${on ? "on" : ""}"><span class="stamp ${on ? "on" : ""}" aria-hidden="true">${esc(x.mark)}</span>
+        <span class="pp-t"><b>${esc(x.name)}</b><span>${on ? `${esc(got[x.id])} 획득` : esc(x.how)}</span></span>
+        <span class="pp-act">${act}</span></li>`;
+    };
     dlg.innerHTML = `<div class="station-inner"><div class="station-band" data-line="main"></div>
       <button type="button" class="station-close" aria-label="닫기" data-passport-close><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3.5 3.5l9 9m0-9l-9 9"/></svg></button>
       <div class="station-content">
-        <p class="quiz-step"><span>학습 여권</span></p>
+        <p class="quiz-step"><span>활동 여권</span></p>
         <h2 id="passport-title">스탬프 ${n} / ${STAMPS.length}</h2>
-        <p class="pp-sub">${n === STAMPS.length ? "모든 스탬프를 모았습니다. 이제 다음 기수의 러너나 Builder로 만나요." : next ? `다음 스탬프: <b>${esc(next.name)}</b>. ${esc(next.how)}` : ""}</p>
-        <ul class="pp-grid">${STAMPS.map((s) => {
-          const on = !!got[s.id];
-          return `<li class="${on ? "on" : ""}"><a href="${esc(s.href)}" data-passport-close><span class="stamp ${on ? "on" : ""}" aria-hidden="true">${esc(s.mark)}</span><b>${esc(s.name)}</b><span>${on ? `${esc(got[s.id])} 획득` : esc(s.how)}</span></a></li>`;
-        }).join("")}</ul>
-        <p class="pp-note">기록은 이 브라우저에만 저장됩니다. 다른 기기나 시크릿 창에서는 처음부터 시작합니다.</p>
+        <p class="pp-sub">${n === STAMPS.length ? "모든 스탬프를 모았습니다. 다음 기수에 Builder로 만나요." : next ? `다음 스탬프: <b>${esc(next.name)}</b>. ${esc(next.how)}` : ""}</p>
+        ${GROUPS.map(([g, label]) => `<section class="pp-group"><h3>${label}</h3><ul class="pp-list">${STAMPS.filter((x) => x.group === g).map(row).join("")}</ul></section>`).join("")}
+        <p class="pp-note">배우기 스탬프는 허브가 알아서 찍고, 함께하기와 기여하기는 하고 나서 ‘했어요’를 누르면 찍힙니다. 기록은 이 브라우저에만 저장됩니다.</p>
       </div></div>`;
     if (!dlg.open) { if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", ""); }
     dlg.querySelector(".station-close").focus();
-    if (window.hubTrack) window.hubTrack("passport_open", { count: n, source: source || "header" });
+    if (window.hubTrack && source !== "claim") window.hubTrack("passport_open", { count: n, source: source || "header" });
   }
   window.openPassport = passportDialog;
 
   document.addEventListener("click", (e) => {
     const b = e.target.closest("[data-passport]");
-    if (b) { e.preventDefault(); passportDialog(b.dataset.passport || "header"); }
+    if (b) { e.preventDefault(); passportDialog(b.dataset.passport || "header"); return; }
+    const c = e.target.closest("[data-claim]");
+    if (c) {
+      window.hubStamp(c.dataset.claim);
+      passportDialog("claim");
+      /* the redraw replaced the dialog's content, toast included: put it back */
+      const dlg = document.getElementById("passport-dialog");
+      if (toastEl && dlg && toastEl.parentNode !== dlg) dlg.appendChild(toastEl);
+    }
   });
   document.addEventListener("DOMContentLoaded", () => {
     paintCounts();

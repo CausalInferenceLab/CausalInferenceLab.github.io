@@ -29,11 +29,12 @@
     </a>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="#curriculum">커리큘럼</a>
+      <a href="#posts">연재</a>
       <a href="#contrib">Builder</a>
       <a href="#events">행사</a>
       <a href="#join">참여하기</a>
     </nav>
-    <button type="button" class="pass-btn" data-passport aria-label="학습 여권 열기">여권 <b data-passport-count>0/9</b></button>
+    <button type="button" class="pass-btn" data-passport aria-label="활동 여권 열기">여권 <b data-passport-count>0/9</b></button>
   </div>
 </header>
 
@@ -103,21 +104,27 @@
       </div>
 
       <div id="panel-course" role="tabpanel" aria-labelledby="tab-course">
+        <div class="progress" id="progress"></div>
         <div class="shelf-bar">
           <div class="chapters" id="chapters" role="group" aria-label="단계로 이동"></div>
-          <div class="shelf-nav">
-            <button type="button" data-shelf="-1" aria-label="이전 레포"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            <button type="button" data-shelf="1" aria-label="다음 레포"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          </div>
         </div>
         <div class="shelf-wrap" id="shelf-wrap">
-          <ol class="shelf" id="shelf" tabindex="0" aria-label="레포 목록. 좌우로 스크롤할 수 있습니다."></ol>
+          <ol class="shelf" id="shelf" aria-label="단계별 자료"></ol>
         </div>
         <p class="shelf-foot" id="shelf-foot"></p>
-        <div class="week" id="week"></div>
       </div>
 
 
+    </div>
+  </section>
+
+  <section class="band" id="posts" aria-labelledby="posts-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="posts-title">연재</h2>
+        <p>팀원이 쓰는 인과추론 이야기입니다. 이번 주 포스트는 월요일마다 바뀝니다.</p>
+      </div>
+      <div id="post-box"></div>
     </div>
   </section>
 
@@ -153,15 +160,6 @@
     </div>
   </section>
 
-  <section class="band" id="reading" aria-labelledby="reading-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="reading-title">읽을거리</h2>
-        <p>팀이 쓴 글과 독자를 위한 자료입니다.</p>
-      </div>
-      <ul class="articles" id="article-list"></ul>
-    </div>
-  </section>
 
   <section class="band" id="join" aria-labelledby="join-title">
     <div class="wrap join">
