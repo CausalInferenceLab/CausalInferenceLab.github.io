@@ -30,8 +30,8 @@
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="#curriculum">커리큘럼</a>
       <a href="#contrib">Builder</a>
-      <a href="#posts">연재</a>
       <a href="#events">행사</a>
+      <a href="#posts">연재</a>
       <a href="#join">참여하기</a>
     </nav>
     <button type="button" class="pass-btn" data-passport aria-label="활동 여권 열기">여권 <b data-passport-count>0/9</b></button>
@@ -61,6 +61,10 @@
           <ul class="featured" id="featured" aria-label="대표 사이트"></ul>
         </div>
       </div>
+      <div class="hero-grid">
+        <ul class="growth" id="growth" aria-label="팀의 성장 지표"></ul>
+      </div>
+      <a class="next-event" id="next-event" href="#events" hidden></a>
     </div>
   </section>
 
@@ -76,12 +80,23 @@
       </div>
       <p class="route-note" id="route-note" aria-live="polite"></p>
       <div class="tabs big" role="tablist" aria-label="보기 방식">
-        <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="true">단계별로 보기<span class="tab-n" id="n-course"></span></button>
-        <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" tabindex="-1">트랙 지도</button>
+        <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="true">단계로 보기<span class="tab-n" id="n-course"></span></button>
+        <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" tabindex="-1"><span class="tab-lines" aria-hidden="true"><i></i><i></i><i></i></span>트랙 지도로 보기</button>
       </div>
+      <p class="tab-note" id="tab-note">단계는 배우는 순서이고, 트랙은 주제입니다. 같은 주제를 L0부터 L4까지 이어 보려면 <button type="button" class="link-btn" data-tab-go="tab-map">트랙 지도</button>를 여세요.</p>
 
       <div id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden>
         <div class="map-card">
+          <div class="map-how" aria-label="트랙 지도 읽는 법">
+            <p class="mh-t">트랙 지도 읽는 법</p>
+            <ul>
+              <li><svg width="30" height="10" aria-hidden="true"><path d="M2 5H28" stroke="var(--l-main)" stroke-width="5" stroke-linecap="round"/></svg><span><b>노선</b>은 주제 트랙입니다. 색마다 하나씩, 6개입니다.</span></li>
+              <li><svg width="22" height="22" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="var(--surface)" stroke="var(--l-main)" stroke-width="3.5"/></svg><span><b>역</b>은 자료입니다. 누르면 설명과 링크가 열립니다.</span></li>
+              <li><svg width="16" height="26" aria-hidden="true"><rect x="2" y="2" width="12" height="22" rx="6" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/></svg><span><b>환승역</b>은 여러 트랙이 만나는 자료입니다.</span></li>
+              <li><svg width="30" height="10" aria-hidden="true"><path d="M2 5H28" stroke="var(--l-main)" stroke-width="2.5" stroke-dasharray="5 5" stroke-linecap="round"/></svg><span><b>점선</b>은 책과 강의(유료)입니다.</span></li>
+            </ul>
+            <p class="mh-tip">아래 트랙 이름을 누르면 그 노선만 남겨서 볼 수 있습니다.</p>
+          </div>
           <p class="map-hint" id="map-hint" hidden>지도가 화면보다 넓습니다. 옆으로 밀면 L3·L4까지 보입니다.</p>
           <div class="map-scroll" id="map-scroll">
             <svg id="metro" role="group" aria-labelledby="metro-title"><title id="metro-title">인과추론 트랙 지도: L0부터 L4까지 6개 트랙</title></svg>
@@ -131,16 +146,6 @@
     </div>
   </section>
 
-  <section class="band" id="posts" aria-labelledby="posts-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="posts-title">연재</h2>
-        <p>팀원이 쓰는 인과추론 이야기입니다. 이번 주 포스트는 월요일마다 바뀝니다.</p>
-      </div>
-      <div id="post-box"></div>
-    </div>
-  </section>
-
   <section class="band" id="events" aria-labelledby="events-title">
     <div class="wrap">
       <div class="section-head">
@@ -149,6 +154,16 @@
       </div>
       <ol class="events" id="event-list"></ol>
       <section class="stage" id="stage" aria-labelledby="stage-title"></section>
+    </div>
+  </section>
+
+  <section class="band" id="posts" aria-labelledby="posts-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="posts-title">연재</h2>
+        <p>팀원이 쓰는 인과추론 이야기입니다. 이번 주 포스트는 월요일마다 바뀝니다.</p>
+      </div>
+      <div id="post-box"></div>
     </div>
   </section>
 
