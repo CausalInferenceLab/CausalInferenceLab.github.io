@@ -41,3 +41,43 @@
     if (ok && b.dataset.share) window.hubTrack("share", { content: b.dataset.share, method: "copy" });
   });
 })();
+
+/* Links to the team's other sites on this domain (the web book, causal-studio, ccwr, ...): add utm_*
+   so that site's GA sees the visit came from the hub and from which spot, open them in the same tab
+   unless the reader asked for a new one, and send webbook_click or team_site_click. */
+(() => {
+  "use strict";
+  const HUB_PATHS = /^\/(?:$|index\.html$|article\.html$|404\.html$|game\.html$|lab\.html$|assets\/|data\/|articles\/|builders\/|badges\/)/;
+  const WEBBOOK = "Causal-Inference-with-Python";
+  const SPOTS = [
+    ["#featured", "featured"], [".partner", "partner"], ["#station-dialog", "station"], ["#daily", "daily"],
+    ["#shelf, #week, .spot", "curriculum"], [".gm", "game"], [".lab", "lab"], [".bp", "builder_page"],
+    [".reader, .prose", "article"], [".site-footer", "footer"], [".banner", "banner"]
+  ];
+  function teamSite(a) {
+    let u;
+    try { u = new URL(a.href, location.href); } catch (e) { return null; }
+    if (u.origin !== location.origin || HUB_PATHS.test(u.pathname)) return null;
+    const site = u.pathname.split("/")[1];
+    return site ? { url: u, site } : null;
+  }
+  const placement = (a) => (SPOTS.find(([sel]) => a.closest(sel)) || [null, "other"])[1];
+  function decorate(e) {
+    const a = e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    const t = teamSite(a);
+    if (!t) return;
+    const where = placement(a), u = t.url;
+    if (!u.searchParams.has("utm_source")) {
+      u.searchParams.set("utm_source", "hub");
+      u.searchParams.set("utm_medium", "referral");
+      u.searchParams.set("utm_campaign", "crosslink");
+      u.searchParams.set("utm_content", where);
+      a.href = u.toString();
+    }
+    if (e.type === "click" && e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey) a.removeAttribute("target");
+    window.hubTrack(t.site === WEBBOOK ? "webbook_click" : "team_site_click", { site: t.site, placement: where, link_url: u.origin + u.pathname });
+  }
+  document.addEventListener("click", decorate, true);
+  document.addEventListener("auxclick", decorate, true);
+})();
