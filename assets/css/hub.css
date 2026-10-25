@@ -1599,3 +1599,38 @@ button.btn.sm { font-size: 14px; }
   .stage-goal.pop { animation: sg-pop .7s ease; }
   @keyframes sg-pop { 0% { transform: scale(.96); } 55% { transform: scale(1.02); } 100% { transform: scale(1); } }
 }
+
+/* ---------- track map: numbered lines, a one-row guide, the picker on top, quests cleared on the map ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.map-how { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; margin: 4px 16px 12px; padding: 10px 14px; border-radius: 12px; background: var(--surface-2); }
+.map-how li { gap: 8px; font-size: 13px; }
+.ln-no { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--c); color: var(--on-line); font-family: var(--f-display); font-size: 12.5px; font-weight: 800; line-height: 1; flex-shrink: 0; }
+.ln-no.sm { width: 18px; height: 18px; font-size: 11.5px; margin-left: 3px; }
+.line-legend { margin: 0 0 6px; align-items: center; }
+.ll-k { font-size: 13px; font-weight: 800; color: var(--ink); margin-right: 4px; }
+.ll { padding: 5px 12px 5px 5px; }
+.ll[aria-pressed="true"] .ln-no { background: var(--on-line); color: var(--c); }
+.line-desc { margin: 0 16px 8px; }
+#metro .badge circle { stroke: var(--surface); stroke-width: 3; }
+#metro .badge text { font-size: 15px; }
+#metro .zone-n { font-weight: 800; }
+#metro .st.cleared .ring, #metro .st.cleared .pill { fill: #FFC93C; }
+#metro .st .done { fill: none; stroke: #14162B; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+#metro .pin rect, #metro .pin path { fill: var(--accent); }
+#metro .pin text { fill: #fff; font-size: 12px; font-weight: 800; text-anchor: middle; dominant-baseline: central; }
+@media (prefers-reduced-motion: no-preference) {
+  #metro .pin { animation: pin-bob 2.4s ease-in-out infinite; }
+  @keyframes pin-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+}
+.vline h3 { flex-wrap: wrap; }
+.vl-tag { font-size: 13px; font-weight: 600; color: var(--muted); }
+.vline li { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+.vline .lv { margin-left: 0; padding: 1px 7px; border-radius: 999px; background: var(--surface-2); font-weight: 700; color: var(--muted); }
+.vl-x { display: inline-flex; align-items: center; font-size: 12px; font-weight: 700; color: var(--muted); }
+.vl-done { padding: 1px 8px; border-radius: 999px; background: #FFE9A8; color: #6B4500; font-size: 12px; font-weight: 800; }
+.vline li.on::after { background: #FFC93C; }
+.vl-pin { padding: 1px 8px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 800; }
+@media (max-width: 860px) { .map-how li:nth-child(-n+2) { display: none; } }
+/* pins keep white text readable in both themes */
+.st-pin, .vl-pin { background: #4C4FD0; }
+#metro .pin rect, #metro .pin path { fill: #4C4FD0; }

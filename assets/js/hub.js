@@ -763,17 +763,25 @@
 
 
   /* ---------- map legend ---------- */
+  /* the next quest to clear on the map, where the roadmap pin points */
+  function pinStationId() {
+    const onMap = new Set(state.map.stations.map((s) => s.id));
+    return (questsOf(hereStage()).find((r) => !state.ridden.has(r.repo) && onMap.has(r.repo)) || {}).repo;
+  }
   function renderVLines() {
+    const pin = pinStationId();
     $("#vlines").innerHTML = state.lineList.map((l) => {
       let ids = [...(state.order.get(l.id) || [])];
       if (l.id === "main") {
         const at = ids.indexOf("causal-inference-in-python-code") + 1;
         ids.splice(at, 0, ...(state.map.express.stops || []).map((s) => s.id));
       }
-      return `<div class="vline" data-line="${l.id}"><h3><span class="num" aria-hidden="true"></span>${esc(l.name)}</h3><ol>${ids.map((id) => {
+      return `<div class="vline" data-line="${l.id}"><h3><span class="ln-no" aria-hidden="true">${l.number}</span>${esc(l.name)}<span class="vl-tag">${esc(l.tagline || "")}</span></h3><ol>${ids.map((id) => {
         const r = state.repos.get(id);
         const cls = [r.kind === "paid" ? "paid" : "", state.ridden.has(id) ? "on" : ""].filter(Boolean).join(" ");
-        return `<li class="${cls}" data-vst="${esc(id)}"><button type="button" data-open="${esc(id)}">${esc(r.mapLabel || r.title)}</button>${r.level ? `<span class="lv">${r.level}</span>` : ""}</li>`;
+        const other = (r.lines || []).filter((x) => x !== l.id).map((x) => state.lines.get(x)).filter(Boolean);
+        const transfer = other.length ? `<span class="vl-x" title="환승: ${esc(other.map((x) => x.name).join(", "))}">환승${other.map((x) => `<span class="ln-no sm" data-line="${x.id}" aria-hidden="true">${x.number}</span>`).join("")}<span class="sr-only">${esc(other.map((x) => x.name).join(", "))}</span></span>` : "";
+        return `<li class="${cls}" data-vst="${esc(id)}"><button type="button" data-open="${esc(id)}">${esc(r.mapLabel || r.title)}</button>${r.level ? `<span class="lv">${r.level}</span>` : ""}${transfer}${state.ridden.has(id) ? `<span class="vl-done">클리어</span>` : id === pin ? `<span class="vl-pin">지금 여기</span>` : ""}</li>`;
       }).join("")}</ol></div>`;
     }).join("");
   }
@@ -781,8 +789,7 @@
   /* the legend doubles as a filter: pick a track to keep only its line */
   function renderLegend() {
     const count = (id) => [...state.repos.values()].filter((r) => (r.lines || []).includes(id)).length;
-    $("#line-legend").innerHTML = state.lineList.map((l) => `<li data-line="${l.id}"><button type="button" class="ll" data-focus-line="${l.id}" aria-pressed="false" title="${esc(l.description || "")}"><span class="num" aria-hidden="true"></span>${esc(l.name)}<span class="ll-n">${count(l.id)}</span></button></li>`).join("") +
-      `<li><svg width="28" height="6" aria-hidden="true"><path d="M2 3H26" stroke="var(--l-main)" stroke-width="3" stroke-dasharray="5 6" stroke-linecap="round"/></svg>도서·강의 (유료)</li>`;
+    $("#line-legend").innerHTML = `<li class="ll-k">노선 골라 보기</li>` + state.lineList.map((l) => `<li data-line="${l.id}"><button type="button" class="ll" data-focus-line="${l.id}" aria-pressed="false" title="${esc(l.description || "")}"><span class="ln-no" aria-hidden="true">${l.number}</span>${esc(l.name)}<span class="ll-n">역 ${count(l.id)}</span></button></li>`).join("");
     if (!$("#line-desc")) $("#line-legend").insertAdjacentHTML("afterend", `<p class="line-desc" id="line-desc" aria-live="polite"></p>`);
   }
   function focusLine(id) {
@@ -957,7 +964,7 @@
       const g = svg("g", { class: "zone" + (lv.layer === "build" ? " build" : "") }, zones);
       svg("rect", { x: z.x, y: 8, width: z.w, height: m.viewBox[1] - 16, rx: 14 }, g);
       svg("text", { x: z.x + 14, y: 38, class: "zone-l" }, g).textContent = z.level;
-      svg("text", { x: z.x + 52, y: 36, class: "zone-n" }, g).textContent = lv.name;
+      svg("text", { x: z.x + 52, y: 36, class: "zone-n" }, g).textContent = lv.tier || lv.name;
       svg("text", { x: z.x + 14, y: 58, class: "zone-q" }, g).textContent = lv.question;
     });
 
@@ -968,13 +975,15 @@
     });
     const ex = m.express;
     svg("path", { d: `M${ex.from[0]} ${ex.from[1]} L${ex.to[0]} ${ex.to[1]}`, class: "express" }, tracks);
-    svg("text", { x: ex.from[0], y: ex.from[1] - 12, class: "express-l" }, tracks).textContent = ex.label;
+    svg("text", { x: ex.from[0], y: ex.from[1] - 12, class: "express-l" }, tracks).textContent = "교재 (유료)";
     m.lines.forEach((ln) => {
       const g = svg("g", { class: "badge", "data-line": ln.line, "data-track": ln.line, "aria-hidden": "true" }, tracks);
-      svg("circle", { cx: ln.badge[0], cy: ln.badge[1], r: 9 }, g);
+      svg("circle", { cx: ln.badge[0], cy: ln.badge[1], r: 13 }, g);
+      svg("text", { x: ln.badge[0], y: ln.badge[1] + 0.5 }, g).textContent = String(state.lines.get(ln.line).number);
     });
 
     const stations = svg("g", {}, root);
+    const pinStation = pinStationId();
     (ex.stops || []).forEach((s) => {
       const r = state.repos.get(s.id);
       const g = stationGroup(stations, s.id, r, " paid");
@@ -994,13 +1003,23 @@
         if (r.kind === "external") svg("circle", { cx: s.x, cy: s.y, r: 15, class: "halo" }, g);
         svg("circle", { cx: s.x, cy: s.y, r: r.kind === "external" ? 9.5 : 10, class: "ring" }, g);
       }
-      if (state.ridden.has(s.id)) svg("circle", { cx: s.x, cy: s.y2 ? (s.y + s.y2) / 2 : s.y, r: 4.5, class: "done" }, g);
+      if (state.ridden.has(s.id)) {
+        g.classList.add("cleared");
+        svg("path", { d: `M${s.x - 4.5} ${(s.y2 ? (s.y + s.y2) / 2 : s.y) + 0.5} l3 3 l6 -6.5`, class: "done" }, g);
+      }
       const bottom = s.y2 || s.y;
       let lx = s.x, ly, anchor = "middle";
       if (s.label === "above") ly = s.y - (s.y2 ? 40 : 32);
       else if (s.label === "right") { lx = s.x + 20; ly = s.y + 5; anchor = "start"; }
       else ly = bottom + 34;
       svg("text", { x: lx, y: ly, class: "label", "text-anchor": anchor }, g).textContent = r.title;
+      if (s.id === pinStation) {
+        const py = s.label === "above" ? ly - 30 : s.y - 34;
+        const pin = svg("g", { class: "pin", "aria-hidden": "true" }, g);
+        svg("rect", { x: s.x - 34, y: py - 12, width: 68, height: 22, rx: 11 }, pin);
+        svg("path", { d: `M${s.x - 5} ${py + 9} L${s.x} ${py + 15} L${s.x + 5} ${py + 9} Z` }, pin);
+        svg("text", { x: s.x, y: py - 0.5 }, pin).textContent = "지금 여기";
+      }
       if (r.status === "running") {
         const tag = svg("g", { class: "tag" }, g);
         const tx = anchor === "start" ? lx + 34 : lx, ty = ly + 18;
