@@ -645,19 +645,6 @@
     return `<ul class="ro-strip" aria-label="${esc(`참여한 기수: ${all.map((c) => `${c}기`).join(", ")}`)}">${chips}</ul>`;
   }
 
-  /* medal rules and the stage they lead to, with how many people hold each */
-  function renderMedalLadder(list) {
-    const box = $("#medal-ladder");
-    if (!box) return;
-    const count = (t) => list.filter((p) => tierOf(p) === t).length;
-    const steps = [...TIERS].reverse().map((t) => `<li class="ml-step"><span class="ml-medal">${medalSVG(t, 48, t.min)}</span><b>${esc(t.name)}</b><span>${esc(t.rule)}</span><span class="ml-n">${count(t)}명</span></li>`).join("");
-    const sp = SPECIALS.map((m) => `<li>${medalSVG(m, 22)}<b>${esc(m.name)}</b><span>${esc(m.rule)} · ${list.filter((p) => m.has(p)).length}명</span></li>`).join("");
-    box.innerHTML = `<div class="ml-head"><h3 class="contrib-head">Builder 메달과 다음 무대</h3><p>Builder로 연 기수가 쌓일수록 메달이 바뀝니다. 오래 함께한 Builder에게는 학회와 Data Forum에서 발표할 기회가 열립니다.</p></div>
-      <ol class="ml-steps">${steps}<li class="ml-step stage"><a href="#stage" data-event="click_conference" data-event-params='{"conference":"all","placement":"medal_ladder"}'><span class="ml-medal"><svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#14162B"/><rect x="15" y="8" width="10" height="16" rx="5" fill="#FFD54A"/><path d="M11 19a9 9 0 0 0 18 0M20 28v5M14 33h12" fill="none" stroke="#FFD54A" stroke-width="2.4" stroke-linecap="round"/></svg></span><b>발표 무대</b><span>비즈니스 실험 심포지엄 · Data Forum</span></a></li></ol>
-      <ul class="ml-special"><li class="k">특별 메달</li>${sp}</ul>`;
-  }
-
-
   function renderContrib() {
     const list = builderStats();
     state.people = list;
@@ -700,7 +687,6 @@
     const contributors = state.stats.totals && state.stats.totals.contributors;
     $("#contrib-sub").textContent = `프로젝트를 연 사람(Builder) ${list.length}명 가운데 연 프로젝트 수, 그다음 함께한 러너 수가 많은 순입니다. 지금까지 ${cohorts.length}개 기수 동안 프로젝트 ${state.projects.length}개가 열렸습니다.`;
     $("#roster-legend").innerHTML = `<li><span class="cc b" data-line="main"><b>8기</b>러너 6</span>Builder로 연 기수와 함께한 러너 수</li><li><span class="cc r" data-line="main"><b>7기</b>러너</span>러너로 참여한 기수</li><li><span class="cc b live" data-line="main"><b>13기</b>진행 중</span>지금 진행 중</li>`;
-    renderMedalLadder(list);
   }
 
   /* Three lines a Builder writes after a project; nothing shows until they do. */
@@ -1033,7 +1019,15 @@
     const contrib = recentContrib(30);
     const people = [...new Map(contrib.map((x) => [x.login, x])).keys()];
     const interest = (state.activity || []).filter((x) => (x.kind === "star" || x.kind === "fork") && ageDays(x.at) <= 30).reduce((s, x) => s + (x.n || 1), 0);
-    const list = (state.activity || []).filter((x) => CONTRIB_KINDS.has(x.kind)).slice(0, 8);
+    /* one row per piece of work: a merged PR hides its own "opened" row and the push the merge made */
+    const all = state.activity || [];
+    const merges = all.filter((x) => x.kind === "pr_merge");
+    const mergedKeys = new Set(merges.map((x) => `${x.repo}#${x.number}`));
+    const byMerge = (x) => merges.some((m) => m.repo === x.repo && Math.abs(new Date(m.at) - new Date(x.at)) < 5 * 60e3);
+    const list = all.filter((x) => CONTRIB_KINDS.has(x.kind))
+      .filter((x) => !(x.kind === "pr_open" && mergedKeys.has(`${x.repo}#${x.number}`)))
+      .filter((x) => !(x.kind === "push" && byMerge(x)))
+      .slice(0, 5);
     if (!list.length) { box.hidden = true; return; }
     box.hidden = false;
     const at = state.activityAt ? `GitHub 공개 활동 기준 · ${ago(state.activityAt)} 갱신` : "GitHub 공개 활동 기준";
