@@ -18,7 +18,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOKEN = re.compile(r"[A-Za-z0-9_.-]+")
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
-URL_KEYS = {"url", "link", "linkedin", "site", "cover", "href", "builderUrl", "preview"}
+URL_KEYS = {"url", "link", "linkedin", "site", "cover", "href", "builderUrl", "preview", "poster", "timetableImage"}
 errors = []
 
 
@@ -136,6 +136,20 @@ def main():
             err(w, "participants must be a whole number or null")
         if e.get("date") is not None and not DATE.fullmatch(str(e["date"])):
             err(w, "date must look like 2026-11-21")
+        for k in ("signupStart", "signupEnd"):
+            if e.get(k) is not None and not DATE.fullmatch(str(e[k])):
+                err(w, f"{k} must look like 2026-11-04")
+        if e.get("capacity") is not None and not is_int(e.get("capacity")):
+            err(w, "capacity must be a whole number")
+        for k in ("poster", "timetableImage"):
+            v = e.get(k)
+            if v is not None and not re.fullmatch(r"assets/img/[\w.-]+\.(?:jpg|png|webp)", str(v)):
+                err(w, f"{k} must be an image under assets/img/")
+            elif v is not None and not os.path.exists(os.path.join(ROOT, v)):
+                err(w, f"{k} {v!r} does not exist")
+        for j, t in enumerate(e.get("timetable") or []):
+            if not (isinstance(t.get("time"), str) and t.get("kind") and t.get("title")):
+                err(f"{w}.timetable[{j}]", "each row needs time, kind and title")
 
     for i, a in enumerate(data.get("articles.json") or []):
         w = f"articles.json[{i}]"

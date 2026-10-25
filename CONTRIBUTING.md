@@ -19,7 +19,7 @@ PR을 올리기 전에 `python3 scripts/check_data.py`를 실행해 주세요. �
 | `data/projects.json` | 기수별 프로젝트를 추가할 때. 러너는 인원수(`runners`)만 적습니다. Builder가 회고를 보내 주면 `"retro": {"why": "…", "learned": "…", "next": "…"}`로 넣습니다. 비어 있으면 화면에 나오지 않습니다. |
 | `data/builders.json` | Builder의 LinkedIn, GitHub 아이디(프로필 사진에 쓰임), 한 줄 소개, Builder가 되기 전 러너로 참여한 프로젝트(`runnerOf`)를 넣을 때. `slug`는 Builder 페이지 주소(`/builders/<slug>.html`)가 되므로 한 번 정하면 바꾸지 않습니다. |
 | `data/growth.json` | 기수별 누적 러너 수. 프로젝트 시트를 xlsx로 내려받아 `python scripts/runners_from_sheet.py 파일.xlsx > data/growth.json`으로 만듭니다. 이름은 파일에 남지 않습니다. |
-| `data/events.json` | Data Forum 같은 행사를 추가할 때 |
+| `data/events.json` | Data Forum 같은 행사를 추가할 때. 다가오는 행사에는 `tagline`, `time`, `venue`, `address`, `signupStart`·`signupEnd`(신청 기간), `capacity`(정원), `code`(추천 코드 안내), `timetable`, `poster`·`timetableImage`(`assets/img/`의 이미지)를 적을 수 있습니다. 신청 기간에 따라 첫 화면 띠와 카드의 문구가 ‘신청 예정 · 받는 중 · 마감’으로 바뀝니다. |
 | `data/repos.json` | 레포를 추가하거나 설명·단계·트랙·상태를 바꿀 때 |
 | `data/map.json` | 트랙 지도에서 레포의 위치를 정할 때. 책과 강의(`paid`)의 표지와 소개도 여기서 고칩니다. |
 | `data/levels.json` | 레벨의 설명과 볼 순서를 바꿀 때. `learn`(배우는 것), `outcome`(끝나면), `steps`(순서대로 볼 레포와 한 줄 `note`), `more`(웹북 장이나 허브 페이지 같은 더 해 보기 링크)를 적습니다. `steps`에 없는 같은 레벨의 레포는 ‘골라 보기’로 나옵니다. |

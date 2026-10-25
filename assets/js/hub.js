@@ -25,7 +25,7 @@
   const dot = (d) => esc(String(d ?? "").replace(/-/g, "."));
   /* Data files come from pull requests: links must be http(s) or a site path, ids plain tokens,
      counts whole numbers. scripts/check_data.py enforces the same in CI; this is the second line. */
-  const URL_KEYS = new Set(["url", "link", "linkedin", "site", "cover", "href", "builderUrl"]);
+  const URL_KEYS = new Set(["url", "link", "linkedin", "site", "cover", "href", "builderUrl", "poster", "timetableImage"]);
   const safeUrl = (u) => {
     if (typeof u !== "string" || !u) return u;
     try { const x = new URL(u, location.href); return /^https?:$/.test(x.protocol) ? u : "#"; } catch (e) { return "#"; }
@@ -395,7 +395,7 @@
     const count = `<span aria-label="${quests.length}개 중 ${done}개 클리어">${done} / ${quests.length}</span>`;
     const list = build
       ? `<p class="lr-k">직접 해 보기 ${count}</p><ol class="ls-list">${quests.map((q, k) => questRow(q, k + 1)).join("")}</ol>
-         <p class="lr-k">함께 만드는 레포</p><ul class="ls-list">${steps.map((s) => stepRow(s.r, 0, s.note)).join("")}${extra.map((r) => stepRow(r, 0, "")).join("")}</ul>`
+         <p class="lr-k">함께 만드는 레포</p><ul class="lr-repos">${[...steps.map((s) => [s.r, s.note]), ...extra.map((r) => [r, r.format || ""])].map(([r, note]) => `<li data-id="${esc(r.repo)}" data-line="${primaryLine(r)}"><button type="button" data-open="${esc(r.repo)}" title="${esc(note)}"><i aria-hidden="true"></i>${esc(r.title)}${r.status === "running" ? `<span class="ls-live">진행 중</span>` : ""}</button></li>`).join("")}</ul>`
       : `<p class="lr-k">이 순서로 ${count}</p><ol class="ls-list">${steps.map((s, k) => stepRow(s.r, k + 1, s.note)).join("")}</ol>
          ${extra.length ? `<details class="lr-more" data-more="${lv.id}"><summary>골라 보기 ${extra.length}개</summary><ul class="ls-list">${extra.map((r) => stepRow(r, 0, "")).join("")}</ul></details>` : ""}`;
     const text = books.length ? `<p class="lr-also"><span>함께 보는 교재</span>${books.map((b) => `<button type="button" data-open="${esc(b.repo)}" data-id="${esc(b.repo)}">${esc(b.mapLabel || b.title)}</button>`).join("")}</p>` : "";
@@ -438,7 +438,7 @@
   }
 
   /* ---------- level test: concept questions place the visitor on a level ---------- */
-  const test = { step: 0, picks: [], interest: null };
+  const test = { step: 0, picks: [], interest: null, done: false };
   function meterHTML(levelId) {
     const at = levelId ? state.levels.findIndex((l) => l.id === levelId) : -1;
     return `<ol class="lt-meter" aria-hidden="true">${state.levels.map((l, i) => `<li class="${i < at ? "past" : i === at ? "at" : ""}"><b>${i}</b><span>${esc(l.tier || l.name)}</span></li>`).join("")}</ol>`;
@@ -456,17 +456,6 @@
       : `<div class="lt-t"><p class="lt-k">어디서 시작할지 모르겠다면</p><h3>내 레벨 진단</h3><p>개념 문제 ${n}개, 3분 정도 걸립니다. 맞힌 문제를 보고 시작할 Level과 첫 자료를 알려 드립니다.</p></div>
         ${meterHTML(null)}
         <div class="lt-acts"><button type="button" class="pill solid" data-test-open="card">진단 시작</button></div>`;
-  }
-  function openLevelTest(source) {
-    if (!state.leveltest) return;
-    Object.assign(test, { step: 0, picks: [], interest: null });
-    track("level_test_start", { source: source || "card" });
-    renderTest(); showDialog();
-    const first = $("#station-body .quiz-opts button"); if (first) first.focus();
-  }
-  function showDialog() {
-    const d = dialog();
-    if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
   }
   function scoreTest() {
     const T = state.leveltest, bands = {};
@@ -487,32 +476,59 @@
     }
     return `배우기 단계의 문제를 거의 다 맞혔습니다. 이제 직접 만들며 기여할 차례입니다. ${lv.goal}`;
   }
-  function renderTest() {
+  /* the test opens in a side panel: questions can be answered in any order and revisited */
+  const sheet = () => $("#lt-sheet");
+  function openLevelTest(source) {
+    if (!state.leveltest) return;
+    Object.assign(test, { step: 0, picks: [], interest: null, done: false });
+    track("level_test_start", { source: source || "card" });
+    const d = sheet();
+    renderTest();
+    if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
+    const first = $("#lt-body .quiz-opts button"); if (first) first.focus();
+  }
+  function closeSheet() { const d = sheet(); if (d && d.open) d.close(); }
+  function showDialog() {
+    const d = dialog();
+    if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
+  }
+  const answered = (i) => (i < state.leveltest.questions.length ? test.picks[i] !== undefined : test.interest !== null);
+  const missingSteps = () => Array.from({ length: state.leveltest.questions.length + 1 }, (_, i) => i).filter((i) => !answered(i));
+  function renderTest(keepFocus) {
     const T = state.leveltest, qs = T.questions, total = qs.length + 1;
-    const shell = (inner) => `<div class="station-band" data-line="main"></div>
-      <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
-      <div class="station-content quiz lt" data-line="main">${inner}</div>`;
-    const head = (label) => `<p class="quiz-step"><span>${esc(label)} · ${test.step + 1} / ${total}</span><span class="quiz-dots" aria-hidden="true">${Array.from({ length: total }, (_, i) => `<i class="${i <= test.step ? "on" : ""}"></i>`).join("")}</span></p>`;
-    const back = test.step ? `<button type="button" class="quiz-back" data-test-back>이전 문제</button>` : `<p class="quiz-note">결과는 이 브라우저에만 저장합니다. 통계에는 결과 Level만 이름 없이 남습니다.</p>`;
+    const body = $("#lt-body");
+    const head = `<div class="sh-head"><p class="sh-k">내 레벨 진단</p><button type="button" class="sh-close" aria-label="진단 닫기" data-sheet-close>${icons.close}</button></div>`;
+    if (test.done) { renderResult(head); return; }
+    const nav = `<nav class="sh-nav" aria-label="문제 이동"><ol>${Array.from({ length: total }, (_, i) => {
+      const band = i < qs.length ? T.bands.find((b) => b.level === qs[i].band) : null;
+      const sep = i === 0 || (band && qs[i - 1] && qs[i - 1].band !== qs[i].band) || i === qs.length;
+      return `${sep ? `<li class="sh-sep" aria-hidden="true">${band ? esc(band.name) : ""}</li>` : ""}<li><button type="button" data-test-jump="${i}" class="${answered(i) ? "done" : ""}" aria-current="${i === test.step ? "step" : "false"}" aria-label="${i < qs.length ? `${i + 1}번 문제` : "관심 분야"}${answered(i) ? ", 답함" : ""}">${i < qs.length ? i + 1 : "✓"}</button></li>`;
+    }).join("")}</ol></nav>`;
+    const prog = `<div class="sh-prog" aria-hidden="true"><i style="width:${Math.round(((total - missingSteps().length) / total) * 100)}%"></i></div>`;
+    let main;
     if (test.step < qs.length) {
       const q = qs[test.step], band = T.bands.find((b) => b.level === q.band);
-      $("#station-body").innerHTML = shell(`${head(band.name)}
-        <h2 id="station-title">${esc(q.q)}</h2>
+      main = `<p class="quiz-step"><span>${esc(band.name)} · ${test.step + 1} / ${total}</span></p>
+        <h2 id="lt-title">${esc(q.q)}</h2>
         <div class="quiz-opts" role="group" aria-label="보기">${q.opts.map((o, i) => `<button type="button" data-test-pick="${i}" aria-pressed="${test.picks[test.step] === i}">${esc(o)}</button>`).join("")}
-          <button type="button" class="lt-idk" data-test-pick="-1" aria-pressed="${test.picks[test.step] === -1}">잘 모르겠어요</button></div>
-        ${back}`);
-      $("#station-body .quiz-opts button").focus();
-      return;
-    }
-    if (test.step === qs.length) {
-      $("#station-body").innerHTML = shell(`${head("마지막")}
-        <h2 id="station-title">${esc(T.interest.q)}</h2>
+          <button type="button" class="lt-idk" data-test-pick="-1" aria-pressed="${test.picks[test.step] === -1}">잘 모르겠어요</button></div>`;
+    } else {
+      const miss = missingSteps().filter((i) => i < qs.length);
+      main = `<p class="quiz-step"><span>마지막 · ${total} / ${total}</span></p>
+        <h2 id="lt-title">${esc(T.interest.q)}</h2>
         <p class="lt-sub">점수에는 들어가지 않고, 다음에 볼 자료를 고르는 데 씁니다.</p>
         <div class="quiz-opts" role="group" aria-label="보기">${T.interest.opts.map(([v, label]) => `<button type="button" data-test-interest="${esc(v)}" aria-pressed="${test.interest === v}">${esc(label)}</button>`).join("")}</div>
-        ${back}`);
-      $("#station-body .quiz-opts button").focus();
-      return;
+        ${miss.length ? `<p class="sh-miss" role="status">아직 고르지 않은 문제가 있습니다: ${miss.map((i) => `<button type="button" data-test-jump="${i}">${i + 1}번</button>`).join(" ")}</p>` : ""}`;
     }
+    const canResult = missingSteps().length === 0;
+    const foot = `<div class="sh-foot"><button type="button" class="btn ghost" data-test-jump="${Math.max(0, test.step - 1)}"${test.step === 0 ? " disabled" : ""}>이전</button>
+      ${test.step < qs.length ? `<button type="button" class="btn ghost" data-test-jump="${test.step + 1}">${answered(test.step) ? "다음" : "건너뛰기"}</button>` : `<button type="button" class="btn" data-test-finish${canResult ? "" : " disabled"}>결과 보기</button>`}</div>`;
+    body.innerHTML = `${head}${prog}${nav}<div class="sh-main lt">${main}<p class="quiz-note">결과는 이 브라우저에만 저장합니다. 통계에는 결과 Level만 이름 없이 남습니다.</p></div>${foot}`;
+    $("#lt-body .sh-main").scrollTop = 0;
+    if (!keepFocus) { const f = $("#lt-body .quiz-opts button[aria-pressed='true']") || $("#lt-body .quiz-opts button"); if (f) f.focus({ preventScroll: true }); }
+  }
+  function renderResult(head) {
+    const T = state.leveltest, qs = T.questions;
     const v = myLevel(), lv = levelOf(v.level);
     const start = questsOf(lv.id).filter((q) => !questDone(q)).slice(0, 3);
     const startIds = new Set(start.map((q) => q.repo));
@@ -520,30 +536,45 @@
     const route = state.routes.find((r) => r.id === v.interest);
     const next = route ? route.stops.map((id) => state.repos.get(id)).filter((r) => r && !startIds.has(r.repo) && state.levels.findIndex((l) => l.id === r.level) >= at).slice(0, 2) : [];
     const missed = v.missed.map((id) => qs.find((q) => q.id === id)).filter(Boolean);
-    $("#station-body").innerHTML = shell(`<p class="quiz-step"><span>진단 결과 · ${v.score} / ${qs.length}</span></p>
-      <h2 id="station-title">${LV(lv.id)} ${esc(lv.tier || lv.name)}부터 시작하세요</h2>
+    $("#lt-body").innerHTML = `${head}<div class="sh-main lt">
+      <p class="quiz-step"><span>진단 결과 · ${v.score} / ${qs.length}</span></p>
+      <h2 id="lt-title">${LV(lv.id)} ${esc(lv.tier || lv.name)}부터 시작하세요</h2>
       <p>${esc(testReason(v))}</p>
       ${meterHTML(lv.id)}
       <ul class="lt-bands">${T.bands.map((b) => { const [r, t] = v.bands[b.level]; return `<li class="${r >= b.pass ? "pass" : ""}"><b>${esc(b.name)}</b><span class="bar" aria-hidden="true"><i style="width:${t ? (r / t) * 100 : 0}%"></i></span><span>${r} / ${t}${r >= b.pass ? " · 통과" : ""}</span></li>`; }).join("")}</ul>
       ${start.length ? `<div class="lt-block"><p class="k">여기서 시작</p><ol class="lt-start">${start.map((q, k) => { const s = (lv.steps || []).find((x) => x.repo === q.repo); return `<li><span class="n">${k + 1}</span><span><b>${esc(q.title)}</b><span>${esc(q.action ? q.stamp.how : (s && s.note) || q.format || "")}</span></span></li>`; }).join("")}</ol></div>` : ""}
-      <div class="links"><button type="button" class="btn" data-goto-level="${lv.id}" data-test-go>${LV(lv.id)} 코스 보기</button><button type="button" class="btn ghost" data-test-open="retry">다시 진단하기</button></div>
       ${next.length ? `<div class="lt-block"><p class="k">관심 분야에 맞춰 이어서</p><ul class="lt-next">${next.map((r) => `<li><button type="button" data-open="${esc(r.repo)}">${esc(r.title)}</button><span>${LV(r.level)}</span></li>`).join("")}</ul></div>` : ""}
-      ${missed.length ? `<div class="lt-block"><p class="k">다시 볼 개념</p><ul class="lt-review">${missed.map((q) => `<li><b>${esc(q.topic)}</b><span>${esc(q.why)}</span><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "level_test", topic: q.id }))}'>${esc(q.chapter.title)} 읽기<span aria-hidden="true"> ↗</span></a></li>`).join("")}</ul></div>` : ""}
-`);
-    const content = $("#station-body .station-content"); if (content) content.scrollTop = 0;
-    dialog().scrollTop = 0;
-    $("#station-body [data-test-go]").focus({ preventScroll: true });
+      ${missed.length ? `<div class="lt-block"><p class="k">다시 볼 개념 ${missed.length}개</p><ul class="lt-review">${missed.map((q) => `<li><b>${esc(q.topic)}</b><span>${esc(q.why)}</span><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "level_test", topic: q.id }))}'>${esc(q.chapter.title)} 읽기<span aria-hidden="true"> ↗</span></a></li>`).join("")}</ul></div>` : `<p class="lt-sub">틀린 문제가 없습니다.</p>`}
+    </div>
+    <div class="sh-foot"><button type="button" class="btn ghost" data-test-open="retry">다시 풀기</button><button type="button" class="btn" data-goto-level="${lv.id}" data-test-go>${LV(lv.id)} 코스로 이동</button></div>`;
+    $("#lt-body .sh-main").scrollTop = 0;
+    $("#lt-body [data-test-go]").focus({ preventScroll: true });
+  }
+  function testJump(i) {
+    test.step = Math.max(0, Math.min(state.leveltest.questions.length, i));
+    renderTest();
+  }
+  /* after a pick, go to the next question still open (or stay on the last step) */
+  function nextOpen(from) {
+    const miss = missingSteps().filter((i) => i > from);
+    return miss.length ? miss[0] : state.leveltest.questions.length;
   }
   function testPick(i) {
     test.picks[test.step] = i;
-    test.step += 1;
-    renderTest();
+    const from = test.step;
+    renderTest(true);
+    setTimeout(() => { if (test.step === from && !test.done) testJump(nextOpen(from)); }, reduceMotion ? 0 : 160);
   }
   function testInterest(id) {
     test.interest = id;
-    test.step = state.leveltest.questions.length + 1;
+    if (missingSteps().length) { renderTest(true); const m = $("#lt-body .sh-miss button"); if (m) m.focus(); return; }
+    finishTest();
+  }
+  function finishTest() {
+    if (missingSteps().length) return;
     const v = scoreTest();
     saveLevel(v);
+    test.done = true;
     track("level_test_complete", { level: v.level, score: v.score, interest: v.interest || "" });
     stamp("level_test");
     renderShelf(); renderMap();
@@ -910,17 +941,33 @@
   }
 
   const daysTo = (iso) => Math.ceil((Date.parse(`${iso}T00:00:00+09:00`) - Date.now()) / DAY);
+  /* dates in Korean time: today's key, the weekday, and where signup stands */
+  const kstToday = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+  const WD = "일월화수목금토";
+  const wd = (iso) => { const [y, m, d] = String(iso).split("-").map(Number); return WD[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]; };
+  const md = (iso) => `${iso.slice(5, 7)}.${iso.slice(8, 10)}(${wd(iso)})`;
+  function signup(e) {
+    const t = kstToday();
+    if (!e.link) return { state: "none", cta: "", line: "신청 링크는 곧 열립니다" };
+    const seats = e.capacity ? ` · 선착순 ${e.capacity}명` : "";
+    if (e.signupStart && t < e.signupStart) return { state: "soon", cta: "행사 페이지", action: "event_page", line: `${md(e.signupStart)}부터 신청${seats}` };
+    if (e.signupEnd && t > e.signupEnd) return { state: "closed", cta: "행사 페이지", action: "event_page", line: "신청이 마감되었습니다" };
+    return { state: "open", cta: "참가 신청", action: "signup", line: `신청 받는 중${e.signupEnd ? ` · ${md(e.signupEnd)} 마감` : ""}${seats}` };
+  }
+  const eventTitle = (e) => String(e.name).split(" - ")[0];
   function renderNextEvent() {
     const el = $("#next-event"), next = state.events.find((e) => e.upcoming && e.date);
     if (!el || !next) return;
     const d = daysTo(next.date);
     if (d < 0) return;
+    const su = signup(next);
     el.hidden = false;
     if (next.link) {
       el.href = next.link; el.target = "_blank"; el.rel = "noopener";
-      el.dataset.eventParams = JSON.stringify({ event_order: next.order, action: "signup", placement: "next_strip" });
+      el.dataset.eventParams = JSON.stringify({ event_order: next.order, action: su.action, placement: "next_strip" });
     }
-    el.innerHTML = `<span class="ne-k">다음 행사</span><span class="ne-d">${d === 0 ? "오늘" : `D-${d}`}</span><span class="ne-t"><b>${dot(next.date)} · ${esc(next.name)}</b><span>${next.link ? "참가 신청을 받고 있습니다" : "신청 링크는 곧 열립니다"} · 지난 ${state.events.filter((e) => !e.upcoming).length}회에 ${fmt(state.events.reduce((s, e) => s + (e.participants || 0), 0))}명이 함께했습니다</span></span>${next.link ? `<span class="ne-cta">참가 신청<span class="sr-only"> (새 창)</span></span>` : `<span class="ne-go" aria-hidden="true">›</span>`}`;
+    const where = next.venue ? ` · ${next.venue}` : "";
+    el.innerHTML = `<span class="ne-k">다음 행사</span><span class="ne-d">${d === 0 ? "오늘" : `D-${d}`}</span><span class="ne-t"><b>${dot(next.date)}(${wd(next.date)}) · ${esc(eventTitle(next))}${next.tagline ? ` · ${esc(next.tagline)}` : ""}</b><span>${esc(su.line)}${esc(where)}</span></span>${su.cta ? `<span class="ne-cta">${esc(su.cta)}<span class="sr-only"> (새 창)</span></span>` : `<span class="ne-go" aria-hidden="true">›</span>`}`;
   }
   /* ---------- activity: what the team did on GitHub lately, credited by name ---------- */
   const BOT = /\[bot\]$|^github-actions$|^dependabot/;
@@ -1064,13 +1111,30 @@
     const total = past.reduce((s, e) => s + (e.participants || 0), 0);
     const maxP = Math.max(1, ...past.map((e) => e.participants || 0));
     const dd = next && next.date ? daysTo(next.date) : null;
-    const nextHTML = next ? `<li class="event next">
-        <span class="soon-tag">다음 행사${dd != null && dd >= 0 ? ` · ${dd === 0 ? "오늘" : `D-${dd}`}` : ""}</span>
-        <span class="ord">${next.order}회</span>
-        <h3>${next.link ? `<a href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: "signup", placement: "title" }))}'>${esc(next.name)}</a>` : esc(next.name)}</h3>
-        <span class="when">${when(next)}</span>
-        <p class="ev-about">현업과 학계가 만나 인과추론과 실험, 데이터 의사결정을 이야기하는 자리입니다. 지난 ${past.length}회에 ${fmt(total)}명이 함께했습니다.</p>
-        ${next.link ? `<a class="btn sm" href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: "signup", placement: "button" }))}'>참가 신청하기</a>` : `<span class="ppl">신청 링크는 곧 열립니다.</span>`}
+    const su = next ? signup(next) : null;
+    const go = (placement) => next && su.cta ? `<a class="btn${placement === "button" ? "" : " ghost"} sm" href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: su.action, placement }))}'>${esc(su.cta)}<span aria-hidden="true"> ↗</span></a>` : "";
+    const facts = next ? [
+      ["일시", `${dot(next.date)}(${wd(next.date)})${next.time ? ` ${esc(next.time)}` : ""}`],
+      next.venue ? ["장소", `${esc(next.venue)}${next.address ? `<span>${esc(next.address)}</span>` : ""}`] : null,
+      next.signupStart ? ["신청", `${md(next.signupStart)} – ${next.signupEnd ? md(next.signupEnd) : ""}${next.capacity ? ` · 선착순 ${next.capacity}명` : ""}`] : null,
+      next.audience ? ["대상", esc(next.audience)] : null
+    ].filter(Boolean) : [];
+    const tt = next && (next.timetable || []).length ? `<details class="ev-tt" data-event-fold><summary>타임테이블<span>${esc(next.timetable[0].time.split("–")[0])}–${esc(next.timetable[next.timetable.length - 1].time.split("–")[1] || "")}</span></summary>
+        <ol>${next.timetable.map((r) => `<li class="${r.talk ? "talk" : ""}"><span class="t">${esc(r.time)}</span><span class="k">${esc(r.kind)}</span><span class="w"><b>${esc(r.title)}</b>${r.who ? `<span>${esc(r.who)}</span>` : ""}</span></li>`).join("")}</ol>
+        ${next.timetableImage ? `<a class="ev-img-link" href="${esc(next.timetableImage)}" target="_blank" rel="noopener">타임테이블 이미지로 보기<span aria-hidden="true"> ↗</span></a>` : ""}</details>` : "";
+    const nextHTML = next ? `<li class="event next${next.poster ? " has-poster" : ""}">
+        <div class="ev-main">
+          <span class="soon-tag">다음 행사${dd != null && dd >= 0 ? ` · ${dd === 0 ? "오늘" : `D-${dd}`}` : ""}</span>
+          <h3>${next.link ? `<a href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: su.action || "event_page", placement: "title" }))}'>${esc(eventTitle(next))}</a>` : esc(eventTitle(next))}</h3>
+          ${next.tagline ? `<p class="ev-tag">${esc(next.tagline)}</p>` : ""}
+          <dl class="ev-facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
+          ${next.code ? `<div class="ev-code"><p><b>${esc(next.code.label)}</b></p><ol>${next.code.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol></div>` : ""}
+          <p class="ev-state ${su.state}">${esc({ soon: `신청은 ${next.signupStart ? md(next.signupStart) : ""}에 열립니다. 지금은 행사 페이지에서 내용을 볼 수 있습니다.`, open: `지금 신청을 받고 있습니다${next.capacity ? `. 선착순 ${next.capacity}명이라 일찍 마감될 수 있습니다` : ""}.`, closed: "신청이 마감되었습니다.", none: "신청 링크는 곧 열립니다." }[su.state])}</p>
+          <div class="ev-acts">${go("button")}${next.poster ? `<a class="btn ghost sm ev-poster-btn" href="${esc(next.poster)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: "poster", placement: "card" }))}'>포스터 보기</a>` : ""}</div>
+          ${next.host || (next.sponsors || []).length ? `<p class="ev-org">${next.host ? `주관 ${esc(next.host)}` : ""}${(next.sponsors || []).length ? ` · 후원 ${next.sponsors.map(esc).join(", ")}` : ""}</p>` : ""}
+        </div>
+        ${next.poster ? `<a class="ev-poster" href="${esc(next.poster)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: "poster", placement: "thumb" }))}'><img src="${esc(next.poster)}" alt="${esc(`${eventTitle(next)} 포스터: ${dot(next.date)} ${next.venue || ""}`)}" width="1414" height="2000" loading="lazy"><span>포스터 크게 보기</span></a>` : ""}
+        ${tt}
       </li>` : "";
     const pastHTML = past.map((e) => `<li class="event past">
         <span class="ord">${e.order}회</span>
@@ -1078,6 +1142,8 @@
         <span class="ev-n">${e.participants ? `<span class="ev-num"><b>${fmt(e.participants)}</b>명</span><i class="ev-bar" aria-hidden="true"><i style="width:${Math.round((e.participants / maxP) * 100)}%"></i></i>` : ""}</span>
       </li>`).join("");
     $("#event-list").innerHTML = nextHTML + (past.length ? `<li class="event-past"><p class="ev-sum">지난 Data Forum ${past.length}회 · 참가 ${fmt(total)}명</p><ol>${pastHTML}</ol></li>` : "");
+    const fold = $("#event-list [data-event-fold]");
+    if (fold) fold.addEventListener("toggle", () => { if (fold.open) track("click_event", { event_order: next.order, action: "timetable", placement: "card" }); });
   }
 
 
@@ -1607,15 +1673,18 @@
         return;
       }
       const to = e.target.closest("[data-test-open]");
-      if (to) { openLevelTest(to.dataset.testOpen); return; }
+      if (to) { e.preventDefault(); openLevelTest(to.dataset.testOpen); return; }
       const tp = e.target.closest("[data-test-pick]");
       if (tp) { testPick(Number(tp.dataset.testPick)); return; }
       const ti = e.target.closest("[data-test-interest]");
       if (ti) { testInterest(ti.dataset.testInterest); return; }
-      if (e.target.closest("[data-test-back]")) { test.step = Math.max(0, test.step - 1); renderTest(); return; }
+      const tj = e.target.closest("[data-test-jump]");
+      if (tj) { testJump(Number(tj.dataset.testJump)); return; }
+      if (e.target.closest("[data-test-finish]")) { finishTest(); return; }
+      if (e.target.closest("[data-sheet-close]")) { closeSheet(); return; }
       const gl = e.target.closest("[data-goto-level]");
       if (gl) {
-        if (gl.hasAttribute("data-test-go")) { track("level_test_go", { level: gl.dataset.gotoLevel }); closeStation(); }
+        if (gl.hasAttribute("data-test-go")) { track("level_test_go", { level: gl.dataset.gotoLevel }); closeSheet(); }
         else track("select_level", { level: gl.dataset.gotoLevel, source: "level_card" });
         gotoLevel(gl.dataset.gotoLevel); return;
       }
@@ -1650,6 +1719,18 @@
       if (back) { openPerson(back.dataset.backPerson, "back"); return; }
     });
     dialog().addEventListener("click", (e) => { if (e.target === dialog()) closeStation(); });
+    const sh = sheet();
+    if (sh) {
+      sh.addEventListener("click", (e) => { if (e.target === sh) closeSheet(); });
+      /* answer with number keys inside the panel: 1–4 pick, 0 is "잘 모르겠어요" */
+      sh.addEventListener("keydown", (e) => {
+        if (test.done || e.altKey || e.ctrlKey || e.metaKey || !/^[0-9]$/.test(e.key)) return;
+        const opts = [...sh.querySelectorAll(".quiz-opts button")];
+        const b = e.key === "0" ? sh.querySelector(".lt-idk") : opts[Number(e.key) - 1];
+        if (!b) return;
+        e.preventDefault(); b.click();
+      });
+    }
     dialog().addEventListener("close", () => {
       state.backTo = null;
       if (stationFromHash()) history.replaceState(null, "", location.pathname + location.search);
