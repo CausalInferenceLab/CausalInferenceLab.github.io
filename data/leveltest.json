@@ -1,0 +1,231 @@
+{
+  "title": "내 레벨 진단",
+  "bands": [
+    {
+      "level": "L0",
+      "name": "기초",
+      "pass": 2
+    },
+    {
+      "level": "L1",
+      "name": "개념",
+      "pass": 3
+    },
+    {
+      "level": "L2",
+      "name": "실전",
+      "pass": 3
+    }
+  ],
+  "questions": [
+    {
+      "id": "confounder",
+      "band": "L0",
+      "topic": "교란",
+      "q": "커피를 많이 마시는 사람일수록 심장병 비율이 높았습니다. 이것만으로 커피가 심장병을 일으킨다고 말하기 어려운 가장 큰 이유는?",
+      "opts": [
+        "상관계수가 1이 아니어서",
+        "흡연처럼 커피와 심장병에 함께 영향을 주는 요인이 있을 수 있어서",
+        "표본이 충분히 크지 않을 수 있어서",
+        "심장병이 커피 섭취에 영향을 줄 수는 없어서"
+      ],
+      "answer": 1,
+      "why": "커피를 많이 마시는 사람이 담배도 더 피운다면, 심장병이 늘어난 이유가 커피인지 흡연인지 구분할 수 없습니다. 둘 다에 영향을 주는 이런 요인을 교란 요인이라고 합니다.",
+      "chapter": {
+        "title": "1장 인과추론 입문",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html"
+      }
+    },
+    {
+      "id": "counterfactual",
+      "band": "L0",
+      "topic": "반사실",
+      "q": "한 사용자가 쿠폰을 받고 구매했습니다. 이 사용자에게 쿠폰이 준 효과를 정의하려면 무엇과 비교해야 할까요?",
+      "opts": [
+        "같은 사용자가 쿠폰을 받지 않았을 때의 구매",
+        "같은 사용자의 지난달 구매",
+        "전체 사용자의 평균 구매",
+        "쿠폰을 받지 않은 다른 사용자의 구매"
+      ],
+      "answer": 0,
+      "why": "인과효과는 같은 대상의 두 잠재적 결과, 즉 받았을 때와 받지 않았을 때의 차이입니다. 둘 중 하나만 관측되기 때문에 인과추론이 필요합니다.",
+      "chapter": {
+        "title": "1장 인과추론 입문",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html"
+      }
+    },
+    {
+      "id": "randomization",
+      "band": "L1",
+      "topic": "무작위 배정",
+      "q": "A/B 테스트에서 사용자를 무작위로 나누는 가장 중요한 이유는?",
+      "opts": [
+        "처치 말고는 두 그룹이 평균적으로 같아져, 단순 비교가 인과효과가 되도록",
+        "두 그룹의 크기를 같게 하려고",
+        "결과 변수의 분산을 없애려고",
+        "필요한 표본 수를 줄이려고"
+      ],
+      "answer": 0,
+      "why": "무작위로 나누면 처치 여부가 다른 어떤 특성과도 관계없어집니다. 그래서 두 그룹의 평균 차이를 처치의 효과로 읽을 수 있습니다.",
+      "chapter": {
+        "title": "2장 무작위 실험",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html"
+      }
+    },
+    {
+      "id": "bad_control",
+      "band": "L1",
+      "topic": "나쁜 통제변수",
+      "q": "교육 프로그램이 연봉에 준 효과를 회귀로 추정합니다. 프로그램 이후의 직급을 통제변수로 넣으면 어떻게 될까요?",
+      "opts": [
+        "결과에 아무 영향이 없다",
+        "표준오차만 줄고 추정값은 그대로다",
+        "교란이 사라져 추정이 더 정확해진다",
+        "프로그램이 직급을 거쳐 연봉을 올린 경로까지 막아 효과를 잘못 추정한다"
+      ],
+      "answer": 3,
+      "why": "직급은 프로그램의 결과입니다. 처치 이후에 정해지는 변수를 통제하면 효과의 일부를 지우거나 새로운 편향을 만듭니다.",
+      "chapter": {
+        "title": "7장 교란변수를 넘어서",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/07-Beyond-Confounders.html"
+      }
+    },
+    {
+      "id": "parallel_trends",
+      "band": "L1",
+      "topic": "평행 추세",
+      "q": "정책을 도입한 지역과 도입하지 않은 지역의 전후 변화를 비교하는 이중차분법이 믿을 만하려면 무엇이 필요할까요?",
+      "opts": [
+        "정책 후 두 지역의 차이가 커야 한다",
+        "정책 전 두 지역의 수준이 같아야 한다",
+        "정책이 없었다면 두 지역이 같은 추세로 움직였어야 한다",
+        "두 지역의 표본 수가 같아야 한다"
+      ],
+      "answer": 2,
+      "why": "이중차분법은 수준이 달라도 됩니다. 대신 처치가 없었다면 변화의 폭이 같았으리라는 평행 추세 가정이 필요합니다.",
+      "chapter": {
+        "title": "13장 이중차분법",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/13-Difference-in-Differences.html"
+      }
+    },
+    {
+      "id": "propensity",
+      "band": "L1",
+      "topic": "성향점수",
+      "q": "성향점수(propensity score)는 무엇일까요?",
+      "opts": [
+        "처치효과를 표준화한 크기",
+        "결과를 예측하는 모델의 정확도",
+        "처치를 받은 뒤 결과가 좋아질 확률",
+        "공변량이 주어졌을 때 처치를 받을 확률"
+      ],
+      "answer": 3,
+      "why": "성향점수는 관측된 특성이 같을 때 처치를 받을 확률입니다. 점수가 같은 사람끼리 비교하면 그 특성에 따른 차이를 맞출 수 있습니다.",
+      "chapter": {
+        "title": "11장 성향점수",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/11-Propensity-Score.html"
+      }
+    },
+    {
+      "id": "rdd",
+      "band": "L2",
+      "topic": "회귀 불연속 설계",
+      "q": "모의고사 80점 이상이면 장학금을 주는 제도가 있습니다. 장학금이 다음 학기 성적에 준 효과를 가장 설득력 있게 추정하는 방법은?",
+      "opts": [
+        "80점 바로 위와 바로 아래 학생의 성적 비교",
+        "성적 예측 모델을 학습하고 변수 중요도 확인",
+        "장학금을 받은 학생의 전후 성적 비교",
+        "장학금을 받은 학생과 못 받은 학생의 평균 성적 비교"
+      ],
+      "answer": 0,
+      "why": "79점과 81점 학생은 장학금 말고는 거의 같습니다. 기준점 근처를 비교하는 회귀 불연속 설계가 이런 제도에 맞습니다.",
+      "chapter": {
+        "title": "16장 회귀 불연속 설계",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/16-Regression-Discontinuity-Design.html"
+      }
+    },
+    {
+      "id": "synthetic_control",
+      "band": "L2",
+      "topic": "통제집단합성법",
+      "q": "한 도시에만 새 교통 정책을 도입했습니다. 비교할 도시가 20곳 있고 도입 전 10년치 월별 데이터가 있지만, 추세가 이 도시와 비슷한 곳은 한 곳도 없습니다. 가장 알맞은 방법은?",
+      "opts": [
+        "도시들을 무작위로 다시 나눠 실험하기",
+        "가장 비슷한 도시 하나와 이중차분법",
+        "도입 후 데이터만으로 회귀분석",
+        "여러 도시를 가중 평균해 도입 전 추세를 맞춘 비교 대상을 만들기"
+      ],
+      "answer": 3,
+      "why": "처치받은 단위가 하나이고 비슷한 비교 대상이 없을 때는, 여러 단위를 섞어 도입 전 궤적을 재현하는 통제집단합성법이 맞습니다.",
+      "chapter": {
+        "title": "15장 통제집단합성법",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/15-Synthetic-Control.html"
+      }
+    },
+    {
+      "id": "uplift",
+      "band": "L2",
+      "topic": "이질적 처치효과",
+      "q": "쿠폰을 보냈을 때 구매가 가장 많이 늘어날 고객에게만 보내고 싶습니다. 무엇을 추정해야 할까요?",
+      "opts": [
+        "고객별 처치효과, 즉 쿠폰이 그 고객의 구매를 얼마나 바꾸는지",
+        "전체 고객의 평균 처치효과",
+        "고객별 구매 확률",
+        "쿠폰을 받은 고객의 구매율"
+      ],
+      "answer": 0,
+      "why": "구매 확률이 높은 고객은 쿠폰이 없어도 살 수 있습니다. 쿠폰이 바꾸는 양, 곧 조건부 처치효과를 추정해야 합니다.",
+      "chapter": {
+        "title": "18장 이질적 처치효과와 개인화",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/18-Heterogeneous-Treatment-Effects-and-Personalization.html"
+      }
+    },
+    {
+      "id": "peeking",
+      "band": "L2",
+      "topic": "실험 중간 확인",
+      "q": "A/B 테스트 결과를 매일 확인하다가 p값이 처음 0.05 아래로 내려간 날 실험을 멈췄습니다. 무엇이 문제일까요?",
+      "opts": [
+        "여러 번 들여다보면 효과가 없어도 유의하게 나올 확률이 5%보다 커진다",
+        "실험 기간과 p값은 관계없다",
+        "표본이 커질수록 p값은 항상 커진다",
+        "문제없다, 유의하면 그날 끝내도 된다"
+      ],
+      "answer": 0,
+      "why": "매일 검정하면 그때마다 우연히 유의할 기회가 생겨 거짓 양성이 늘어납니다. 기간과 표본 수를 미리 정하거나 순차 검정을 써야 합니다.",
+      "chapter": {
+        "title": "온라인 통제 실험 스터디 자료",
+        "url": "https://github.com/CausalInferenceLab/OCE-Materials"
+      }
+    }
+  ],
+  "interest": {
+    "q": "인과추론을 어디에 쓰고 싶나요?",
+    "opts": [
+      [
+        "experiment",
+        "A/B 테스트와 실험"
+      ],
+      [
+        "marketing",
+        "마케팅·정책 효과 분석"
+      ],
+      [
+        "ml",
+        "ML로 효과 추정"
+      ],
+      [
+        "research",
+        "연구·헬스케어"
+      ],
+      [
+        "build",
+        "데이터 도구·에이전트 개발"
+      ],
+      [
+        "start",
+        "아직 정하지 않았어요"
+      ]
+    ]
+  }
+}

@@ -83,20 +83,24 @@
     <div class="wrap">
       <div class="section-head">
         <h2 id="curriculum-title">커리큘럼</h2>
-        <p id="curriculum-sub">팀이 만든 오픈소스를 Level 0부터 4까지 엮었습니다. Level 0–2는 무료 자료만으로 끝까지 갈 수 있습니다.</p>
+        <p id="curriculum-sub">Level 0부터 4까지, 레벨마다 정해진 순서대로 보면 됩니다. Level 0–2는 무료 자료만으로 끝까지 갈 수 있습니다.</p>
       </div>
-      <div class="tabs big" role="tablist" aria-label="보기 방식">
-        <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="true"><span class="tab-lines" aria-hidden="true"><i></i><i></i><i></i></span>트랙 지도로 보기</button>
-        <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="false" tabindex="-1">로드맵으로 보기<span class="tab-n" id="n-course"></span></button>
-      </div>
-<div class="note-row">
-              <p class="tab-note" id="tab-note">트랙 지도는 주제별 노선, 로드맵은 Level 0부터 차례로 깨는 순서입니다.</p>
-        <div class="route-chips" role="group" aria-label="시작점 찾기" id="route-chips"></div>
+      <div class="lt-card" id="lt-card" aria-live="polite"></div>
+      <div class="tabs-row">
+        <div class="tabs big" role="tablist" aria-label="보기 방식">
+          <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="true">레벨별 코스<span class="tab-n" id="n-course"></span></button>
+          <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" tabindex="-1"><span class="tab-lines" aria-hidden="true"><i></i><i></i><i></i></span>주제별 노선도</button>
+        </div>
         <div class="quest-hud" id="quest-hud"></div>
       </div>
-      <p class="route-note" id="route-note" aria-live="polite"></p>
 
-      <div id="panel-map" role="tabpanel" aria-labelledby="tab-map">
+      <div id="panel-course" role="tabpanel" aria-labelledby="tab-course">
+        <div class="progress" id="progress"></div>
+        <ol class="ladder2" id="shelf" aria-label="Level 0부터 4까지 코스"></ol>
+        <p class="shelf-foot" id="shelf-foot"></p>
+      </div>
+
+      <div id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden>
         <div class="map-card">
           <ul class="map-how" aria-label="트랙 지도 읽는 법">
             <li><svg width="26" height="10" aria-hidden="true"><path d="M2 5H24" stroke="var(--l-main)" stroke-width="5" stroke-linecap="round"/></svg><span><b>노선</b> 주제 트랙</span></li>
@@ -114,18 +118,7 @@
         </div>
       </div>
 
-      <div id="panel-course" role="tabpanel" aria-labelledby="tab-course" hidden>
-        <div class="progress" id="progress"></div>
-        <div class="path-wrap">
-          <p class="path-k"><span>배우기 · Level 0–2</span><span>만들기 · Level 3–4</span></p>
-          <ol class="path" id="path" aria-label="로드맵: 스테이지 고르기"></ol>
-        </div>
-        <div class="chapters" id="chapters" hidden></div>
-        <div class="shelf-wrap" id="shelf-wrap">
-          <ol class="shelf" id="shelf" aria-label="단계별 자료"></ol>
-        </div>
-        <p class="shelf-foot" id="shelf-foot"></p>
-      </div>
+
 
 
     </div>
