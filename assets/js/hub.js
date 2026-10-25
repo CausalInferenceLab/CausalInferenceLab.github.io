@@ -44,7 +44,9 @@
     d.lines.forEach((l) => { l.id = tok(l.id); });
     d.repos.forEach((r) => { r.level = r.level ? tok(r.level, "") : r.level; r.lines = (r.lines || []).filter((x) => TOKEN.test(x)); r.cohorts = (r.cohorts || []).map(int); if (r.stars != null) r.stars = int(r.stars); });
     d.projects.forEach((p) => { p.cohort = int(p.cohort); p.runners = p.runners == null ? null : int(p.runners); });
-    d.events.forEach((e) => { e.order = int(e.order); e.year = int(e.year); e.participants = e.participants == null ? null : int(e.participants); });
+    /* an event with a date is upcoming until its day has passed (Korean time); without a date, the file decides */
+    const todayKey = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+    d.events.forEach((e) => { e.order = int(e.order); e.year = int(e.year); e.participants = e.participants == null ? null : int(e.participants); e.upcoming = e.date ? String(e.date) >= todayKey : !!e.upcoming; });
     d.routes.forEach((r) => { r.id = tok(r.id); });
     d.stages.items = (d.stages.items || []).map((x) => ({ ...x, id: tok(x.id), year: int(x.year) }));
     d.builders.forEach((b) => { (b.runnerOf || []).forEach((x) => { x.cohort = int(x.cohort); }); });
@@ -186,8 +188,8 @@
     return [
       { key: "runners", label: "함께한 러너", unit: "명", value: lastR ? lastR.y : 0, series: runners, delta: lastR ? `${lastR.x}에 새로 ${lastR.add}명` : "", tip: (p) => `${p.x}까지 ${fmt(p.y)}명` },
       { key: "projects", label: "프로젝트", unit: "개", value: lastP ? lastP.y : 0, series: projects, delta: lastP ? `${lastP.x} +${lastP.add}개` : "", tip: (p) => `${p.x}까지 ${fmt(p.y)}개` },
-      { key: "stars", label: "GitHub 스타", unit: "", value: totalStars(), series: stars, delta: `레포 ${[...state.repos.values()].filter((r) => !r.kind && r.status !== "depot").length}개 합계`, plain: true, empty: "월별 추이는 매주 자동으로 쌓입니다.", tip: (p) => `${p.x} ${fmt(p.y)}` },
-      { key: "events", label: "행사 참가자", unit: "명", value: ppl, series: events, delta: next ? `다음: ${dot(next.date.slice(5))} 5th Data Forum` : "", plain: true, tip: (p) => `${p.x}까지 ${fmt(p.y)}명` }
+      { key: "stars", label: "GitHub 스타", unit: "", value: totalStars(), series: stars, delta: `레포 ${[...state.repos.values()].filter((r) => !r.kind).length}개 합계`, plain: true, empty: "월별 추이는 매주 자동으로 쌓입니다.", tip: (p) => `${p.x} ${fmt(p.y)}` },
+      { key: "events", label: "행사 참가자", unit: "명", value: ppl, series: events, delta: next ? `다음: ${next.date ? `${dot(next.date.slice(5))} ` : ""}${String(next.name).split(" - ")[0]}` : "", plain: true, tip: (p) => `${p.x}까지 ${fmt(p.y)}명` }
     ];
   }
 
