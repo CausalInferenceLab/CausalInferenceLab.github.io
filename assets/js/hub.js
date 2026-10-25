@@ -60,7 +60,7 @@
   const state = {
     repos: new Map(), lines: new Map(), lineList: [], levels: [], map: null, routes: [],
     projects: [], events: [], articles: [], builders: [], growth: null, stats: null,
-    ridden: new Set(), recent: [], order: new Map(), route: "all", unfolded: new Set()
+    ridden: new Set(), recent: [], order: new Map(), route: "all"
   };
 
   function loadRidden() { try { state.ridden = new Set(JSON.parse(localStorage.getItem(RIDE_KEY) || "[]")); } catch (e) { state.ridden = new Set(); } }
@@ -383,8 +383,44 @@
       <span class="ls-acts">${st.go ? `<a class="ls-go" href="${esc(st.go)}" target="_blank" rel="noopener" data-event="passport_go" data-event-params='${esc(JSON.stringify({ stamp: st.id, source: "roadmap" }))}'>${esc(st.goLabel || "하러 가기")}<span aria-hidden="true"> ↗</span></a>` : ""}<button type="button" class="ls-ck" data-quest-claim="${esc(st.id)}" aria-pressed="${done}"${done ? " disabled" : ""}>${done ? "클리어" : "했어요"}</button></span>
     </li>`;
   }
-  function levelRow(lv, i) {
-    const mine = myLevel(), isMine = !!mine && mine.level === lv.id;
+  const lvIndex = (id) => state.levels.findIndex((l) => l.id === id);
+  /* the level on screen: the one picked, else the tested level, else Level 0 */
+  const shownLevel = () => (levelOf(state.level) ? state.level : (myLevel() || {}).level || "L0");
+  /* where this level sits for the visitor: their level, passed by the test, cleared, or not yet */
+  function levelStatus(lv) {
+    const mine = myLevel(), mi = mine ? lvIndex(mine.level) : -1, i = lvIndex(lv.id);
+    if (levelDone(lv.id)) return { cls: "cleared", label: "클리어" };
+    if (mine && i === mi) return { cls: "mine", label: "내 레벨" };
+    if (mine && i < mi) return { cls: "past", label: "통과" };
+    const q = questsOf(lv.id);
+    return { cls: !mine && i > 0 ? "ahead" : "", label: `${q.filter(questDone).length} / ${q.length}` };
+  }
+  /* five stations on one line; the line is filled up to the visitor's level */
+  function renderRail(reveal) {
+    const box = $("#lv-rail");
+    if (!box) return;
+    const mine = myLevel(), mi = mine ? lvIndex(mine.level) : -1, sel = lvIndex(shownLevel());
+    const n = state.levels.length;
+    box.innerHTML = `<ol class="rail${reveal ? " reveal" : ""}" style="--fill:${mi > 0 ? mi / (n - 1) : 0}" aria-label="Level 0부터 4까지">
+      <li class="rail-line" aria-hidden="true"><i></i></li>
+      ${state.levels.map((lv, i) => {
+        const st = levelStatus(lv), q = questsOf(lv.id), pct = q.length ? q.filter(questDone).length / q.length : 0;
+        const mark = st.cls === "cleared" ? "★" : st.cls === "past" ? "✓" : String(i);
+        return `<li class="rs ${st.cls}${lv.layer === "build" ? " build" : ""}" style="--i:${i}">
+          <button type="button" data-goto-level="${lv.id}" data-rail aria-pressed="${i === sel}" aria-label="${esc(`${LV(lv.id)} ${lv.tier || lv.name}, ${st.label}`)}">
+            ${st.cls === "mine" ? `<span class="rs-pin" aria-hidden="true">내 레벨</span>` : ""}
+            <span class="rs-node" style="--p:${pct}" aria-hidden="true">${mark}</span>
+            <span class="rs-lv">${LV(lv.id)}</span>
+            <b class="rs-t">${esc(lv.tier || lv.name)}</b>
+            <span class="rs-s">${st.cls === "mine" ? esc(lv.question) : esc(st.label)}</span>
+          </button></li>`;
+      }).join("")}
+      <li class="rail-layer learn" aria-hidden="true">배우기</li><li class="rail-layer build" aria-hidden="true">만들기</li>
+    </ol>`;
+  }
+  /* one level in full: who it is for, what it covers, what you can do after it, and the order to take it */
+  function levelPanel(lv, i) {
+    const mine = myLevel(), mi = mine ? lvIndex(mine.level) : -1;
     const steps = stepsOf(lv), quests = questsOf(lv.id), done = quests.filter(questDone).length, cleared = levelDone(lv.id);
     const inSteps = new Set(steps.map((s) => s.repo));
     const items = levelItems(lv.id);
@@ -401,40 +437,71 @@
     const text = books.length ? `<p class="lr-also"><span>함께 보는 교재</span>${books.map((b) => `<button type="button" data-open="${esc(b.repo)}" data-id="${esc(b.repo)}">${esc(b.mapLabel || b.title)}</button>`).join("")}</p>` : "";
     const more = (lv.more || []).length ? `<p class="lr-also"><span>더 해 보기</span>${lv.more.map((m) => `<a href="${esc(m.href)}"${/^https?:/.test(m.href) ? ' target="_blank" rel="noopener"' : ""} data-event="click_level_extra" data-event-params='${esc(JSON.stringify({ level: lv.id, target: m.title }))}'>${esc(m.title)}</a>`).join("")}</p>` : "";
     const goal = cleared ? `<div class="lr-clear"><b>클리어</b><span>여권에 스탬프가 찍혔습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>` : "";
-    const sep = i === 0 ? `<li class="lr-sep">배우기 · Level 0–2</li>` : lv.layer === "build" && state.levels[i - 1].layer !== "build" ? `<li class="lr-sep">만들기 · Level 3–4</li>` : "";
-    /* on phones only the level to work on stays open; the others fold to their heading */
-    const folded = lv.id === hereStage() ? state.unfolded.has(`-${lv.id}`) : !state.unfolded.has(lv.id);
-    return `${sep}<li class="lr${build ? " build" : ""}${isMine ? " mine" : ""}${cleared ? " cleared" : ""}${folded ? " folded" : ""}" id="lv-${lv.id}" data-row="${lv.id}">
-      <span class="lr-st" aria-hidden="true">${cleared ? "★" : lv.id.replace(/^L/, "")}</span>
-      <button type="button" class="lr-toggle" data-unfold="${lv.id}" aria-expanded="${!folded}" aria-controls="lv-${lv.id}-more">${folded ? `자료 ${quests.length}개 보기` : "접기"}</button>
+    /* one line on why this level is on screen for this visitor */
+    const note = !mine
+      ? (i === 0 ? `<p class="lp-note">처음이라면 여기부터 보세요. 아는 내용이라면 <button type="button" data-test-open="panel">3분 진단</button>으로 내 레벨을 찾아 바로 건너뛸 수 있습니다.</p>` : "")
+      : i === mi ? `<p class="lp-note mine">진단 결과, 여기서 시작하면 됩니다.${mi > 0 ? ` 앞의 Level ${mi === 1 ? "0" : `0–${mi - 1}`}은 통과했습니다.` : ""}</p>`
+      : i < mi ? `<p class="lp-note">진단에서 통과한 레벨입니다. 필요할 때 복습하세요.</p>` : "";
+    const prev = state.levels[i - 1], next = state.levels[i + 1];
+    const nav = `<div class="lp-nav">${prev ? `<button type="button" data-goto-level="${prev.id}" data-step-nav="prev"><span aria-hidden="true">‹ </span>${LV(prev.id)} ${esc(prev.tier || prev.name)}</button>` : "<span></span>"}${next ? `<button type="button" data-goto-level="${next.id}" data-step-nav="next">${LV(next.id)} ${esc(next.tier || next.name)}<span aria-hidden="true"> ›</span></button>` : ""}</div>`;
+    return `<article class="lr${build ? " build" : ""}${mine && i === mi ? " mine" : ""}${cleared ? " cleared" : ""}" id="lv-${lv.id}" data-row="${lv.id}" aria-labelledby="lv-${lv.id}-t">
       <div class="lr-head">
-        <h3><span class="lr-lv">${LV(lv.id)}</span>${esc(lv.tier || lv.name)}${isMine ? `<span class="lr-mine">내 레벨</span>` : ""}</h3>
+        <h3 id="lv-${lv.id}-t"><span class="lr-lv">${LV(lv.id)}</span>${esc(lv.tier || lv.name)}${mine && i === mi ? `<span class="lr-mine">내 레벨</span>` : ""}</h3>
         <p class="lr-q">${esc(lv.question)}</p>
+        ${note}
         ${lv.for ? `<p class="lr-for"><b>이런 분께</b>${esc(lv.for)}</p>` : ""}
       </div>
-      <div class="lr-more-wrap" id="lv-${lv.id}-more">
       <div class="lr-body">
         ${(lv.learn || []).length ? `<p class="lr-k">배우는 것</p><ul class="lr-learn">${lv.learn.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
         ${lv.outcome ? `<p class="lr-out"><b>끝나면</b>${esc(lv.outcome)}</p>` : ""}
         ${crew.length ? `<p class="lr-crew"><span>만든 Builder</span>${crew.slice(0, 5).map((n) => `<span title="${esc(n)}">${avatarHTML(n, "sm")}</span>`).join("")}${crew.length > 5 ? `<i>외 ${crew.length - 5}명</i>` : ""}<span class="sr-only">${esc(crew.join(", "))}</span></p>` : ""}
       </div>
       <div class="lr-steps">${list}${text}${more}${goal}</div>
-      </div>
-    </li>`;
+      ${nav}
+    </article>`;
   }
-  function renderShelf() {
+  function renderShelf(_, dir, reveal) {
     const shelf = $("#shelf");
     if (!shelf) return;
-    const open = new Set([...shelf.querySelectorAll("details[data-more][open]")].map((d) => d.dataset.more));
-    shelf.innerHTML = state.levels.map(levelRow).join("");
-    open.forEach((id) => { const d = shelf.querySelector(`details[data-more="${id}"]`); if (d) d.open = true; });
+    const id = shownLevel(), lv = levelOf(id), i = lvIndex(id);
+    state.level = id;
+    const keep = shelf.querySelector(`details[data-more="${id}"]`);
+    const wasOpen = keep && keep.open;
+    shelf.innerHTML = levelPanel(lv, i);
+    if (wasOpen) { const d = shelf.querySelector("details[data-more]"); if (d) d.open = true; }
+    if (dir && !reduceMotion) { const a = shelf.firstElementChild; a.classList.add(dir > 0 ? "enter-r" : "enter-l"); }
     wireAvatars(shelf);
-    renderHud(); renderTestCard();
+    renderRail(reveal); renderHud(); renderTestCard();
 
     const repos = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot");
     const depot = [...state.repos.values()].filter((r) => r.status === "depot");
     $("#n-course").textContent = repos.length; $("#n-course").title = `레포 ${repos.length}개`;
     $("#shelf-foot").innerHTML = `자료 이름을 누르면 자세한 정보와 링크가 열립니다. 진단 결과와 클리어 기록은 이 브라우저에만 남습니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
+  }
+  /* each section arrives once as it comes into view: its station dot, then the heading, then the content */
+  function revealSections() {
+    if (reduceMotion || !("IntersectionObserver" in window)) return;
+    const secs = [...document.querySelectorAll("main > section.band")].filter((s) => s.getBoundingClientRect().top > innerHeight * 0.9);
+    secs.forEach((s) => s.classList.add("rv"));
+    const io = new IntersectionObserver((ens) => ens.forEach((en) => {
+      if (!en.isIntersecting) return;
+      en.target.classList.add("rv-in"); io.unobserve(en.target);
+    }), { threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
+    secs.forEach((s) => io.observe(s));
+    /* a jump straight to a section (nav, hash) shows it at once */
+    const show = () => { const t = location.hash && document.querySelector(location.hash); const sec = t && t.closest("section.band"); if (sec) sec.classList.add("rv-in"); };
+    window.addEventListener("hashchange", show); show();
+  }
+  /* the rail draws itself once, the first time the curriculum comes into view */
+  function watchRail() {
+    const rail = $("#lv-rail");
+    if (!rail || reduceMotion || !("IntersectionObserver" in window)) return;
+    rail.classList.add("pre");
+    const io = new IntersectionObserver((ens) => ens.forEach((en) => {
+      if (!en.isIntersecting) return;
+      rail.classList.remove("pre"); rail.classList.add("drawn"); io.disconnect();
+    }), { threshold: 0.4 });
+    io.observe(rail);
   }
 
   /* ---------- level test: concept questions place the visitor on a level ---------- */
@@ -450,11 +517,9 @@
     const mine = myLevel(), lv = mine && levelOf(mine.level);
     const n = state.leveltest.questions.length;
     box.innerHTML = lv
-      ? `<div class="lt-t"><p class="lt-k">내 레벨</p><h3>${LV(lv.id)} · ${esc(lv.tier || lv.name)}</h3><p>${esc(bandLine(mine))}</p></div>
-        ${meterHTML(lv.id)}
+      ? `<div class="lt-t"><p class="lt-k">내 레벨 진단 결과</p><h3>${LV(lv.id)} · ${esc(lv.tier || lv.name)}</h3><p>${esc(bandLine(mine))}</p></div>
         <div class="lt-acts"><button type="button" class="pill solid" data-goto-level="${lv.id}">내 코스 보기</button><button type="button" class="pill" data-test-open="retry">다시 진단</button></div>`
-      : `<div class="lt-t"><p class="lt-k">어디서 시작할지 모르겠다면</p><h3>내 레벨 진단</h3><p>개념 문제 ${n}개, 3분 정도 걸립니다. 맞힌 문제를 보고 시작할 Level과 첫 자료를 알려 드립니다.</p></div>
-        ${meterHTML(null)}
+      : `<div class="lt-t"><p class="lt-k">어디서 시작할지 모르겠다면</p><h3>3분 진단으로 내 레벨 찾기</h3><p>실무 상황 문제 ${n}개를 풀면 시작할 Level과 첫 자료, 다시 볼 개념을 알려 드립니다.</p></div>
         <div class="lt-acts"><button type="button" class="pill solid" data-test-open="card">진단 시작</button></div>`;
   }
   function scoreTest() {
@@ -577,6 +642,7 @@
     test.done = true;
     track("level_test_complete", { level: v.level, score: v.score, interest: v.interest || "" });
     stamp("level_test");
+    state.level = v.level;
     renderShelf(); renderMap();
     renderTest();
   }
@@ -860,35 +926,27 @@
 
   /* bring a level's row into view and mark it briefly */
   const flash = (el) => { el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); };
-  /* a folded level (phones) opens when something sends the visitor to it */
-  function unfold(row) {
-    if (!row || !row.classList.contains("folded")) return;
-    const id = row.dataset.row;
-    state.unfolded.add(id); state.unfolded.delete(`-${id}`);
-    row.classList.remove("folded");
-    const b = row.querySelector("[data-unfold]"); if (b) { b.setAttribute("aria-expanded", "true"); b.textContent = "접기"; }
-  }
-  function gotoLevel(levelId) {
+  function gotoLevel(levelId, source) {
+    if (!levelOf(levelId)) return;
     selectTab("tab-course");
-    const row = document.getElementById(`lv-${levelId}`);
-    if (!row) return;
-    unfold(row);
-    row.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
-    setTimeout(() => flash(row), reduceMotion ? 0 : 450);
+    const from = lvIndex(shownLevel());
+    state.level = levelId;
+    renderShelf(null, lvIndex(levelId) - from, source === "test");
+    const top = $("#lv-rail");
+    if (top && (top.getBoundingClientRect().top < 0 || top.getBoundingClientRect().top > innerHeight * 0.5)) top.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
   }
 
-  /* Jump to one material in the ladder and mark it briefly. */
+  /* Jump to one material: show its level, then mark it briefly. */
   function gotoItem(id) {
     closeStation();
-    selectTab("tab-course");
+    const r = state.repos.get(id);
+    if (r && r.level) { selectTab("tab-course"); const from = lvIndex(shownLevel()); state.level = r.level; renderShelf(null, lvIndex(r.level) - from); }
     const el = $(`#shelf [data-id="${CSS.escape(id)}"]`);
-    if (!el) { const r = state.repos.get(id); if (r && r.level) gotoLevel(r.level); return; }
-    unfold(el.closest(".lr"));
+    if (!el) return;
     const more = el.closest("details"); if (more) more.open = true;
     document.querySelectorAll("#shelf .picked").forEach((x) => x.classList.remove("picked", "flash"));
     el.classList.add("picked");
     el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
-    /* start the highlight once the page has arrived, so it is seen */
     setTimeout(() => flash(el), reduceMotion ? 0 : 550);
   }
 
@@ -1662,16 +1720,6 @@
       if (sa && state.openRepo) track("click_outbound", { repo: state.openRepo.repo, kind: state.openRepo.kind === "paid" ? "paid" : /github\.com/.test(sa.href) ? "github" : "site" });
       const dpick = e.target.closest("[data-daily]");
       if (dpick) { answerDaily(dpick.dataset.daily); return; }
-      const uf = e.target.closest("[data-unfold]");
-      if (uf) {
-        const id = uf.dataset.unfold, row = document.getElementById(`lv-${id}`), open = row.classList.contains("folded");
-        if (open) state.unfolded.add(id); else { state.unfolded.delete(id); if (id === hereStage()) state.unfolded.add(`-${id}`); }
-        row.classList.toggle("folded", !open);
-        uf.setAttribute("aria-expanded", String(open));
-        uf.textContent = open ? "접기" : `자료 ${questsOf(id).length}개 보기`;
-        if (open) track("select_level", { level: id, source: "unfold" });
-        return;
-      }
       const to = e.target.closest("[data-test-open]");
       if (to) { e.preventDefault(); openLevelTest(to.dataset.testOpen); return; }
       const tp = e.target.closest("[data-test-pick]");
@@ -1684,9 +1732,10 @@
       if (e.target.closest("[data-sheet-close]")) { closeSheet(); return; }
       const gl = e.target.closest("[data-goto-level]");
       if (gl) {
-        if (gl.hasAttribute("data-test-go")) { track("level_test_go", { level: gl.dataset.gotoLevel }); closeSheet(); }
-        else track("select_level", { level: gl.dataset.gotoLevel, source: "level_card" });
-        gotoLevel(gl.dataset.gotoLevel); return;
+        const fromTest = gl.hasAttribute("data-test-go");
+        if (fromTest) { track("level_test_go", { level: gl.dataset.gotoLevel }); closeSheet(); }
+        else track("select_level", { level: gl.dataset.gotoLevel, source: gl.hasAttribute("data-rail") ? "rail" : gl.dataset.stepNav ? `panel_${gl.dataset.stepNav}` : "level_card" });
+        gotoLevel(gl.dataset.gotoLevel, fromTest ? "test" : ""); return;
       }
       const card = e.target.closest("[data-card]");
       if (card) { openCard(card.dataset.card); return; }
@@ -1805,7 +1854,7 @@
     try { await load(); } catch (err) { fail(err); return; }
     renderGrowth();
     renderContrib();
-    renderShelf(); renderWeek();
+    renderShelf(); renderWeek(); watchRail(); revealSections();
     document.addEventListener("hub:stamp", onStamp);
     syncStageStamps();
     const header = $(".site-header");
