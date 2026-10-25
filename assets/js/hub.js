@@ -370,17 +370,26 @@
     const spec = r.format || book ? `<span class="ep-spec">${r.format ? `<span><b>구성</b>${esc(r.format)}</span>` : ""}${book ? `<span><b>교재</b>${esc(book.shortTitle || book.title)}</span>` : ""}</span>` : "";
     const tryUrl = r.preview || (r.previewLabel ? r.site : "");
     const tryLink = tryUrl ? `<a class="ep-try" href="${esc(tryUrl)}" target="_blank" rel="noopener" data-event="try_course" data-event-params='${esc(JSON.stringify({ repo: id }))}'>${esc(r.previewLabel || "맛보기")}<span aria-hidden="true"> ›</span></a>` : "";
-    return `<li class="ep${step ? " on" : ""}${r.kind ? ` ${r.kind}` : ""}${tryLink ? " has-try" : ""}" data-line="${line}" data-id="${esc(id)}" data-level="${level}"${step ? ` data-chap="${esc(id)}"` : ""}>
+    const done = state.ridden.has(id);
+    const clearBtn = rideable(r) ? `<button type="button" class="ep-clear" data-clear="${esc(id)}" aria-pressed="${done}">${done ? "✓ 클리어" : "클리어 표시"}</button>` : "";
+    const acts = tryLink || clearBtn ? `<div class="ep-acts">${tryLink}${clearBtn}</div>` : "";
+    return `<li class="ep${step ? " on" : ""}${r.kind ? ` ${r.kind}` : ""}${done ? " cleared" : ""}" data-line="${line}" data-id="${esc(id)}" data-level="${level}"${step ? ` data-chap="${esc(id)}"` : ""}>
       <button type="button" data-open="${esc(id)}" aria-label="${step ? `${step}번째, ` : ""}${esc(r.title)}${lv ? `, ${lv.id} ${esc(lv.name)}` : ""}">
-        <span class="ep-top">${step ? `<span class="ep-step">${pad2(step)}</span>` : ""}<span class="ep-track"><i aria-hidden="true"></i>${step && lv ? `${lv.id} · ` : ""}${tracks || (r.kind === "paid" ? "도서·강의" : "")}</span><span class="ep-badges">${badges}</span></span>
+        <span class="ep-top">${step ? `<span class="ep-step">${pad2(step)}</span>` : `<span class="ep-q">퀘스트 ${pad2(k + 1)}</span>`}<span class="ep-track"><i aria-hidden="true"></i>${step && lv ? `${lv.id} · ` : ""}${tracks || (r.kind === "paid" ? "도서·강의" : "")}</span><span class="ep-badges">${badges}</span></span>
         <span class="ep-main">${r.cover ? `<img class="ep-thumb" src="${esc(r.cover)}" alt="" loading="lazy">` : ""}<span><h4>${esc(r.title)}</h4><span class="sum">${esc(r.summary)}</span>${tags}</span></span>
         ${spec}
-        <span class="ep-foot">${people}<span class="ep-end">${r.kind ? "" : `<span class="star">${icons.star}${fmt(r.stars || 0)}</span>`}${state.ridden.has(id) ? `<span class="ep-done" aria-label="학습 완료">✓ 완료</span>` : ""}</span></span>
+        <span class="ep-foot">${people}<span class="ep-end">${r.kind ? "" : `<span class="star">${icons.star}${fmt(r.stars || 0)}</span>`}</span></span>
       </button>
-      ${tryLink}
+      ${acts}
     </li>`;
   }
 
+  /* what clearing a stage gives: a finish card to save and share */
+  function stageGoalHTML(lv) {
+    const quests = questsOf(lv.id), done = quests.filter((r) => state.ridden.has(r.repo)).length;
+    if (levelDone(lv.id)) return `<div class="stage-goal clear"><b class="sg-badge">STAGE CLEAR</b><span>${esc(lv.tier || lv.name)} 퀘스트 ${quests.length}개를 모두 마쳤습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>`;
+    return `<div class="stage-goal"><b class="sg-badge">클리어 보상</b><span>${esc(lv.tier || lv.name)} 완주 카드</span><span class="sg-n" aria-label="퀘스트 ${quests.length}개 중 ${done}개 클리어">${done} / ${quests.length}</span></div>`;
+  }
   /* the Builders behind a level, each one a link to their page */
   function levelCrewHTML(courses) {
     const names = [...new Set(courses.flatMap((r) => r.builders || []))];
@@ -405,22 +414,44 @@
     }).join("")}</ul></div>`;
   }
 
+  /* quests are the free materials of a stage (and the outside library on L4); the book and lecture are not quests */
+  const questsOf = (levelId) => levelItems(levelId).filter(rideable);
+  /* the stage to go to next: the first one that is not cleared */
+  const hereStage = () => (state.levels.find((lv) => !levelDone(lv.id)) || state.levels[state.levels.length - 1]).id;
+  function renderHud() {
+    const box = $("#quest-hud");
+    if (!box) return;
+    const all = state.levels.flatMap((lv) => questsOf(lv.id));
+    const done = all.filter((r) => state.ridden.has(r.repo)).length;
+    const badges = state.levels.filter((lv) => levelDone(lv.id)).length;
+    const pct = all.length ? Math.round((done / all.length) * 100) : 0;
+    box.innerHTML = `<span class="qh-k">내 로드맵</span>
+      <span class="qh-bar" role="img" aria-label="퀘스트 ${done}/${all.length} 클리어"><i style="width:${pct}%"></i></span>
+      <span class="qh-n">퀘스트 <b>${done}</b> / ${all.length}</span><span class="qh-n">배지 <b>${badges}</b> / ${state.levels.length}</span>`;
+  }
   function renderPath() {
     const box = $("#path");
     if (!box) return;
     const route = currentRoute();
     const onRoute = route ? new Set(route.stops.map((id) => (state.repos.get(id) || {}).level)) : null;
+    const here = hereStage();
     box.innerHTML = state.levels.map((lv) => {
-      const items = levelItems(lv.id), free = items.filter((r) => !r.kind).length, books = items.filter((r) => r.kind === "paid").length;
-      const makers = [...new Set(items.flatMap((r) => r.builders || []))];
-      const done = items.filter((r) => state.ridden.has(r.repo)).length;
+      const quests = questsOf(lv.id), books = levelItems(lv.id).filter((r) => r.kind === "paid").length;
+      const makers = [...new Set(quests.flatMap((r) => r.builders || []))];
+      const done = quests.filter((r) => state.ridden.has(r.repo)).length;
+      const cleared = levelDone(lv.id);
       const on = route ? onRoute.has(lv.id) : state.level === lv.id;
-      return `<li class="step${lv.layer === "build" ? " build" : ""}"><button type="button" data-step="${lv.id}" aria-pressed="${on}">
-        <span class="st-id">${lv.id}</span><span class="st-name">${esc(lv.tier || lv.name)}</span><span class="st-en">${esc(lv.name)}</span><span class="st-q">${esc(lv.question)}</span>
-        <span class="st-meta">자료 ${free}개${books ? ` · 교재 ${books}` : ""}${done ? ` · 완료 ${done}` : ""}</span>
+      const pct = quests.length ? Math.round((done / quests.length) * 100) : 0;
+      const cls = ["step", lv.layer === "build" ? "build" : "", cleared ? "cleared" : "", lv.id === here ? "here" : ""].filter(Boolean).join(" ");
+      return `<li class="${cls}"><button type="button" data-step="${lv.id}" aria-pressed="${on}" aria-label="${esc(`${lv.id} ${lv.tier || lv.name}, 퀘스트 ${quests.length}개 중 ${done}개 클리어${lv.id === here ? ", 지금 여기" : ""}`)}">
+        ${lv.id === here ? `<span class="st-pin" aria-hidden="true">지금 여기</span>` : ""}
+        <span class="st-node" style="--p:${pct}" aria-hidden="true"><span class="st-id">${cleared ? "★" : lv.id}</span></span>
+        <span class="st-name">${esc(lv.tier || lv.name)}</span><span class="st-q">${esc(lv.question)}</span>
+        <span class="st-meta">${cleared ? `<b class="st-clear">CLEAR</b>` : `퀘스트 ${quests.length}${done ? ` · 클리어 ${done}` : ""}`}${books ? ` · 교재 ${books}` : ""}</span>
         ${makers.length ? `<span class="st-makers">${makers.slice(0, 4).map((n) => avatarHTML(n, "sm")).join("")}</span>` : ""}</button></li>`;
     }).join("");
     wireAvatars(box);
+    renderHud();
   }
   function renderShelf() {
     const top = topRepos();
@@ -440,12 +471,12 @@
       shelf.innerHTML = `<li class="lv${lv.layer === "build" ? " build" : ""}" data-chap="${lv.id}">
           <div class="lv-head">
             <span class="lv-id">${lv.id}</span>
-            <div class="lv-t"><h3>${esc(lv.tier || lv.name)}<span>${esc(lv.question)}</span></h3><p>${esc(lv.goal)}</p>${lv.for ? `<p class="lv-for"><b>이런 분께</b>${esc(lv.for)}</p>` : ""}</div>
+            <div class="lv-t"><p class="lv-kick">STAGE ${i + 1} · ${esc(lv.name)}</p><h3>${esc(lv.tier || lv.name)}<span>${esc(lv.question)}</span></h3><p>${esc(lv.goal)}</p>${lv.for ? `<p class="lv-for"><b>이런 분께</b>${esc(lv.for)}</p>` : ""}</div>
             ${levelCrewHTML(courses)}
           </div>
           <ol class="lv-items">${courses.map((r, k) => episodeHTML(r, lv.id, k, top)).join("")}</ol>
           ${books.length ? textbookHTML(books, courses) : ""}
-          ${next ? `<button type="button" class="lv-next" data-step="${next.id}">다음 단계 · ${next.id} ${esc(next.tier || next.name)} ›</button>` : ""}
+          <div class="lv-foot">${stageGoalHTML(lv)}${next ? `<button type="button" class="lv-next" data-step="${next.id}">다음 스테이지 · ${next.id} ${esc(next.tier || next.name)} ›</button>` : ""}</div>
         </li>`;
       $("#route-note").textContent = "";
     }
@@ -454,11 +485,9 @@
 
     const repos = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot");
     const depot = [...state.repos.values()].filter((r) => r.status === "depot");
-    const learnable = repos.filter((r) => (r.lines || []).length);
-    const done = learnable.filter((r) => state.ridden.has(r.repo)).length;
-    $("#curriculum-sub").textContent = `인과추론을 어디서 시작해 어디까지 가면 되는지, 팀이 만든 레포 ${repos.length}개를 다섯 단계로 엮었습니다. L0–L2는 무료 자료만으로도 끝까지 갈 수 있습니다.`;
+    $("#curriculum-sub").textContent = `인과추론을 어디서 시작해 어디까지 가면 되는지, 팀이 만든 레포 ${repos.length}개를 다섯 스테이지의 로드맵으로 엮었습니다. L0–L2는 무료 자료만으로도 끝까지 갈 수 있습니다.`;
     $("#n-course").textContent = repos.length; $("#n-course").title = `레포 ${repos.length}개`;
-    $("#shelf-foot").innerHTML = `${done ? `<span class="done-n">학습 완료 ${done} / ${learnable.length}</span> ` : ""}카드를 누르면 자세한 정보와 링크가 열립니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
+    $("#shelf-foot").innerHTML = `카드를 누르면 자세한 정보와 링크가 열립니다. 클리어 기록은 이 브라우저에만 남습니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
   }
 
   function scrollShelfTo(el, smooth = true) {
@@ -724,11 +753,10 @@
     if (!box) return;
     const list = learnables();
     const recent = state.recent.map((x) => state.repos.get(x.id)).filter(Boolean).slice(0, 3);
-    const done = list.filter((r) => state.ridden.has(r.repo)).length;
     const finished = state.levels.filter((l) => levelDone(l.id));
     const cardChip = finished.length ? `<button type="button" class="cont-chip card" data-card="${finished[finished.length - 1].id}">${finished[finished.length - 1].id} 완주 카드</button>` : "";
     box.innerHTML = recent.length ? `<div class="continue"><span class="cont-label">이어서 보기</span>${recent.map((r) => `<button type="button" class="cont-chip" data-line="${primaryLine(r)}" data-open="${esc(r.repo)}"><i aria-hidden="true"></i>${esc(r.title)}</button>`).join("")}
-      ${cardChip}<span class="cont-progress">학습 완료 <b>${done}</b> / ${list.length}<span class="bar" aria-hidden="true"><i style="width:${Math.round((done / list.length) * 100)}%"></i></span></span></div>` : "";
+      ${cardChip}</div>` : "";
   }
 
 
@@ -1193,7 +1221,7 @@
     c.fillText("Causal Inference Hub · 가짜연구소 인과추론팀", 80, 110);
     c.fillStyle = "#fff"; c.font = font(800, 92);
     c.fillText(`${lv.id} 완주`, 80, 236);
-    c.font = font(700, 44); c.fillText(lv.name, 80, 300);
+    c.font = font(700, 44); c.fillText(lv.tier ? `${lv.tier} · ${lv.name}` : lv.name, 80, 300);
     c.fillStyle = "rgba(255,255,255,.86)"; c.font = font(500, 30);
     c.fillText(items.length === 1 ? `“${lv.question}”에 답하는 자료를 마쳤습니다.` : `“${lv.question}”에 답하는 자료 ${items.length}개를 모두 마쳤습니다.`, 80, 362);
     c.font = font(500, 26); c.fillStyle = "rgba(255,255,255,.78)";
@@ -1380,8 +1408,8 @@
         ${rows ? `<dl>${rows}</dl>` : ""}
         <div class="links">${links}${r.kind === "paid" ? `<button type="button" class="btn ghost" data-goto="${esc(r.repo)}">커리큘럼에서 위치 보기</button>` : ""}</div>
         ${adjacent}
-        ${canRide ? `<button type="button" class="ride" aria-pressed="${ridden}" data-ride="${esc(r.repo)}">${ridden ? "학습 완료" : "학습 완료로 표시"}</button>` : ""}
-        ${ridden && lv && levelDone(lv.id) ? `<div class="done-banner"><span><b>${lv.id} ${esc(lv.name)}</b> 자료를 모두 마쳤습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>` : ""}
+        ${canRide ? `<button type="button" class="ride" aria-pressed="${ridden}" data-ride="${esc(r.repo)}">${ridden ? "✓ 클리어" : "클리어 표시"}</button>` : ""}
+        ${ridden && lv && levelDone(lv.id) ? `<div class="done-banner"><span><b>STAGE CLEAR · ${lv.id} ${esc(lv.tier || lv.name)}</b> 퀘스트를 모두 마쳤습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>` : ""}
       </div>`;
     const d = dialog();
     if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
@@ -1420,6 +1448,22 @@
     if (lv) dialog().addEventListener("close", () => gotoItem(id), { once: true });
   }
 
+  function toggleClear(id) {
+    const was = state.level, stageWas = state.repos.get(id) && state.repos.get(id).level;
+    const before = stageWas ? levelDone(stageWas) : false;
+    if (state.ridden.has(id)) state.ridden.delete(id); else state.ridden.add(id);
+    track("mark_done", { repo: id, level: stageWas || "", done: state.ridden.has(id), source: "card" });
+    saveRidden();
+    renderMap(); renderShelf(true); renderWeek();
+    state.level = was;
+    const btn = $(`#shelf [data-clear="${CSS.escape(id)}"]`);
+    if (btn) btn.focus();
+    if (stageWas && !before && levelDone(stageWas)) {
+      track("stage_clear", { level: stageWas });
+      const goal = $("#shelf .stage-goal.clear");
+      if (goal) { goal.classList.add("pop"); goal.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" }); }
+    }
+  }
   function toggleRide(id) {
     if (state.ridden.has(id)) state.ridden.delete(id); else state.ridden.add(id);
     const rr = state.repos.get(id);
@@ -1473,6 +1517,8 @@
       if (mc) { openMedalCard(mc.dataset.medalCard); return; }
       const dl = e.target.closest("[data-card-save]");
       if (dl) { saveCard(dl.dataset.cardSave); return; }
+      const clr = e.target.closest("[data-clear]");
+      if (clr) { toggleClear(clr.dataset.clear); return; }
       const ride = e.target.closest("[data-ride]");
       if (ride) { toggleRide(ride.dataset.ride); return; }
       if (e.target.closest("[data-close]")) { closeStation(); return; }
