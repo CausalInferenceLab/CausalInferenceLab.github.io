@@ -15,7 +15,15 @@
       12
     ],
     "site": "https://causalinferencelab.github.io/causal-studio",
-    "stars": 15
+    "stars": 15,
+    "format": "영상 + 실행 노트북 (한·영)",
+    "tags": [
+      "영상으로 먼저",
+      "Colab에서 바로 실행",
+      "상관과 인과"
+    ],
+    "preview": "https://www.youtube.com/@CausalStudio",
+    "previewLabel": "영상 보기"
   },
   {
     "repo": "Causal-Inference-with-Python",
@@ -38,7 +46,15 @@
       6
     ],
     "site": "https://causalinferencelab.github.io/Causal-Inference-with-Python/",
-    "stars": 482
+    "stars": 482,
+    "format": "웹북 25장 + 부록 5편",
+    "tags": [
+      "잠재적 결과부터",
+      "성향점수·이중차분",
+      "용어집 포함"
+    ],
+    "preview": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html",
+    "previewLabel": "1장 읽기"
   },
   {
     "repo": "OCE-Materials",
@@ -55,7 +71,13 @@
     "cohorts": [
       8
     ],
-    "stars": 55
+    "stars": 55,
+    "format": "스터디 16회 · 발표 자료",
+    "tags": [
+      "A/B 테스트",
+      "지표와 OEC",
+      "SRM·간섭"
+    ]
   },
   {
     "repo": "causal-inference-in-python-code",
@@ -68,7 +90,14 @@
     "status": "stable",
     "builders": [],
     "cohorts": [],
-    "stars": 58
+    "stars": 58,
+    "format": "책 장별 예제 코드 + 참고 논문",
+    "tags": [
+      "책 예제 코드",
+      "장별 참고 자료",
+      "데이터 포함"
+    ],
+    "textbook": "paid-book"
   },
   {
     "repo": "Smart_Causal_Inference",
@@ -86,7 +115,15 @@
       8
     ],
     "site": "https://causalinferencelab.github.io/Smart_Causal_Inference/intro.html",
-    "stars": 14
+    "stars": 14,
+    "format": "Jupyter Book · 스터디 정리 16회",
+    "tags": [
+      "장별 정리",
+      "발표 자료",
+      "함께 읽기"
+    ],
+    "textbook": "paid-book",
+    "previewLabel": "정리 노트 보기"
   },
   {
     "repo": "causal-inference-practice",
@@ -103,7 +140,15 @@
     "cohorts": [
       8
     ],
-    "stars": 42
+    "stars": 42,
+    "format": "14주 프로젝트 · 기법별 산업 사례",
+    "tags": [
+      "Industry Case",
+      "RCT부터 RDD까지",
+      "실무 템플릿"
+    ],
+    "preview": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week01_OT.pdf",
+    "previewLabel": "OT 자료"
   },
   {
     "repo": "causal-inference-with-causalML",
@@ -120,7 +165,14 @@
     "cohorts": [
       10
     ],
-    "stars": 27
+    "stars": 27,
+    "format": "책 이론을 causalml 코드로 복습",
+    "tags": [
+      "uber/causalml",
+      "메타러너",
+      "이론에서 코드로"
+    ],
+    "textbook": "paid-book"
   },
   {
     "repo": "awesome-causal-inference-python",
@@ -137,7 +189,13 @@
     "cohorts": [
       11
     ],
-    "stars": 9
+    "stars": 9,
+    "format": "주제별 파이썬 코드 · 주간 PR 리뷰",
+    "tags": [
+      "바로 쓰는 코드",
+      "짧고 정확하게",
+      "PR 리뷰"
+    ]
   },
   {
     "repo": "Experimentation-platform-materials",
@@ -150,7 +208,13 @@
     "status": "stable",
     "builders": [],
     "cohorts": [],
-    "stars": 42
+    "stars": 42,
+    "format": "국내외 실험 플랫폼 구축 사례 모음",
+    "tags": [
+      "실험 플랫폼",
+      "빅테크 블로그",
+      "국내 사례"
+    ]
   },
   {
     "repo": "causal-inference-lecture",
@@ -167,7 +231,16 @@
     "cohorts": [
       8
     ],
-    "stars": 47
+    "stars": 47,
+    "format": "책 장별 현업 특강 · YouTube",
+    "tags": [
+      "현업 연사",
+      "장별 특강",
+      "무료 영상"
+    ],
+    "textbook": "paid-book",
+    "preview": "https://www.youtube.com/playlist?list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+    "previewLabel": "특강 보기"
   },
   {
     "repo": "Marketing_Science",
@@ -184,7 +257,13 @@
     "cohorts": [
       10
     ],
-    "stars": 21
+    "stars": 21,
+    "format": "주간 스터디 · 마케팅 데이터 분석",
+    "tags": [
+      "마케팅 성과 측정",
+      "베이지안",
+      "인과를 곁들인 분석"
+    ]
   },
   {
     "repo": "data-still-does-not-speak",
@@ -200,7 +279,15 @@
       13
     ],
     "site": "https://pseudo-lab.com/projects/25cd8f79-6911-4ed9-baf0-446b90e62c26?tab=home",
-    "stars": 3
+    "stars": 3,
+    "format": "14주 · 정규 모임 12회 + 매지컬 위크 2회",
+    "tags": [
+      "행동 데이터 분석",
+      "코드 재현",
+      "동료 리뷰"
+    ],
+    "preview": "https://causalinferencelab.github.io/data-still-does-not-speak/",
+    "previewLabel": "발표 자료 보기"
   },
   {
     "repo": "Lang2SQL",
@@ -220,7 +307,13 @@
       11,
       12
     ],
-    "stars": 141
+    "stars": 141,
+    "format": "오픈소스 데이터 에이전트",
+    "tags": [
+      "Text-to-SQL",
+      "데이터 에이전트",
+      "함께 개발"
+    ]
   },
   {
     "repo": "policy-effect-analytics-agent",
@@ -236,7 +329,15 @@
       "신진수"
     ],
     "cohorts": [],
-    "stars": 7
+    "stars": 7,
+    "format": "공공데이터 40종 · 정책 주제 8개",
+    "tags": [
+      "정책 효과",
+      "공공데이터",
+      "분석 계획 먼저 공개"
+    ],
+    "preview": "https://causalinferencelab.github.io/policy-effect-analytics-agent/",
+    "previewLabel": "사이트 열기"
   },
   {
     "repo": "Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines",
@@ -254,7 +355,14 @@
       9
     ],
     "site": "https://causalinferencelab.github.io/Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines/intro.html",
-    "stars": 10
+    "stars": 10,
+    "format": "규제 가이드라인 리딩 · Jupyter Book",
+    "tags": [
+      "Real-World Evidence",
+      "FDA·EMA·식약처",
+      "가이드라인 리뷰"
+    ],
+    "previewLabel": "정리 노트 보기"
   },
   {
     "repo": "From-Fixed-to-Flexible-Your-Guide-to-Adaptive-Designs-and-Master-Protocols",
@@ -271,7 +379,13 @@
     "cohorts": [
       9
     ],
-    "stars": 21
+    "stars": 21,
+    "format": "적응형 임상 설계 스터디",
+    "tags": [
+      "Adaptive Design",
+      "Master Protocol",
+      "종양학 임상"
+    ]
   },
   {
     "repo": "ccwr",
@@ -289,7 +403,14 @@
       12
     ],
     "site": "https://causalinferencelab.github.io/ccwr/",
-    "stars": 3
+    "stars": 3,
+    "format": "R 패키지 · target trial emulation",
+    "tags": [
+      "R 패키지",
+      "Clone-Censor-Weight",
+      "재현 가능한 분석"
+    ],
+    "previewLabel": "문서 보기"
   },
   {
     "repo": "CausalInferenceLab.github.io",

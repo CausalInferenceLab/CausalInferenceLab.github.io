@@ -1489,3 +1489,43 @@ button.btn.sm { font-size: 14px; }
 .ev-bar { display: block; width: 90px; height: 5px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
 .ev-bar i { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
 .ev-num { white-space: nowrap; }
+
+/* ---------- curriculum as courses: tier names, who it is for, the Builders, a first look, the textbook ---------- */
+.st-en { font-size: 12px; color: var(--muted); letter-spacing: .02em; }
+.step button[aria-pressed="true"] .st-en { color: rgba(255, 255, 255, .7); }
+.lv-for { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; font-size: 14.5px; color: var(--ink); margin-top: 6px; }
+.lv-for b { font-size: 12px; font-weight: 800; color: var(--accent); background: color-mix(in srgb, var(--accent) 11%, var(--surface)); padding: 2px 9px; border-radius: 999px; }
+.lv-crew { grid-column: 1 / -1; margin-top: 8px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
+@media (min-width: 1080px) {
+  .lv .lv-head { grid-template-columns: auto minmax(0, 1fr) minmax(0, 40%); }
+  .lv-crew { grid-column: auto; margin-top: 2px; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .lv-crew ul { justify-content: flex-end; }
+}
+.lv-crew .k { font-size: 13px; font-weight: 700; color: var(--muted); }
+.lv-crew ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.lv-crew a, .lv-crew li > span { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px 4px 4px; border-radius: 999px; background: var(--surface-2); color: var(--ink); font-size: 14px; font-weight: 700; text-decoration: none; }
+.lv-crew a:hover { background: color-mix(in srgb, var(--accent) 10%, var(--surface-2)); }
+.lv-crew a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.lv-crew .avatar.sm { width: 28px; height: 28px; font-size: 12px; }
+.lv-crew .mini-medal { display: inline-flex; }
+.ep-tags { display: flex; flex-wrap: wrap; gap: 2px 10px; margin-top: 8px; font-size: 12.5px; font-weight: 700; color: color-mix(in srgb, var(--c) 72%, var(--ink)); }
+.ep-spec { display: flex; flex-direction: column; gap: 3px; font-size: 13.5px; color: var(--ink); }
+.ep-spec b { display: inline-block; min-width: 2.6em; margin-right: 8px; font-size: 12px; font-weight: 700; color: var(--muted); }
+#shelf .ep.has-try { position: relative; }
+#shelf .ep.has-try > button { padding-bottom: 58px; }
+.ep-try { position: absolute; left: 18px; bottom: 14px; display: inline-flex; align-items: center; padding: 5px 13px; border-radius: 999px; background: var(--surface); border: 1px solid var(--rule); color: var(--accent); font-size: 13.5px; font-weight: 700; text-decoration: none; }
+.ep-try:hover { border-color: var(--accent); }
+.ep-try:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.lv-text { margin-top: 18px; padding: 16px 18px; border-radius: 16px; border: 1.5px dashed color-mix(in srgb, var(--l-main) 45%, var(--rule)); }
+.lv-text .k { margin: 0 0 12px; font-size: 13px; font-weight: 800; color: color-mix(in srgb, var(--l-main) 75%, var(--ink)); }
+.lv-text ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 14px 20px; }
+#shelf .tb { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 14px; align-items: start; border-radius: 12px; }
+.tb-cover { grid-row: span 2; object-fit: cover; }
+.tb-cover.book { width: 52px; height: 68px; border-radius: 4px; box-shadow: 0 3px 8px rgba(20, 22, 43, .18); }
+.tb-cover.wide { width: 88px; height: 56px; border-radius: 8px; }
+.tb-t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tb-type { font-size: 12px; font-weight: 700; color: var(--muted); }
+.tb-t b { font-size: 15.5px; line-height: 1.4; }
+.tb-c { font-size: 13px; color: var(--muted); }
+.tb-go { display: flex; flex-wrap: wrap; gap: 6px; }
+#shelf .tb.picked { box-shadow: 0 0 0 3px var(--l-main); }

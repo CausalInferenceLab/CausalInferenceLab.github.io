@@ -360,17 +360,49 @@
     ].join("");
     const who = r.builders || [];
     const maker = (n) => { const p = (state.people || []).find((x) => x.name === n); return `${avatarHTML(n, "sm")}<span class="nm">${esc(n)}${p ? `<span class="mini-medal" title="${esc(tierOf(p).name)}">${tierMedal(p, 12)}</span>` : ""}</span>`; };
-    const people = who.length ? `<span class="who"><span class="k">만든 사람</span>${who.slice(0, 2).map(maker).join("")}${who.length > 2 ? `<span class="nm">외 ${who.length - 2}명</span>` : ""}</span>`
+    const people = who.length ? `<span class="who"><span class="k">Builder</span>${who.slice(0, 2).map(maker).join("")}${who.length > 2 ? `<span class="nm">외 ${who.length - 2}명</span>` : ""}</span>`
       : `<span class="who"><span class="k">${r.kind === "paid" ? "출판" : r.kind === "external" ? "커뮤니티" : "만든 사람"}</span><span class="nm">${r.kind === "paid" ? "한빛미디어" : r.kind === "external" ? "PyWhy · CausalML" : "팀 공동"}</span></span>`;
     const tracks = (r.lines || []).map((l) => esc(state.lines.get(l).name)).join(" · ");
     const lv = state.levels.find((x) => x.id === level);
-    return `<li class="ep${step ? " on" : ""}${r.kind ? ` ${r.kind}` : ""}" data-line="${line}" data-id="${esc(id)}" data-level="${level}"${step ? ` data-chap="${esc(id)}"` : ""}>
+    /* what a course says about itself: three tags, what it is made of, the book it follows, and a first look */
+    const tags = (r.tags || []).length ? `<span class="ep-tags">${r.tags.map((t) => `<span>#${esc(t)}</span>`).join("")}</span>` : "";
+    const book = r.textbook ? state.repos.get(r.textbook) : null;
+    const spec = r.format || book ? `<span class="ep-spec">${r.format ? `<span><b>구성</b>${esc(r.format)}</span>` : ""}${book ? `<span><b>교재</b>${esc(book.shortTitle || book.title)}</span>` : ""}</span>` : "";
+    const tryUrl = r.preview || (r.previewLabel ? r.site : "");
+    const tryLink = tryUrl ? `<a class="ep-try" href="${esc(tryUrl)}" target="_blank" rel="noopener" data-event="try_course" data-event-params='${esc(JSON.stringify({ repo: id }))}'>${esc(r.previewLabel || "맛보기")}<span aria-hidden="true"> ›</span></a>` : "";
+    return `<li class="ep${step ? " on" : ""}${r.kind ? ` ${r.kind}` : ""}${tryLink ? " has-try" : ""}" data-line="${line}" data-id="${esc(id)}" data-level="${level}"${step ? ` data-chap="${esc(id)}"` : ""}>
       <button type="button" data-open="${esc(id)}" aria-label="${step ? `${step}번째, ` : ""}${esc(r.title)}${lv ? `, ${lv.id} ${esc(lv.name)}` : ""}">
         <span class="ep-top">${step ? `<span class="ep-step">${pad2(step)}</span>` : ""}<span class="ep-track"><i aria-hidden="true"></i>${step && lv ? `${lv.id} · ` : ""}${tracks || (r.kind === "paid" ? "도서·강의" : "")}</span><span class="ep-badges">${badges}</span></span>
-        <span class="ep-main">${r.cover ? `<img class="ep-thumb" src="${esc(r.cover)}" alt="" loading="lazy">` : ""}<span><h4>${esc(r.title)}</h4><span class="sum">${esc(r.summary)}</span></span></span>
+        <span class="ep-main">${r.cover ? `<img class="ep-thumb" src="${esc(r.cover)}" alt="" loading="lazy">` : ""}<span><h4>${esc(r.title)}</h4><span class="sum">${esc(r.summary)}</span>${tags}</span></span>
+        ${spec}
         <span class="ep-foot">${people}<span class="ep-end">${r.kind ? "" : `<span class="star">${icons.star}${fmt(r.stars || 0)}</span>`}${state.ridden.has(id) ? `<span class="ep-done" aria-label="학습 완료">✓ 완료</span>` : ""}</span></span>
       </button>
+      ${tryLink}
     </li>`;
+  }
+
+  /* the Builders behind a level, each one a link to their page */
+  function levelCrewHTML(courses) {
+    const names = [...new Set(courses.flatMap((r) => r.builders || []))];
+    if (!names.length) return "";
+    const one = (n) => {
+      const b = builderInfo(n), p = (state.people || []).find((x) => x.name === n);
+      const inner = `${avatarHTML(n, "sm")}<span class="nm">${esc(n)}</span>${p ? `<span class="mini-medal" title="${esc(tierOf(p).name)}">${tierMedal(p, 14)}</span>` : ""}`;
+      return `<li>${b.slug ? `<a href="builders/${esc(b.slug)}.html" data-event="open_builder" data-event-params='${esc(JSON.stringify({ builder: b.slug, source: "curriculum" }))}'>${inner}</a>` : `<span>${inner}</span>`}</li>`;
+    };
+    return `<div class="lv-crew"><span class="k">이 단계를 만든 Builder</span><ul>${names.map(one).join("")}</ul></div>`;
+  }
+  /* the book and the lecture sit beside the courses that follow them, not among them */
+  function textbookHTML(books, courses) {
+    return `<div class="lv-text"><p class="k">함께 보는 교재</p><ul>${books.map((b) => {
+      const out = (b.links || [])[0];
+      const follows = courses.filter((r) => r.textbook === b.repo).length;
+      return `<li class="ep paid tb" data-id="${esc(b.repo)}" data-line="main">
+        ${b.cover ? `<img class="tb-cover ${b.type === "도서" ? "book" : "wide"}" src="${esc(b.cover)}" alt="" loading="lazy">` : ""}
+        <div class="tb-t"><span class="tb-type">${esc(b.type || "")}${b.meta ? ` · ${esc(b.meta)}` : ""}</span><b>${esc(b.title)}</b><span class="tb-c">${follows ? `이 단계 자료 ${follows}개가 이 책을 따라갑니다` : esc(b.credit || "")}</span></div>
+        <div class="tb-go">${out ? `<a class="btn sm" href="${esc(out.url)}" target="_blank" rel="noopener" data-event="click_partner" data-event-params='${esc(JSON.stringify({ item: b.repo, action: "out", placement: "curriculum" }))}'>${esc(out.label)}</a>` : ""}<button type="button" class="btn ghost sm" data-open="${esc(b.repo)}">자세히</button></div>
+      </li>`;
+    }).join("")}</ul></div>`;
   }
 
   function renderPath() {
@@ -379,13 +411,13 @@
     const route = currentRoute();
     const onRoute = route ? new Set(route.stops.map((id) => (state.repos.get(id) || {}).level)) : null;
     box.innerHTML = state.levels.map((lv) => {
-      const items = levelItems(lv.id), free = items.filter((r) => !r.kind).length;
+      const items = levelItems(lv.id), free = items.filter((r) => !r.kind).length, books = items.filter((r) => r.kind === "paid").length;
       const makers = [...new Set(items.flatMap((r) => r.builders || []))];
       const done = items.filter((r) => state.ridden.has(r.repo)).length;
       const on = route ? onRoute.has(lv.id) : state.level === lv.id;
       return `<li class="step${lv.layer === "build" ? " build" : ""}"><button type="button" data-step="${lv.id}" aria-pressed="${on}">
-        <span class="st-id">${lv.id}</span><span class="st-name">${esc(lv.name)}</span><span class="st-q">${esc(lv.question)}</span>
-        <span class="st-meta">자료 ${free}개${items.length > free ? " · 책·강의" : ""}${done ? ` · 완료 ${done}` : ""}</span>
+        <span class="st-id">${lv.id}</span><span class="st-name">${esc(lv.tier || lv.name)}</span><span class="st-en">${esc(lv.name)}</span><span class="st-q">${esc(lv.question)}</span>
+        <span class="st-meta">자료 ${free}개${books ? ` · 교재 ${books}` : ""}${done ? ` · 완료 ${done}` : ""}</span>
         ${makers.length ? `<span class="st-makers">${makers.slice(0, 4).map((n) => avatarHTML(n, "sm")).join("")}</span>` : ""}</button></li>`;
     }).join("");
     wireAvatars(box);
@@ -403,14 +435,17 @@
     } else {
       const lv = state.levels.find((x) => x.id === state.level) || state.levels[0];
       const items = levelItems(lv.id);
+      const courses = items.filter((r) => r.kind !== "paid"), books = items.filter((r) => r.kind === "paid");
       const i = state.levels.indexOf(lv), next = state.levels[i + 1];
       shelf.innerHTML = `<li class="lv${lv.layer === "build" ? " build" : ""}" data-chap="${lv.id}">
           <div class="lv-head">
             <span class="lv-id">${lv.id}</span>
-            <div class="lv-t"><h3>${esc(lv.name)}<span>${esc(lv.question)}</span></h3><p>${esc(lv.goal)}</p></div>
+            <div class="lv-t"><h3>${esc(lv.tier || lv.name)}<span>${esc(lv.question)}</span></h3><p>${esc(lv.goal)}</p>${lv.for ? `<p class="lv-for"><b>이런 분께</b>${esc(lv.for)}</p>` : ""}</div>
+            ${levelCrewHTML(courses)}
           </div>
-          <ol class="lv-items">${items.map((r, k) => episodeHTML(r, lv.id, k, top)).join("")}</ol>
-          ${next ? `<button type="button" class="lv-next" data-step="${next.id}">다음 단계 · ${next.id} ${esc(next.name)} ›</button>` : ""}
+          <ol class="lv-items">${courses.map((r, k) => episodeHTML(r, lv.id, k, top)).join("")}</ol>
+          ${books.length ? textbookHTML(books, courses) : ""}
+          ${next ? `<button type="button" class="lv-next" data-step="${next.id}">다음 단계 · ${next.id} ${esc(next.tier || next.name)} ›</button>` : ""}
         </li>`;
       $("#route-note").textContent = "";
     }
