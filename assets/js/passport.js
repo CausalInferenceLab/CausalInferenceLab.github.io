@@ -7,8 +7,11 @@
   const REPO = "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io";
   /* auto: the hub sees it happen. self: done outside the hub (GitHub, an event, a store),
      so the visitor ticks it after doing it. */
-  const GROUPS = [["learn", "배우기"], ["together", "함께하기"], ["build", "기여하기"]];
+  const GROUPS = [["roadmap", "로드맵"], ["learn", "배우기"], ["together", "함께하기"], ["build", "기여하기"]];
+  /* one stamp per roadmap stage: the hub gives it when every quest in the stage is cleared */
+  const STAGES = [["L0", "입", "입문"], ["L1", "개", "개념 완성"], ["L2", "실", "실전 적용"], ["L3", "도", "도구 개발"], ["L4", "연", "연구"]];
   const STAMPS = [
+    ...STAGES.map(([id, mark, name]) => ({ id: `stage_${id}`, group: "roadmap", kind: "auto", mark, name: `${name} 클리어`, how: `로드맵 ${id} ${name} 스테이지의 퀘스트를 모두 클리어하세요.`, href: "/#curriculum" })),
     { id: "first_open", group: "learn", kind: "auto", mark: "첫", name: "첫 걸음", how: "커리큘럼에서 자료 하나를 열어 보세요.", href: "/#curriculum" },
     { id: "post", group: "learn", kind: "auto", mark: "글", name: "연재 독자", how: "연재 글을 하나 읽어 보세요.", href: "/#posts" },
     { id: "webbook", group: "learn", kind: "auto", mark: "책", name: "웹북 독자", how: "웹북 『Python으로 하는 인과추론』에서 한 장을 끝까지 읽어 보세요.", href: "/Causal-Inference-with-Python/" },
@@ -63,8 +66,11 @@
     const n = earnedCount(d);
     if (window.hubTrack) window.hubTrack("stamp_earned", { stamp: id, count: n });
     paintCounts(); toast(stamp, n);
+    document.dispatchEvent(new CustomEvent("hub:stamp", { detail: { id } }));
     return true;
   };
+  /* what the roadmap reads: the stamp list and whether one is earned */
+  window.hubPassport = { stamps: STAMPS, has: (id) => !!(load().stamps || {})[id], count: () => earnedCount(load()) };
   /* Distinct things seen (Builders), so reloading one page three times does not count. */
   window.hubSeen = (key, value, need, stampId) => {
     const d = load();
@@ -102,7 +108,7 @@
         <h2 id="passport-title">스탬프 ${n} / ${STAMPS.length}</h2>
         <p class="pp-sub">${n === STAMPS.length ? "모든 스탬프를 모았습니다. 다음 기수에 Builder로 만나요." : next ? `다음 스탬프: <b>${esc(next.name)}</b>. ${esc(next.how)}` : ""}</p>
         ${GROUPS.map(([g, label]) => `<section class="pp-group"><h3>${label}</h3><ul class="pp-list">${STAMPS.filter((x) => x.group === g).map(row).join("")}</ul></section>`).join("")}
-        <p class="pp-note">배우기 스탬프는 허브가 알아서 찍고, 함께하기와 기여하기는 하고 나서 ‘했어요’를 누르면 찍힙니다. 기록은 이 브라우저에만 저장됩니다.</p>
+        <p class="pp-note">로드맵 스탬프는 스테이지를 클리어하면, 배우기 스탬프는 허브가 알아서 찍고, 함께하기와 기여하기는 하고 나서 ‘했어요’를 누르면 찍힙니다. 기록은 이 브라우저에만 저장됩니다.</p>
       </div></div>`;
     if (!dlg.open) { if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", ""); }
     dlg.querySelector(".station-close").focus();

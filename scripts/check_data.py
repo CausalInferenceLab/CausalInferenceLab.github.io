@@ -71,6 +71,8 @@ def main():
     levels = {lv.get("id") for lv in data.get("levels.json") or []}
     for lv in data.get("levels.json") or []:
         token(lv.get("id"), "levels.json", "id")
+        for q in lv.get("quests") or []:
+            token(q, f"levels.json {lv.get('id')!r}", "quests")
     lines = {ln.get("id") for ln in data.get("lines.json") or []}
     for ln in data.get("lines.json") or []:
         token(ln.get("id"), "lines.json", "id")
