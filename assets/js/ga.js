@@ -2,10 +2,9 @@
    counted. Incoming utm_* (from shared links or other team sites) reach GA through page_location
    and are then removed from the address bar so the URL people copy stays clean. */
 (() => {
-  /* ID is the hub's GA4 stream. Google serves no tag script for that ID on its own (gtag/js?id=ID is a 404);
-     the stream's Google tag is TAG, so the script loads from TAG and only ID is configured, which keeps the
-     hub's events in the hub's property. */
-  const ID = "G-C5V0X2SGD3";
+  /* The hub's GA4 stream (measurement ID G-C5V0X2SGD3) is reached through its Google tag, TAG: Google serves
+     the script only for TAG (gtag/js?id=G-C5V0X2SGD3 is a 404), and a page only sends when TAG itself is
+     configured. GA's own install guide for the stream gives this snippet; hits land in the hub property. */
   const TAG = "G-BEBVKYH8HL";
   if (location.hostname === "causalinferencelab.github.io") {
     const s = document.createElement("script");
@@ -15,7 +14,7 @@
     window.dataLayer = window.dataLayer || [];
     window.gtag = function gtag() { window.dataLayer.push(arguments); };
     window.gtag("js", new Date());
-    window.gtag("config", ID, { page_location: location.href, allow_google_signals: false, allow_ad_personalization_signals: false });
+    window.gtag("config", TAG, { page_location: location.href, allow_google_signals: false, allow_ad_personalization_signals: false });
   }
   try {
     const u = new URL(location.href);
