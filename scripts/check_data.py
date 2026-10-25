@@ -162,6 +162,41 @@ def main():
             if s not in repos and s != "external":
                 err(w, f"stop {s!r} is not in repos.json")
 
+    # each level's study order: steps name repos (or the outside library), extra links are site paths or https
+    for lv in data.get("levels.json") or []:
+        w = f"levels.json {lv.get('id')!r}"
+        for s in lv.get("steps") or []:
+            if s.get("repo") not in repos and s.get("repo") != "external":
+                err(w, f"step {s.get('repo')!r} is not in repos.json")
+        for m in lv.get("more") or []:
+            h = str(m.get("href", ""))
+            if not (h.startswith("https://") or re.fullmatch(r"[a-z0-9-]+\.html", h)):
+                err(w, f"more href must be an https link or a page on this site, got {h!r}")
+
+    # the level test: every question sits in a level band, has one right answer, and points at a chapter
+    lt = data.get("leveltest.json")
+    if lt is not None:
+        bands = {b.get("level") for b in lt.get("bands") or []}
+        for b in lt.get("bands") or []:
+            if b.get("level") not in levels:
+                err("leveltest.json bands", f"level {b.get('level')!r} is not in levels.json")
+        for q in lt.get("questions") or []:
+            w = f"leveltest.json {q.get('id')!r}"
+            token(q.get("id"), w, "id")
+            if q.get("band") not in bands:
+                err(w, f"band {q.get('band')!r} is not one of the bands")
+            opts = q.get("opts") or []
+            if len(opts) < 2 or not all(isinstance(o, str) and o for o in opts):
+                err(w, "opts must be two or more answers")
+            if not (is_int(q.get("answer")) and 0 <= q["answer"] < len(opts)):
+                err(w, "answer must be the index of one of opts")
+            if not str((q.get("chapter") or {}).get("url", "")).startswith("https://"):
+                err(w, "chapter.url must be an https link")
+        route_ids = {r.get("id") for r in data.get("routes.json") or []}
+        for o in (lt.get("interest") or {}).get("opts") or []:
+            if not (isinstance(o, list) and len(o) == 2 and o[0] in route_ids):
+                err("leveltest.json interest", f"option {o!r} must be [route id, label]")
+
     for i, x in enumerate((data.get("stages.json") or {}).get("items", [])):
         w = f"stages.json items[{i}]"
         token(x.get("id"), w, "id")

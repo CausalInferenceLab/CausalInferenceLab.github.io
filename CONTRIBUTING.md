@@ -22,7 +22,9 @@ PR을 올리기 전에 `python3 scripts/check_data.py`를 실행해 주세요. �
 | `data/events.json` | Data Forum 같은 행사를 추가할 때 |
 | `data/repos.json` | 레포를 추가하거나 설명·단계·트랙·상태를 바꿀 때 |
 | `data/map.json` | 트랙 지도에서 레포의 위치를 정할 때. 책과 강의(`paid`)의 표지와 소개도 여기서 고칩니다. |
-| `data/routes.json` | 경로 안내 항목을 바꿀 때 |
+| `data/levels.json` | 레벨의 설명과 볼 순서를 바꿀 때. `learn`(배우는 것), `outcome`(끝나면), `steps`(순서대로 볼 레포와 한 줄 `note`), `more`(웹북 장이나 허브 페이지 같은 더 해 보기 링크)를 적습니다. `steps`에 없는 같은 레벨의 레포는 ‘골라 보기’로 나옵니다. |
+| `data/leveltest.json` | 레벨 진단 문제를 고칠 때. 문제마다 `band`(L0·L1·L2), 보기 `opts`, 정답 순서 `answer`(0부터), 해설 `why`, 다시 볼 장 `chapter`를 적습니다. `bands`의 `pass`보다 적게 맞힌 첫 구간이 시작 Level이 되고, 모두 넘으면 관심 분야에 따라 Level 3이나 4가 됩니다. |
+| `data/routes.json` | 관심 분야별로 이어서 볼 자료를 바꿀 때. 레벨 진단 결과의 ‘관심 분야에 맞춰 이어서’에 쓰입니다. |
 | `data/articles.json`, `articles/*.md` | 연재 글을 추가할 때. 아래 ‘연재 쓰기’를 보세요. |
 | `data/game.json` | ‘상관일까, 인과일까?’ 문항을 고칠 때. `answer`는 `corr` 또는 `cause`이고, 문항마다 웹북 장 링크(`chapter`)를 답니다. |
 | `data/daily.json` | 오늘의 한 문제 문항을 더하거나 고칠 때. 형식은 `game.json`과 같고, 날짜마다 순서대로 돌아갑니다. 인과와 상관 문항을 비슷한 수로 맞춥니다. |
@@ -83,7 +85,7 @@ python3 scripts/builder_cards.py
 
 ## 활동 여권과 실험실
 
-스탬프 정의는 `assets/js/passport.js`의 `STAMPS`에 있습니다. `kind: "auto"`는 허브가 알아서 찍고(`window.hubStamp("post")`), `kind: "self"`는 행사 후기, 강의 후기, 레포 댓글처럼 허브 밖에서 하는 일이라 방문자가 ‘했어요’를 눌러 찍습니다. 로드맵 스테이지 스탬프(`stage_L0`–`stage_L4`)는 그 스테이지의 퀘스트를 모두 클리어하면 허브가 찍습니다. L3·L4처럼 `data/levels.json`에 `quests`(스탬프 id 목록)가 있는 스테이지는 그 스탬프들이 퀘스트이고, 없는 스테이지는 무료 자료가 퀘스트입니다. 이미 받은 스탬프는 다시 주지 않고, 기록은 `localStorage`에만 남습니다. 웹북 독자 스탬프는 같은 도메인의 웹북이 남기는 `cil-book-read`(읽은 장)를 보고 찍고, 역 정보 창의 '내 진도'와 '이어 읽기'는 `cil-book-read`, `cil-book-last`를 읽습니다. `/#passport`로 들어오면 여권이 바로 열립니다. 교란 실험실(`lab.html`, `assets/js/lab.js`)의 데이터는 페이지에서 만드는 가상 사용자입니다.
+스탬프 정의는 `assets/js/passport.js`의 `STAMPS`에 있습니다. `kind: "auto"`는 허브가 알아서 찍고(`window.hubStamp("post")`), `kind: "self"`는 행사 후기, 강의 후기, 레포 댓글처럼 허브 밖에서 하는 일이라 방문자가 ‘했어요’를 눌러 찍습니다. 레벨 스탬프(`stage_L0`–`stage_L4`)는 그 레벨의 퀘스트를 모두 클리어하면 허브가 찍습니다. L3·L4처럼 `data/levels.json`에 `quests`(스탬프 id 목록)가 있는 레벨은 그 스탬프들이 퀘스트이고, 없는 레벨은 `steps`에 적은 자료가 퀘스트입니다. 레벨 진단 스탬프(`level_test`)는 진단을 끝까지 풀면 찍히고, 결과는 `cil-hub-level`에 남습니다. `/?level`로 들어오면 진단이 바로 열립니다. 이미 받은 스탬프는 다시 주지 않고, 기록은 `localStorage`에만 남습니다. 웹북 독자 스탬프는 같은 도메인의 웹북이 남기는 `cil-book-read`(읽은 장)를 보고 찍고, 역 정보 창의 '내 진도'와 '이어 읽기'는 `cil-book-read`, `cil-book-last`를 읽습니다. `/#passport`로 들어오면 여권이 바로 열립니다. 교란 실험실(`lab.html`, `assets/js/lab.js`)의 데이터는 페이지에서 만드는 가상 사용자입니다.
 
 ## 이벤트 측정
 

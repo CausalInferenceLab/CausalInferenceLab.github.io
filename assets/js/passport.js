@@ -7,11 +7,12 @@
   const REPO = "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io";
   /* auto: the hub sees it happen. self: done outside the hub (GitHub, an event, a store),
      so the visitor ticks it after doing it. */
-  const GROUPS = [["roadmap", "로드맵"], ["learn", "배우기"], ["together", "함께하기"], ["build", "기여하기"]];
+  const GROUPS = [["roadmap", "레벨"], ["learn", "배우기"], ["together", "함께하기"], ["build", "기여하기"]];
   /* one stamp per roadmap stage: the hub gives it when every quest in the stage is cleared */
   const STAGES = [["L0", "입", "입문"], ["L1", "개", "개념 완성"], ["L2", "실", "실전 적용"], ["L3", "도", "도구 개발"], ["L4", "연", "연구"]];
   const STAMPS = [
-    ...STAGES.map(([id, mark, name]) => ({ id: `stage_${id}`, group: "roadmap", kind: "auto", mark, name: `${name} 클리어`, how: `로드맵 ${id} ${name} 스테이지의 퀘스트를 모두 클리어하세요.`, href: "/#curriculum" })),
+    ...STAGES.map(([id, mark, name]) => ({ id: `stage_${id}`, group: "roadmap", kind: "auto", mark, name: `${name} 클리어`, how: `커리큘럼 Level ${id.slice(1)} ${name}의 순서를 모두 클리어하세요.`, href: "/#curriculum" })),
+    { id: "level_test", group: "learn", kind: "auto", mark: "진", name: "레벨 진단", how: "커리큘럼의 내 레벨 진단을 끝까지 풀어 보세요.", href: "/?level" },
     { id: "first_open", group: "learn", kind: "auto", mark: "첫", name: "첫 걸음", how: "커리큘럼에서 자료 하나를 열어 보세요.", href: "/#curriculum" },
     { id: "post", group: "learn", kind: "auto", mark: "글", name: "연재 독자", how: "연재 글을 하나 읽어 보세요.", href: "/#posts" },
     { id: "webbook", group: "learn", kind: "auto", mark: "책", name: "웹북 독자", how: "웹북 『Python으로 하는 인과추론』에서 한 장을 끝까지 읽어 보세요.", href: "/Causal-Inference-with-Python/" },
@@ -108,7 +109,7 @@
         <h2 id="passport-title">스탬프 ${n} / ${STAMPS.length}</h2>
         <p class="pp-sub">${n === STAMPS.length ? "모든 스탬프를 모았습니다. 다음 기수에 Builder로 만나요." : next ? `다음 스탬프: <b>${esc(next.name)}</b>. ${esc(next.how)}` : ""}</p>
         ${GROUPS.map(([g, label]) => `<section class="pp-group"><h3>${label}</h3><ul class="pp-list">${STAMPS.filter((x) => x.group === g).map(row).join("")}</ul></section>`).join("")}
-        <p class="pp-note">로드맵 스탬프는 스테이지를 클리어하면, 배우기 스탬프는 허브가 알아서 찍고, 함께하기와 기여하기는 하고 나서 ‘했어요’를 누르면 찍힙니다. 기록은 이 브라우저에만 저장됩니다.</p>
+        <p class="pp-note">레벨 스탬프는 레벨의 순서를 클리어하면, 배우기 스탬프는 허브가 알아서 찍고, 함께하기와 기여하기는 하고 나서 ‘했어요’를 누르면 찍힙니다. 기록은 이 브라우저에만 저장됩니다.</p>
       </div></div>`;
     if (!dlg.open) { if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", ""); }
     dlg.querySelector(".station-close").focus();
