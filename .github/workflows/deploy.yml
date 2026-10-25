@@ -4,7 +4,9 @@ on:
   push:
     branches: [main]
   schedule:
+    # stats once a week (Monday), the activity feed every day
     - cron: "17 0 * * 1"
+    - cron: "17 21 * * *"
   workflow_dispatch:
 
 permissions:
@@ -24,7 +26,7 @@ jobs:
           persist-credentials: false
 
       - name: Refresh GitHub stats
-        if: github.event_name != 'push'
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 0 * * 1'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -36,6 +38,11 @@ jobs:
             git commit -m "Update GitHub stats"
             git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
           fi
+
+      - name: Build the activity feed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/build_activity.py data/activity.json || echo "activity feed kept as is"
 
       - name: Check data files
         run: python3 scripts/check_data.py

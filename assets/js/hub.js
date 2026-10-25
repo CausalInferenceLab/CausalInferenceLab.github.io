@@ -77,6 +77,8 @@
   async function load() {
     const names = ["repos", "lines", "levels", "map", "routes", "projects", "events", "articles", "builders", "growth", "stats", "featured", "daily", "stages"];
     const data = await Promise.all(names.map((n) => getJSON(`data/${n}.json`)));
+    /* the activity snapshot is optional: the feed asks GitHub live and falls back to it */
+    state.activitySnap = await getJSON("data/activity.json").catch(() => ({ updated: null, items: [] }));
     const d = cleanData(Object.fromEntries(names.map((n, i) => [n, data[i]])));
     d.repos.forEach((r) => {
       const live = d.stats.repos && d.stats.repos[r.repo];
@@ -928,6 +930,132 @@
     el.hidden = false;
     el.innerHTML = `<span class="ne-k">다음 행사</span><span class="ne-d">${d === 0 ? "오늘" : `D-${d}`}</span><span class="ne-t"><b>${dot(next.date)} · ${esc(next.name)}</b><span>${next.link ? "참가 신청을 받고 있습니다" : "신청 링크는 곧 열립니다"} · 지난 ${state.events.filter((e) => !e.upcoming).length}회에 ${fmt(state.events.reduce((s, e) => s + (e.participants || 0), 0))}명이 함께했습니다</span></span><span class="ne-go" aria-hidden="true">›</span>`;
   }
+  /* ---------- activity: what the team did on GitHub lately, credited by name ---------- */
+  const BOT = /\[bot\]$|^github-actions$|^dependabot/;
+  /* the same reading of a GitHub event as scripts/build_activity.py */
+  function activityItem(e) {
+    const login = (e.actor || {}).login || "", full = (e.repo || {}).name || "";
+    if (!login || BOT.test(login) || !full.includes("/")) return null;
+    const repo = full.split("/")[1], p = e.payload || {}, a = p.action;
+    const base = { id: e.id, login, repo, at: e.created_at };
+    const prUrl = (n) => (n ? `https://github.com/${full}/pull/${n}` : null);
+    switch (e.type) {
+      case "PushEvent": return /^refs\/heads\/(main|master)$/.test(p.ref || "") ? { ...base, kind: "push" } : null;
+      case "PullRequestEvent": {
+        const pr = p.pull_request || {}, n = p.number || pr.number, merged = a === "merged" || (a === "closed" && pr.merged);
+        if (a !== "opened" && !merged) return null;
+        return { ...base, kind: merged ? "pr_merge" : "pr_open", number: n, title: pr.title || null, url: prUrl(n) };
+      }
+      case "IssuesEvent": return a === "opened" ? { ...base, kind: "issue", number: (p.issue || {}).number, title: (p.issue || {}).title, url: (p.issue || {}).html_url } : null;
+      case "IssueCommentEvent": return { ...base, kind: "comment", number: (p.issue || {}).number, title: (p.issue || {}).title, url: (p.comment || {}).html_url || (p.issue || {}).html_url };
+      case "PullRequestReviewEvent": { const n = p.number || (p.pull_request || {}).number; return { ...base, kind: "review", number: n, title: (p.pull_request || {}).title || null, url: prUrl(n) }; }
+      case "WatchEvent": return { ...base, kind: "star" };
+      case "ForkEvent": return { ...base, kind: "fork" };
+      case "ReleaseEvent": return { ...base, kind: "release", title: (p.release || {}).tag_name, url: (p.release || {}).html_url };
+      case "CreateEvent": return p.ref_type === "repository" ? { ...base, kind: "repo" } : null;
+      default: return null;
+    }
+  }
+  const CONTRIB_KINDS = new Set(["push", "pr_open", "pr_merge", "issue", "comment", "review", "release", "repo"]);
+  const VERB = { push: "에 코드를 올렸어요", pr_open: "에 PR을 열었어요", pr_merge: "의 PR을 머지했어요", issue: "에 이슈를 남겼어요", comment: "에 댓글을 남겼어요", review: "의 PR을 리뷰했어요", star: "에 ★를 눌렀어요", fork: "를 포크했어요", release: "의 새 버전을 냈어요", repo: " 레포를 새로 열었어요" };
+  const builderByLogin = (login) => state.builders.find((b) => (b.github || "").toLowerCase() === String(login).toLowerCase());
+  /* newest first; repeated pushes by the same person to the same repo count as one line */
+  function tidyActivity(items) {
+    const titles = new Map((state.activitySnap.items || []).filter((x) => x.title).map((x) => [String(x.id), x.title]));
+    const sorted = items.filter(Boolean).map((x) => ({ ...x, title: x.title || titles.get(String(x.id)) || null })).sort((a, b) => (a.at < b.at ? 1 : -1));
+    const out = [];
+    sorted.forEach((x) => {
+      const last = out[out.length - 1];
+      if (last && last.login === x.login && last.repo === x.repo && last.kind === x.kind && (x.kind === "push" || x.kind === "star")) { last.n = (last.n || 1) + 1; return; }
+      out.push({ ...x });
+    });
+    return out;
+  }
+  async function loadActivity() {
+    let items = null, live = false;
+    try {
+      const res = await fetch(`https://api.github.com/orgs/${ORG}/events?per_page=100`, { headers: { Accept: "application/vnd.github+json" } });
+      if (res.ok) { items = (await res.json()).map(activityItem); live = true; }
+    } catch (e) { /* offline or blocked: use the snapshot */ }
+    if (!items || !items.filter(Boolean).length) { items = state.activitySnap.items || []; live = false; }
+    state.activity = tidyActivity(items);
+    state.activityAt = live ? new Date().toISOString() : state.activitySnap.updated;
+    renderLive(); renderActivity(); renderLoop();
+  }
+  function whoHTML(login, placement) {
+    const b = builderByLogin(login);
+    const img = `<img src="https://github.com/${esc(login)}.png?size=64" alt="" loading="lazy" data-fallback="${esc(login.slice(0, 1))}">`;
+    const name = b ? `${esc(b.name)}님` : `@${esc(login)}`;
+    const href = b && b.slug ? `builders/${esc(b.slug)}.html` : `https://github.com/${esc(login)}`;
+    return `<a class="ac-who" href="${href}"${b ? "" : ' target="_blank" rel="noopener"'} data-event="live_click" data-event-params='${esc(JSON.stringify({ placement, target: b ? "builder" : "github", kind: "person" }))}'><span class="avatar xs" aria-hidden="true">${esc(login.slice(0, 1).toUpperCase())}${img}</span>${name}</a>`;
+  }
+  function whatHTML(x, placement) {
+    const r = state.repos.get(x.repo), label = r && !r.kind ? r.title : x.repo;
+    const repoHTML = r && !r.kind ? `<button type="button" class="ac-repo" data-open="${esc(x.repo)}" data-event="live_click" data-event-params='${esc(JSON.stringify({ placement, target: "repo", kind: x.kind, repo: x.repo }))}'>${esc(label)}</button>` : `<span class="ac-repo">${esc(label)}</span>`;
+    const verb = x.kind === "push" && x.n > 1 ? `에 코드를 ${x.n}번 올렸어요` : x.kind === "star" && x.n > 1 ? `에 ★ ${x.n}개` : VERB[x.kind];
+    const title = x.title ? (x.url ? `<a class="ac-title" href="${esc(x.url)}" target="_blank" rel="noopener" data-event="live_click" data-event-params='${esc(JSON.stringify({ placement, target: "github", kind: x.kind, repo: x.repo }))}'>${esc(x.title)}</a>` : `<span class="ac-title">${esc(x.title)}</span>`) : "";
+    return `${repoHTML}<span class="ac-verb">${esc(verb)}</span>${title}`;
+  }
+  const recentContrib = (days) => (state.activity || []).filter((x) => CONTRIB_KINDS.has(x.kind) && ageDays(x.at) != null && ageDays(x.at) <= days);
+  /* one line under the hero that changes every few seconds */
+  let liveTimer = null;
+  function renderLive() {
+    const box = $("#live");
+    if (!box) return;
+    const list = (state.activity || []).slice(0, 6);
+    if (!list.length) { box.hidden = true; return; }
+    box.hidden = false;
+    let i = 0;
+    const paint = () => {
+      const x = list[i % list.length];
+      box.querySelector(".lv-line").innerHTML = `${whoHTML(x.login, "ticker")}<span class="lv-what">${whatHTML(x, "ticker")}</span><time datetime="${esc(x.at)}">${ago(x.at)}</time>`;
+      wireAvatars(box);
+    };
+    box.innerHTML = `<span class="lv-k"><i class="lv-dot" aria-hidden="true"></i>지금 팀에서</span><span class="lv-line" aria-live="off"></span><a class="lv-more" href="#activity" data-event="live_click" data-event-params='{"placement":"ticker","target":"feed","kind":"more"}'>더 보기</a>`;
+    paint();
+    clearInterval(liveTimer);
+    if (reduceMotion || list.length < 2) return;
+    let paused = false;
+    box.addEventListener("mouseenter", () => { paused = true; });
+    box.addEventListener("mouseleave", () => { paused = false; });
+    box.addEventListener("focusin", () => { paused = true; });
+    box.addEventListener("focusout", () => { paused = false; });
+    liveTimer = setInterval(() => { if (paused || document.hidden) return; i += 1; paint(); }, 5000);
+  }
+  /* the feed in the contributors section: everyone who did something lately, then what they did */
+  function renderActivity() {
+    const box = $("#activity");
+    if (!box) return;
+    const contrib = recentContrib(30);
+    const people = [...new Map(contrib.map((x) => [x.login, x])).keys()];
+    const interest = (state.activity || []).filter((x) => (x.kind === "star" || x.kind === "fork") && ageDays(x.at) <= 30).reduce((s, x) => s + (x.n || 1), 0);
+    const list = (state.activity || []).filter((x) => CONTRIB_KINDS.has(x.kind)).slice(0, 8);
+    if (!list.length) { box.hidden = true; return; }
+    box.hidden = false;
+    const at = state.activityAt ? `GitHub 공개 활동 기준 · ${ago(state.activityAt)} 갱신` : "GitHub 공개 활동 기준";
+    box.innerHTML = `<div class="ac-head"><h3>최근 30일, 이렇게 기여했어요</h3><p>기여하면 여기와 Builder 페이지에 이름이 올라갑니다.</p></div>
+      <div class="ac-people"><span class="ac-n"><b>${people.length}</b>명이 기여${interest ? ` · ★·포크 ${interest}` : ""}</span><ul>${people.slice(0, 16).map((l) => `<li>${whoHTML(l, "feed")}</li>`).join("")}</ul></div>
+      <ol class="ac-list">${list.map((x) => `<li>${whoHTML(x.login, "feed")}<span class="ac-what">${whatHTML(x, "feed")}</span><time datetime="${esc(x.at)}">${ago(x.at)}</time></li>`).join("")}</ol>
+      <div class="ac-foot"><a class="btn sm" href="https://github.com/search?q=org%3ACausalInferenceLab+is%3Aissue+is%3Aopen&type=issues" target="_blank" rel="noopener" data-event="click_join" data-event-params='{"target":"issue","source":"activity"}'>열린 이슈로 첫 기여하기</a><span>${at}</span></div>`;
+    wireAvatars(box);
+  }
+  /* the loop the hub runs on, with today's numbers: learn, contribute, get named, share */
+  function renderLoop() {
+    const box = $("#loop");
+    if (!box) return;
+    const materials = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot").length;
+    const people = new Set(recentContrib(30).map((x) => x.login)).size;
+    const runners = (state.growth && state.growth.uniqueRunners || []).slice(-1)[0];
+    const steps = [
+      ["배우기", `자료 ${materials}개, 무료`, "#curriculum"],
+      ["기여하기", people ? `최근 30일 ${people}명` : "이슈 하나, PR 하나부터", "#activity"],
+      ["이름이 올라가기", `Builder ${state.builders.length}명${runners ? ` · 러너 ${fmt(runners.cumulative)}명` : ""}`, "#contrib"],
+      ["공유하기", "Builder 페이지·완주 카드", "#contrib"]
+    ];
+    box.innerHTML = steps.map(([t, n, href], i) => `<li><a href="${href}" data-event="loop_click" data-event-params='${esc(JSON.stringify({ step: i + 1 }))}'><span class="lp-n">${i + 1}</span><b>${t}</b><span>${esc(n)}</span></a></li>`).join("") +
+      `<li class="lp-back" aria-hidden="true">공유한 링크로 다음 사람이 1부터 시작합니다 ↺</li>`;
+  }
+
   /* the next Data Forum gets the space; past ones are one line each */
   function renderEvents() {
     const list = [...state.events].sort((a, b) => b.order - a.order);
@@ -939,14 +1067,14 @@
     const nextHTML = next ? `<li class="event next">
         <span class="soon-tag">다음 행사${dd != null && dd >= 0 ? ` · ${dd === 0 ? "오늘" : `D-${dd}`}` : ""}</span>
         <span class="ord">${next.order}회</span>
-        <h3>${next.link ? `<a href="${esc(next.link)}" target="_blank" rel="noopener">${esc(next.name)}</a>` : esc(next.name)}</h3>
+        <h3>${next.link ? `<a href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: "signup", placement: "title" }))}'>${esc(next.name)}</a>` : esc(next.name)}</h3>
         <span class="when">${when(next)}</span>
         <p class="ev-about">현업과 학계가 만나 인과추론과 실험, 데이터 의사결정을 이야기하는 자리입니다. 지난 ${past.length}회에 ${fmt(total)}명이 함께했습니다.</p>
-        ${next.link ? `<a class="btn sm" href="${esc(next.link)}" target="_blank" rel="noopener">참가 신청하기</a>` : `<span class="ppl">신청 링크는 곧 열립니다.</span>`}
+        ${next.link ? `<a class="btn sm" href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: "signup", placement: "button" }))}'>참가 신청하기</a>` : `<span class="ppl">신청 링크는 곧 열립니다.</span>`}
       </li>` : "";
     const pastHTML = past.map((e) => `<li class="event past">
         <span class="ord">${e.order}회</span>
-        <span class="ev-name">${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener">${esc(e.name)}</a>` : esc(e.name)}<span class="when">${when(e)}</span></span>
+        <span class="ev-name">${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: e.order, action: "record", placement: "past" }))}'>${esc(e.name)}</a>` : esc(e.name)}<span class="when">${when(e)}</span></span>
         <span class="ev-n">${e.participants ? `<span class="ev-num"><b>${fmt(e.participants)}</b>명</span><i class="ev-bar" aria-hidden="true"><i style="width:${Math.round((e.participants / maxP) * 100)}%"></i></i>` : ""}</span>
       </li>`).join("");
     $("#event-list").innerHTML = nextHTML + (past.length ? `<li class="event-past"><p class="ev-sum">지난 Data Forum ${past.length}회 · 참가 ${fmt(total)}명</p><ol>${pastHTML}</ol></li>` : "");
@@ -1548,7 +1676,7 @@
       if (fa) track("click_featured", { repo: fa.dataset.repo || "" });
       const out = e.target.closest(".pt-out");
       if (out) track("click_partner", { item: out.closest(".pt-card").querySelector("[data-goto]").dataset.goto, action: "out" });
-      const ja = e.target.closest("#join a, .footer-links a[href*='discord']");
+      const ja = e.target.closest("#join .steps a, #join .join-foot a, .footer-links a[href*='discord']");
       if (ja) track("click_join", { target: joinTarget(ja.getAttribute("href") || ""), source: ja.closest("#join") ? "join_section" : "footer" });
       const sa = e.target.closest("#station-body .links a");
       if (sa && state.openRepo) track("click_outbound", { repo: state.openRepo.repo, kind: state.openRepo.kind === "paid" ? "paid" : /github\.com/.test(sa.href) ? "github" : "site" });
@@ -1645,6 +1773,18 @@
     $("#curriculum .wrap").insertAdjacentHTML("afterbegin", `<p class="notice">데이터를 불러오지 못했습니다. 로컬에서 볼 때는 <code>python3 -m http.server</code>로 띄운 뒤 접속해 주세요.</p>`);
   }
 
+  /* section_view: each section once per page view, when half of it (or most of the screen) is shown */
+  function watchSections() {
+    if (!("IntersectionObserver" in window)) return;
+    const seen = new Set();
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      const id = en.target.id;
+      if (!en.isIntersecting || seen.has(id)) return;
+      seen.add(id); io.unobserve(en.target);
+      track("section_view", { section: id });
+    }), { threshold: [0.35] });
+    ["curriculum", "contrib", "activity", "events", "posts", "join"].forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+  }
   async function init() {
     loadRidden(); loadRecent();
     wire();
@@ -1661,6 +1801,7 @@
     setHeader(); window.addEventListener("resize", setHeader);
     renderLegend(); renderMap(); wireTabs();
     renderFeatured(); renderPartner(); renderEvents(); renderNextEvent(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
+    renderLoop(); loadActivity(); watchSections();
     /* sections fill in after the data loads, so jump again once they have their height */
     if (/^#(contrib|events|reading|join)$/.test(location.hash)) requestAnimationFrame(() => { const el = $(location.hash); if (el) el.scrollIntoView(); });
     openFromHash();

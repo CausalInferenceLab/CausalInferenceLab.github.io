@@ -64,7 +64,8 @@
       <div class="hero-grid">
         <ul class="growth" id="growth" aria-label="팀의 성장 지표"></ul>
       </div>
-      <a class="next-event" id="next-event" href="#events" hidden></a>
+      <a class="next-event" id="next-event" href="#events" data-event="click_event" data-event-params='{"action":"next_strip","placement":"hero"}' hidden></a>
+      <div class="live" id="live" hidden></div>
     </div>
   </section>
 
@@ -131,6 +132,7 @@
         <div class="people-rail" id="people-rail" aria-label="함께한 Builder"></div>
         <div class="contrib-cta"><a class="btn" href="#join" data-event="click_join" data-event-params='{"target":"join_section","source":"builder_section"}'>다음 기수 Builder 되기</a></div>
       </div>
+      <div class="activity" id="activity" hidden></div>
       <details class="fold" id="medal-fold">
         <summary><span>메달과 발표 무대</span><small>기수가 쌓이면 메달이 바뀌고, 학회 발표로 이어집니다</small></summary>
         <section class="medal-ladder" id="medal-ladder" aria-label="Builder 메달"></section>
@@ -171,6 +173,7 @@
         <h2 id="join-title">참여하기</h2>
         <p>러너로 시작해 기여를 쌓고, Builder로 다음 기수의 프로젝트를 엽니다.</p>
       </div>
+      <ol class="loop" id="loop" aria-label="허브가 도는 방식"></ol>
       <ol class="steps">
         <li>
           <h3>러너로 참여</h3>
