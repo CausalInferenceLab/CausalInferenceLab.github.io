@@ -55,6 +55,21 @@ jobs:
           mkdir _site
           cp -r index.html article.html game.html lab.html 404.html .nojekyll assets data articles builders badges _site/
 
+      # Browsers keep scripts and styles for up to ten minutes; a version on their URLs makes each deploy load
+      # its own files instead of new HTML running last deploy's scripts.
+      - name: Version script and style URLs
+        run: |
+          python3 - "${GITHUB_SHA::8}" <<'PY'
+          import pathlib, re, sys
+          v = sys.argv[1]
+          pat = re.compile(r'((?:src|href)="(?:\.\./|/)?assets/(?:js|css)/[\w.-]+\.(?:js|css))"')
+          for p in pathlib.Path("_site").rglob("*.html"):
+              t = p.read_text(encoding="utf-8")
+              n = pat.sub(lambda m: f'{m.group(1)}?v={v}"', t)
+              if n != t:
+                  p.write_text(n, encoding="utf-8")
+          PY
+
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
         with:
