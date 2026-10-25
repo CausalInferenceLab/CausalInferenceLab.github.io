@@ -80,10 +80,13 @@
       </div>
       <p class="route-note" id="route-note" aria-live="polite"></p>
       <div class="tabs big" role="tablist" aria-label="보기 방식">
-        <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="true">단계로 보기<span class="tab-n" id="n-course"></span></button>
+        <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="true">로드맵으로 보기<span class="tab-n" id="n-course"></span></button>
         <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" tabindex="-1"><span class="tab-lines" aria-hidden="true"><i></i><i></i><i></i></span>트랙 지도로 보기</button>
       </div>
-      <p class="tab-note" id="tab-note">단계는 배우는 순서이고, 트랙은 주제입니다. 같은 주제를 L0부터 L4까지 이어 보려면 <button type="button" class="link-btn" data-tab-go="tab-map">트랙 지도</button>를 여세요.</p>
+<div class="note-row">
+              <p class="tab-note" id="tab-note">로드맵은 배우는 순서이고, 트랙은 주제입니다. 같은 주제를 L0부터 L4까지 이어 보려면 <button type="button" class="link-btn" data-tab-go="tab-map">트랙 지도</button>를 여세요.</p>
+        <div class="quest-hud" id="quest-hud" aria-live="polite"></div>
+      </div>
 
       <div id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden>
         <div class="map-card">
@@ -109,8 +112,8 @@
       <div id="panel-course" role="tabpanel" aria-labelledby="tab-course">
         <div class="progress" id="progress"></div>
         <div class="path-wrap">
-          <p class="path-k"><span>배우기 L0–L2</span><span>만들기 L3–L4</span></p>
-          <ol class="path" id="path" aria-label="단계 고르기"></ol>
+          <p class="path-k"><span>WORLD 1 · 배우기</span><span>WORLD 2 · 만들기</span></p>
+          <ol class="path" id="path" aria-label="로드맵: 스테이지 고르기"></ol>
         </div>
         <div class="chapters" id="chapters" hidden></div>
         <div class="shelf-wrap" id="shelf-wrap">
