@@ -928,7 +928,11 @@
     const d = daysTo(next.date);
     if (d < 0) return;
     el.hidden = false;
-    el.innerHTML = `<span class="ne-k">다음 행사</span><span class="ne-d">${d === 0 ? "오늘" : `D-${d}`}</span><span class="ne-t"><b>${dot(next.date)} · ${esc(next.name)}</b><span>${next.link ? "참가 신청을 받고 있습니다" : "신청 링크는 곧 열립니다"} · 지난 ${state.events.filter((e) => !e.upcoming).length}회에 ${fmt(state.events.reduce((s, e) => s + (e.participants || 0), 0))}명이 함께했습니다</span></span><span class="ne-go" aria-hidden="true">›</span>`;
+    if (next.link) {
+      el.href = next.link; el.target = "_blank"; el.rel = "noopener";
+      el.dataset.eventParams = JSON.stringify({ event_order: next.order, action: "signup", placement: "next_strip" });
+    }
+    el.innerHTML = `<span class="ne-k">다음 행사</span><span class="ne-d">${d === 0 ? "오늘" : `D-${d}`}</span><span class="ne-t"><b>${dot(next.date)} · ${esc(next.name)}</b><span>${next.link ? "참가 신청을 받고 있습니다" : "신청 링크는 곧 열립니다"} · 지난 ${state.events.filter((e) => !e.upcoming).length}회에 ${fmt(state.events.reduce((s, e) => s + (e.participants || 0), 0))}명이 함께했습니다</span></span>${next.link ? `<span class="ne-cta">참가 신청<span class="sr-only"> (새 창)</span></span>` : `<span class="ne-go" aria-hidden="true">›</span>`}`;
   }
   /* ---------- activity: what the team did on GitHub lately, credited by name ---------- */
   const BOT = /\[bot\]$|^github-actions$|^dependabot/;
@@ -1758,7 +1762,7 @@
   }
   function navSpy() {
     if (!("IntersectionObserver" in window)) return;
-    const ids = ["curriculum", "contrib", "events", "reading", "join"];
+    const ids = ["curriculum", "contrib", "events", "posts", "join"];
     const seen = new Map();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
@@ -1766,6 +1770,22 @@
       paintNav();
     }, { rootMargin: "-45% 0px -50% 0px" });
     ids.forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+    /* the nav is a line through the five sections: --p is how far down that line the reader is (0 to 1) */
+    const nav = $(".site-nav");
+    if (!nav) return;
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const tops = ids.map((id) => document.getElementById(id)).filter(Boolean).map((el) => el.getBoundingClientRect().top + scrollY);
+      const y = scrollY + innerHeight * 0.45;
+      let p = 0;
+      tops.forEach((t, i) => { if (y >= t) p = i + (i + 1 < tops.length ? Math.min(1, (y - t) / (tops[i + 1] - t)) : 0); });
+      nav.style.setProperty("--p", (p / Math.max(1, tops.length - 1)).toFixed(3));
+    };
+    const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+    addEventListener("scroll", queue, { passive: true });
+    addEventListener("resize", queue);
+    update();
   }
 
   function fail(err) {
