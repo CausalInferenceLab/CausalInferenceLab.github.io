@@ -1452,7 +1452,11 @@ button.btn.sm { font-size: 14px; }
 .ne-t b { font-size: 15.5px; }
 .ne-t span { font-size: 13.5px; color: var(--muted); }
 .ne-go { margin-left: auto; font-size: 22px; font-weight: 800; color: var(--muted); }
-@media (max-width: 600px) { .next-event { flex-wrap: wrap; gap: 6px 10px; padding: 14px 16px; } .ne-t { flex-basis: 100%; } .ne-go { display: none; } }
+.ne-cta { margin-left: auto; flex-shrink: 0; padding: 9px 16px; border-radius: 999px; background: var(--ink); color: var(--surface); font-size: 14px; font-weight: 800; white-space: nowrap; transition: transform .15s ease; }
+.ne-cta::after { content: " ↗"; }
+.next-event:hover .ne-cta { transform: translateX(2px); }
+@media (prefers-reduced-motion: reduce) { .ne-cta { transition: none; } .next-event:hover .ne-cta { transform: none; } }
+@media (max-width: 600px) { .next-event { flex-wrap: wrap; gap: 6px 10px; padding: 14px 16px; } .ne-t { flex-basis: 100%; } .ne-go { display: none; } .ne-cta { margin-left: 0; } }
 
 /* tabs and the hint that says what the map is for */
 .tab-lines { display: inline-flex; flex-direction: column; gap: 2px; margin-right: 6px; vertical-align: middle; }
@@ -1732,3 +1736,65 @@ a.ac-title:hover { text-decoration: underline; }
   .loop > li:nth-child(2) > a::after { display: none; }
 }
 #join .steps li::before { display: none; }
+
+/* ==========================================================================
+   The page is a line: the nav is five stations, each section a stop on it,
+   and the hero is where the six track lines come in.
+   ========================================================================== */
+#curriculum, .s-main { --sec: var(--l-main); }
+#contrib, .s-ml { --sec: var(--l-ml); }
+#events, .s-exp { --sec: var(--l-exp); }
+#posts, .s-behavior { --sec: var(--l-behavior); }
+#join, .s-research { --sec: var(--l-research); }
+
+/* nav: a rail under the five labels, a stop under each, filled up to where the reader is */
+.site-nav { position: relative; gap: 22px; padding: 0 6px; overflow: visible; }
+.site-nav::before, .site-nav::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: 9px; height: 3px; border-radius: 2px; pointer-events: none; }
+.site-nav::before { background: var(--rule); }
+.site-nav::after { right: auto; width: calc((100% - 28px) * var(--p, 0)); background: linear-gradient(90deg, var(--l-main), var(--l-ml), var(--l-exp), var(--l-behavior), var(--l-research)); transition: width .25s ease-out; }
+.site-nav a.stn { position: relative; z-index: 1; padding: 16px 2px 22px; border-radius: 0; background: none; font-size: 14.5px; }
+.site-nav a.stn::after { content: ""; position: absolute; left: 50%; bottom: 5px; width: 11px; height: 11px; margin-left: -5.5px; border-radius: 50%; background: var(--surface); border: 2.5px solid var(--sec); box-sizing: border-box; transition: transform .2s ease, background .2s ease; }
+.site-nav a.stn:hover { background: none; color: var(--ink); }
+.site-nav a.stn:hover::after { transform: scale(1.2); }
+.site-nav a.stn[aria-current="true"] { background: none; color: var(--ink); font-weight: 800; }
+.site-nav a.stn[aria-current="true"]::after { background: var(--sec); transform: scale(1.25); }
+.site-nav a.stn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+@media (max-width: 820px) {
+  .site-nav { gap: 16px; overflow-x: auto; padding: 0 4px; }
+  .site-nav::before, .site-nav::after { left: 10px; }
+  .site-nav a.stn { padding: 6px 2px 18px; font-size: 14px; }
+}
+
+/* hero: one solid indigo, the six lines run in from the right edge and bend at 45 degrees like a map */
+.banner { background: #1E2160; }
+.banner::before { display: none; }
+.hero-rails { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.banner > .banner-main, .banner > .banner-side { z-index: 1; }
+.hero-rails .r { fill: none; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
+.hero-rails .r1 { stroke: #5B8BFF; } .hero-rails .r2 { stroke: #A88BF8; } .hero-rails .r3 { stroke: #F0709A; }
+.hero-rails .r4 { stroke: #FF9452; } .hero-rails .r5 { stroke: #34C796; } .hero-rails .r6 { stroke: #AEB8C6; }
+.hero-rails .st { fill: #1E2160; stroke: #fff; stroke-width: 3; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-rails .r { stroke-dasharray: 1600; stroke-dashoffset: 1600; animation: rail-in 1.4s cubic-bezier(.2, .7, .2, 1) forwards; }
+  .hero-rails .r2 { animation-delay: .08s; } .hero-rails .r3 { animation-delay: .16s; } .hero-rails .r4 { animation-delay: .24s; }
+  .hero-rails .r5 { animation-delay: .32s; } .hero-rails .r6 { animation-delay: .4s; }
+  .hero-rails .st { opacity: 0; animation: stop-in .3s ease-out 1.2s forwards; }
+  @keyframes rail-in { to { stroke-dashoffset: 0; } }
+  @keyframes stop-in { to { opacity: 1; } }
+}
+
+@media (max-width: 860px) { .hero-rails { display: none; } }
+
+/* section heads: the station for that section, then the name */
+.section-head h2 { display: flex; align-items: center; gap: 14px; font-size: clamp(28px, 3.4vw, 40px); letter-spacing: -.035em; }
+#curriculum .section-head h2::before, #contrib .section-head h2::before, #events .section-head h2::before, #posts .section-head h2::before, #join .section-head h2::before {
+  content: ""; width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%; background: var(--surface); border: 5px solid var(--sec); box-sizing: border-box; }
+.section-head > p { max-width: 40em; }
+
+/* quieter surfaces: a hairline instead of a shadow, and corners that step down with the size of the thing */
+.tile, .map-card, .event, .steps li, .activity, .crew-row, .fold, .top3 > li, .loop > li > a, .post-feature, .au-card, .stages, .live, .next-event, #shelf .lv {
+  box-shadow: none; border: 1px solid var(--rule); }
+.map-card, #shelf .lv, .stages, .activity { border-radius: 24px; }
+.tile, .event, .top3 > li, .post-feature, .au-card, .steps li { border-radius: 20px; }
+.loop > li > a, .live, .crew-row, .fold { border-radius: 16px; }
+.tile:hover, .top3 > li:hover, .loop > li > a:hover { box-shadow: 0 10px 30px -18px color-mix(in srgb, var(--ink) 40%, transparent); }
