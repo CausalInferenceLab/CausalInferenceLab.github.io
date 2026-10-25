@@ -6,6 +6,7 @@ Uses only the standard library.
 import json
 import os
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 from collections import Counter
@@ -90,4 +91,8 @@ def main(out_path):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "data/stats.json")
+    # A refused or failed GitHub call keeps last week's stats rather than stopping the deploy.
+    try:
+        main(sys.argv[1] if len(sys.argv) > 1 else "data/stats.json")
+    except (urllib.error.HTTPError, urllib.error.URLError) as e:
+        print(f"stats not refreshed, kept as is: {e}", file=sys.stderr)
