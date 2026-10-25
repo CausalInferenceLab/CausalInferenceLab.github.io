@@ -373,11 +373,11 @@
     const tryUrl = r.preview || (r.previewLabel ? r.site : "");
     const tryLink = tryUrl ? `<a class="ep-try" href="${esc(tryUrl)}" target="_blank" rel="noopener" data-event="try_course" data-event-params='${esc(JSON.stringify({ repo: id }))}'>${esc(r.previewLabel || "맛보기")}<span aria-hidden="true"> ›</span></a>` : "";
     const done = state.ridden.has(id);
-    const clearBtn = rideable(r) ? `<button type="button" class="ep-clear" data-clear="${esc(id)}" aria-pressed="${done}">${done ? "✓ 클리어" : "클리어 표시"}</button>` : "";
+    const clearBtn = isMaterialQuest(r) ? `<button type="button" class="ep-clear" data-clear="${esc(id)}" aria-pressed="${done}">${done ? "✓ 클리어" : "클리어 표시"}</button>` : "";
     const acts = tryLink || clearBtn ? `<div class="ep-acts">${tryLink}${clearBtn}</div>` : "";
     return `<li class="ep${step ? " on" : ""}${r.kind ? ` ${r.kind}` : ""}${done ? " cleared" : ""}" data-line="${line}" data-id="${esc(id)}" data-level="${level}"${step ? ` data-chap="${esc(id)}"` : ""}>
       <button type="button" data-open="${esc(id)}" aria-label="${step ? `${step}번째, ` : ""}${esc(r.title)}${lv ? `, ${lv.id} ${esc(lv.name)}` : ""}">
-        <span class="ep-top">${step ? `<span class="ep-step">${pad2(step)}</span>` : `<span class="ep-q">퀘스트 ${pad2(k + 1)}</span>`}<span class="ep-track"><i aria-hidden="true"></i>${step && lv ? `${lv.id} · ` : ""}${tracks || (r.kind === "paid" ? "도서·강의" : "")}</span><span class="ep-badges">${badges}</span></span>
+        <span class="ep-top">${step ? `<span class="ep-step">${pad2(step)}</span>` : (isMaterialQuest(r) ? `<span class="ep-q">퀘스트 ${pad2(k + 1)}</span>` : "")}<span class="ep-track"><i aria-hidden="true"></i>${step && lv ? `${lv.id} · ` : ""}${tracks || (r.kind === "paid" ? "도서·강의" : "")}</span><span class="ep-badges">${badges}</span></span>
         <span class="ep-main">${r.cover ? `<img class="ep-thumb" src="${esc(r.cover)}" alt="" loading="lazy">` : ""}<span><h4>${esc(r.title)}</h4><span class="sum">${esc(r.summary)}</span>${tags}</span></span>
         ${spec}
         <span class="ep-foot">${people}<span class="ep-end">${r.kind ? "" : `<span class="star">${icons.star}${fmt(r.stars || 0)}</span>`}</span></span>
@@ -386,11 +386,22 @@
     </li>`;
   }
 
+  /* a WORLD 2 quest: something done outside the hub, ticked here, kept as a passport stamp */
+  function actionQuestHTML(q, k, lv) {
+    const st = q.stamp, done = questDone(q);
+    return `<li class="ep act${done ? " cleared" : ""}" data-line="${lv.id === "L4" ? "research" : "ai"}" data-id="quest-${esc(st.id)}">
+      <div class="aq-body">
+        <span class="ep-top"><span class="ep-q">퀘스트 ${pad2(k + 1)}</span><span class="ep-track"><i aria-hidden="true"></i>직접 해 보기</span></span>
+        <span class="ep-main"><span class="stamp${done ? " on" : ""}" aria-hidden="true">${esc(st.mark)}</span><span><h4>${esc(st.name)}</h4><span class="sum">${esc(st.how)}</span></span></span>
+      </div>
+      <div class="ep-acts">${st.go ? `<a class="ep-try" href="${esc(st.go)}" target="_blank" rel="noopener" data-event="passport_go" data-event-params='${esc(JSON.stringify({ stamp: st.id, source: "roadmap" }))}'>${esc(st.goLabel || "하러 가기")}<span aria-hidden="true"> ↗</span></a>` : ""}<button type="button" class="ep-clear" data-quest-claim="${esc(st.id)}" aria-pressed="${done}"${done ? " disabled" : ""}>${done ? "✓ 클리어" : "했어요"}</button></div>
+    </li>`;
+  }
   /* what clearing a stage gives: a finish card to save and share */
   function stageGoalHTML(lv) {
-    const quests = questsOf(lv.id), done = quests.filter((r) => state.ridden.has(r.repo)).length;
-    if (levelDone(lv.id)) return `<div class="stage-goal clear"><b class="sg-badge">STAGE CLEAR</b><span>${esc(lv.tier || lv.name)} 퀘스트 ${quests.length}개를 모두 마쳤습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>`;
-    return `<div class="stage-goal"><b class="sg-badge">클리어 보상</b><span>${esc(lv.tier || lv.name)} 완주 카드</span><span class="sg-n" aria-label="퀘스트 ${quests.length}개 중 ${done}개 클리어">${done} / ${quests.length}</span></div>`;
+    const quests = questsOf(lv.id), done = quests.filter(questDone).length;
+    if (levelDone(lv.id)) return `<div class="stage-goal clear"><b class="sg-badge">STAGE CLEAR</b><span>여권에 ‘${esc(lv.tier || lv.name)} 클리어’ 스탬프가 찍혔습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>`;
+    return `<div class="stage-goal"><b class="sg-badge">클리어 보상</b><span>여권 스탬프 ‘${esc(lv.tier || lv.name)} 클리어’ · 완주 카드</span><span class="sg-n" aria-label="퀘스트 ${quests.length}개 중 ${done}개 클리어">${done} / ${quests.length}</span></div>`;
   }
   /* the Builders behind a level, each one a link to their page */
   function levelCrewHTML(courses) {
@@ -417,19 +428,23 @@
   }
 
   /* quests are the free materials of a stage (and the outside library on L4); the book and lecture are not quests */
-  const questsOf = (levelId) => levelItems(levelId).filter(rideable);
+  /* WORLD 1 quests are the stage's free materials; WORLD 2 quests are things to do, kept as passport stamps */
+  function questsOf(levelId) {
+    const lv = levelOf(levelId);
+    if (lv && (lv.quests || []).length) {
+      return lv.quests.map((id) => passport().stamps.find((x) => x.id === id)).filter(Boolean).map((st) => ({ action: true, repo: st.id, title: st.name, stamp: st }));
+    }
+    return levelItems(levelId).filter(rideable);
+  }
   /* the stage to go to next: the first one that is not cleared */
   const hereStage = () => (state.levels.find((lv) => !levelDone(lv.id)) || state.levels[state.levels.length - 1]).id;
   function renderHud() {
     const box = $("#quest-hud");
     if (!box) return;
-    const all = state.levels.flatMap((lv) => questsOf(lv.id));
-    const done = all.filter((r) => state.ridden.has(r.repo)).length;
-    const badges = state.levels.filter((lv) => levelDone(lv.id)).length;
-    const pct = all.length ? Math.round((done / all.length) * 100) : 0;
-    box.innerHTML = `<span class="qh-k">내 로드맵</span>
-      <span class="qh-bar" role="img" aria-label="퀘스트 ${done}/${all.length} 클리어"><i style="width:${pct}%"></i></span>
-      <span class="qh-n">퀘스트 <b>${done}</b> / ${all.length}</span><span class="qh-n">배지 <b>${badges}</b> / ${state.levels.length}</span>`;
+    const p = passport(), total = p.stamps.length;
+    const stages = state.levels.filter((lv) => levelDone(lv.id)).length;
+    box.innerHTML = `<button type="button" class="qh" data-passport="roadmap"><span class="qh-k">내 여권</span>
+      <span class="qh-n">스탬프 <b>${p.count()}</b> / ${total}</span><span class="qh-n">스테이지 <b>${stages}</b> / ${state.levels.length}</span><span aria-hidden="true">›</span></button>`;
   }
   function renderPath() {
     const box = $("#path");
@@ -440,7 +455,7 @@
     box.innerHTML = state.levels.map((lv) => {
       const quests = questsOf(lv.id), books = levelItems(lv.id).filter((r) => r.kind === "paid").length;
       const makers = [...new Set(quests.flatMap((r) => r.builders || []))];
-      const done = quests.filter((r) => state.ridden.has(r.repo)).length;
+      const done = quests.filter(questDone).length;
       const cleared = levelDone(lv.id);
       const on = route ? onRoute.has(lv.id) : state.level === lv.id;
       const pct = quests.length ? Math.round((done / quests.length) * 100) : 0;
@@ -476,6 +491,7 @@
             <div class="lv-t"><p class="lv-kick">STAGE ${i + 1} · ${esc(lv.name)}</p><h3>${esc(lv.tier || lv.name)}<span>${esc(lv.question)}</span></h3><p>${esc(lv.goal)}</p>${lv.for ? `<p class="lv-for"><b>이런 분께</b>${esc(lv.for)}</p>` : ""}</div>
             ${levelCrewHTML(courses)}
           </div>
+          ${(lv.quests || []).length ? `<p class="lv-sub">퀘스트 · 직접 해 보기</p><ol class="lv-items act-items">${questsOf(lv.id).map((q, k) => actionQuestHTML(q, k, lv)).join("")}</ol><p class="lv-sub">이 스테이지의 레포</p>` : ""}
           <ol class="lv-items">${courses.map((r, k) => episodeHTML(r, lv.id, k, top)).join("")}</ol>
           ${books.length ? textbookHTML(books, courses) : ""}
           <div class="lv-foot">${stageGoalHTML(lv)}${next ? `<button type="button" class="lv-next" data-step="${next.id}">다음 스테이지 · ${next.id} ${esc(next.tier || next.name)} ›</button>` : ""}</div>
@@ -518,16 +534,18 @@
     if (source && id !== state.route) track("select_route", { route: id, source });
     state.routeBegin = 0;
     state.route = id;
-    $("#route-chips").querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-checked", String(c.dataset.route === id)));
+    renderRouteChips();
     renderShelf();
     applyRouteMap();
   }
 
   function renderRouteChips() {
     const box = $("#route-chips");
-    const all = [{ id: "all", label: "전체 보기" }, ...state.routes];
-    box.innerHTML = all.map((r) => `<button type="button" class="chip" role="radio" data-route="${esc(r.id)}" aria-checked="${r.id === state.route}">${esc(r.label)}</button>`).join("") +
-      `<button type="button" class="chip quiz-chip" data-quiz-open>잘 모르겠어요 · 3문항으로 찾기</button>`;
+    const route = currentRoute();
+    box.innerHTML = (route ? `<button type="button" class="chip" data-route="all">‹ 로드맵 전체로</button>` : "") +
+      `<button type="button" class="chip quiz-chip" data-quiz-open>어디서 시작할지 모르겠어요 · 3문항</button>`;
+    if (box.dataset.wired) return;
+    box.dataset.wired = "1";
     box.addEventListener("click", (e) => {
       const b = e.target.closest("[data-route]");
       if (!b) return;
@@ -1224,9 +1242,19 @@
 
   /* ---------- finish card (one level fully marked done) ---------- */
   const rideable = (r) => !r.kind || r.kind === "external";
+  const levelOf = (id) => state.levels.find((l) => l.id === id);
+  /* a material is a quest only on stages without action quests */
+  const isMaterialQuest = (r) => rideable(r) && !!r.level && !((levelOf(r.level) || {}).quests || []).length;
+  const passport = () => window.hubPassport || { stamps: [], has: () => false, count: () => 0 };
+  const questDone = (q) => (q.action ? passport().has(q.repo) : state.ridden.has(q.repo));
   function levelDone(levelId) {
-    const items = levelItems(levelId).filter(rideable);
-    return items.length > 0 && items.every((r) => state.ridden.has(r.repo));
+    const qs = questsOf(levelId);
+    return qs.length > 0 && qs.every(questDone);
+  }
+  /* a cleared stage puts its stamp in the passport (once; stamps stay) */
+  function syncStageStamps() {
+    if (!window.hubStamp) return;
+    state.levels.forEach((lv) => { if (levelDone(lv.id)) window.hubStamp(`stage_${lv.id}`); });
   }
   function drawCard(canvas, lv, items, name) {
     const W = 1200, H = 630, c = canvas.getContext("2d");
@@ -1319,7 +1347,7 @@
   async function openCard(levelId) {
     const lv = state.levels.find((l) => l.id === levelId);
     if (!lv || !levelDone(levelId)) return;
-    const items = levelItems(levelId).filter(rideable);
+    const items = questsOf(levelId);
     const next = state.levels[state.levels.indexOf(lv) + 1];
     track("finish_card_open", { level: levelId });
     $("#station-body").innerHTML = `<div class="station-band" data-line="main"></div>
@@ -1414,7 +1442,7 @@
       const l = state.lines.get(lid);
       return `<div class="adjacent" data-line="${lid}">${prev ? `<button type="button" data-open="${esc(prev.repo)}">${esc(l.name)} 트랙 이전<b>${esc(prev.title)}</b></button>` : `<span></span>`}${next ? `<button type="button" class="next" data-open="${esc(next.repo)}">${esc(l.name)} 트랙 다음<b>${esc(next.title)}</b></button>` : `<span></span>`}</div>`;
     }).join("");
-    const canRide = !r.kind || r.kind === "external";
+    const canRide = isMaterialQuest(r);
     const ridden = state.ridden.has(r.repo);
     $("#station-body").innerHTML = `
       <div class="station-band" data-line="${line}"></div>
@@ -1469,6 +1497,21 @@
     if (lv) dialog().addEventListener("close", () => gotoItem(id), { once: true });
   }
 
+  function claimQuest(id) {
+    const lv = state.levels.find((l) => (l.quests || []).includes(id));
+    const before = lv ? levelDone(lv.id) : false;
+    if (!window.hubStamp || !window.hubStamp(id)) return;
+    track("mark_done", { quest: id, level: lv ? lv.id : "", done: true, source: "card" });
+    if (lv && !before && levelDone(lv.id)) { track("stage_clear", { level: lv.id }); syncStageStamps(); }
+  }
+  /* a stamp from anywhere (passport dialog, a quest card) redraws the roadmap and keeps focus where it was */
+  function onStamp() {
+    const a = document.activeElement, key = a && (a.dataset.clear || a.dataset.questClaim);
+    renderShelf(); renderMap(); renderWeek();
+    if (key) { const b = $(`#shelf [data-clear="${CSS.escape(key)}"], #shelf [data-quest-claim="${CSS.escape(key)}"]`); if (b) b.focus(); }
+    const goal = $("#shelf .stage-goal.clear");
+    if (goal && key) goal.classList.add("pop");
+  }
   function toggleClear(id) {
     const was = state.level, stageWas = state.repos.get(id) && state.repos.get(id).level;
     const before = stageWas ? levelDone(stageWas) : false;
@@ -1481,6 +1524,7 @@
     if (btn) btn.focus();
     if (stageWas && !before && levelDone(stageWas)) {
       track("stage_clear", { level: stageWas });
+      syncStageStamps();
       const goal = $("#shelf .stage-goal.clear");
       if (goal) { goal.classList.add("pop"); goal.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" }); }
     }
@@ -1540,6 +1584,8 @@
       if (dl) { saveCard(dl.dataset.cardSave); return; }
       const clr = e.target.closest("[data-clear]");
       if (clr) { toggleClear(clr.dataset.clear); return; }
+      const qc = e.target.closest("[data-quest-claim]");
+      if (qc) { claimQuest(qc.dataset.questClaim); return; }
       const ride = e.target.closest("[data-ride]");
       if (ride) { toggleRide(ride.dataset.ride); return; }
       if (e.target.closest("[data-close]")) { closeStation(); return; }
@@ -1605,6 +1651,8 @@
     renderGrowth(); renderLadder();
     renderContrib();
     renderRouteChips(); renderShelf(); renderWeek();
+    document.addEventListener("hub:stamp", onStamp);
+    syncStageStamps();
     let spyQueued = false;
     window.addEventListener("scroll", () => { if (spyQueued) return; spyQueued = true; requestAnimationFrame(() => { spyQueued = false; shelfSpy(); }); }, { passive: true });
     const header = $(".site-header");

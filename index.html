@@ -74,19 +74,16 @@
         <h2 id="curriculum-title">커리큘럼</h2>
         <p id="curriculum-sub">L0부터 L4까지, 팀이 만든 오픈소스를 순서대로 엮었습니다. L0–L2는 무료 자료만으로 끝까지 갈 수 있습니다.</p>
       </div>
-      <div class="goal-row">
-        <span class="goal-q">무엇을 하고 싶나요?</span>
-        <div class="route-chips" role="radiogroup" aria-label="목표 고르기" id="route-chips"></div>
-      </div>
-      <p class="route-note" id="route-note" aria-live="polite"></p>
       <div class="tabs big" role="tablist" aria-label="보기 방식">
         <button type="button" role="tab" id="tab-course" aria-controls="panel-course" aria-selected="true">로드맵으로 보기<span class="tab-n" id="n-course"></span></button>
         <button type="button" role="tab" id="tab-map" aria-controls="panel-map" aria-selected="false" tabindex="-1"><span class="tab-lines" aria-hidden="true"><i></i><i></i><i></i></span>트랙 지도로 보기</button>
       </div>
 <div class="note-row">
               <p class="tab-note" id="tab-note">로드맵은 배우는 순서이고, 트랙은 주제입니다. 같은 주제를 L0부터 L4까지 이어 보려면 <button type="button" class="link-btn" data-tab-go="tab-map">트랙 지도</button>를 여세요.</p>
-        <div class="quest-hud" id="quest-hud" aria-live="polite"></div>
+        <div class="route-chips" role="group" aria-label="시작점 찾기" id="route-chips"></div>
+        <div class="quest-hud" id="quest-hud"></div>
       </div>
+      <p class="route-note" id="route-note" aria-live="polite"></p>
 
       <div id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden>
         <div class="map-card">

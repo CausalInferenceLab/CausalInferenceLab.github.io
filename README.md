@@ -41,26 +41,26 @@
 
 - **교란 실험실:** 가상 사용자 800명으로 교란이 단순 비교를 얼마나 속이는지 슬라이더로 직접 움직여 봅니다. [실험실 열기](https://causalinferencelab.github.io/lab.html)
 - **연재:** 팀원이 쓰는 글을 모읍니다. 매주 월요일 ‘이번 주 포스트’가 바뀌고, 글쓴이를 작가 카드로 소개합니다.
-- **활동 여권:** 자료 읽기, 웹북 한 장 완독 같은 배우기 스탬프와 함께, 행사 사진 후기, 강의·책 후기, 레포 댓글, 러너 참여, 첫 기여, Builder 되기 스탬프를 모읍니다. 기록은 내 브라우저에만 남습니다.
+- **활동 여권:** 로드맵 스테이지 클리어 스탬프 다섯 개, 자료 읽기와 웹북 한 장 완독 같은 배우기 스탬프와 함께, 행사 사진 후기, 강의·책 후기, 레포 댓글, 러너 참여, 첫 기여, Builder 되기 스탬프를 모읍니다. 기록은 내 브라우저에만 남습니다.
 - **3문항으로 시작점 찾기:** 경험, 하는 일, 원하는 것을 고르면 볼 순서와 첫 자료를 추천합니다. [바로 해 보기](https://causalinferencelab.github.io/?quiz=1)
 - **상관일까, 인과일까?:** 데이터 상황 10개를 보고 상관인지 인과인지 고르는 2분짜리 게임입니다. 답마다 관련 웹북 장으로 이어집니다. [게임 하기](https://causalinferencelab.github.io/game.html)
 - **완주 카드:** 한 단계의 자료를 모두 학습 완료로 표시하면, 공유할 수 있는 완주 카드 이미지를 만들 수 있습니다.
 - **Builder 페이지:** 프로젝트를 연 Builder마다 이력, 만든 레포, 배지를 모은 페이지가 있습니다. [Builder 전체 보기](https://causalinferencelab.github.io/builders/)
 - **Builder 메달:** Builder로 연 기수가 쌓이면 메달이 바뀝니다. 첫 기수는 Builder, 2개 기수는 다시 온 Builder, 3개 기수 이상은 베테랑 Builder, 5개 기수 이상은 명예 Builder입니다. 러너 20명 이상과 함께한 멘토, 러너로 시작해 Builder가 된 사람에게는 특별 메달이 붙습니다. 메달 카드 이미지는 허브에서 바로 만들 수 있습니다.
 
-## 커리큘럼: L0–L4
+## 커리큘럼: L0–L4 로드맵
 
-L0–L2는 **배우는 단계**로, 무료 자료만으로 끝까지 갈 수 있습니다. L3–L4는 **만드는 단계**입니다.
+다섯 단계를 한 길 위의 스테이지로 엮었습니다. L0–L2(WORLD 1 · 배우기)는 무료 자료가 퀘스트이고, 무료 자료만으로 끝까지 갈 수 있습니다. L3–L4(WORLD 2 · 만들기)는 이슈 댓글, 첫 PR, 러너 참여, Builder 되기처럼 직접 하는 일이 퀘스트입니다. 스테이지의 퀘스트를 모두 클리어하면 활동 여권에 스테이지 스탬프가 찍힙니다.
 
 | 단계 | 질문 | 대표 자료 |
 | --- | --- | --- |
-| L0 Foundation | 왜 인과추론인가 | [Causal Studio](https://github.com/CausalInferenceLab/causal-studio) |
-| L1 Theory & Concept | 어떻게 추정하나 | [Brave & True 인과추론 번역서](https://github.com/CausalInferenceLab/Causal-Inference-with-Python), [온라인 실험 이해하기](https://github.com/CausalInferenceLab/OCE-Materials) |
-| L2 Application | 내 데이터에 어떻게 쓰나 | [책 예제 코드](https://github.com/CausalInferenceLab/causal-inference-in-python-code), [산업 사례 템플릿](https://github.com/CausalInferenceLab/causal-inference-practice), [특강·발표 자료](https://github.com/CausalInferenceLab/causal-inference-lecture) 외 |
-| L3 Amplification | 분석을 어떻게 키우나 | [Lang2SQL](https://github.com/CausalInferenceLab/Lang2SQL), [정책 효과 분석 에이전트](https://github.com/CausalInferenceLab/policy-effect-analytics-agent) |
-| L4 Research | 무엇이 아직 안 풀렸나 | [ccwr](https://github.com/CausalInferenceLab/ccwr), RWE 가이드라인·적응형 설계 스터디, 외부 오픈소스 기여 |
+| L0 입문 | 왜 인과추론인가 | [Causal Studio](https://github.com/CausalInferenceLab/causal-studio) |
+| L1 개념 완성 | 어떻게 추정하나 | [Brave & True 인과추론 번역서](https://github.com/CausalInferenceLab/Causal-Inference-with-Python), [온라인 실험 이해하기](https://github.com/CausalInferenceLab/OCE-Materials) |
+| L2 실전 적용 | 내 데이터에 어떻게 쓰나 | [책 예제 코드](https://github.com/CausalInferenceLab/causal-inference-in-python-code), [산업 사례 템플릿](https://github.com/CausalInferenceLab/causal-inference-practice), [특강·발표 자료](https://github.com/CausalInferenceLab/causal-inference-lecture) 외 |
+| L3 도구 개발 | 분석을 어떻게 키우나 | [Lang2SQL](https://github.com/CausalInferenceLab/Lang2SQL), [정책 효과 분석 에이전트](https://github.com/CausalInferenceLab/policy-effect-analytics-agent) |
+| L4 연구 | 무엇이 아직 안 풀렸나 | [ccwr](https://github.com/CausalInferenceLab/ccwr), RWE 가이드라인·적응형 설계 스터디, 외부 오픈소스 기여 |
 
-자료는 주제에 따라 여섯 트랙(입문·기본, ML, 연구, 실험, 행동·마케팅, AI 에이전트)으로도 나뉩니다. 허브에서 "처음 시작해요", "A/B 테스트를 해요" 같은 목표를 고르면 볼 순서를 안내합니다.
+자료는 주제에 따라 여섯 트랙(입문·기본, ML, 연구, 실험, 행동·마케팅, AI 에이전트)으로도 나뉩니다. 허브의 트랙 지도에서 노선을 고르면 그 주제만 따라갈 수 있고, 어디서 시작할지 모르겠다면 3문항으로 볼 순서를 추천받습니다.
 
 ## 한빛미디어와 함께
 

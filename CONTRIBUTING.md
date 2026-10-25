@@ -83,7 +83,7 @@ python3 scripts/builder_cards.py
 
 ## 활동 여권과 실험실
 
-스탬프 정의는 `assets/js/passport.js`의 `STAMPS`에 있습니다. `kind: "auto"`는 허브가 알아서 찍고(`window.hubStamp("post")`), `kind: "self"`는 행사 후기, 강의 후기, 레포 댓글처럼 허브 밖에서 하는 일이라 방문자가 ‘했어요’를 눌러 찍습니다. 이미 받은 스탬프는 다시 주지 않고, 기록은 `localStorage`에만 남습니다. 웹북 독자 스탬프는 같은 도메인의 웹북이 남기는 `cil-book-read`(읽은 장)를 보고 찍고, 역 정보 창의 '내 진도'와 '이어 읽기'는 `cil-book-read`, `cil-book-last`를 읽습니다. `/#passport`로 들어오면 여권이 바로 열립니다. 교란 실험실(`lab.html`, `assets/js/lab.js`)의 데이터는 페이지에서 만드는 가상 사용자입니다.
+스탬프 정의는 `assets/js/passport.js`의 `STAMPS`에 있습니다. `kind: "auto"`는 허브가 알아서 찍고(`window.hubStamp("post")`), `kind: "self"`는 행사 후기, 강의 후기, 레포 댓글처럼 허브 밖에서 하는 일이라 방문자가 ‘했어요’를 눌러 찍습니다. 로드맵 스테이지 스탬프(`stage_L0`–`stage_L4`)는 그 스테이지의 퀘스트를 모두 클리어하면 허브가 찍습니다. L3·L4처럼 `data/levels.json`에 `quests`(스탬프 id 목록)가 있는 스테이지는 그 스탬프들이 퀘스트이고, 없는 스테이지는 무료 자료가 퀘스트입니다. 이미 받은 스탬프는 다시 주지 않고, 기록은 `localStorage`에만 남습니다. 웹북 독자 스탬프는 같은 도메인의 웹북이 남기는 `cil-book-read`(읽은 장)를 보고 찍고, 역 정보 창의 '내 진도'와 '이어 읽기'는 `cil-book-read`, `cil-book-last`를 읽습니다. `/#passport`로 들어오면 여권이 바로 열립니다. 교란 실험실(`lab.html`, `assets/js/lab.js`)의 데이터는 페이지에서 만드는 가상 사용자입니다.
 
 ## 이벤트 측정
 

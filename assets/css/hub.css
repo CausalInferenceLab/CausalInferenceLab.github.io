@@ -1634,3 +1634,18 @@ button.btn.sm { font-size: 14px; }
 /* pins keep white text readable in both themes */
 .st-pin, .vl-pin { background: #4C4FD0; }
 #metro .pin rect, #metro .pin path { fill: #4C4FD0; }
+
+/* ---------- one record (the passport), action quests on WORLD 2, the start finder beside the tab note ---------- */
+.note-row { margin: -6px 0 14px; }
+.note-row .tab-note { margin: 0; }
+.note-row .route-chips { gap: 6px; }
+.note-row .route-chips .chip { font-size: 13.5px; padding: 6px 12px; }
+.qh { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px; border-radius: 999px; background: var(--surface); font-size: 13.5px; color: var(--muted); }
+.qh:hover { box-shadow: 0 4px 14px rgba(20, 22, 43, .08); }
+.qh:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.route-note:empty { display: none; }
+.lv-sub { margin: 18px 0 -6px; font-size: 13px; font-weight: 800; color: var(--muted); letter-spacing: .02em; }
+#shelf .ep.act { --c: var(--l-ai); }
+.aq-body { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px 12px; flex: 1; }
+.aq-body .stamp { width: 44px; height: 44px; font-size: 16px; flex-shrink: 0; }
+.ep-clear:disabled { cursor: default; }
