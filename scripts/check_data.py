@@ -18,7 +18,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOKEN = re.compile(r"[A-Za-z0-9_.-]+")
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
-URL_KEYS = {"url", "link", "linkedin", "site", "cover", "href", "builderUrl"}
+URL_KEYS = {"url", "link", "linkedin", "site", "cover", "href", "builderUrl", "preview"}
 errors = []
 
 
@@ -89,6 +89,17 @@ def main():
             err(w, "cohorts must be whole numbers")
         if not is_int(r.get("stars", 0)):
             err(w, "stars must be a whole number")
+        tags = r.get("tags")
+        if tags is not None and not (isinstance(tags, list) and len(tags) <= 3 and all(isinstance(t, str) and t and len(t) <= 20 for t in tags)):
+            err(w, "tags must be a list of up to 3 short labels")
+        for k in ("format", "previewLabel"):
+            if r.get(k) is not None and not (isinstance(r[k], str) and r[k].strip()):
+                err(w, f"{k} must be a non-empty string")
+        if r.get("previewLabel") and not (r.get("preview") or r.get("site")):
+            err(w, "previewLabel needs a preview or site link")
+        paid_ids = {p.get("id") for p in (data.get("map.json") or {}).get("paid") or []}
+        if r.get("textbook") is not None and r["textbook"] not in paid_ids:
+            err(w, f"textbook {r['textbook']!r} must be a paid item id in map.json")
 
     for i, p in enumerate(data.get("projects.json") or []):
         w = f"projects.json[{i}]"

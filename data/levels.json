@@ -1,37 +1,47 @@
 [
   {
     "id": "L0",
+    "tier": "입문",
     "name": "Foundation",
     "question": "왜 인과추론인가",
     "goal": "영상과 노트북으로 상관과 인과가 왜 다른지 감을 잡습니다.",
-    "layer": "learn"
+    "layer": "learn",
+    "for": "상관과 인과가 왜 다른지 처음 궁금해진 분"
   },
   {
     "id": "L1",
+    "tier": "개념 완성",
     "name": "Theory & Concept",
     "question": "어떻게 추정하나",
     "goal": "잠재적 결과, 무작위 실험, 회귀, 성향점수, 이중차분법 같은 핵심 기법을 무료 자료로 끝까지 익힙니다.",
-    "layer": "learn"
+    "layer": "learn",
+    "for": "핵심 기법을 무료 자료로 처음부터 끝까지 익히려는 분"
   },
   {
     "id": "L2",
+    "tier": "실전 적용",
     "name": "Application",
     "question": "내 데이터에 어떻게 쓰나",
     "goal": "책 코드, 산업 사례 템플릿, 현업 특강으로 실제 문제에 적용합니다.",
-    "layer": "learn"
+    "layer": "learn",
+    "for": "회사 데이터에 기법을 붙여 보려는 실무자"
   },
   {
     "id": "L3",
+    "tier": "도구 개발",
     "name": "Amplification",
     "question": "분석을 어떻게 키우나",
     "goal": "데이터 에이전트처럼 분석을 빠르게 만드는 도구를 함께 개발합니다.",
-    "layer": "build"
+    "layer": "build",
+    "for": "분석을 돕는 도구를 직접 만들고 싶은 분"
   },
   {
     "id": "L4",
+    "tier": "연구",
     "name": "Research",
     "question": "무엇이 아직 안 풀렸나",
     "goal": "연구 소프트웨어를 만들고 규제·임상 연구를 리뷰하며, 외부 오픈소스에 기여합니다.",
-    "layer": "build"
+    "layer": "build",
+    "for": "헬스케어·규제 연구나 외부 오픈소스 기여를 하려는 분"
   }
 ]
