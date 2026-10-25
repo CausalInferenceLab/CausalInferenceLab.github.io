@@ -334,6 +334,8 @@
   }
 
   const pad2 = (n) => String(n).padStart(2, "0");
+  /* levels read as "Level 0".."Level 4"; the ids stay L0..L4 in data and links */
+  const LV = (id) => (id ? `Level ${String(id).replace(/^L/, "")}` : "");
   const DAY = 864e5;
   const ageDays = (iso) => (iso ? Math.max(0, Math.floor((Date.now() - Date.parse(iso)) / DAY)) : null);
   function ago(iso) {
@@ -367,7 +369,6 @@
     const tracks = (r.lines || []).map((l) => esc(state.lines.get(l).name)).join(" · ");
     const lv = state.levels.find((x) => x.id === level);
     /* what a course says about itself: three tags, what it is made of, the book it follows, and a first look */
-    const tags = (r.tags || []).length ? `<span class="ep-tags">${r.tags.map((t) => `<span>#${esc(t)}</span>`).join("")}</span>` : "";
     const book = r.textbook ? state.repos.get(r.textbook) : null;
     const spec = r.format || book ? `<span class="ep-spec">${r.format ? `<span><b>구성</b>${esc(r.format)}</span>` : ""}${book ? `<span><b>교재</b>${esc(book.shortTitle || book.title)}</span>` : ""}</span>` : "";
     const tryUrl = r.preview || (r.previewLabel ? r.site : "");
@@ -376,9 +377,9 @@
     const clearBtn = isMaterialQuest(r) ? `<button type="button" class="ep-clear" data-clear="${esc(id)}" aria-pressed="${done}">${done ? "✓ 클리어" : "클리어 표시"}</button>` : "";
     const acts = tryLink || clearBtn ? `<div class="ep-acts">${tryLink}${clearBtn}</div>` : "";
     return `<li class="ep${step ? " on" : ""}${r.kind ? ` ${r.kind}` : ""}${done ? " cleared" : ""}" data-line="${line}" data-id="${esc(id)}" data-level="${level}"${step ? ` data-chap="${esc(id)}"` : ""}>
-      <button type="button" data-open="${esc(id)}" aria-label="${step ? `${step}번째, ` : ""}${esc(r.title)}${lv ? `, ${lv.id} ${esc(lv.name)}` : ""}">
-        <span class="ep-top">${step ? `<span class="ep-step">${pad2(step)}</span>` : (isMaterialQuest(r) ? `<span class="ep-q">퀘스트 ${pad2(k + 1)}</span>` : "")}<span class="ep-track"><i aria-hidden="true"></i>${step && lv ? `${lv.id} · ` : ""}${tracks || (r.kind === "paid" ? "도서·강의" : "")}</span><span class="ep-badges">${badges}</span></span>
-        <span class="ep-main">${r.cover ? `<img class="ep-thumb" src="${esc(r.cover)}" alt="" loading="lazy">` : ""}<span><h4>${esc(r.title)}</h4><span class="sum">${esc(r.summary)}</span>${tags}</span></span>
+      <button type="button" data-open="${esc(id)}" aria-label="${step ? `${step}번째, ` : ""}${esc(r.title)}${lv ? `, ${LV(lv.id)} ${esc(lv.tier || lv.name)}` : ""}">
+        <span class="ep-top">${step ? `<span class="ep-step">${pad2(step)}</span>` : (isMaterialQuest(r) ? `<span class="ep-q">퀘스트 ${pad2(k + 1)}</span>` : "")}<span class="ep-track"><i aria-hidden="true"></i>${step && lv ? `${LV(lv.id)} · ` : ""}${tracks || (r.kind === "paid" ? "도서·강의" : "")}</span><span class="ep-badges">${badges}</span></span>
+        <span class="ep-main">${r.cover ? `<img class="ep-thumb" src="${esc(r.cover)}" alt="" loading="lazy">` : ""}<span><h4>${esc(r.title)}</h4><span class="sum">${esc(r.summary)}</span></span></span>
         ${spec}
         <span class="ep-foot">${people}<span class="ep-end">${r.kind ? "" : `<span class="star">${icons.star}${fmt(r.stars || 0)}</span>`}</span></span>
       </button>
@@ -400,8 +401,8 @@
   /* what clearing a stage gives: a finish card to save and share */
   function stageGoalHTML(lv) {
     const quests = questsOf(lv.id), done = quests.filter(questDone).length;
-    if (levelDone(lv.id)) return `<div class="stage-goal clear"><b class="sg-badge">STAGE CLEAR</b><span>여권에 ‘${esc(lv.tier || lv.name)} 클리어’ 스탬프가 찍혔습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>`;
-    return `<div class="stage-goal"><b class="sg-badge">클리어 보상</b><span>여권 스탬프 ‘${esc(lv.tier || lv.name)} 클리어’ · 완주 카드</span><span class="sg-n" aria-label="퀘스트 ${quests.length}개 중 ${done}개 클리어">${done} / ${quests.length}</span></div>`;
+    if (levelDone(lv.id)) return `<div class="stage-goal clear"><b class="sg-badge">클리어</b><span>여권에 스탬프가 찍혔습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>`;
+    return `<div class="stage-goal"><span>다 하면 여권 스탬프</span><span class="sg-n" aria-label="퀘스트 ${quests.length}개 중 ${done}개 클리어">${done} / ${quests.length}</span></div>`;
   }
   /* the Builders behind a level, each one a link to their page */
   function levelCrewHTML(courses) {
@@ -460,10 +461,10 @@
       const on = route ? onRoute.has(lv.id) : state.level === lv.id;
       const pct = quests.length ? Math.round((done / quests.length) * 100) : 0;
       const cls = ["step", lv.layer === "build" ? "build" : "", cleared ? "cleared" : "", lv.id === here ? "here" : ""].filter(Boolean).join(" ");
-      return `<li class="${cls}"><button type="button" data-step="${lv.id}" aria-pressed="${on}" aria-label="${esc(`${lv.id} ${lv.tier || lv.name}, 퀘스트 ${quests.length}개 중 ${done}개 클리어${lv.id === here ? ", 지금 여기" : ""}`)}">
+      return `<li class="${cls}"><button type="button" data-step="${lv.id}" aria-pressed="${on}" aria-label="${esc(`${LV(lv.id)} ${lv.tier || lv.name}, 퀘스트 ${quests.length}개 중 ${done}개 클리어${lv.id === here ? ", 지금 여기" : ""}`)}">
         ${lv.id === here ? `<span class="st-pin" aria-hidden="true">지금 여기</span>` : ""}
-        <span class="st-node" style="--p:${pct}" aria-hidden="true"><span class="st-id">${cleared ? "★" : lv.id}</span></span>
-        <span class="st-name">${esc(lv.tier || lv.name)}</span><span class="st-q">${esc(lv.question)}</span>
+        <span class="st-node" style="--p:${pct}" aria-hidden="true"><span class="st-id">${cleared ? "★" : lv.id.replace(/^L/, "")}</span></span>
+        <span class="st-lv">${LV(lv.id)}</span><span class="st-name">${esc(lv.tier || lv.name)}</span><span class="st-q">${esc(lv.question)}</span>
         <span class="st-meta">${cleared ? `<b class="st-clear">CLEAR</b>` : `퀘스트 ${quests.length}${done ? ` · 클리어 ${done}` : ""}`}${books ? ` · 교재 ${books}` : ""}</span>
         ${makers.length ? `<span class="st-makers">${makers.slice(0, 4).map((n) => avatarHTML(n, "sm")).join("")}</span>` : ""}</button></li>`;
     }).join("");
@@ -487,14 +488,14 @@
       const i = state.levels.indexOf(lv), next = state.levels[i + 1];
       shelf.innerHTML = `<li class="lv${lv.layer === "build" ? " build" : ""}" data-chap="${lv.id}">
           <div class="lv-head">
-            <span class="lv-id">${lv.id}</span>
-            <div class="lv-t"><p class="lv-kick">STAGE ${i + 1} · ${esc(lv.name)}</p><h3>${esc(lv.tier || lv.name)}<span>${esc(lv.question)}</span></h3><p>${esc(lv.goal)}</p>${lv.for ? `<p class="lv-for"><b>이런 분께</b>${esc(lv.for)}</p>` : ""}</div>
+            <span class="lv-id"><small>Level</small>${lv.id.replace(/^L/, "")}</span>
+            <div class="lv-t"><h3>${esc(lv.tier || lv.name)}<span>${esc(lv.question)}</span></h3><p>${esc(lv.goal)}</p>${lv.for ? `<p class="lv-for"><b>이런 분께</b>${esc(lv.for)}</p>` : ""}</div>
             ${levelCrewHTML(courses)}
           </div>
           ${(lv.quests || []).length ? `<p class="lv-sub">퀘스트 · 직접 해 보기</p><ol class="lv-items act-items">${questsOf(lv.id).map((q, k) => actionQuestHTML(q, k, lv)).join("")}</ol><p class="lv-sub">이 스테이지의 레포</p>` : ""}
           <ol class="lv-items">${courses.map((r, k) => episodeHTML(r, lv.id, k, top)).join("")}</ol>
           ${books.length ? textbookHTML(books, courses) : ""}
-          <div class="lv-foot">${stageGoalHTML(lv)}${next ? `<button type="button" class="lv-next" data-step="${next.id}">다음 스테이지 · ${next.id} ${esc(next.tier || next.name)} ›</button>` : ""}</div>
+          <div class="lv-foot">${stageGoalHTML(lv)}${next ? `<button type="button" class="lv-next" data-step="${next.id}">다음 · ${LV(next.id)} ${esc(next.tier || next.name)} ›</button>` : ""}</div>
         </li>`;
       $("#route-note").textContent = "";
     }
@@ -503,7 +504,7 @@
 
     const repos = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot");
     const depot = [...state.repos.values()].filter((r) => r.status === "depot");
-    $("#curriculum-sub").textContent = `인과추론을 어디서 시작해 어디까지 가면 되는지, 팀이 만든 레포 ${repos.length}개를 다섯 스테이지의 로드맵으로 엮었습니다. L0–L2는 무료 자료만으로도 끝까지 갈 수 있습니다.`;
+    $("#curriculum-sub").textContent = `팀이 만든 오픈소스 ${repos.length}개를 Level 0부터 4까지 엮었습니다. Level 0–2는 무료 자료만으로 끝까지 갈 수 있습니다.`;
     $("#n-course").textContent = repos.length; $("#n-course").title = `레포 ${repos.length}개`;
     $("#shelf-foot").innerHTML = `카드를 누르면 자세한 정보와 링크가 열립니다. 클리어 기록은 이 브라우저에만 남습니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
   }
@@ -774,7 +775,7 @@
     const list = learnables();
     const recent = state.recent.map((x) => state.repos.get(x.id)).filter(Boolean).slice(0, 3);
     const finished = state.levels.filter((l) => levelDone(l.id));
-    const cardChip = finished.length ? `<button type="button" class="cont-chip card" data-card="${finished[finished.length - 1].id}">${finished[finished.length - 1].id} 완주 카드</button>` : "";
+    const cardChip = finished.length ? `<button type="button" class="cont-chip card" data-card="${finished[finished.length - 1].id}">${LV(finished[finished.length - 1].id)} 완주 카드</button>` : "";
     box.innerHTML = recent.length ? `<div class="continue"><span class="cont-label">이어서 보기</span>${recent.map((r) => `<button type="button" class="cont-chip" data-line="${primaryLine(r)}" data-open="${esc(r.repo)}"><i aria-hidden="true"></i>${esc(r.title)}</button>`).join("")}
       ${cardChip}</div>` : "";
   }
@@ -799,7 +800,7 @@
         const cls = [r.kind === "paid" ? "paid" : "", state.ridden.has(id) ? "on" : ""].filter(Boolean).join(" ");
         const other = (r.lines || []).filter((x) => x !== l.id).map((x) => state.lines.get(x)).filter(Boolean);
         const transfer = other.length ? `<span class="vl-x" title="환승: ${esc(other.map((x) => x.name).join(", "))}">환승${other.map((x) => `<span class="ln-no sm" data-line="${x.id}" aria-hidden="true">${x.number}</span>`).join("")}<span class="sr-only">${esc(other.map((x) => x.name).join(", "))}</span></span>` : "";
-        return `<li class="${cls}" data-vst="${esc(id)}"><button type="button" data-open="${esc(id)}">${esc(r.mapLabel || r.title)}</button>${r.level ? `<span class="lv">${r.level}</span>` : ""}${transfer}${state.ridden.has(id) ? `<span class="vl-done">클리어</span>` : id === pin ? `<span class="vl-pin">지금 여기</span>` : ""}</li>`;
+        return `<li class="${cls}" data-vst="${esc(id)}"><button type="button" data-open="${esc(id)}">${esc(r.mapLabel || r.title)}</button>${r.level ? `<span class="lv">${LV(r.level)}</span>` : ""}${transfer}${state.ridden.has(id) ? `<span class="vl-done">클리어</span>` : id === pin ? `<span class="vl-pin">지금 여기</span>` : ""}</li>`;
       }).join("")}</ol></div>`;
     }).join("");
   }
@@ -883,7 +884,7 @@
           <span class="pt-text"><b>${esc(p.shortTitle || p.title)}</b><span class="pt-lv"><span class="pt-type">${esc(p.type)}</span>${esc(who)}</span></span>
           <svg class="pt-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <button type="button" class="pt-goto" data-goto="${esc(p.id)}">커리큘럼 ${esc(p.level)}</button>
+        <button type="button" class="pt-goto" data-goto="${esc(p.id)}">커리큘럼 ${esc(LV(p.level))}</button>
       </li>`;
     }).join("");
   }
@@ -981,8 +982,8 @@
       const lv = levelById.get(z.level);
       const g = svg("g", { class: "zone" + (lv.layer === "build" ? " build" : "") }, zones);
       svg("rect", { x: z.x, y: 8, width: z.w, height: m.viewBox[1] - 16, rx: 14 }, g);
-      svg("text", { x: z.x + 14, y: 38, class: "zone-l" }, g).textContent = z.level;
-      svg("text", { x: z.x + 52, y: 36, class: "zone-n" }, g).textContent = lv.tier || lv.name;
+      svg("text", { x: z.x + 14, y: 37, class: "zone-l" }, g).textContent = LV(z.level);
+      svg("text", { x: z.x + 92, y: 36, class: "zone-n" }, g).textContent = lv.tier || lv.name;
       svg("text", { x: z.x + 14, y: 58, class: "zone-q" }, g).textContent = lv.question;
     });
 
@@ -1213,7 +1214,7 @@
       <p class="quiz-step"><span>추천 경로</span></p>
       <h2 id="station-title">${esc(route.label)}</h2>
       <p>${esc(quizReason(quiz.a, id))} ${esc(route.description)}</p>
-      <ol class="quiz-stops">${stops.map((r, i) => `<li data-line="${primaryLine(r)}"${i < begin ? ' class="is-optional"' : ""}><span class="n">${pad2(i + 1)}</span><span><b>${esc(r.title)}</b><span>${esc(r.level || "")}${i === begin ? " · 여기서 시작" : i < begin ? " · 필요하면" : ""}</span></span></li>`).join("")}</ol>
+      <ol class="quiz-stops">${stops.map((r, i) => `<li data-line="${primaryLine(r)}"${i < begin ? ' class="is-optional"' : ""}><span class="n">${pad2(i + 1)}</span><span><b>${esc(r.title)}</b><span>${esc(LV(r.level))}${i === begin ? " · 여기서 시작" : i < begin ? " · 필요하면" : ""}</span></span></li>`).join("")}</ol>
       <div class="links"><button type="button" class="btn" data-quiz-go="${id}" data-quiz-begin="${begin}">이 순서로 보기</button><button type="button" class="btn ghost" data-quiz-restart>다시 답하기</button></div>`);
     $("#station-body [data-quiz-go]").focus();
   }
@@ -1269,7 +1270,7 @@
     c.fillStyle = "rgba(255,255,255,.82)"; c.font = font(600, 28);
     c.fillText("Causal Inference Hub · 가짜연구소 인과추론팀", 80, 110);
     c.fillStyle = "#fff"; c.font = font(800, 92);
-    c.fillText(`${lv.id} 완주`, 80, 236);
+    c.fillText(`${LV(lv.id)} 완주`, 80, 236);
     c.font = font(700, 44); c.fillText(lv.tier ? `${lv.tier} · ${lv.name}` : lv.name, 80, 300);
     c.fillStyle = "rgba(255,255,255,.86)"; c.font = font(500, 30);
     c.fillText(items.length === 1 ? `“${lv.question}”에 답하는 자료를 마쳤습니다.` : `“${lv.question}”에 답하는 자료 ${items.length}개를 모두 마쳤습니다.`, 80, 362);
@@ -1353,11 +1354,11 @@
     $("#station-body").innerHTML = `<div class="station-band" data-line="main"></div>
       <button type="button" class="station-close" aria-label="닫기" data-close>${icons.close}</button>
       <div class="station-content" data-line="main">
-        <h2 id="station-title">${lv.id} ${esc(lv.name)} 완주 카드</h2>
-        <canvas class="card-canvas" width="1200" height="630" role="img" aria-label="${esc(`${lv.id} ${lv.name} 완주 카드`)}"></canvas>
+        <h2 id="station-title">${LV(lv.id)} ${esc(lv.tier || lv.name)} 완주 카드</h2>
+        <canvas class="card-canvas" width="1200" height="630" role="img" aria-label="${esc(`${LV(lv.id)} ${lv.tier || lv.name} 완주 카드`)}"></canvas>
         <label class="card-name">카드에 넣을 이름 (선택)<input type="text" maxlength="20" autocomplete="nickname" placeholder="예: 진수" data-card-name="${lv.id}"></label>
         <p class="card-note">이미지를 저장해 링크드인이나 블로그에 올려 보세요. 이름은 이 브라우저 밖으로 보내지 않고, 학습 진도는 이름 없이 방문 통계로만 집계합니다.</p>
-        <div class="links"><button type="button" class="btn" data-card-save="${lv.id}">${navigator.canShare ? "이미지 저장·공유" : "이미지 저장"}</button><button type="button" class="btn ghost" data-copy="${esc(shareUrl("/", "finish_card"))}" data-share="finish_card">허브 링크 복사</button>${next ? `<button type="button" class="btn ghost" data-next-level="${next.id}">${next.id} 이어서 보기</button>` : ""}</div>
+        <div class="links"><button type="button" class="btn" data-card-save="${lv.id}">${navigator.canShare ? "이미지 저장·공유" : "이미지 저장"}</button><button type="button" class="btn ghost" data-copy="${esc(shareUrl("/", "finish_card"))}" data-share="finish_card">허브 링크 복사</button>${next ? `<button type="button" class="btn ghost" data-next-level="${next.id}">${LV(next.id)} 이어서 보기</button>` : ""}</div>
       </div>`;
     showDialog();
     try { if (document.fonts) await document.fonts.load('800 92px "Pretendard Variable"'); } catch (e) { /* draw with fallback fonts */ }
@@ -1416,7 +1417,7 @@
     const extraTag = r.kind === "paid" ? `<span class="status active">유료</span>` : statusLabel[r.status] ? `<span class="status ${r.status}">${statusLabel[r.status]}</span>` : "";
     const builders = (r.builders || []).map(nameLink).join(", ");
     const rows = [
-      lv ? `<dt>단계</dt><dd>${lv.id} ${esc(lv.name)}: ${esc(lv.question)}</dd>` : "",
+      lv ? `<dt>단계</dt><dd>${LV(lv.id)} ${esc(lv.tier || lv.name)}: ${esc(lv.question)}</dd>` : "",
       r.kind === "paid" && r.type ? `<dt>형태</dt><dd>${esc(r.type)} · ${esc(r.meta || "")} · 한빛미디어</dd>` : "",
       r.kind === "paid" && r.credit ? `<dt>${r.type === "강의" ? "강사" : "만든 사람"}</dt><dd>${esc(r.credit)}</dd>` : "",
       builders ? `<dt>Builder</dt><dd>${builders}</dd>` : "",
@@ -1458,7 +1459,7 @@
         <div class="links">${links}${r.kind === "paid" ? `<button type="button" class="btn ghost" data-goto="${esc(r.repo)}">커리큘럼에서 위치 보기</button>` : ""}</div>
         ${adjacent}
         ${canRide ? `<button type="button" class="ride" aria-pressed="${ridden}" data-ride="${esc(r.repo)}">${ridden ? "✓ 클리어" : "클리어 표시"}</button>` : ""}
-        ${ridden && lv && levelDone(lv.id) ? `<div class="done-banner"><span><b>STAGE CLEAR · ${lv.id} ${esc(lv.tier || lv.name)}</b> 퀘스트를 모두 마쳤습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>` : ""}
+        ${ridden && lv && levelDone(lv.id) ? `<div class="done-banner"><span><b>클리어 · ${LV(lv.id)} ${esc(lv.tier || lv.name)}</b> 퀘스트를 모두 마쳤습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>` : ""}
       </div>`;
     const d = dialog();
     if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
