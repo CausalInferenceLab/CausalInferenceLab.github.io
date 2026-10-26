@@ -36,8 +36,18 @@ def get(url, accept="application/vnd.github+json"):
     headers = {"Accept": accept, "User-Agent": "cil-hub-stats"}
     if TOKEN:
         headers["Authorization"] = f"Bearer {TOKEN}"
-    with OPENER.open(urllib.request.Request(url, headers=headers), timeout=30) as res:
-        return json.load(res)
+    try:
+        with OPENER.open(urllib.request.Request(url, headers=headers), timeout=30) as res:
+            return json.load(res)
+    except urllib.error.HTTPError as e:
+        # Public data: if the workflow token is refused, ask once more without it.
+        if e.code != 403 or "Authorization" not in headers:
+            print(f"{e.code} on {url}", file=sys.stderr)
+            raise
+        print(f"403 with the token on {url}; retrying without it", file=sys.stderr)
+        del headers["Authorization"]
+        with OPENER.open(urllib.request.Request(url, headers=headers), timeout=30) as res:
+            return json.load(res)
 
 
 def paged(url, accept="application/vnd.github+json"):
@@ -56,12 +66,18 @@ def main(out_path):
     contributors = set()
     repo_stats = {}
 
+    complete = True
     for r in repos:
         repo_stats[r["name"]] = {"stars": r["stargazers_count"], "pushed": r["pushed_at"]}
         if r["fork"]:
             continue
-        for s in paged(f"{API}/repos/{ORG}/{r['name']}/stargazers", "application/vnd.github.star+json"):
-            star_months[s["starred_at"][:7]] += 1
+        try:
+            for s in paged(f"{API}/repos/{ORG}/{r['name']}/stargazers", "application/vnd.github.star+json"):
+                star_months[s["starred_at"][:7]] += 1
+        except urllib.error.HTTPError as e:
+            # One refused repo would make the monthly curve wrong, so the old curve is kept below.
+            print(f"skip stargazers for {r['name']}: {e.code}", file=sys.stderr)
+            complete = False
         try:
             for c in paged(f"{API}/repos/{ORG}/{r['name']}/contributors"):
                 if c.get("type") != "Bot" and not c["login"].endswith("[bot]"):
@@ -73,6 +89,12 @@ def main(out_path):
     for month in sorted(star_months):
         total += star_months[month]
         stars_by_month.append({"month": month, "cumulative": total})
+    if not complete:
+        try:
+            with open(out_path, encoding="utf-8") as f:
+                stars_by_month = json.load(f).get("starsByMonth", [])
+        except (OSError, ValueError):
+            stars_by_month = []
 
     stats = {
         "updated": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
