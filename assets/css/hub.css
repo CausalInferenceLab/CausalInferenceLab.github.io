@@ -1092,7 +1092,6 @@ button.btn.sm { font-size: 14px; }
 .hero-grid { grid-template-columns: minmax(0, 1fr); margin-top: 12px; }
 .growth { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: auto; gap: 12px; }
 .tile { min-height: 0; padding: 20px 22px; gap: 4px; }
-.tile .spark, .tile .mini-bars, .tile .spark-empty { display: none; }
 .tile-value { font-size: 34px; }
 @media (max-width: 760px) { .growth { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tile-value { font-size: 28px; } .tile { padding: 16px; } }
 
@@ -1743,22 +1742,10 @@ a.ac-title:hover { text-decoration: underline; }
 /* hero: one solid indigo, the six lines run in from the right edge and bend at 45 degrees like a map */
 .banner { background: #1E2160; }
 .banner::before { display: none; }
-.hero-rails { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 .banner > .banner-main, .banner > .banner-side { z-index: 1; }
-.hero-rails .r { fill: none; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
-.hero-rails .r1 { stroke: #5B8BFF; } .hero-rails .r2 { stroke: #A88BF8; } .hero-rails .r3 { stroke: #F0709A; }
-.hero-rails .r4 { stroke: #FF9452; } .hero-rails .r5 { stroke: #34C796; } .hero-rails .r6 { stroke: #AEB8C6; }
-.hero-rails .st { fill: #1E2160; stroke: #fff; stroke-width: 3; }
 @media (prefers-reduced-motion: no-preference) {
-  .hero-rails .r { stroke-dasharray: 1600; stroke-dashoffset: 1600; animation: rail-in 1.4s cubic-bezier(.2, .7, .2, 1) forwards; }
-  .hero-rails .r2 { animation-delay: .08s; } .hero-rails .r3 { animation-delay: .16s; } .hero-rails .r4 { animation-delay: .24s; }
-  .hero-rails .r5 { animation-delay: .32s; } .hero-rails .r6 { animation-delay: .4s; }
-  .hero-rails .st { opacity: 0; animation: stop-in .3s ease-out 1.2s forwards; }
-  @keyframes rail-in { to { stroke-dashoffset: 0; } }
-  @keyframes stop-in { to { opacity: 1; } }
 }
 
-@media (max-width: 860px) { .hero-rails { display: none; } }
 
 /* section heads: the station for that section, then the name */
 .section-head h2 { display: flex; align-items: center; gap: 14px; font-size: clamp(28px, 3.4vw, 40px); letter-spacing: -.035em; }
