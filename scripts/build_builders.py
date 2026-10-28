@@ -289,9 +289,8 @@ def page(p, repos, projects, terms):
     books = [x for x in (load("map.json").get("paid") or []) if p["name"] in (x.get("credit") or "")]
     def book_li(x):
         out = next((l["url"] for l in x.get("links") or [] if str(l.get("url", "")).startswith("https://")), "")
-        role = "옮김" if x.get("type") == "도서" else "강의"
-        return (f'<li><a href="{esc(safe_url(out))}" target="_blank" rel="noopener" data-event="click_partner" '
-                f'data-event-params=\'{{"item":"{esc(token(x["id"]))}","action":"out","source":"builder_page"}}\'>'
+        role = "옮김" if x.get("type") == "도서" else "강사"
+        return (f'<li><a href="{esc(safe_url(out))}" target="_blank" rel="noopener">'
                 f'<img src="/{esc(x["cover"])}" alt="" width="{30 if x.get("type") == "도서" else 52}" height="40">'
                 f'<span><b>{esc(x.get("shortTitle") or x["title"])}</b><span>{esc(x.get("type", ""))} · {role} · 한빛미디어</span></span></a></li>') if out else ""
     books_html = "".join(book_li(x) for x in books)
