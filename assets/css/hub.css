@@ -2129,3 +2129,5 @@ dialog.sheet .toast.show { opacity: 1; pointer-events: auto; }
 .rv-in .wrap > :not(.section-head) { opacity: 1; transform: none; transition-delay: .3s; }
 .rv-in .wrap > :not(.section-head) + :not(.section-head) { transition-delay: .4s; }
 @media (prefers-reduced-motion: reduce) { .rv .section-head h2::before, .rv .section-head h2, .rv .section-head p, .rv .wrap > * { opacity: 1; transform: none; transition: none; } }
+.lt-share { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 13.5px; color: var(--muted); }
+.lt-share .btn { margin: 0; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
