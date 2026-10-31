@@ -93,7 +93,7 @@ python3 scripts/builder_cards.py
 
 `assets/js/track.js`의 `hubTrack(이름, 파라미터)`가 GA4로 이벤트를 보냅니다. GA4가 설치되지 않았으면 아무 일도 하지 않습니다. 이벤트 이름과 파라미터는 PM 문서의 이벤트 사전을 따르고, 새 이벤트를 넣을 때는 사전에도 같이 적습니다. HTML에서는 `data-event="click_join" data-event-params='{"target":"template","source":"builder_page"}'`처럼 속성만으로도 보낼 수 있습니다. 로컬에서 확인하려면 콘솔에서 `window.HUB_DEBUG = true`를 켭니다.
 
-한빛미디어 링크는 `track.js`가 한곳에서 처리합니다. 누를 때마다 `click_partner`(item, action, placement)를 한 번 보내고 링크에 `utm_source=causalinference_hub`를 붙이므로, 한빛 링크에는 따로 `data-event`를 달지 않습니다. 들어온 링크의 `utm_*`는 `ga.js`가 주소창에서 지우기 전에 `sessionStorage`의 `cil-hub-landing`에 남깁니다. `utm_source=forum5`처럼 `forum<회차>`로 들어오면 그 탭에서는 진단이 행사 현장 모드가 됩니다. 진단 결과에 네트워킹 카드가 생기고, 진단 이벤트에 `context`가 붙습니다. 카드는 행사 다음 날까지만 나옵니다.
+한빛미디어 링크는 `track.js`가 한곳에서 처리합니다. 누를 때마다 `click_partner`(item, action, placement)를 한 번 보내고 링크에 `utm_source=causalinference_hub`를 붙이므로, 한빛 링크에는 따로 `data-event`를 달지 않습니다. `item`은 책 `paid-book`, 강의 `paid-lecture`, 채널 H 연재 `channel-h`이고, 그 밖의 한빛 주소는 `other`입니다. 들어온 링크의 `utm_*`는 `ga.js`가 주소창에서 지우기 전에 `sessionStorage`의 `cil-hub-landing`에 남깁니다. `utm_source=forum5`처럼 `forum<회차>`로 들어오면 그 탭에서는 진단이 행사 현장 모드가 됩니다. 진단 결과에 네트워킹 카드가 생기고, 진단 이벤트에 `context`가 붙습니다. 카드는 행사 다음 날까지만 나옵니다.
 
 ## 배포
 

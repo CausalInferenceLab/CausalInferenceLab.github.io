@@ -21,6 +21,11 @@
     ],
     "more": [
       {
+        "title": "웹북 1장: 인과추론 소개",
+        "href": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html",
+        "note": "영상에서 본 내용을 글과 코드로 다시 읽기"
+      },
+      {
         "title": "상관일까, 인과일까?",
         "href": "game.html",
         "note": "짧은 문장 10개로 감 잡기"
