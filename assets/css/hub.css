@@ -2131,3 +2131,28 @@ dialog.sheet .toast.show { opacity: 1; pointer-events: auto; }
 @media (prefers-reduced-motion: reduce) { .rv .section-head h2::before, .rv .section-head h2, .rv .section-head p, .rv .wrap > * { opacity: 1; transform: none; transition: none; } }
 .lt-share { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 13.5px; color: var(--muted); }
 .lt-share .btn { margin: 0; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+/* Data Forum on-site: the test panel says where it is; the result offers a networking card */
+.sh-tag { margin-left: 8px; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 800; color: var(--surface); background: var(--l-exp); vertical-align: 1px; }
+.lt-forum { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; padding: 14px 16px; border-radius: 14px; background: color-mix(in srgb, var(--l-exp) 12%, var(--surface)); }
+.lt-forum p { font-size: 14px; line-height: 1.5; max-width: 30em; }
+.lt-forum p b { display: block; margin-bottom: 2px; }
+.lt-forum .btn { margin: 0; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.fcard { display: flex; flex-direction: column; gap: 6px; padding: 28px 24px 22px; border-radius: 24px; background: #1E2160; color: #fff; text-align: center; }
+.fc-ev { font-size: 13.5px; font-weight: 700; color: rgba(255, 255, 255, .78); }
+.fc-lv { font-family: var(--f-display); font-size: clamp(56px, 16vw, 84px); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin-top: 8px; }
+.fc-tier { font-size: 26px; font-weight: 800; }
+.fc-in { margin-top: 6px; font-size: 17px; font-weight: 700; }
+.fc-in span { display: inline-block; margin-right: 8px; padding: 1px 10px; border-radius: 999px; font-size: 13px; color: #1E2160; background: #FFC93C; vertical-align: 2px; }
+.fc-name { display: grid; gap: 6px; margin-top: 14px; font-size: 12.5px; color: rgba(255, 255, 255, .78); }
+.fc-name input { width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 12px; border: 1.5px solid rgba(255, 255, 255, .4); background: rgba(255, 255, 255, .08); color: #fff; font: inherit; font-size: 22px; font-weight: 800; text-align: center; }
+.fc-name input::placeholder { color: rgba(255, 255, 255, .45); }
+.fc-name input:focus-visible { outline: 3px solid #FFC93C; outline-offset: 2px; }
+.fc-foot { margin-top: 12px; font-size: 12.5px; color: rgba(255, 255, 255, .7); }
+
+/* a quiet way for Builders to send their photo, intro and retro */
+.contrib-cta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.contrib-form { font-size: 13.5px; font-weight: 700; color: var(--accent); }
+.bp-own { margin-top: 12px; font-size: 14px; color: var(--muted); }
+.bp-own a { font-weight: 700; color: var(--accent); }
+@media (max-width: 760px) { .contrib-cta { align-items: stretch; } .contrib-form { text-align: center; } }

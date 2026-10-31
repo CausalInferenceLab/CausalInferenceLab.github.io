@@ -541,12 +541,48 @@
     }
     return `배우기 단계의 문제를 거의 다 맞혔습니다. 이제 직접 만들며 기여할 차례입니다. ${lv.goal}`;
   }
+  /* Data Forum on-site: a visit from the forum QR (utm_source=forum5) is marked for this tab's session,
+     so the test says where it is and the result offers a card to show at the networking tables */
+  const FORUM_KEY = "cil-hub-forum";
+  function onSite() {
+    if (state.forum !== undefined) return state.forum;
+    /* ga.js keeps the landing utm_* (window.hubLanding, and in sessionStorage) before it cleans the address bar */
+    let v = null, landing = window.hubLanding || null;
+    try {
+      if (!landing) landing = JSON.parse(sessionStorage.getItem("cil-hub-landing") || "null");
+      const m = /^forum(\d+)$/.exec((landing && landing.source) || "");
+      if (m) sessionStorage.setItem(FORUM_KEY, m[1]);
+      v = sessionStorage.getItem(FORUM_KEY);
+    } catch (e) { const m = /^forum(\d+)$/.exec((landing && landing.source) || ""); v = m ? m[1] : null; }
+    const ev = v && state.events.find((e) => e.order === Number(v));
+    /* the card is for the day itself: from the QR until the day after the forum */
+    const dayAfter = ev && ev.date ? new Date(Date.parse(`${ev.date}T00:00:00Z`) + DAY).toISOString().slice(0, 10) : "";
+    state.forum = ev && dayAfter && kstToday() <= dayAfter ? ev : null;
+    return state.forum;
+  }
+  const testContext = () => (onSite() ? `forum${onSite().order}` : "web");
+  function forumCard(lv) {
+    const ev = onSite(), interest = (state.leveltest.interest.opts.find(([id]) => id === test.interest) || [])[1];
+    $("#lt-body").innerHTML = `<div class="sh-head"><p class="sh-k">네트워킹 카드</p><button type="button" class="sh-close" aria-label="진단 닫기" data-sheet-close>${icons.close}</button></div>
+      <div class="sh-main lt"><div class="fcard" role="group" aria-label="${esc(`${LV(lv.id)} ${lv.tier || lv.name}${interest ? `, 관심 ${interest}` : ""}`)}">
+        <p class="fc-ev">${esc(eventTitle(ev))} · ${dot(ev.date)}</p>
+        <p class="fc-lv">${LV(lv.id)}</p>
+        <p class="fc-tier">${esc(lv.tier || lv.name)}</p>
+        ${interest ? `<p class="fc-in"><span>관심</span>${esc(interest)}</p>` : ""}
+        <label class="fc-name"><span>이름이나 닉네임 (선택, 저장하지 않음)</span><input type="text" maxlength="16" autocomplete="nickname" placeholder="예: 진수"></label>
+        <p class="fc-foot">인과추론 Hub에서 3분 진단 · causalinferencelab.github.io</p>
+      </div>
+      <p class="lt-sub">같은 레벨이나 같은 관심 분야인 사람과 이야기를 시작해 보세요. 화면을 켜 둔 채 보여 주면 됩니다.</p></div>
+      <div class="sh-foot"><button type="button" class="btn ghost" data-forum-back>결과로 돌아가기</button><button type="button" class="btn" data-goto-level="${lv.id}" data-test-go>${LV(lv.id)} 코스로 이동</button></div>`;
+    track("forum_card_open", { level: lv.id, event_order: ev.order });
+    const inp = $("#lt-body .fc-name input"); if (inp) inp.focus();
+  }
   /* the test opens in a side panel: questions can be answered in any order and revisited */
   const sheet = () => $("#lt-sheet");
   function openLevelTest(source) {
     if (!state.leveltest) return;
     Object.assign(test, { step: 0, picks: [], interest: null, done: false });
-    track("level_test_start", { source: source || "card" });
+    track("level_test_start", { source: source || "card", context: testContext() });
     const d = sheet();
     renderTest();
     if (!d.open) { if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
@@ -562,7 +598,7 @@
   function renderTest(keepFocus) {
     const T = state.leveltest, qs = T.questions, total = qs.length + 1;
     const body = $("#lt-body");
-    const head = `<div class="sh-head"><p class="sh-k">내 레벨 진단</p><button type="button" class="sh-close" aria-label="진단 닫기" data-sheet-close>${icons.close}</button></div>`;
+    const head = `<div class="sh-head"><p class="sh-k">내 레벨 진단${onSite() ? `<span class="sh-tag">${esc(eventTitle(onSite()))} 현장</span>` : ""}</p><button type="button" class="sh-close" aria-label="진단 닫기" data-sheet-close>${icons.close}</button></div>`;
     if (test.done) { renderResult(head); return; }
     const nav = `<nav class="sh-nav" aria-label="문제 이동"><ol>${Array.from({ length: total }, (_, i) => {
       const band = i < qs.length ? T.bands.find((b) => b.level === qs[i].band) : null;
@@ -607,6 +643,7 @@
       <p>${esc(testReason(v))}</p>
       ${meterHTML(lv.id)}
       <ul class="lt-bands">${T.bands.map((b) => { const [r, t] = v.bands[b.level]; return `<li class="${r >= b.pass ? "pass" : ""}"><b>${esc(b.name)}</b><span class="bar" aria-hidden="true"><i style="width:${t ? (r / t) * 100 : 0}%"></i></span><span>${r} / ${t}${r >= b.pass ? " · 통과" : ""}</span></li>`; }).join("")}</ul>
+      ${onSite() ? `<div class="lt-forum"><p><b>네트워킹 시간에 보여 줄 카드</b>내 레벨과 관심 분야를 크게 띄워, 같은 관심사인 사람을 찾기 쉽게 합니다.</p><button type="button" class="btn sm" data-forum-card="${lv.id}">네트워킹 카드 열기</button></div>` : ""}
       <p class="lt-share"><button type="button" class="btn ghost sm" data-share-result="${lv.id}">${navigator.share ? "결과 공유하기" : "진단 링크 복사"}</button><span>동료에게 보내면 같은 3분 진단이 바로 열립니다.</span></p>
       ${start.length ? `<div class="lt-block"><p class="k">여기서 시작</p><ol class="lt-start">${start.map((q, k) => { const s = (lv.steps || []).find((x) => x.repo === q.repo); return `<li><span class="n">${k + 1}</span><span><b>${esc(q.title)}</b><span>${esc(q.action ? q.stamp.how : (s && s.note) || q.format || "")}</span></span></li>`; }).join("")}</ol></div>` : ""}
       ${next.length ? `<div class="lt-block"><p class="k">관심 분야에 맞춰 이어서</p><ul class="lt-next">${next.map((r) => `<li><button type="button" data-open="${esc(r.repo)}">${esc(r.title)}</button><span>${LV(r.level)}</span></li>`).join("")}</ul></div>` : ""}
@@ -656,7 +693,7 @@
     const v = scoreTest();
     saveLevel(v);
     test.done = true;
-    track("level_test_complete", { level: v.level, score: v.score, interest: v.interest || "" });
+    track("level_test_complete", { level: v.level, score: v.score, interest: v.interest || "", context: testContext() });
     stamp("level_test");
     state.level = v.level;
     renderShelf(); renderMap();
@@ -1029,6 +1066,14 @@
     return { state: "open", cta: "참가 신청", action: "signup", line: `신청 받는 중${e.signupEnd ? ` · ${md(e.signupEnd)} 마감` : ""}${seats}` };
   }
   const eventTitle = (e) => String(e.name).split(" - ")[0];
+  /* a speaker who is also a Builder links to their Builder page */
+  function speakerHTML(who) {
+    let out = esc(who);
+    state.builders.filter((b) => b.slug && who.includes(b.name)).forEach((b) => {
+      out = out.split(esc(b.name)).join(`<a href="builders/${esc(b.slug)}.html" data-event="open_builder" data-event-params='${esc(JSON.stringify({ builder: b.slug, source: "forum_timetable" }))}'>${esc(b.name)}</a>`);
+    });
+    return out;
+  }
   function renderNextEvent() {
     const el = $("#next-event"), next = state.events.find((e) => e.upcoming && e.date);
     if (!el || !next) return;
@@ -1097,7 +1142,7 @@
       next.audience ? ["대상", esc(next.audience)] : null
     ].filter(Boolean) : [];
     const tt = next && (next.timetable || []).length ? `<details class="ev-tt" data-event-fold><summary>타임테이블<span>${esc(next.timetable[0].time.split("–")[0])}–${esc(next.timetable[next.timetable.length - 1].time.split("–")[1] || "")}</span></summary>
-        <ol>${next.timetable.map((r) => `<li class="${r.talk ? "talk" : ""}"><span class="t">${esc(r.time)}</span><span class="k">${esc(r.kind)}</span><span class="w"><b>${esc(r.title)}</b>${r.who ? `<span>${esc(r.who)}</span>` : ""}</span></li>`).join("")}</ol>
+        <ol>${next.timetable.map((r) => `<li class="${r.talk ? "talk" : ""}"><span class="t">${esc(r.time)}</span><span class="k">${esc(r.kind)}</span><span class="w"><b>${esc(r.title)}</b>${r.who ? `<span>${speakerHTML(r.who)}</span>` : ""}</span></li>`).join("")}</ol>
         ${next.timetableImage ? `<a class="ev-img-link" href="${esc(next.timetableImage)}" target="_blank" rel="noopener">타임테이블 이미지로 보기<span aria-hidden="true"> ↗</span></a>` : ""}</details>` : "";
     const nextHTML = next ? `<li class="event next${next.poster ? " has-poster" : ""}">
         <div class="ev-main">
@@ -1643,6 +1688,9 @@
       if (tp) { testPick(Number(tp.dataset.testPick)); return; }
       const ti = e.target.closest("[data-test-interest]");
       if (ti) { testInterest(ti.dataset.testInterest); return; }
+      const fcd = e.target.closest("[data-forum-card]");
+      if (fcd) { forumCard(levelOf(fcd.dataset.forumCard)); return; }
+      if (e.target.closest("[data-forum-back]")) { renderTest(); return; }
       const sr = e.target.closest("[data-share-result]");
       if (sr) { shareResult(sr); return; }
       const tj = e.target.closest("[data-test-jump]");

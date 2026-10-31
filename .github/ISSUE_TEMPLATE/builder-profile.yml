@@ -1,0 +1,69 @@
+name: Builder 프로필과 회고
+description: 허브의 Builder 페이지에 들어갈 사진, 한 줄 소개, 프로젝트 회고 세 줄을 보냅니다.
+title: "[Builder] 이름"
+labels: ["builder-profile"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        허브의 Builder 페이지(`/builders/<이름>.html`)와 이력 창에 들어갈 내용입니다. 적은 내용은 공개 링크로 나갑니다.
+        비워 둔 칸은 페이지에 나오지 않습니다. 운영진이 확인한 뒤 `data/builders.json`과 `data/projects.json`에 옮깁니다.
+  - type: input
+    id: name
+    attributes:
+      label: 이름
+      description: 허브에 적힌 이름 그대로 적어 주세요.
+      placeholder: 신진수
+    validations:
+      required: true
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: 공개 동의
+      options:
+        - label: Builder 페이지, 메달 카드, 아래에 적은 내용이 허브에 공개되는 데 동의합니다.
+          required: true
+  - type: input
+    id: github
+    attributes:
+      label: GitHub 아이디
+      description: 프로필 사진과 활동 표시에 씁니다.
+      placeholder: jsshin2022
+  - type: input
+    id: intro
+    attributes:
+      label: 한 줄 소개
+      description: 40자 안팎. 하는 일이나 관심 분야를 적어 주세요.
+      placeholder: 크래프톤에서 크리에이터 생태계와 마케팅 효과를 분석합니다.
+  - type: input
+    id: link
+    attributes:
+      label: LinkedIn이나 블로그 (선택)
+      placeholder: https://
+  - type: input
+    id: slug
+    attributes:
+      label: 페이지 주소를 바꾸고 싶다면 (선택)
+      description: 지금 주소는 허브의 Builder 페이지에서 확인할 수 있습니다. 영문 소문자와 하이픈만 씁니다.
+      placeholder: shin-jinsoo
+  - type: input
+    id: project
+    attributes:
+      label: 회고를 남길 프로젝트
+      description: 기수와 프로젝트 이름
+      placeholder: 13기 · 정책 효과 분석 에이전트
+  - type: textarea
+    id: why
+    attributes:
+      label: 왜 만들었나
+      description: 한두 문장
+  - type: textarea
+    id: learned
+    attributes:
+      label: 무엇을 배웠나
+      description: 한두 문장
+  - type: textarea
+    id: next
+    attributes:
+      label: 다음 사람에게
+      description: 이 프로젝트를 이어 갈 사람이나 러너에게 한두 문장
