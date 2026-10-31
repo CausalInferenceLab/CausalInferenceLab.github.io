@@ -641,6 +641,9 @@
     const route = state.routes.find((r) => r.id === v.interest);
     const next = route ? route.stops.map((id) => state.repos.get(id)).filter((r) => r && !startIds.has(r.repo) && state.levels.findIndex((l) => l.id === r.level) >= at).slice(0, 2) : [];
     const missed = v.missed.map((id) => qs.find((q) => q.id === id)).filter(Boolean);
+    /* the book and the lecture sit at L2 in the curriculum, so a result at L2 or above names them */
+    const paidAt = state.levels.findIndex((l) => l.id === "L2");
+    const paid = at >= paidAt ? (state.map.paid || []).map((p) => ({ p, url: ((p.links || []).find((l) => /hanbit\.co\.kr/.test(l.url)) || {}).url })).filter((x) => x.url) : [];
     $("#lt-body").innerHTML = `${head}<div class="sh-main lt">
       <p class="quiz-step"><span>진단 결과 · ${v.score} / ${qs.length}</span></p>
       <h2 id="lt-title">${LV(lv.id)} ${esc(lv.tier || lv.name)}부터 시작하세요</h2>
@@ -651,6 +654,7 @@
       <p class="lt-share"><button type="button" class="btn ghost sm" data-share-result="${lv.id}">${navigator.share ? "결과 공유하기" : "진단 링크 복사"}</button><span>동료에게 보내면 같은 3분 진단이 바로 열립니다.</span></p>
       ${start.length ? `<div class="lt-block"><p class="k">여기서 시작</p><ol class="lt-start">${start.map((q, k) => { const s = (lv.steps || []).find((x) => x.repo === q.repo); return `<li><span class="n">${k + 1}</span><span><b>${esc(q.title)}</b><span>${esc(q.action ? q.stamp.how : (s && s.note) || q.format || "")}</span></span></li>`; }).join("")}</ol></div>` : ""}
       ${next.length ? `<div class="lt-block"><p class="k">관심 분야에 맞춰 이어서</p><ul class="lt-next">${next.map((r) => `<li><button type="button" data-open="${esc(r.repo)}">${esc(r.title)}</button><span>${LV(r.level)}</span></li>`).join("")}</ul></div>` : ""}
+      ${paid.length ? `<div class="lt-block"><p class="k">책과 강의로 이어서</p><ul class="lt-next">${paid.map(({ p, url }) => `<li><a href="${esc(url)}" target="_blank" rel="noopener">${esc(p.title)}<span aria-hidden="true"> ↗</span></a><span>${esc(p.type || "")} · 한빛미디어</span></li>`).join("")}</ul></div>` : ""}
       ${missed.length ? `<div class="lt-block"><p class="k">다시 볼 개념 ${missed.length}개</p><ul class="lt-review">${missed.map((q) => `<li><b>${esc(q.topic)}</b><span>${esc(q.why)}</span><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "level_test", topic: q.id }))}'>${esc(q.chapter.title)} 읽기<span aria-hidden="true"> ↗</span></a></li>`).join("")}</ul></div>` : `<p class="lt-sub">틀린 문제가 없습니다.</p>`}
     </div>
     <div class="sh-foot"><button type="button" class="btn ghost" data-test-open="retry">다시 풀기</button><button type="button" class="btn" data-goto-level="${lv.id}" data-test-go>${LV(lv.id)} 코스로 이동</button></div>`;

@@ -87,7 +87,7 @@
      the visit came from the hub, and send one click_partner per click, the same way everywhere.
      The partner report counts click_partner by item and placement. */
   const PARTNER = /(^|\.)hanbit\.co\.kr$/;
-  const PARTNER_ITEMS = [["B6208936856", "paid-book"], ["C0781073345", "paid-lecture"]];
+  const PARTNER_ITEMS = [["B6208936856", "paid-book"], ["C0781073345", "paid-lecture"], ["/channel/", "channel-h"]];
   const PARTNER_SPOT = { partner: "hero", station: "curriculum" };
   function partner(e) {
     const a = e.target.closest && e.target.closest("a[href]");
