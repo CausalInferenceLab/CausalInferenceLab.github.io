@@ -1907,6 +1907,7 @@ button.ls-t:focus-visible, .ls-ck:focus-visible, .lr-also a:focus-visible, .lr-a
 .lt-next li { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
 .lt-next button { padding: 0; border: 0; background: none; font: inherit; font-weight: 700; color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-align: left; }
 .lt-next li > span { color: var(--muted); font-size: 13px; white-space: nowrap; }
+.lt-next a { font-weight: 700; color: var(--accent); text-underline-offset: 3px; }
 .lt-review li { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--rule); font-size: 14px; line-height: 1.5; }
 .lt-review li > span { color: var(--muted); }
 .lt-review a { width: fit-content; font-weight: 700; color: var(--accent); }
