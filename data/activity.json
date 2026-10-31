@@ -1,0 +1,557 @@
+{
+ "updated": "2026-10-31T03:14:06Z",
+ "items": [
+  {
+   "id": "18728872575",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-31T03:13:45Z",
+   "kind": "pr_merge",
+   "number": 82,
+   "title": "Fix the stamp toast covering the header on phones and focus for wide tables",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/82"
+  },
+  {
+   "id": "18728853119",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-31T03:13:21Z",
+   "kind": "pr_merge",
+   "number": 81,
+   "title": "Add Data Forum on-site mode, a Builder profile form, and speaker links",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/81"
+  },
+  {
+   "id": "18728004587",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-31T02:54:34Z",
+   "kind": "pr_open",
+   "number": 82,
+   "title": "Fix the stamp toast covering the header on phones and focus for wide tables",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/82"
+  },
+  {
+   "id": "18727378280",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T02:40:19Z",
+   "kind": "pr_open",
+   "number": 63,
+   "title": "feat(site): 이슈 보드 + 시민 데이터 과학자 톤 — #61 rebase 대체",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/63"
+  },
+  {
+   "id": "18727377068",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T02:40:17Z",
+   "kind": "pr_open",
+   "number": 62,
+   "title": "analysis(YoungjaeKang-retail-hours): 관측 범위 시각화·결과 해석 보강 — #38 정리본(main 위 한 커밋)",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/62"
+  },
+  {
+   "id": "18727106900",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-31T02:34:05Z",
+   "kind": "pr_merge",
+   "number": 80,
+   "title": "Fix #station= deep links that stopped the hub on first load",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/80"
+  },
+  {
+   "id": "18727091576",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-31T02:33:46Z",
+   "kind": "pr_merge",
+   "number": 79,
+   "title": "Count every Hanbit click the same way and let people share their level",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/79"
+  },
+  {
+   "id": "18726933692",
+   "login": "jsshin2022",
+   "repo": "Causal-Inference-with-Python",
+   "at": "2026-10-31T02:30:24Z",
+   "kind": "pr_open",
+   "number": 93,
+   "title": "Polish the text, landing page and mobile layout once more",
+   "url": "https://github.com/CausalInferenceLab/Causal-Inference-with-Python/pull/93"
+  },
+  {
+   "id": "18726661486",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T02:24:00Z",
+   "kind": "pr_open",
+   "number": 61,
+   "title": "feat(site): 이슈 보드 — 이슈 → 공공데이터 → 계보 → 분석 → 대시보드를 한 흐름으로 (#51 포함)",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/61"
+  },
+  {
+   "id": "18726064005",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-31T02:11:03Z",
+   "kind": "pr_open",
+   "number": 81,
+   "title": "Add Data Forum on-site mode, a Builder profile form, and speaker links",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/81"
+  },
+  {
+   "id": "18726058926",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-31T02:10:57Z",
+   "kind": "pr_open",
+   "number": 80,
+   "title": "Fix #station= deep links that stopped the hub on first load",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/80"
+  },
+  {
+   "id": "18725840032",
+   "login": "gonasooc",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T02:06:18Z",
+   "kind": "pr_merge",
+   "number": 51,
+   "title": "fix(site): 가독성과 홈 질문 입력창 배치 개선",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/51"
+  },
+  {
+   "id": "18725829026",
+   "login": "jgkim1008",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T02:06:04Z",
+   "kind": "pr_merge",
+   "number": 52,
+   "title": "analysis(jgkim1008-daegu-mart-holiday): 결과 해석과 한계 (6단계)",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/52"
+  },
+  {
+   "id": "18725817025",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T02:05:48Z",
+   "kind": "pr_merge",
+   "number": 60,
+   "title": "fix(core): 무작위화 추론 p값이 실제보다 작게 나오던 문제 — 가능한 배정 전부 계산",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/60"
+  },
+  {
+   "id": "18725617900",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T02:01:36Z",
+   "kind": "pr_open",
+   "number": 60,
+   "title": "fix(core): 무작위화 추론 p값이 실제보다 작게 나오던 문제 — 가능한 배정 전부 계산",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/60"
+  },
+  {
+   "id": "18725290050",
+   "login": "kkumtree",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T01:54:18Z",
+   "kind": "pr_merge",
+   "number": 57,
+   "title": "chore: uv 의존성 제외처리 건의 (브랜치명 수정)",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/57"
+  },
+  {
+   "id": "18619308367",
+   "login": "inshining",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-30T00:44:49Z",
+   "kind": "pr_open",
+   "number": 59,
+   "title": "plan(inshining-elderly-driver): 후속 분석의 검토 기준 마련",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/59"
+  },
+  {
+   "id": "18618994611",
+   "login": "inshining",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-30T00:39:54Z",
+   "kind": "fork"
+  },
+  {
+   "id": "18618968592",
+   "login": "inshining",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-30T00:39:33Z",
+   "kind": "issue",
+   "number": 58,
+   "title": "[작업] 고령운전자 면허 자진반납 인센티브와 교통안전 분석 계획",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/issues/58"
+  },
+  {
+   "id": "18532973137",
+   "login": "kkumtree",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-29T06:56:51Z",
+   "kind": "pr_open",
+   "number": 57,
+   "title": "chore: uv 의존성 제외처리 건의 (브랜치명 수정)",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/57"
+  },
+  {
+   "id": "18532890512",
+   "login": "kkumtree",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-29T06:55:33Z",
+   "kind": "comment",
+   "number": 56,
+   "title": "chore: uv 의존성 제외처리 건의",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/56#issuecomment-6490106197"
+  },
+  {
+   "id": "18532163968",
+   "login": "kkumtree",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-29T06:44:47Z",
+   "kind": "pr_open",
+   "number": 56,
+   "title": "chore: uv 의존성 제외처리 건의",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/56"
+  },
+  {
+   "id": "18460169069",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-28T15:23:18Z",
+   "kind": "pr_open",
+   "number": 79,
+   "title": "Count every Hanbit click the same way and let people share their level",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/79"
+  },
+  {
+   "id": "25424261793",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-27T04:33:20Z",
+   "kind": "push"
+  },
+  {
+   "id": "18433093488",
+   "login": "sgim49697-ops",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-28T09:04:21Z",
+   "kind": "pr_open",
+   "number": 55,
+   "title": "강남대로 버스의 방향별 변화·운영 이력과 공개자료 예측 검증",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/55"
+  },
+  {
+   "id": "18432358197",
+   "login": "sgim49697-ops",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-28T08:54:27Z",
+   "kind": "pr_open",
+   "number": 54,
+   "title": "강남대로 정책 분석과 단기 속도 예측 계획 등록",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/54"
+  },
+  {
+   "id": "18431981147",
+   "login": "sgim49697-ops",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-28T08:49:16Z",
+   "kind": "issue",
+   "number": 53,
+   "title": "[작업] 강남대로 버스 분산 정책과 단기 속도 예측 분석",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/issues/53"
+  },
+  {
+   "id": "18429984578",
+   "login": "UICHEOL-HWANG",
+   "repo": "causal-studio",
+   "at": "2026-10-28T08:21:40Z",
+   "kind": "star"
+  },
+  {
+   "id": "18404603608",
+   "login": "Funbucket",
+   "repo": "causal-studio",
+   "at": "2026-10-28T01:09:54Z",
+   "kind": "pr_open",
+   "number": 20,
+   "title": "feat(uplift): ATE에서 CATE 타기팅으로 이어지는 영상 소스 추가",
+   "url": "https://github.com/CausalInferenceLab/causal-studio/pull/20"
+  },
+  {
+   "id": "18306905839",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-27T04:33:19Z",
+   "kind": "pr_merge",
+   "number": 78,
+   "title": "Bring back the KPI growth charts and quiet the hero and contributor section",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/78"
+  },
+  {
+   "id": "25278809536",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T02:01:16Z",
+   "kind": "push"
+  },
+  {
+   "id": "18241207902",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-26T14:18:02Z",
+   "kind": "pr_open",
+   "number": 78,
+   "title": "Bring back the KPI growth charts and quiet the hero and contributor section",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/78"
+  },
+  {
+   "id": "18230125742",
+   "login": "jgkim1008",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T12:06:49Z",
+   "kind": "pr_open",
+   "number": 52,
+   "title": "analysis(jgkim1008-daegu-mart-holiday): 결과 해석과 한계 (6단계)",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/52"
+  },
+  {
+   "id": "25218039685",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-25T13:01:46Z",
+   "kind": "push"
+  },
+  {
+   "id": "25200138522",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T02:01:46Z",
+   "kind": "push"
+  },
+  {
+   "id": "18197359256",
+   "login": "gonasooc",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T04:02:20Z",
+   "kind": "comment",
+   "number": 32,
+   "title": "[작업] 디지털포용 정책의 데이터 계보와 관측 공백 정리 (트랙 A)",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/issues/32#issuecomment-6407935157"
+  },
+  {
+   "id": "18196609019",
+   "login": "gonasooc",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T03:46:04Z",
+   "kind": "pr_open",
+   "number": 51,
+   "title": "fix(site): 가독성과 홈 질문 입력창 배치 개선",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/51"
+  },
+  {
+   "id": "18196603866",
+   "login": "gonasooc",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T03:45:58Z",
+   "kind": "issue",
+   "number": 50,
+   "title": "[개선] 사이트 가독성과 홈 질문 입력창 배치",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/issues/50"
+  },
+  {
+   "id": "25185482746",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-25T03:47:50Z",
+   "kind": "push"
+  },
+  {
+   "id": "25184211743",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T02:01:27Z",
+   "kind": "push"
+  },
+  {
+   "id": "18191762640",
+   "login": "gonasooc",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T02:01:45Z",
+   "kind": "pr_merge",
+   "number": 33,
+   "title": "data(catalog): 디지털포용 데이터 계보와 관측 공백 추가",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/33"
+  },
+  {
+   "id": "18191748319",
+   "login": "jm-git-163",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T02:01:26Z",
+   "kind": "pr_merge",
+   "number": 49,
+   "title": "plan(jm-git-163-climate-card): 기후동행카드 도시 비교 케이스 추가",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/49"
+  },
+  {
+   "id": "18191740994",
+   "login": "jgkim1008",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T02:01:14Z",
+   "kind": "pr_merge",
+   "number": 46,
+   "title": "analysis(jgkim1008-daegu-mart-holiday): KOSIS 판매액지수 수집·분석 (5단계)",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/46"
+  },
+  {
+   "id": "25184162807",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-26T02:00:53Z",
+   "kind": "push"
+  },
+  {
+   "id": "18191723911",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-26T02:00:52Z",
+   "kind": "pr_merge",
+   "number": 77,
+   "title": "Show one level at a time on a rail and let sections arrive on scroll",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/77"
+  },
+  {
+   "id": "18191608940",
+   "login": "jm-git-163",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T01:58:17Z",
+   "kind": "pr_open",
+   "number": 49,
+   "title": "plan(jm-git-163-climate-card): 기후동행카드 도시 비교 케이스 추가",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/49"
+  },
+  {
+   "id": "18191191891",
+   "login": "jm-git-163",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-26T01:49:10Z",
+   "kind": "issue",
+   "number": 48,
+   "title": "[Track B] 서울 기후동행카드 시범사업 전후 도시철도 승차 흐름 비교",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/issues/48"
+  },
+  {
+   "id": "25149611470",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-24T17:34:33Z",
+   "kind": "push"
+  },
+  {
+   "id": "18169419513",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-25T17:24:40Z",
+   "kind": "pr_open",
+   "number": 77,
+   "title": "Show one level at a time on a rail and let sections arrive on scroll",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/77"
+  },
+  {
+   "id": "25147339641",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-24T16:49:53Z",
+   "kind": "push"
+  },
+  {
+   "id": "25146190179",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-25T17:00:23Z",
+   "kind": "push"
+  },
+  {
+   "id": "18168318316",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-25T17:00:22Z",
+   "kind": "pr_merge",
+   "number": 76,
+   "title": "Show the curriculum as one level ladder, add a level test, and fill in the 5th forum",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/76"
+  },
+  {
+   "id": "25144301635",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-25T12:14:21Z",
+   "kind": "push"
+  },
+  {
+   "id": "18166916203",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-25T16:28:43Z",
+   "kind": "pr_open",
+   "number": 76,
+   "title": "Show the curriculum as one level ladder, add a level test, and fill in the 5th forum",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/76"
+  },
+  {
+   "id": "25140255169",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-25T15:45:55Z",
+   "kind": "push"
+  },
+  {
+   "id": "18164992208",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-25T15:45:54Z",
+   "kind": "pr_merge",
+   "number": 75,
+   "title": "Start the hub with Causal Studio videos and trim the contributor section",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/75"
+  },
+  {
+   "id": "18164558664",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-25T15:36:24Z",
+   "kind": "pr_open",
+   "number": 75,
+   "title": "Start the hub with Causal Studio videos and trim the contributor section",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/75"
+  },
+  {
+   "id": "25139311262",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-25T15:30:14Z",
+   "kind": "push"
+  },
+  {
+   "id": "18164281077",
+   "login": "Hyun2",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-25T15:30:12Z",
+   "kind": "pr_merge",
+   "number": 47,
+   "title": "analysis(hyun2-land-permit-spillover-2020): 토지거래허가구역 풍선효과 분석 결과",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/47"
+  },
+  {
+   "id": "25138032552",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-25T15:12:26Z",
+   "kind": "push"
+  }
+ ]
+}

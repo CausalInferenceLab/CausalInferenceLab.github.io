@@ -1,0 +1,80 @@
+[
+  {
+    "slug": "brave-true-errata-03",
+    "title": "원서에서 찾은 오류와 처리한 방법",
+    "summary": "코드 출력과 다른 숫자, 수식과 반대로 말하는 설명. 번역하며 멈춘 곳과 옮긴이 주로 처리한 원칙을 정리합니다.",
+    "date": "2026-11-09",
+    "author": "신진수",
+    "series": "번역 노트: Brave & True 한국어판",
+    "episode": 3,
+    "weekOf": "2026-11-09",
+    "related": [
+      "Causal-Inference-with-Python"
+    ]
+  },
+  {
+    "slug": "brave-true-terms-02",
+    "title": "처치군이 아니라 실험군: 번역하며 정한 인과추론 용어",
+    "summary": "실험군·대조군, 처치효과, 교란 요인, 잠재 결과, 탄력성과 민감도까지. 용어를 어떻게, 왜 정했는지 적습니다.",
+    "date": "2026-11-02",
+    "author": "신진수",
+    "series": "번역 노트: Brave & True 한국어판",
+    "episode": 2,
+    "weekOf": "2026-11-02",
+    "related": [
+      "Causal-Inference-with-Python"
+    ]
+  },
+  {
+    "slug": "brave-true-webbook-01",
+    "title": "『Brave & True』 한국어판, 웹북으로 다시 엽니다",
+    "summary": "원서 25장과 부록 5편을 모두 옮기고 네 번 검수한 전면 개정, 그리고 새 웹북에서 달라진 점을 정리합니다.",
+    "date": "2026-10-26",
+    "author": "신진수",
+    "series": "번역 노트: Brave & True 한국어판",
+    "episode": 1,
+    "weekOf": "2026-10-26",
+    "related": [
+      "Causal-Inference-with-Python"
+    ]
+  },
+  {
+    "slug": "book-epilogue-01",
+    "title": "실무에 인과추론을 적용하기 위한 험난한 여정",
+    "summary": "번역서 에필로그에 담은 5단계 여정을 프라임 카드 사례로 풀어 씁니다.",
+    "date": "2024-03-18",
+    "author": "신진수",
+    "series": "번역 노트: 실무로 통하는 인과추론",
+    "episode": 3,
+    "related": [
+      "paid-book",
+      "paid-lecture"
+    ]
+  },
+  {
+    "slug": "book-references",
+    "title": "『실무로 통하는 인과추론 with 파이썬』 논문·자료 모음",
+    "summary": "장별로 참고한 논문과 더 읽을 자료를 정리했습니다.",
+    "date": "2024-03-11",
+    "author": "신진수",
+    "series": "번역 노트: 실무로 통하는 인과추론",
+    "episode": 2,
+    "related": [
+      "paid-book",
+      "paid-lecture"
+    ]
+  },
+  {
+    "slug": "book-release",
+    "title": "『실무로 통하는 인과추론 with 파이썬』 출간 안내",
+    "summary": "한국의 데이터 실무자를 위한 인과추론 첫 기본서를 소개합니다.",
+    "date": "2024-03-05",
+    "author": "신진수",
+    "series": "번역 노트: 실무로 통하는 인과추론",
+    "episode": 1,
+    "related": [
+      "paid-book",
+      "paid-lecture"
+    ]
+  }
+]

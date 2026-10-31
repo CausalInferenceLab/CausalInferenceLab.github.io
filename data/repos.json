@@ -1,0 +1,459 @@
+[
+  {
+    "repo": "causal-studio",
+    "title": "영상으로 여는 인과추론",
+    "summary": "영상으로 먼저 보고 Binder나 Colab 노트북으로 따라 하는 인과추론 입문 스튜디오입니다. 첫 챕터 '왜 인과추론인가'가 공개되어 있습니다.",
+    "level": "L0",
+    "lines": [
+      "main"
+    ],
+    "status": "active",
+    "builders": [
+      "조해창"
+    ],
+    "cohorts": [
+      12
+    ],
+    "site": "https://causalinferencelab.github.io/causal-studio",
+    "stars": 15,
+    "format": "영상 + 실행 노트북 (한·영)",
+    "tags": [
+      "영상으로 먼저",
+      "Colab에서 바로 실행",
+      "상관과 인과"
+    ],
+    "preview": "https://www.youtube.com/@CausalStudio",
+    "previewLabel": "영상 보기"
+  },
+  {
+    "repo": "Causal-Inference-with-Python",
+    "title": "Brave & True 인과추론 번역서",
+    "summary": "『Causal Inference for The Brave and True』 한국어판입니다. 원서 25장과 부록 5편을 모두 옮겼고, 용어집과 검색, 장별 댓글이 있는 웹북으로 읽을 수 있습니다.",
+    "siteLabel": "웹북 읽기",
+    "level": "L1",
+    "lines": [
+      "main",
+      "ml",
+      "research"
+    ],
+    "status": "stable",
+    "builders": [
+      "신진수"
+    ],
+    "cohorts": [
+      4,
+      5,
+      6
+    ],
+    "site": "https://causalinferencelab.github.io/Causal-Inference-with-Python/",
+    "stars": 482,
+    "format": "웹북 25장 + 부록 5편",
+    "tags": [
+      "잠재적 결과부터",
+      "성향점수·이중차분",
+      "용어집 포함"
+    ],
+    "preview": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html",
+    "previewLabel": "1장 읽기"
+  },
+  {
+    "repo": "OCE-Materials",
+    "title": "온라인 통제 실험",
+    "summary": "온라인 통제 실험(A/B 테스트) 연구자로 거듭나기 프로젝트의 스터디 자료입니다.",
+    "level": "L1",
+    "lines": [
+      "exp"
+    ],
+    "status": "stable",
+    "builders": [
+      "방태모"
+    ],
+    "cohorts": [
+      8
+    ],
+    "stars": 55,
+    "format": "스터디 16회 · 발표 자료",
+    "tags": [
+      "A/B 테스트",
+      "지표와 OEC",
+      "SRM·간섭"
+    ]
+  },
+  {
+    "repo": "causal-inference-in-python-code",
+    "title": "책 예제 코드",
+    "summary": "『실무로 통하는 인과추론 with 파이썬』의 장별 예제 코드와 데이터입니다.",
+    "level": "L2",
+    "lines": [
+      "main"
+    ],
+    "status": "stable",
+    "builders": [],
+    "cohorts": [],
+    "stars": 58,
+    "format": "책 장별 예제 코드 + 참고 논문",
+    "tags": [
+      "책 예제 코드",
+      "장별 참고 자료",
+      "데이터 포함"
+    ],
+    "textbook": "paid-book"
+  },
+  {
+    "repo": "Smart_Causal_Inference",
+    "title": "책 스터디 노트",
+    "summary": "『실무로 통하는 인과추론 with 파이썬』을 함께 읽고 장별로 정리한 Jupyter Book입니다.",
+    "level": "L2",
+    "lines": [
+      "main"
+    ],
+    "status": "stable",
+    "builders": [
+      "박상호"
+    ],
+    "cohorts": [
+      8
+    ],
+    "site": "https://causalinferencelab.github.io/Smart_Causal_Inference/intro.html",
+    "stars": 14,
+    "format": "Jupyter Book · 스터디 정리 16회",
+    "tags": [
+      "장별 정리",
+      "발표 자료",
+      "함께 읽기"
+    ],
+    "textbook": "paid-book",
+    "previewLabel": "정리 노트 보기"
+  },
+  {
+    "repo": "causal-inference-practice",
+    "title": "산업 사례 템플릿",
+    "summary": "인과 그래프부터 RDD까지 기법마다 산업 사례를 붙여 템플릿으로 만든 14주 프로젝트입니다.",
+    "level": "L2",
+    "lines": [
+      "main"
+    ],
+    "status": "stable",
+    "builders": [
+      "김성수"
+    ],
+    "cohorts": [
+      8
+    ],
+    "stars": 42,
+    "format": "14주 프로젝트 · 기법별 산업 사례",
+    "tags": [
+      "Industry Case",
+      "RCT부터 RDD까지",
+      "실무 템플릿"
+    ],
+    "preview": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week01_OT.pdf",
+    "previewLabel": "OT 자료"
+  },
+  {
+    "repo": "causal-inference-with-causalML",
+    "title": "CausalML 스터디",
+    "summary": "책의 이론을 uber/causalml 코드로 다시 구현하며 이론에서 코드까지 잇는 스터디입니다.",
+    "level": "L2",
+    "lines": [
+      "ml"
+    ],
+    "status": "stable",
+    "builders": [
+      "박이삭"
+    ],
+    "cohorts": [
+      10
+    ],
+    "stars": 27,
+    "format": "책 이론을 causalml 코드로 복습",
+    "tags": [
+      "uber/causalml",
+      "메타러너",
+      "이론에서 코드로"
+    ],
+    "textbook": "paid-book"
+  },
+  {
+    "repo": "awesome-causal-inference-python",
+    "title": "메서드 코드북",
+    "summary": "실무에 바로 쓸 수 있도록 짧고 정확하게 정리한 인과추론 파이썬 코드 모음입니다.",
+    "level": "L2",
+    "lines": [
+      "ml"
+    ],
+    "status": "active",
+    "builders": [
+      "권명석"
+    ],
+    "cohorts": [
+      11
+    ],
+    "stars": 9,
+    "format": "주제별 파이썬 코드 · 주간 PR 리뷰",
+    "tags": [
+      "바로 쓰는 코드",
+      "짧고 정확하게",
+      "PR 리뷰"
+    ]
+  },
+  {
+    "repo": "Experimentation-platform-materials",
+    "title": "실험 플랫폼 자료",
+    "summary": "국내외 실험 플랫폼 구축 사례와 참고 자료를 정리한 저장소입니다.",
+    "level": "L2",
+    "lines": [
+      "exp"
+    ],
+    "status": "stable",
+    "builders": [],
+    "cohorts": [],
+    "stars": 42,
+    "format": "국내외 실험 플랫폼 구축 사례 모음",
+    "tags": [
+      "실험 플랫폼",
+      "빅테크 블로그",
+      "국내 사례"
+    ]
+  },
+  {
+    "repo": "causal-inference-lecture",
+    "title": "특강·발표 자료",
+    "summary": "책의 장마다 현업 연사가 진행한 특강과 발표 자료 모음입니다.",
+    "level": "L2",
+    "lines": [
+      "behavior"
+    ],
+    "status": "stable",
+    "builders": [
+      "신진수"
+    ],
+    "cohorts": [
+      8
+    ],
+    "stars": 47,
+    "format": "책 장별 현업 특강 · YouTube",
+    "tags": [
+      "현업 연사",
+      "장별 특강",
+      "무료 영상"
+    ],
+    "textbook": "paid-book",
+    "preview": "https://www.youtube.com/playlist?list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+    "previewLabel": "특강 보기"
+  },
+  {
+    "repo": "Marketing_Science",
+    "title": "마케팅 사이언스",
+    "summary": "마케팅 데이터 분석과 베이지안 통계를 함께 공부한 프로젝트입니다.",
+    "level": "L2",
+    "lines": [
+      "behavior"
+    ],
+    "status": "stable",
+    "builders": [
+      "권남택"
+    ],
+    "cohorts": [
+      10
+    ],
+    "stars": 21,
+    "format": "주간 스터디 · 마케팅 데이터 분석",
+    "tags": [
+      "마케팅 성과 측정",
+      "베이지안",
+      "인과를 곁들인 분석"
+    ]
+  },
+  {
+    "repo": "data-still-does-not-speak",
+    "title": "데이터는 여전히 말하지 않는다",
+    "summary": "『행동 데이터 분석』 코드를 재현하고 해석을 서로 리뷰하는 14주 리딩 살롱입니다. 공개 분석 사례 1–2건을 목표로 합니다.",
+    "level": "L2",
+    "lines": [
+      "behavior"
+    ],
+    "status": "running",
+    "builders": [],
+    "cohorts": [
+      13
+    ],
+    "site": "https://pseudo-lab.com/projects/25cd8f79-6911-4ed9-baf0-446b90e62c26?tab=home",
+    "stars": 3,
+    "format": "14주 · 정규 모임 12회 + 매지컬 위크 2회",
+    "tags": [
+      "행동 데이터 분석",
+      "코드 재현",
+      "동료 리뷰"
+    ],
+    "preview": "https://causalinferencelab.github.io/data-still-does-not-speak/",
+    "previewLabel": "발표 자료 보기"
+  },
+  {
+    "repo": "Lang2SQL",
+    "title": "Lang2SQL",
+    "summary": "사람과 대화하며 함께 분석하는 발화 기반 데이터 에이전트입니다.",
+    "level": "L3",
+    "lines": [
+      "ai"
+    ],
+    "status": "active",
+    "builders": [
+      "이동욱",
+      "최세영"
+    ],
+    "cohorts": [
+      10,
+      11,
+      12
+    ],
+    "stars": 141,
+    "format": "오픈소스 데이터 에이전트",
+    "tags": [
+      "Text-to-SQL",
+      "데이터 에이전트",
+      "함께 개발"
+    ]
+  },
+  {
+    "repo": "policy-effect-analytics-agent",
+    "title": "정책 효과 분석 에이전트",
+    "summary": "공공데이터로 화제가 된 정책의 효과를 검증합니다. 분석 계획을 먼저 공개하고, 근거가 없으면 판단할 수 없다고 말합니다.",
+    "level": "L3",
+    "lines": [
+      "main",
+      "ai"
+    ],
+    "status": "running",
+    "builders": [
+      "신진수"
+    ],
+    "cohorts": [],
+    "stars": 7,
+    "format": "공공데이터 40종 · 정책 주제 8개",
+    "tags": [
+      "정책 효과",
+      "공공데이터",
+      "분석 계획 먼저 공개"
+    ],
+    "preview": "https://causalinferencelab.github.io/policy-effect-analytics-agent/",
+    "previewLabel": "사이트 열기"
+  },
+  {
+    "repo": "Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines",
+    "title": "RWE 규제 가이드라인",
+    "summary": "FDA 등 규제기관의 Real-World Evidence 가이드라인을 인과추론 관점에서 읽은 스터디입니다.",
+    "level": "L4",
+    "lines": [
+      "research"
+    ],
+    "status": "stable",
+    "builders": [
+      "박상호"
+    ],
+    "cohorts": [
+      9
+    ],
+    "site": "https://causalinferencelab.github.io/Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines/intro.html",
+    "stars": 10,
+    "format": "규제 가이드라인 리딩 · Jupyter Book",
+    "tags": [
+      "Real-World Evidence",
+      "FDA·EMA·식약처",
+      "가이드라인 리뷰"
+    ],
+    "previewLabel": "정리 노트 보기"
+  },
+  {
+    "repo": "From-Fixed-to-Flexible-Your-Guide-to-Adaptive-Designs-and-Master-Protocols",
+    "title": "적응형 설계",
+    "summary": "적응형 임상시험 설계와 마스터 프로토콜을 다룬 스터디 자료입니다.",
+    "level": "L4",
+    "lines": [
+      "research"
+    ],
+    "status": "stable",
+    "builders": [
+      "박상호"
+    ],
+    "cohorts": [
+      9
+    ],
+    "stars": 21,
+    "format": "적응형 임상 설계 스터디",
+    "tags": [
+      "Adaptive Design",
+      "Master Protocol",
+      "종양학 임상"
+    ]
+  },
+  {
+    "repo": "ccwr",
+    "title": "ccwr",
+    "summary": "Clone-censor-weight 방식으로 target trial emulation을 재현 가능하게 수행하는 R 패키지입니다.",
+    "level": "L4",
+    "lines": [
+      "research"
+    ],
+    "status": "active",
+    "builders": [
+      "박상호"
+    ],
+    "cohorts": [
+      12
+    ],
+    "site": "https://causalinferencelab.github.io/ccwr/",
+    "stars": 3,
+    "format": "R 패키지 · target trial emulation",
+    "tags": [
+      "R 패키지",
+      "Clone-Censor-Weight",
+      "재현 가능한 분석"
+    ],
+    "previewLabel": "문서 보기"
+  },
+  {
+    "repo": "CausalInferenceLab.github.io",
+    "title": "인과추론팀 허브",
+    "summary": "지금 보고 있는 이 허브의 소스입니다. 데이터 파일을 고치는 PR로 누구나 내용을 보탤 수 있습니다.",
+    "level": null,
+    "lines": [],
+    "status": "depot",
+    "builders": [],
+    "cohorts": [],
+    "stars": 36
+  },
+  {
+    "repo": "Project-template",
+    "title": "프로젝트 템플릿",
+    "summary": "새 프로젝트를 열 때 쓰는 인과추론팀 레포 템플릿입니다.",
+    "level": null,
+    "lines": [],
+    "status": "depot",
+    "builders": [],
+    "cohorts": [],
+    "stars": 2
+  },
+  {
+    "repo": "Causal-Inference-Materials",
+    "title": "스터디·컨퍼런스 자료",
+    "summary": "인과추론 스터디와 컨퍼런스에서 사용한 자료 모음입니다.",
+    "level": null,
+    "lines": [],
+    "status": "depot",
+    "builders": [],
+    "cohorts": [],
+    "stars": 8
+  },
+  {
+    "repo": "python-causality-handbook",
+    "title": "원서 포크",
+    "summary": "번역의 기준이 된 Causal Inference for the Brave and True 원서 저장소의 포크입니다.",
+    "level": null,
+    "lines": [],
+    "status": "depot",
+    "builders": [],
+    "cohorts": [],
+    "stars": 2
+  }
+]

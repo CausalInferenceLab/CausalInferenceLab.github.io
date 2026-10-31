@@ -1,0 +1,167 @@
+[
+  {
+    "id": "L0",
+    "tier": "입문",
+    "name": "Foundation",
+    "question": "왜 인과추론인가",
+    "goal": "영상과 노트북으로 상관과 인과가 왜 다른지 감을 잡습니다.",
+    "layer": "learn",
+    "for": "상관과 인과가 왜 다른지 처음 궁금해진 분",
+    "learn": [
+      "상관과 인과",
+      "교란",
+      "반사실"
+    ],
+    "outcome": "상관과 인과가 왜 다른지 예를 들어 설명할 수 있습니다.",
+    "steps": [
+      {
+        "repo": "causal-studio",
+        "note": "영상을 보고 Colab 노트북으로 따라 하기"
+      }
+    ],
+    "more": [
+      {
+        "title": "상관일까, 인과일까?",
+        "href": "game.html",
+        "note": "짧은 문장 10개로 감 잡기"
+      },
+      {
+        "title": "교란 실험실",
+        "href": "lab.html",
+        "note": "교란이 결과를 바꾸는 모습 보기"
+      }
+    ]
+  },
+  {
+    "id": "L1",
+    "tier": "개념 완성",
+    "name": "Theory & Concept",
+    "question": "어떻게 추정하나",
+    "goal": "잠재적 결과, 무작위 실험, 회귀, 성향점수, 이중차분법 같은 핵심 기법을 무료 자료로 끝까지 익힙니다.",
+    "layer": "learn",
+    "for": "핵심 기법을 무료 자료로 처음부터 끝까지 익히려는 분",
+    "learn": [
+      "잠재적 결과",
+      "무작위 실험",
+      "인과 그래프",
+      "회귀",
+      "도구변수",
+      "성향점수",
+      "이중차분법",
+      "통제집단합성법",
+      "회귀 불연속"
+    ],
+    "outcome": "기법마다 필요한 가정을 알고, 데이터에 맞는 추정 방법을 고를 수 있습니다.",
+    "steps": [
+      {
+        "repo": "Causal-Inference-with-Python",
+        "note": "1부 1–16장: 핵심 기법을 차례로"
+      },
+      {
+        "repo": "OCE-Materials",
+        "note": "A/B 테스트를 한다면 함께"
+      }
+    ]
+  },
+  {
+    "id": "L2",
+    "tier": "실전 적용",
+    "name": "Application",
+    "question": "내 데이터에 어떻게 쓰나",
+    "goal": "책 코드, 산업 사례 템플릿, 현업 특강으로 실제 문제에 적용합니다.",
+    "layer": "learn",
+    "for": "회사 데이터에 기법을 붙여 보려는 실무자",
+    "learn": [
+      "이질적 처치효과",
+      "메타러너",
+      "업리프트",
+      "실험 플랫폼",
+      "마케팅 효과 측정"
+    ],
+    "outcome": "회사 데이터로 효과를 추정하고, 결과와 한계를 설명할 수 있습니다.",
+    "steps": [
+      {
+        "repo": "causal-inference-in-python-code",
+        "note": "책 장별 예제 코드를 직접 돌려 보기"
+      },
+      {
+        "repo": "causal-inference-practice",
+        "note": "기법별 산업 사례 템플릿에 내 문제 대입하기"
+      },
+      {
+        "repo": "causal-inference-with-causalML",
+        "note": "CausalML로 고객별 효과 추정하기"
+      }
+    ],
+    "more": [
+      {
+        "title": "웹북 2부 17–25장",
+        "href": "https://causalinferencelab.github.io/Causal-Inference-with-Python/17-Predictive-Models-101.html",
+        "note": "이질적 처치효과, 메타러너, 이중 머신러닝"
+      }
+    ]
+  },
+  {
+    "id": "L3",
+    "tier": "도구 개발",
+    "name": "Amplification",
+    "question": "분석을 어떻게 키우나",
+    "goal": "데이터 에이전트처럼 분석을 빠르게 만드는 도구를 함께 개발합니다.",
+    "layer": "build",
+    "for": "분석을 돕는 도구를 직접 만들고 싶은 분",
+    "quests": [
+      "comment",
+      "first_pr"
+    ],
+    "learn": [
+      "데이터 에이전트",
+      "분석 자동화",
+      "PR과 코드 리뷰"
+    ],
+    "outcome": "분석을 돕는 도구에 기여하고 리뷰를 주고받을 수 있습니다.",
+    "steps": [
+      {
+        "repo": "policy-effect-analytics-agent",
+        "note": "진행 중: 분석 계획부터 함께"
+      },
+      {
+        "repo": "Lang2SQL",
+        "note": "데이터 에이전트에 기여하기"
+      }
+    ]
+  },
+  {
+    "id": "L4",
+    "tier": "연구",
+    "name": "Research",
+    "question": "무엇이 아직 안 풀렸나",
+    "goal": "연구 소프트웨어를 만들고 규제·임상 연구를 리뷰하며, 외부 오픈소스에 기여합니다.",
+    "layer": "build",
+    "for": "헬스케어·규제 연구나 외부 오픈소스 기여를 하려는 분",
+    "quests": [
+      "runner",
+      "open_project"
+    ],
+    "learn": [
+      "target trial emulation",
+      "실사용 근거(RWE)",
+      "적응형 설계",
+      "외부 라이브러리 기여"
+    ],
+    "outcome": "연구 소프트웨어를 만들거나 외부 인과추론 오픈소스에 기여할 수 있습니다.",
+    "steps": [
+      {
+        "repo": "ccwr",
+        "note": "R 패키지로 target trial emulation"
+      },
+      {
+        "repo": "Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines",
+        "note": "규제 가이드라인을 인과추론으로 읽기"
+      },
+      {
+        "repo": "external",
+        "note": "DoWhy·EconML·CausalML에 기여하기"
+      }
+    ]
+  }
+]

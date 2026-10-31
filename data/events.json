@@ -1,0 +1,133 @@
+[
+  {
+    "order": 1,
+    "name": "1st Data Forum - 인과추론으로 네트워킹하기",
+    "date": "2024-05-25",
+    "participants": 82,
+    "link": "https://chanrankim.notion.site/5796845674494f808356a7def8828855",
+    "year": 2024,
+    "upcoming": false
+  },
+  {
+    "order": 2,
+    "name": "2nd Data Forum - 2025 Meetup for Product & Data",
+    "date": null,
+    "participants": 102,
+    "link": "https://chanrankim.notion.site/2025-Meetup-for-Product-Data-1a3963ffa3ee80aa9d6dcff4c463a094",
+    "year": 2025,
+    "upcoming": false
+  },
+  {
+    "order": 3,
+    "name": "3rd Data Forum - 2025 Product DNA Open Forum",
+    "date": null,
+    "participants": 71,
+    "link": "https://chanrankim.notion.site/2025-Product-DNA-Open-Forum-267963ffa3ee80449e32de2bfe413012",
+    "year": 2025,
+    "upcoming": false
+  },
+  {
+    "order": 4,
+    "name": "4th Data Forum",
+    "date": "2026-06-13",
+    "participants": 75,
+    "link": "https://pseudo-lab.com/events/c712aa07-9a86-4626-8d40-4362d7ad5d29",
+    "year": 2026,
+    "upcoming": false
+  },
+  {
+    "order": 5,
+    "name": "5th Data Forum - AI 시대, 만드는 속도에서 증명하는 힘으로",
+    "date": "2026-11-21",
+    "participants": null,
+    "link": "https://pseudo-lab.com/events/a1f10b8a-e898-47f1-86bb-0ba90bc8cc0e",
+    "year": 2026,
+    "upcoming": true,
+    "tagline": "AI 시대, 만드는 속도에서 증명하는 힘으로",
+    "time": "13:30–17:30",
+    "venue": "한빛미디어 리더스홀",
+    "address": "서울 서대문구 연희로2길 한빛미디어 사옥 1층",
+    "signupStart": "2026-11-04",
+    "signupEnd": "2026-11-18",
+    "capacity": 80,
+    "audience": "Data·AI 오픈소스와 AI 시대 커리어 성장에 관심 있는 누구나",
+    "code": {
+      "label": "인과추론팀 Builder 추천 코드 이벤트",
+      "steps": [
+        "Builder 추천 코드 확인",
+        "가짜연구소 행사 페이지에서 ‘참여하기’",
+        "코드 입력 후 신청 완료"
+      ]
+    },
+    "host": "가짜연구소",
+    "sponsors": [
+      "한빛미디어",
+      "NIPA 오픈업"
+    ],
+    "poster": "assets/img/forum5-poster.jpg",
+    "timetableImage": "assets/img/forum5-timetable.jpg",
+    "timetable": [
+      {
+        "time": "13:30–13:50",
+        "kind": "입장",
+        "title": "참가 등록과 네임태그 수령"
+      },
+      {
+        "time": "13:50–14:00",
+        "kind": "오프닝",
+        "title": "환영 인사와 행사 안내"
+      },
+      {
+        "time": "14:00–14:10",
+        "kind": "Keynote",
+        "title": "만드는 속도에서, 증명하는 힘으로",
+        "who": "신진수 (크래프톤)",
+        "talk": true
+      },
+      {
+        "time": "14:10–14:25",
+        "kind": "세미나 1",
+        "title": "비영리 온라인 실험 플랫폼 이해하기",
+        "who": "김수현 (HDC Labs)",
+        "talk": true
+      },
+      {
+        "time": "14:25–14:40",
+        "kind": "세미나 2",
+        "title": "인과추론 학습 플랫폼 만들기",
+        "who": "김정현 (고려대학교)",
+        "talk": true
+      },
+      {
+        "time": "14:40–14:55",
+        "kind": "세미나 3",
+        "title": "데이터는 여전히 말하지 않는다",
+        "who": "권준혁 (가짜연구소)",
+        "talk": true
+      },
+      {
+        "time": "14:55–15:00",
+        "kind": "Break",
+        "title": "Coffee Time"
+      },
+      {
+        "time": "15:00–15:45",
+        "kind": "패널토크",
+        "title": "실무에서 AI를 더 잘 활용하려면?",
+        "who": "Moderator 이유신 · Panel 이동욱, 최지환, 최세영, 김수현",
+        "talk": true
+      },
+      {
+        "time": "15:45–17:20",
+        "kind": "네트워킹",
+        "title": "\"I\"도 할 수 있는 네트워킹 · 연사와의 Private Tea Time",
+        "talk": true
+      },
+      {
+        "time": "17:20–17:30",
+        "kind": "클로징",
+        "title": "단체 사진과 마무리"
+      }
+    ]
+  }
+]
