@@ -608,6 +608,7 @@
       <p>${esc(testReason(v))}</p>
       ${meterHTML(lv.id)}
       <ul class="lt-bands">${T.bands.map((b) => { const [r, t] = v.bands[b.level]; return `<li class="${r >= b.pass ? "pass" : ""}"><b>${esc(b.name)}</b><span class="bar" aria-hidden="true"><i style="width:${t ? (r / t) * 100 : 0}%"></i></span><span>${r} / ${t}${r >= b.pass ? " · 통과" : ""}</span></li>`; }).join("")}</ul>
+      <p class="lt-share"><button type="button" class="btn ghost sm" data-share-result="${lv.id}">${navigator.share ? "결과 공유하기" : "진단 링크 복사"}</button><span>동료에게 보내면 같은 3분 진단이 바로 열립니다.</span></p>
       ${start.length ? `<div class="lt-block"><p class="k">여기서 시작</p><ol class="lt-start">${start.map((q, k) => { const s = (lv.steps || []).find((x) => x.repo === q.repo); return `<li><span class="n">${k + 1}</span><span><b>${esc(q.title)}</b><span>${esc(q.action ? q.stamp.how : (s && s.note) || q.format || "")}</span></span></li>`; }).join("")}</ol></div>` : ""}
       ${next.length ? `<div class="lt-block"><p class="k">관심 분야에 맞춰 이어서</p><ul class="lt-next">${next.map((r) => `<li><button type="button" data-open="${esc(r.repo)}">${esc(r.title)}</button><span>${LV(r.level)}</span></li>`).join("")}</ul></div>` : ""}
       ${missed.length ? `<div class="lt-block"><p class="k">다시 볼 개념 ${missed.length}개</p><ul class="lt-review">${missed.map((q) => `<li><b>${esc(q.topic)}</b><span>${esc(q.why)}</span><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "level_test", topic: q.id }))}'>${esc(q.chapter.title)} 읽기<span aria-hidden="true"> ↗</span></a></li>`).join("")}</ul></div>` : `<p class="lt-sub">틀린 문제가 없습니다.</p>`}
@@ -615,6 +616,21 @@
     <div class="sh-foot"><button type="button" class="btn ghost" data-test-open="retry">다시 풀기</button><button type="button" class="btn" data-goto-level="${lv.id}" data-test-go>${LV(lv.id)} 코스로 이동</button></div>`;
     $("#lt-body .sh-main").scrollTop = 0;
     $("#lt-body [data-test-go]").focus({ preventScroll: true });
+  }
+  /* the result goes out as a link that opens the same test; the level is in the text, not the link */
+  async function shareResult(btn) {
+    const lv = levelOf(btn.dataset.shareResult);
+    const url = shareUrl("/?level", "level_test");
+    const text = `인과추론 3분 진단 결과: ${LV(lv.id)} ${lv.tier || lv.name}. 실무 상황 문제 10개로 내 레벨을 찾아 보세요.`;
+    if (navigator.share) {
+      try { await navigator.share({ title: "인과추론 3분 진단", text, url }); track("share", { content: "level_test", method: "native", level: lv.id }); } catch (e) { /* closed */ }
+      return;
+    }
+    const ok = window.hubCopy ? await window.hubCopy(`${text} ${url}`) : false;
+    const label = btn.textContent;
+    btn.textContent = ok ? "복사했습니다" : "복사하지 못했습니다";
+    setTimeout(() => { btn.textContent = label; }, 1600);
+    if (ok) track("share", { content: "level_test", method: "copy", level: lv.id });
   }
   function testJump(i) {
     test.step = Math.max(0, Math.min(state.leveltest.questions.length, i));
@@ -959,7 +975,7 @@
       const out = (p.links || [])[0];
       const who = p.type === "도서" ? "인과추론팀 옮김" : `강사 ${p.credit || ""}`;
       return `<li class="pt-card">
-        <a class="pt-main" href="${esc(out ? out.url : "#curriculum")}" target="_blank" rel="noopener" data-event="click_partner" data-event-params='${esc(JSON.stringify({ item: p.id, action: "out" }))}' aria-label="${esc(`${p.type} ${p.title}, 한빛미디어에서 보기`)}">
+        <a class="pt-main" href="${esc(out ? out.url : "#curriculum")}" target="_blank" rel="noopener" aria-label="${esc(`${p.type} ${p.title}, 한빛미디어에서 보기`)}">
           <img class="pt-img ${p.type === "도서" ? "book" : "wide"}" src="${esc(p.cover)}" alt="" width="${p.type === "도서" ? 26 : 48}" height="34">
           <span class="pt-text"><b>${esc(p.shortTitle || p.title)}</b><span class="pt-lv"><span class="pt-type">${esc(p.type)}</span>${esc(who)}</span></span>
           <svg class="pt-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1616,8 +1632,6 @@
     document.addEventListener("click", (e) => {
       const fa = e.target.closest("#featured a");
       if (fa) track("click_featured", { repo: fa.dataset.repo || "" });
-      const out = e.target.closest(".pt-out");
-      if (out) track("click_partner", { item: out.closest(".pt-card").querySelector("[data-goto]").dataset.goto, action: "out" });
       const ja = e.target.closest("#join .steps a, #join .join-foot a, .footer-links a[href*='discord']");
       if (ja) track("click_join", { target: joinTarget(ja.getAttribute("href") || ""), source: ja.closest("#join") ? "join_section" : "footer" });
       const sa = e.target.closest("#station-body .links a");
@@ -1630,6 +1644,8 @@
       if (tp) { testPick(Number(tp.dataset.testPick)); return; }
       const ti = e.target.closest("[data-test-interest]");
       if (ti) { testInterest(ti.dataset.testInterest); return; }
+      const sr = e.target.closest("[data-share-result]");
+      if (sr) { shareResult(sr); return; }
       const tj = e.target.closest("[data-test-jump]");
       if (tj) { testJump(Number(tj.dataset.testJump)); return; }
       if (e.target.closest("[data-test-finish]")) { finishTest(); return; }
@@ -1665,7 +1681,7 @@
       const person = e.target.closest("[data-person]");
       if (person) { openPerson(person.dataset.person, person.closest("#top3") ? "top3" : person.closest("#people-rail") ? "rail" : person.closest("#roster") ? "roster" : "hub"); return; }
       const go = e.target.closest("[data-goto]");
-      if (go) { if (go.closest("#partner-list")) track("click_partner", { item: go.dataset.goto, action: "goto" }); gotoItem(go.dataset.goto); return; }
+      if (go) { if (go.closest("#partner-list")) track("click_partner", { item: go.dataset.goto, action: "goto", placement: "hero" }); gotoItem(go.dataset.goto); return; }
       const open = e.target.closest("[data-open]");
       if (open) { e.preventDefault(); state.backTo = open.dataset.fromPerson || (open.closest(".p-repos") ? (state.lastPerson || null) : null); openStation(open.dataset.open, sourceOf(open)); }
       const back = e.target.closest("[data-back-person]");

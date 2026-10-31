@@ -54,7 +54,7 @@
   const SPOTS = [
     ["#featured", "featured"], [".partner", "partner"], ["#station-dialog", "station"], ["#daily", "daily"], ["#posts", "posts"], ["#passport-dialog", "passport"],
     ["#shelf, #week, .spot", "curriculum"], [".gm", "game"], [".lab", "lab"], [".bp", "builder_page"],
-    [".reader, .prose", "article"], [".site-footer", "footer"], [".banner", "banner"]
+    [".post-related, .reader, .prose", "article"], ["#lt-sheet", "level_test"], [".site-footer", "footer"], [".banner", "banner"]
   ];
   function teamSite(a) {
     let u;
@@ -82,4 +82,30 @@
   }
   document.addEventListener("click", decorate, true);
   document.addEventListener("auxclick", decorate, true);
+
+  /* Links to Hanbit Media (the team's book and lecture): tag them so Hanbit's own analytics can see
+     the visit came from the hub, and send one click_partner per click, the same way everywhere.
+     The partner report counts click_partner by item and placement. */
+  const PARTNER = /(^|\.)hanbit\.co\.kr$/;
+  const PARTNER_ITEMS = [["B6208936856", "paid-book"], ["C0781073345", "paid-lecture"]];
+  const PARTNER_SPOT = { partner: "hero", station: "curriculum" };
+  function partner(e) {
+    const a = e.target.closest && e.target.closest("a[href]");
+    if (!a || (e.type === "auxclick" && e.button !== 1)) return;
+    let u;
+    try { u = new URL(a.href, location.href); } catch (err) { return; }
+    if (!PARTNER.test(u.hostname)) return;
+    const spot = placement(a), where = PARTNER_SPOT[spot] || spot;
+    if (!u.searchParams.has("utm_source")) {
+      u.searchParams.set("utm_source", "causalinference_hub");
+      u.searchParams.set("utm_medium", "referral");
+      u.searchParams.set("utm_campaign", "hub");
+      u.searchParams.set("utm_content", where);
+      a.href = u.toString();
+    }
+    const item = (PARTNER_ITEMS.find(([id]) => u.href.includes(id)) || [null, "other"])[1];
+    window.hubTrack("click_partner", { item, action: "out", placement: where });
+  }
+  document.addEventListener("click", partner, true);
+  document.addEventListener("auxclick", partner, true);
 })();
