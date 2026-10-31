@@ -2077,9 +2077,9 @@ dialog.sheet .toast:not(.show) { transition: opacity .25s ease, visibility 0s li
 .rail-layer.build { grid-column: 4 / 6; }
 /* the first time it is seen, the rail draws from Level 0 to 4; after a test, it fills to the visitor's level */
 .lv-rail.pre .rail-line i { transform: scaleX(0); }
-.lv-rail.pre .rs { opacity: 0; transform: translateY(10px); }
-.lv-rail.drawn .rs { transition: opacity .45s ease, transform .45s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--i) * 110ms); }
-.lv-rail.drawn .rail-line { animation: rail-draw .9s cubic-bezier(.2, .7, .2, 1) both; }
+.lv-rail.pre .rs { opacity: 0; transform: translateY(6px); }
+.lv-rail.drawn .rs { transition: opacity .22s ease, transform .22s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--i) * 40ms); }
+.lv-rail.drawn .rail-line { animation: rail-draw .4s cubic-bezier(.2, .7, .2, 1) both; }
 @keyframes rail-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 .rail.reveal .rs-node { animation: rs-pop .5s cubic-bezier(.2, .9, .3, 1.3) both; animation-delay: calc(var(--i) * 140ms); }
 .rail.reveal .rail-line i { animation: fill-in 1s cubic-bezier(.2, .7, .2, 1) both; }
@@ -2124,14 +2124,14 @@ dialog.sheet .toast:not(.show) { transition: opacity .25s ease, visibility 0s li
 @media (max-width: 960px) { .lt-card { grid-template-columns: minmax(0, 1fr); } }
 
 /* sections arrive once: the station dot, then the heading, then the content */
-.rv .section-head h2::before { transform: scale(0); transition: transform .5s cubic-bezier(.2, .9, .3, 1.4); }
-.rv .section-head h2, .rv .section-head p { opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .5s cubic-bezier(.2, .7, .2, 1); }
-.rv .wrap > :not(.section-head) { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1); }
-.rv-in .section-head h2::before { transform: none; transition-delay: .05s; }
-.rv-in .section-head h2 { opacity: 1; transform: none; transition-delay: .12s; }
-.rv-in .section-head p { opacity: 1; transform: none; transition-delay: .2s; }
-.rv-in .wrap > :not(.section-head) { opacity: 1; transform: none; transition-delay: .3s; }
-.rv-in .wrap > :not(.section-head) + :not(.section-head) { transition-delay: .4s; }
+.rv .section-head h2::before { transform: scale(0); transition: transform .25s cubic-bezier(.2, .9, .3, 1.4); }
+.rv .section-head h2, .rv .section-head p { opacity: 0; transform: translateY(6px); transition: opacity .22s ease, transform .22s cubic-bezier(.2, .7, .2, 1); }
+.rv .wrap > :not(.section-head) { opacity: 0; transform: translateY(8px); transition: opacity .25s ease, transform .25s cubic-bezier(.2, .7, .2, 1); }
+/* sections start showing before they reach the screen, so the delays stay tiny */
+.rv-in .section-head h2::before, .rv-in .section-head h2 { transform: none; }
+.rv-in .section-head h2, .rv-in .section-head p { opacity: 1; transform: none; }
+.rv-in .section-head p { transition-delay: .03s; }
+.rv-in .wrap > :not(.section-head) { opacity: 1; transform: none; transition-delay: .05s; }
 @media (prefers-reduced-motion: reduce) { .rv .section-head h2::before, .rv .section-head h2, .rv .section-head p, .rv .wrap > * { opacity: 1; transform: none; transition: none; } }
 .lt-share { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 13.5px; color: var(--muted); }
 .lt-share .btn { margin: 0; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }

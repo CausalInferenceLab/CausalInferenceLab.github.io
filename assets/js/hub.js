@@ -486,8 +486,11 @@
     const io = new IntersectionObserver((ens) => ens.forEach((en) => {
       if (!en.isIntersecting) return;
       en.target.classList.add("rv-in"); io.unobserve(en.target);
-    }), { threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
+    }), { threshold: 0, rootMargin: "0px 0px 35% 0px" });
     secs.forEach((s) => io.observe(s));
+    /* a fast fling or the scrollbar can pass a section between two observer ticks: show everything above the fold line too */
+    const catchUp = () => { const line = innerHeight * 1.35; secs.forEach((s) => { if (!s.classList.contains("rv-in") && s.getBoundingClientRect().top < line) { s.classList.add("rv-in"); io.unobserve(s); } }); if (secs.every((s) => s.classList.contains("rv-in"))) window.removeEventListener("scroll", catchUp); };
+    window.addEventListener("scroll", catchUp, { passive: true });
     /* a jump straight to a section (nav, hash) shows it at once */
     /* only plain #id hashes name a section; #station=<repo> and the like are not selectors */
     const show = () => { const t = /^#[\w-]+$/.test(location.hash) && document.getElementById(location.hash.slice(1)); const sec = t && t.closest("section.band"); if (sec) sec.classList.add("rv-in"); };
@@ -501,7 +504,7 @@
     const io = new IntersectionObserver((ens) => ens.forEach((en) => {
       if (!en.isIntersecting) return;
       rail.classList.remove("pre"); rail.classList.add("drawn"); io.disconnect();
-    }), { threshold: 0.4 });
+    }), { threshold: 0, rootMargin: "0px 0px 20% 0px" });
     io.observe(rail);
   }
 
