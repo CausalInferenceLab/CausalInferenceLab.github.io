@@ -12,6 +12,7 @@ scripts/builder_cards.py. A page whose image is missing falls back to the hub's.
 """
 import html
 import json
+from urllib.parse import quote
 import os
 import re
 from collections import OrderedDict
@@ -335,6 +336,7 @@ def page(p, repos, projects, terms):
     <section class="bp-cta">
       <div><h2>다음 기수에 프로젝트를 열어 보세요</h2><p>러너로 시작한 Builder도 많습니다. 템플릿으로 레포를 만들고, 기수 모집 때 프로젝트를 등록하면 됩니다.</p></div>
       <div class="bp-cta-links"><a class="btn" href="/#join" data-event="click_join" data-event-params='{{"target":"join_section","source":"builder_page"}}'>참여 방법 보기</a><a class="btn ghost" href="https://github.com/{ORG}/Project-template" target="_blank" rel="noopener" data-event="click_join" data-event-params='{{"target":"template","source":"builder_page"}}'>프로젝트 템플릿</a></div>
+      <p class="bp-own">이 페이지의 Builder라면 <a href="https://github.com/{ORG}/CausalInferenceLab.github.io/issues/new?template=builder-profile.yml&amp;title={quote("[Builder] " + p["name"])}" target="_blank" rel="noopener" data-event="click_join" data-event-params='{{"target":"builder_profile","source":"builder_page"}}'>사진·한 줄 소개·회고 세 줄을 보내 주세요</a>. 운영진이 확인한 뒤 이 페이지에 넣습니다.</p>
     </section>
   </div>
 </main>
