@@ -19,7 +19,10 @@
   try {
     const u = new URL(location.href);
     const drop = [...u.searchParams.keys()].filter((k) => k.startsWith("utm_"));
+    /* keep where this visit came from for the rest of the tab's session (the hub's forum mode reads it) */
     if (drop.length) {
+      try { sessionStorage.setItem("cil-hub-landing", JSON.stringify(Object.fromEntries(drop.map((k) => [k.slice(4), u.searchParams.get(k)])))); } catch (e) { /* storage off */ }
+      window.hubLanding = Object.fromEntries(drop.map((k) => [k.slice(4), u.searchParams.get(k)]));
       drop.forEach((k) => u.searchParams.delete(k));
       history.replaceState(history.state, "", u.pathname + u.search + u.hash);
     }

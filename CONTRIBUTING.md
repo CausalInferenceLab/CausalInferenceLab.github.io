@@ -57,6 +57,8 @@ PR을 올리기 전에 `python3 scripts/check_data.py`를 실행해 주세요. �
 python3 scripts/build_builders.py
 ```
 
+Builder 본인은 [Builder 프로필과 회고](https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/issues/new?template=builder-profile.yml) 이슈 양식으로 공개 동의, GitHub 아이디, 한 줄 소개, 회고 세 줄을 보냅니다. 운영진은 받은 내용을 `data/builders.json`(`github`, `intro`, `linkedin`)과 `data/projects.json`(`retro`)에 옮기고 이슈를 닫습니다. 허브의 Builder 섹션과 각 Builder 페이지에 이 양식 링크가 있습니다.
+
 링크를 공유할 때 보이는 이미지(`assets/og/builders/<slug>.jpg`)는 따로 만들어 커밋합니다. Builder가 새로 생기거나 숫자가 바뀌면 다시 만들어 주세요. 이미지가 없는 페이지는 허브 기본 이미지를 씁니다.
 
 ```bash
@@ -90,6 +92,8 @@ python3 scripts/builder_cards.py
 ## 이벤트 측정
 
 `assets/js/track.js`의 `hubTrack(이름, 파라미터)`가 GA4로 이벤트를 보냅니다. GA4가 설치되지 않았으면 아무 일도 하지 않습니다. 이벤트 이름과 파라미터는 PM 문서의 이벤트 사전을 따르고, 새 이벤트를 넣을 때는 사전에도 같이 적습니다. HTML에서는 `data-event="click_join" data-event-params='{"target":"template","source":"builder_page"}'`처럼 속성만으로도 보낼 수 있습니다. 로컬에서 확인하려면 콘솔에서 `window.HUB_DEBUG = true`를 켭니다.
+
+한빛미디어 링크는 `track.js`가 한곳에서 처리합니다. 누를 때마다 `click_partner`(item, action, placement)를 한 번 보내고 링크에 `utm_source=causalinference_hub`를 붙이므로, 한빛 링크에는 따로 `data-event`를 달지 않습니다. 들어온 링크의 `utm_*`는 `ga.js`가 주소창에서 지우기 전에 `sessionStorage`의 `cil-hub-landing`에 남깁니다. `utm_source=forum5`처럼 `forum<회차>`로 들어오면 그 탭에서는 진단이 행사 현장 모드가 됩니다. 진단 결과에 네트워킹 카드가 생기고, 진단 이벤트에 `context`가 붙습니다. 카드는 행사 다음 날까지만 나옵니다.
 
 ## 배포
 
