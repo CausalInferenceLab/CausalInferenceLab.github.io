@@ -50,6 +50,8 @@
       body.querySelectorAll("table").forEach((t) => {
         const w = document.createElement("div");
         w.className = "table-wrap";
+        /* wide tables scroll sideways on phones, so the scroll area has to be reachable by keyboard */
+        w.tabIndex = 0; w.setAttribute("role", "region"); w.setAttribute("aria-label", "표, 가로로 스크롤할 수 있습니다");
         t.parentNode.insertBefore(w, t);
         w.appendChild(t);
       });

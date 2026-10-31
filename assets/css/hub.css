@@ -666,6 +666,7 @@ dialog.station::backdrop { background: rgba(10, 14, 20, .55); }
 .prose blockquote { border-left: 4px solid var(--rule); padding-left: 16px; color: var(--muted); }
 .prose img { border-radius: 10px; }
 .prose .table-wrap { overflow-x: auto; margin: 0 0 20px; }
+.prose .table-wrap:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
 .prose table { border-collapse: collapse; font-size: 14.5px; min-width: 520px; width: 100%; }
 .prose th, .prose td { border-bottom: 1px solid var(--rule); padding: 8px 10px; text-align: left; vertical-align: top; }
 .prose th { background: var(--surface-2); }
@@ -817,6 +818,8 @@ button.btn.sm { font-size: 14px; }
 .stamp.sm { width: 36px; height: 36px; font-size: 15px; }
 .toast { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 50; display: flex; align-items: center; gap: 12px; width: min(440px, calc(100vw - 32px)); box-sizing: border-box; padding: 12px 14px; border-radius: 14px; background: var(--ink); color: var(--paper); box-shadow: 0 12px 32px rgba(0, 0, 0, .25); transform: translate(-50%, 140%); transition: transform .3s ease; }
 .toast.show { transform: translate(-50%, 0); }
+/* once it slides away it must not sit over the header or catch taps */
+.toast:not(.show) { visibility: hidden; pointer-events: none; transition: transform .3s ease, visibility 0s linear .3s; }
 .toast b { display: block; font-size: 14px; }
 .toast span span { font-size: 12.5px; opacity: .75; }
 .toast button { font: inherit; font-size: 13px; font-weight: 700; margin-left: 4px; padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, .35); background: transparent; color: inherit; cursor: pointer; white-space: nowrap; }
@@ -938,7 +941,7 @@ button.btn.sm { font-size: 14px; }
   .lab-legend { margin-top: 4px; font-size: 12px; }
 }
 .toast > span:nth-child(2) { flex: 1; min-width: 0; }
-@media (max-width: 900px) { .toast { bottom: auto; top: 96px; transform: translate(-50%, -180%); } .toast.show { transform: translate(-50%, 0); } }
+@media (max-width: 900px) { .toast { bottom: auto; top: 96px; transform: translate(-50%, calc(-100% - 112px)); } .toast.show { transform: translate(-50%, 0); } }
 .lab-ctl.off input[type=range] { opacity: .45; }
 .lab-ctl.off small { color: var(--live); font-weight: 600; }
 .lab-note { font-size: 12.5px; color: var(--muted); }
@@ -2004,6 +2007,7 @@ dialog.sheet[open] { animation: sheet-in .28s cubic-bezier(.2, .7, .2, 1); }
 dialog.sheet .toast, dialog.sheet .toast.show { position: absolute; top: auto; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); left: 16px; right: 16px; width: auto; transform: none; transition: opacity .25s ease; }
 dialog.sheet .toast { opacity: 0; pointer-events: none; }
 dialog.sheet .toast.show { opacity: 1; pointer-events: auto; }
+dialog.sheet .toast:not(.show) { transition: opacity .25s ease, visibility 0s linear .25s; }
 @media (min-width: 861px) {
   .event-past ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
   .event.past + .event.past { border-top: 0; }
