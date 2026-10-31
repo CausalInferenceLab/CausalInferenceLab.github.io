@@ -41,7 +41,7 @@ Matheus Facure의 『Causal Inference for The Brave and True』 한국어판을 
 
 ## 허브에서 이 책의 자리
 
-이 책은 Causal Inference Hub 커리큘럼의 L1(어떻게 추정하나)에 있습니다. 개념을 먼저 가볍게 잡고 싶다면 L0의 [영상으로 여는 인과추론](https://causalinferencelab.github.io/causal-studio/)부터 보고 넘어와도 좋습니다. 다 읽은 뒤에는 관심에 따라 이어 가면 됩니다.
+이 책은 Causal Inference Hub 커리큘럼의 Level 1(어떻게 추정하나)에 있습니다. 개념을 먼저 가볍게 잡고 싶다면 Level 0의 [영상으로 여는 인과추론](https://causalinferencelab.github.io/causal-studio/)부터 보고 넘어와도 좋습니다. 다 읽은 뒤에는 관심에 따라 이어 가면 됩니다.
 
 - 내 데이터에 적용해 보고 싶다면: [산업 사례 템플릿](https://causalinferencelab.github.io/#station=causal-inference-practice)
 - 메타러너와 이중 머신러닝을 코드로 더 익히고 싶다면: [CausalML 스터디](https://causalinferencelab.github.io/#station=causal-inference-with-causalML)

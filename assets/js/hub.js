@@ -489,7 +489,8 @@
     }), { threshold: 0.08, rootMargin: "0px 0px -8% 0px" });
     secs.forEach((s) => io.observe(s));
     /* a jump straight to a section (nav, hash) shows it at once */
-    const show = () => { const t = location.hash && document.querySelector(location.hash); const sec = t && t.closest("section.band"); if (sec) sec.classList.add("rv-in"); };
+    /* only plain #id hashes name a section; #station=<repo> and the like are not selectors */
+    const show = () => { const t = /^#[\w-]+$/.test(location.hash) && document.getElementById(location.hash.slice(1)); const sec = t && t.closest("section.band"); if (sec) sec.classList.add("rv-in"); };
     window.addEventListener("hashchange", show); show();
   }
   /* the rail draws itself once, the first time the curriculum comes into view */
