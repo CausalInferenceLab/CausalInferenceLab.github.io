@@ -1080,7 +1080,7 @@ button.btn.sm { font-size: 14px; }
 .featured { gap: 4px; }
 .featured a { border: 0; background: transparent; padding: 10px 12px; border-radius: 12px; }
 .featured a:hover { background: rgba(255, 255, 255, .12); }
-.featured .tag { width: auto; min-width: 0; padding: 0; background: none; color: rgba(255, 255, 255, .62); font-weight: 700; text-align: left; order: 2; }
+.featured .tag { width: auto; min-width: 0; padding: 0; background: none; color: rgba(255, 255, 255, .72); font-weight: 700; text-align: left; order: 2; }
 .featured .tx { order: 1; }
 .featured .st { order: 3; }
 .featured .out { order: 4; }
