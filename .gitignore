@@ -4,3 +4,4 @@ node_modules/
 /builders/
 /badges/
 __pycache__/
+/sitemap.xml

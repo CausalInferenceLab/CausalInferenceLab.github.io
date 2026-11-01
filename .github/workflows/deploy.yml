@@ -50,10 +50,13 @@ jobs:
       - name: Build Builder pages and badges
         run: python3 scripts/build_builders.py
 
+      - name: Build sitemap
+        run: python3 scripts/build_sitemap.py
+
       - name: Collect site files
         run: |
           mkdir _site
-          cp -r index.html article.html game.html lab.html 404.html .nojekyll assets data articles builders badges _site/
+          cp -r index.html article.html game.html lab.html 404.html .nojekyll robots.txt sitemap.xml assets data articles builders badges _site/
 
       # Browsers keep scripts and styles for up to ten minutes; a version on their URLs makes each deploy load
       # its own files instead of new HTML running last deploy's scripts.
