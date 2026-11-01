@@ -1096,6 +1096,22 @@
     const where = next.venue ? ` · ${next.venue}` : "";
     el.innerHTML = `<span class="ne-k">다음 행사</span><span class="ne-d">${d === 0 ? "오늘" : `D-${d}`}</span><span class="ne-t"><b>${dot(next.date)}(${wd(next.date)}) · ${esc(eventTitle(next))}${next.tagline ? ` · ${esc(next.tagline)}` : ""}</b><span>${esc(su.line)}${esc(where)}</span></span>${su.cta ? `<span class="ne-cta">${esc(su.cta)}<span class="sr-only"> (새 창)</span></span>` : `<span class="ne-go" aria-hidden="true">›</span>`}`;
   }
+  /* the header keeps the next Data Forum in view until the day: sign-up while it is open, the date after */
+  function renderHeaderEvent() {
+    const el = $("#hdr-event"), next = state.events.find((e) => e.upcoming && e.date);
+    if (!el || !next || daysTo(next.date) < 0) return;
+    const su = signup(next), d = daysTo(next.date), name = eventTitle(next);
+    const open = su.state === "open" && next.link;
+    const title = open ? "참가자 모집 중" : su.state === "soon" ? "참가 신청 예정" : d === 0 ? "오늘 행사" : `행사 D-${d}`;
+    const sub = open ? `${name} · ${next.signupEnd ? `${md(next.signupEnd)} 마감` : ""}` : su.state === "soon" ? `${name} · ${md(next.signupStart)} 오픈` : `${name} · ${dot(next.date)}`;
+    el.className = `hdr-ev ${open ? "open" : su.state}`;
+    if (open) { el.href = next.link; el.target = "_blank"; el.rel = "noopener"; } else { el.href = "#events"; el.removeAttribute("target"); el.removeAttribute("rel"); }
+    el.setAttribute("aria-label", `${name} ${title}${open ? ", 신청 페이지 열기" : ", 행사 안내로 이동"}`);
+    el.dataset.event = "click_event";
+    el.dataset.eventParams = JSON.stringify({ event_order: next.order, action: open ? "signup" : "event_info", placement: "header" });
+    el.innerHTML = `<svg class="hdr-ev-i" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h11A1.5 1.5 0 0 1 17 6.5V8a2 2 0 0 0 0 4v1.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 3 13.5V12a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 5.5v9" stroke="currentColor" stroke-width="1.4" stroke-dasharray="1.6 1.6"/></svg>${open ? `<span class="hdr-ev-dot" aria-hidden="true"></span>` : ""}<span class="hdr-ev-t">${open ? `<span class="hdr-ev-long">참가자 </span>모집 중` : esc(title)}</span><span class="hdr-ev-s">${esc(sub)}</span>${open ? `<span class="hdr-ev-go" aria-hidden="true">↗</span>` : ""}`;
+    el.hidden = false;
+  }
   /* ---------- activity: who contributed lately (from the daily snapshot), counted in the join loop ---------- */
   const CONTRIB_KINDS = new Set(["push", "pr_open", "pr_merge", "issue", "comment", "review", "release", "repo"]);
   /* newest first; repeated pushes by the same person to the same repo count as one line */
@@ -1880,7 +1896,7 @@
     const setHeader = () => { if (header) document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`); };
     setHeader(); window.addEventListener("resize", setHeader);
     renderLegend(); renderMap(); wireTabs();
-    renderFeatured(); renderPartner(); renderEvents(); renderNextEvent(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
+    renderFeatured(); renderPartner(); renderEvents(); renderNextEvent(); renderHeaderEvent(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
     renderLoop(); loadActivity(); watchSections();
     /* sections fill in after the data loads, so jump again once they have their height */
     if (/^#(contrib|events|reading|join)$/.test(location.hash)) requestAnimationFrame(() => { const el = $(location.hash); if (el) el.scrollIntoView(); });
