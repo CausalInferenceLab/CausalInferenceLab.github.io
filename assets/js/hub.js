@@ -1199,7 +1199,7 @@
     if (!d) {
       d = document.createElement("dialog");
       d.id = "img-dialog"; d.className = "lightbox"; d.setAttribute("aria-labelledby", "img-dialog-title");
-      d.innerHTML = `<div class="lb-head"><h2 id="img-dialog-title"></h2><div class="lb-tabs" role="group" aria-label="행사 이미지"></div><a class="lb-raw" target="_blank" rel="noopener">원본 열기<span aria-hidden="true"> ↗</span></a><button type="button" class="sh-close" aria-label="닫기" data-lb-close>${icons.close}</button></div><div class="lb-body"><img alt=""></div>`;
+      d.innerHTML = `<div class="lb-head"><h2 id="img-dialog-title"></h2><div class="lb-tabs" role="group" aria-label="행사 이미지"></div><a class="lb-raw" target="_blank" rel="noopener">원본 열기<span aria-hidden="true"> ↗</span></a><button type="button" class="sh-close" aria-label="닫기" data-lb-close>${icons.close}</button></div><div class="lb-body" tabindex="0" role="region" aria-label="이미지, 스크롤해서 볼 수 있습니다"><img alt=""></div>`;
       document.body.appendChild(d);
       d.addEventListener("click", (e) => {
         if (e.target === d || e.target.closest("[data-lb-close]")) { d.close(); return; }
