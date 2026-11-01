@@ -1955,6 +1955,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, .7); }
 .lb-raw { margin-left: auto; font-size: 13.5px; font-weight: 700; color: var(--accent); }
 .lb-head .sh-close { margin-left: 4px; }
 .lb-body { overflow: auto; padding: 12px; background: var(--surface-2); }
+.lb-body:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
 .lb-body img { display: block; width: 100%; height: auto; border-radius: 8px; }
 @media (max-width: 520px) { .lb-head { flex-wrap: nowrap; } .lb-head h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .lb-body { padding: 8px; } }
 .ev-tt { grid-area: tt; border-top: 1px solid var(--rule); padding-top: 6px; }
