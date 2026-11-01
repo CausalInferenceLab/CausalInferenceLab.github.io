@@ -1149,10 +1149,17 @@
       next.signupStart ? ["신청", `${md(next.signupStart)} – ${next.signupEnd ? md(next.signupEnd) : ""}${next.capacity ? ` · 선착순 ${next.capacity}명` : ""}`] : null,
       next.audience ? ["대상", esc(next.audience)] : null
     ].filter(Boolean) : [];
-    const tt = next && (next.timetable || []).length ? `<details class="ev-tt" data-event-fold><summary>타임테이블<span>${esc(next.timetable[0].time.split("–")[0])}–${esc(next.timetable[next.timetable.length - 1].time.split("–")[1] || "")}</span></summary>
+    const tt = next && (next.timetable || []).length ? `<details class="ev-tt" data-event-fold open><summary>타임테이블<span>${esc(next.timetable[0].time.split("–")[0])}–${esc(next.timetable[next.timetable.length - 1].time.split("–")[1] || "")}</span></summary>
         <ol>${next.timetable.map((r) => `<li class="${r.talk ? "talk" : ""}"><span class="t">${esc(r.time)}</span><span class="k">${esc(r.kind)}</span><span class="w"><b>${esc(r.title)}</b>${r.who ? `<span>${speakerHTML(r.who)}</span>` : ""}</span></li>`).join("")}</ol>
-        ${next.timetableImage ? `<a class="ev-img-link" href="${esc(next.timetableImage)}" target="_blank" rel="noopener">타임테이블 이미지로 보기<span aria-hidden="true"> ↗</span></a>` : ""}</details>` : "";
-    const nextHTML = next ? `<li class="event next${next.poster ? " has-poster" : ""}">
+        </details>` : "";
+    /* the poster and the timetable image share one viewer: a thumbnail to switch, a full-screen view to read */
+    const imgs = next ? [next.poster && { src: next.poster, label: "포스터", action: "poster" }, next.timetableImage && { src: next.timetableImage, label: "타임테이블", action: "timetable_image" }].filter(Boolean).map((m) => ({ ...m, alt: `${eventTitle(next)} ${m.label}: ${dot(next.date)} ${next.venue || ""}` })) : [];
+    state.evImgs = { imgs, order: next ? next.order : null };
+    const gallery = imgs.length ? `<div class="ev-gallery">
+        ${imgs.length > 1 ? `<div class="ev-gtabs" role="group" aria-label="행사 이미지">${imgs.map((m, i) => `<button type="button" data-ev-pick="${i}" aria-pressed="${i === 0}">${esc(m.label)}</button>`).join("")}</div>` : ""}
+        <button type="button" class="ev-poster" data-ev-zoom="0"><img src="${esc(imgs[0].src)}" alt="${esc(imgs[0].alt)}" width="1414" height="2000" loading="lazy"><span>눌러서 크게 보기</span></button>
+      </div>` : "";
+    const nextHTML = next ? `<li class="event next${imgs.length ? " has-poster" : ""}">
         <div class="ev-main">
           <span class="soon-tag">다음 행사${dd != null && dd >= 0 ? ` · ${dd === 0 ? "오늘" : `D-${dd}`}` : ""}</span>
           <h3>${next.link ? `<a href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: su.action || "event_page", placement: "title" }))}'>${esc(eventTitle(next))}</a>` : esc(eventTitle(next))}</h3>
@@ -1160,10 +1167,10 @@
           <dl class="ev-facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
           ${next.code ? `<div class="ev-code"><p><b>${esc(next.code.label)}</b></p><ol>${next.code.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol></div>` : ""}
           <p class="ev-state ${su.state}">${esc({ soon: `신청은 ${next.signupStart ? md(next.signupStart) : ""}에 열립니다. 지금은 행사 페이지에서 내용을 볼 수 있습니다.`, open: `지금 신청을 받고 있습니다${next.capacity ? `. 선착순 ${next.capacity}명이라 일찍 마감될 수 있습니다` : ""}.`, closed: "신청이 마감되었습니다.", none: "신청 링크는 곧 열립니다." }[su.state])}</p>
-          <div class="ev-acts">${go("button")}${next.poster ? `<a class="btn ghost sm ev-poster-btn" href="${esc(next.poster)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: "poster", placement: "card" }))}'>포스터 보기</a>` : ""}</div>
+          <div class="ev-acts">${go("button")}</div>
           ${next.host || (next.sponsors || []).length ? `<p class="ev-org">${next.host ? `주관 ${esc(next.host)}` : ""}${(next.sponsors || []).length ? ` · 후원 ${next.sponsors.map(esc).join(", ")}` : ""}</p>` : ""}
         </div>
-        ${next.poster ? `<a class="ev-poster" href="${esc(next.poster)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: "poster", placement: "thumb" }))}'><img src="${esc(next.poster)}" alt="${esc(`${eventTitle(next)} 포스터: ${dot(next.date)} ${next.venue || ""}`)}" width="1414" height="2000" loading="lazy"><span>포스터 크게 보기</span></a>` : ""}
+        ${gallery}
         ${tt}
       </li>` : "";
     const pastHTML = past.map((e) => `<li class="event past">
@@ -1173,9 +1180,42 @@
       </li>`).join("");
     $("#event-list").innerHTML = nextHTML + (past.length ? `<li class="event-past"><p class="ev-sum">지난 Data Forum ${past.length}회 · 참가 ${fmt(total)}명</p><ol>${pastHTML}</ol></li>` : "");
     const fold = $("#event-list [data-event-fold]");
-    if (fold) fold.addEventListener("toggle", () => { if (fold.open) track("click_event", { event_order: next.order, action: "timetable", placement: "card" }); });
+    /* the timetable starts open, so only a person reopening it counts */
+    if (fold) fold.querySelector("summary").addEventListener("click", () => { if (!fold.open) track("click_event", { event_order: next.order, action: "timetable", placement: "card" }); });
   }
 
+
+  function evPick(i) {
+    const m = state.evImgs && state.evImgs.imgs[i];
+    if (!m) return;
+    document.querySelectorAll("#event-list [data-ev-pick]").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.evPick) === i)));
+    const t = $("#event-list .ev-poster");
+    if (t) { t.dataset.evZoom = String(i); const im = t.querySelector("img"); im.src = m.src; im.alt = m.alt; }
+  }
+  function evZoom(i, placement) {
+    const g = state.evImgs;
+    if (!g || !g.imgs[i]) return;
+    let d = $("#img-dialog");
+    if (!d) {
+      d = document.createElement("dialog");
+      d.id = "img-dialog"; d.className = "lightbox"; d.setAttribute("aria-labelledby", "img-dialog-title");
+      d.innerHTML = `<div class="lb-head"><h2 id="img-dialog-title"></h2><div class="lb-tabs" role="group" aria-label="행사 이미지"></div><a class="lb-raw" target="_blank" rel="noopener">원본 열기<span aria-hidden="true"> ↗</span></a><button type="button" class="sh-close" aria-label="닫기" data-lb-close>${icons.close}</button></div><div class="lb-body"><img alt=""></div>`;
+      document.body.appendChild(d);
+      d.addEventListener("click", (e) => {
+        if (e.target === d || e.target.closest("[data-lb-close]")) { d.close(); return; }
+        const b = e.target.closest("[data-lb-pick]");
+        if (b) evZoom(Number(b.dataset.lbPick), "lightbox");
+      });
+    }
+    const m = g.imgs[i];
+    d.querySelector("h2").textContent = m.label;
+    d.querySelector(".lb-tabs").innerHTML = g.imgs.length > 1 ? g.imgs.map((x, k) => `<button type="button" data-lb-pick="${k}" aria-pressed="${k === i}">${esc(x.label)}</button>`).join("") : "";
+    d.querySelector(".lb-raw").href = m.src;
+    const im = d.querySelector(".lb-body img"); im.src = m.src; im.alt = m.alt;
+    d.querySelector(".lb-body").scrollTop = 0;
+    if (!d.open) d.showModal();
+    track("click_event", { event_order: g.order, action: m.action, placement });
+  }
 
   /* ---------- metro map ---------- */
   function svg(tag, attrs = {}, parent) {
@@ -1688,6 +1728,10 @@
       if (ja) track("click_join", { target: joinTarget(ja.getAttribute("href") || ""), source: ja.closest("#join") ? "join_section" : "footer" });
       const sa = e.target.closest("#station-body .links a");
       if (sa && state.openRepo) track("click_outbound", { repo: state.openRepo.repo, kind: state.openRepo.kind === "paid" ? "paid" : /github\.com/.test(sa.href) ? "github" : "site" });
+      const ep = e.target.closest("[data-ev-pick]");
+      if (ep) { evPick(Number(ep.dataset.evPick)); return; }
+      const ez = e.target.closest("[data-ev-zoom]");
+      if (ez) { evZoom(Number(ez.dataset.evZoom), "thumb"); return; }
       const dpick = e.target.closest("[data-daily]");
       if (dpick) { answerDaily(dpick.dataset.daily); return; }
       const to = e.target.closest("[data-test-open]");
