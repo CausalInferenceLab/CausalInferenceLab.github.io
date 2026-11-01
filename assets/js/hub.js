@@ -1149,7 +1149,7 @@
       next.signupStart ? ["신청", `${md(next.signupStart)} – ${next.signupEnd ? md(next.signupEnd) : ""}${next.capacity ? ` · 선착순 ${next.capacity}명` : ""}`] : null,
       next.audience ? ["대상", esc(next.audience)] : null
     ].filter(Boolean) : [];
-    const tt = next && (next.timetable || []).length ? `<details class="ev-tt" data-event-fold open><summary>타임테이블<span>${esc(next.timetable[0].time.split("–")[0])}–${esc(next.timetable[next.timetable.length - 1].time.split("–")[1] || "")}</span></summary>
+    const tt = next && (next.timetable || []).length ? `<details class="ev-tt" data-event-fold><summary>타임테이블<span>${esc(next.timetable[0].time.split("–")[0])}–${esc(next.timetable[next.timetable.length - 1].time.split("–")[1] || "")}</span></summary>
         <ol>${next.timetable.map((r) => `<li class="${r.talk ? "talk" : ""}"><span class="t">${esc(r.time)}</span><span class="k">${esc(r.kind)}</span><span class="w"><b>${esc(r.title)}</b>${r.who ? `<span>${speakerHTML(r.who)}</span>` : ""}</span></li>`).join("")}</ol>
         </details>` : "";
     /* the poster and the timetable image share one viewer: a thumbnail to switch, a full-screen view to read */
@@ -1178,9 +1178,8 @@
         <span class="ev-name">${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: e.order, action: "record", placement: "past" }))}'>${esc(e.name)}</a>` : esc(e.name)}<span class="when">${when(e)}</span></span>
         <span class="ev-n">${e.participants ? `<span class="ev-num"><b>${fmt(e.participants)}</b>명</span><i class="ev-bar" aria-hidden="true"><i style="width:${Math.round((e.participants / maxP) * 100)}%"></i></i>` : ""}</span>
       </li>`).join("");
-    $("#event-list").innerHTML = nextHTML + (past.length ? `<li class="event-past"><p class="ev-sum">지난 Data Forum ${past.length}회 · 참가 ${fmt(total)}명</p><ol>${pastHTML}</ol></li>` : "");
+    $("#event-list").innerHTML = nextHTML + (past.length ? `<li class="event-past"><h3 class="ev-sum">지난 Data Forum<span>${past.length}회 · 누적 참가 ${fmt(total)}명</span></h3><ol>${pastHTML}</ol></li>` : "");
     const fold = $("#event-list [data-event-fold]");
-    /* the timetable starts open, so only a person reopening it counts */
     if (fold) fold.querySelector("summary").addEventListener("click", () => { if (!fold.open) track("click_event", { event_order: next.order, action: "timetable", placement: "card" }); });
   }
 

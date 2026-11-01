@@ -1972,7 +1972,7 @@ dialog.lightbox::backdrop { background: rgba(10, 14, 20, .7); }
 @media (max-width: 860px) {
   .events .event.next { grid-template-columns: minmax(0, 1fr); grid-template-areas: "main" "poster" "tt"; padding: 22px 18px; }
   .events .event.next:not(.has-poster) { grid-template-areas: "main" "tt"; }
-  .ev-gallery { width: min(100%, 420px); justify-self: center; }
+  .ev-gallery { width: min(100%, 260px); justify-self: center; }
   .ev-tt li { grid-template-columns: 1fr; gap: 2px; }
   .ev-tt .t { font-size: 13px; }
 }
@@ -2026,11 +2026,25 @@ dialog.sheet .toast, dialog.sheet .toast.show { position: absolute; top: auto; b
 dialog.sheet .toast { opacity: 0; pointer-events: none; }
 dialog.sheet .toast.show { opacity: 1; pointer-events: auto; }
 dialog.sheet .toast:not(.show) { transition: opacity .25s ease, visibility 0s linear .25s; }
-@media (min-width: 861px) {
+/* events: the next forum and the past ones side by side, so neither crowds out the other */
+@media (min-width: 1081px) {
+  .events { grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr); align-items: start; }
+  .events .event.next { grid-column: 1; grid-template-columns: minmax(0, 1fr) 200px; gap: 14px 28px; padding: 24px 26px; }
+  .events .event-past { grid-column: 2; align-self: stretch; }
+}
+@media (min-width: 861px) and (max-width: 1080px) {
   .event-past ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
   .event.past + .event.past { border-top: 0; }
   .event.past { border-bottom: 1px solid var(--rule); }
 }
+.event.next h3 { font-size: clamp(22px, 2.1vw, 28px); }
+.event.next .ev-tag { font-size: 15.5px; }
+.event.next .ev-facts > div { font-size: 14.5px; }
+.event.next .ev-code { padding: 12px 14px; }
+.event.next .ev-code ol { font-size: 13.5px; }
+.ev-gallery .ev-gtabs button { font-size: 12.5px; padding: 5px 10px; }
+.ev-sum { display: flex; flex-direction: column; gap: 2px; font-size: 17px; font-weight: 800; margin: 0 0 6px; }
+.ev-sum span { font-size: 13.5px; font-weight: 600; color: var(--muted); }
 
 /* build levels: the repos to work on read as a short list of links */
 .lr-repos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
