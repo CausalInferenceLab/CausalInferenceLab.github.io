@@ -205,7 +205,8 @@
     const line = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
     const area = `${line} L${pts[n - 1][0].toFixed(1)} ${h - pad} L${pts[0][0].toFixed(1)} ${h - pad} Z`;
     const last = pts[n - 1];
-    return { pts, html: `<line class="base" x1="${pad}" x2="${w - pad}" y1="${h - pad}" y2="${h - pad}"/><path class="area" d="${area}"/><path class="ln" d="${line}"/><line class="guide" x1="0" x2="0" y1="${pad}" y2="${h - pad}" visibility="hidden"/><circle class="end" cx="${last[0]}" cy="${last[1]}" r="4.5"/><circle class="hov" r="4.5" visibility="hidden"/>` };
+    const dots = pts.slice(0, -1).map((q) => `<circle class="pt" cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="2.5"/>`).join("");
+    return { pts, html: `<line class="base" x1="${pad}" x2="${w - pad}" y1="${h - pad}" y2="${h - pad}"/><path class="area" d="${area}"/><path class="ln" d="${line}"/>${dots}<line class="guide" x1="0" x2="0" y1="${pad}" y2="${h - pad}" visibility="hidden"/><circle class="end" cx="${last[0]}" cy="${last[1]}" r="4.5"/><circle class="hov" r="4.5" visibility="hidden"/>` };
   }
 
   function drawSpark(tile, t) {
@@ -217,6 +218,17 @@
     svgEl.setAttribute("viewBox", `0 0 ${w} ${h}`);
     const { pts, html } = sparkSVG(t.series, w, h);
     svgEl.innerHTML = html;
+    /* one label per cohort under its point; when they would collide, keep every k-th counted back from the latest */
+    const axis = box.querySelector(".spark-axis");
+    if (axis) {
+      const n = pts.length;
+      axis.innerHTML = t.series.map((p, i) => `<span class="tk${i === n - 1 ? " last" : ""}" style="left:${((pts[i][0] / w) * 100).toFixed(2)}%">${esc(p.x)}</span>`).join("");
+      const ticks = [...axis.children];
+      const labelW = Math.max(...ticks.map((el) => el.getBoundingClientRect().width)) + 3;
+      const gapPx = n > 1 ? ((pts[n - 1][0] - pts[0][0]) / (n - 1)) * (box.clientWidth / w) : w;
+      const k = gapPx > 0 ? Math.max(1, Math.ceil(labelW / gapPx)) : 1;
+      ticks.forEach((el, i) => { if ((n - 1 - i) % k) el.hidden = true; });
+    }
     const tip = box.querySelector(".spark-tip");
     const guide = svgEl.querySelector(".guide"), hov = svgEl.querySelector(".hov");
     const show = (i) => {
@@ -285,7 +297,7 @@
         <span class="tile-label">${t.label}</span>
         <span class="tile-value" data-to="${t.value}" data-unit="${t.unit}">${fmt(t.value)}${t.unit ? `<small>${t.unit}</small>` : ""}</span>
         ${t.delta ? `<span class="tile-delta${t.plain ? " plain" : ""}">${esc(t.delta)}</span>` : ""}
-        ${has ? `<div class="spark" tabindex="0" aria-label="${esc(summary)}. 좌우 화살표로 값을 볼 수 있습니다."><svg role="img" aria-label="${esc(summary)}" preserveAspectRatio="none"></svg><span class="spark-tip" hidden></span><div class="spark-axis"><span>${esc(first.x)}</span><span>${esc(last.x)}</span></div></div>`
+        ${has ? `<div class="spark" tabindex="0" aria-label="${esc(summary)}. 좌우 화살표로 값을 볼 수 있습니다."><svg role="img" aria-label="${esc(summary)}" preserveAspectRatio="none"></svg><span class="spark-tip" hidden></span><div class="spark-axis" aria-hidden="true"><span>${esc(first.x)}</span><span>${esc(last.x)}</span></div></div>`
           : t.key === "stars" ? topStarsHTML() : `<p class="spark-empty">${esc(t.empty || "")}</p>`}
       </li>`;
     }).join("");
@@ -1161,8 +1173,8 @@
     const go = (placement) => next && su.cta ? `<a class="btn${placement === "button" ? "" : " ghost"} sm" href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: su.action, placement }))}'>${esc(su.cta)}<span aria-hidden="true"> ↗</span></a>` : "";
     const facts = next ? [
       ["일시", `${dot(next.date)}(${wd(next.date)})${next.time ? ` ${esc(next.time)}` : ""}`],
-      next.venue ? ["장소", `${esc(next.venue)}${next.address ? `<span>${esc(next.address)}</span>` : ""}`] : null,
       next.signupStart ? ["신청", `${md(next.signupStart)} – ${next.signupEnd ? md(next.signupEnd) : ""}${next.capacity ? ` · 선착순 ${next.capacity}명` : ""}`] : null,
+      next.venue ? ["장소", `${esc(next.venue)}${next.address ? `<span>${esc(next.address)}</span>` : ""}`] : null,
       next.audience ? ["대상", esc(next.audience)] : null
     ].filter(Boolean) : [];
     const tt = next && (next.timetable || []).length ? `<details class="ev-tt" data-event-fold><summary>타임테이블<span>${esc(next.timetable[0].time.split("–")[0])}–${esc(next.timetable[next.timetable.length - 1].time.split("–")[1] || "")}</span></summary>
@@ -1171,23 +1183,24 @@
     /* the poster and the timetable image share one viewer: a thumbnail to switch, a full-screen view to read */
     const imgs = next ? [next.poster && { src: next.poster, label: "포스터", action: "poster" }, next.timetableImage && { src: next.timetableImage, label: "타임테이블", action: "timetable_image" }].filter(Boolean).map((m) => ({ ...m, alt: `${eventTitle(next)} ${m.label}: ${dot(next.date)} ${next.venue || ""}` })) : [];
     state.evImgs = { imgs, order: next ? next.order : null };
+    const org = next && (next.host || (next.sponsors || []).length) ? `<p class="ev-org">${next.host ? `주관 ${esc(next.host)}` : ""}${(next.sponsors || []).length ? `${next.host ? " · " : ""}후원 ${next.sponsors.map(esc).join(", ")}` : ""}</p>` : "";
     const gallery = imgs.length ? `<div class="ev-gallery">
         ${imgs.length > 1 ? `<div class="ev-gtabs" role="group" aria-label="행사 이미지">${imgs.map((m, i) => `<button type="button" data-ev-pick="${i}" aria-pressed="${i === 0}">${esc(m.label)}</button>`).join("")}</div>` : ""}
         <button type="button" class="ev-poster" data-ev-zoom="0"><img src="${esc(imgs[0].src)}" alt="${esc(imgs[0].alt)}" width="1414" height="2000" loading="lazy"><span>눌러서 크게 보기</span></button>
+        ${org}
       </div>` : "";
     const nextHTML = next ? `<li class="event next${imgs.length ? " has-poster" : ""}">
         <div class="ev-main">
-          <span class="soon-tag">다음 행사${dd != null && dd >= 0 ? ` · ${dd === 0 ? "오늘" : `D-${dd}`}` : ""}</span>
-          <h3>${next.link ? `<a href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: su.action || "event_page", placement: "title" }))}'>${esc(eventTitle(next))}</a>` : esc(eventTitle(next))}</h3>
+          <div class="ev-head"><span class="soon-tag">다음 행사${dd != null && dd >= 0 ? ` · ${dd === 0 ? "오늘" : `D-${dd}`}` : ""}</span>
+          <h3>${next.link ? `<a href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: su.action || "event_page", placement: "title" }))}'>${esc(eventTitle(next))}</a>` : esc(eventTitle(next))}</h3></div>
           ${next.tagline ? `<p class="ev-tag">${esc(next.tagline)}</p>` : ""}
           <dl class="ev-facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
           ${next.code ? `<div class="ev-code"><p><b>${esc(next.code.label)}</b></p><ol>${next.code.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol></div>` : ""}
-          <p class="ev-state ${su.state}">${esc({ soon: `신청은 ${next.signupStart ? md(next.signupStart) : ""}에 열립니다. 지금은 행사 페이지에서 내용을 볼 수 있습니다.`, open: `지금 신청을 받고 있습니다${next.capacity ? `. 선착순 ${next.capacity}명이라 일찍 마감될 수 있습니다` : ""}.`, closed: "신청이 마감되었습니다.", none: "신청 링크는 곧 열립니다." }[su.state])}</p>
-          <div class="ev-acts">${go("button")}</div>
-          ${next.host || (next.sponsors || []).length ? `<p class="ev-org">${next.host ? `주관 ${esc(next.host)}` : ""}${(next.sponsors || []).length ? ` · 후원 ${next.sponsors.map(esc).join(", ")}` : ""}</p>` : ""}
+          <div class="ev-acts">${go("button")}<p class="ev-state ${su.state}">${esc({ soon: `신청은 ${next.signupStart ? md(next.signupStart) : ""}에 열립니다. 지금은 행사 페이지에서 내용을 볼 수 있습니다.`, open: `지금 신청을 받고 있습니다${next.capacity ? `. 선착순 ${next.capacity}명이라 일찍 마감될 수 있습니다` : ""}.`, closed: "신청이 마감되었습니다.", none: "신청 링크는 곧 열립니다." }[su.state])}</p></div>
+          ${imgs.length ? "" : org}
+          ${tt}
         </div>
         ${gallery}
-        ${tt}
       </li>` : "";
     const pastHTML = past.map((e) => `<li class="event past">
         <span class="ord">${e.order}회</span>
