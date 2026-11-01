@@ -120,3 +120,7 @@ JSON을 `fetch`로 읽기 때문에 파일을 더블클릭해서 열면 데이�
 | `active` 최근 업데이트 | 올해 코드나 내용이 갱신된 레포 |
 | `stable` 완결 | 내용이 마무리되어 오류 수정 위주로 관리하는 레포 |
 | `depot` 운영·보관 | 허브 운영(이 레포, 프로젝트 템플릿)과 보관용 레포 |
+
+## 검색 노출
+
+배포할 때 `scripts/build_sitemap.py`가 도메인 전체의 `sitemap.xml`을 만듭니다. 허브 페이지, Builder 페이지, 그리고 `data/repos.json`의 `site` 중 이 도메인 아래 있는 팀 사이트(웹북, Causal Studio 등)가 들어갑니다. `robots.txt`가 이 사이트맵을 가리킵니다. 팀 사이트를 새로 열면 `repos.json`에 `site`만 적으면 다음 배포부터 사이트맵에 들어갑니다.
