@@ -400,7 +400,19 @@
   }
   function listen() {
     (LINES[page] || []).forEach((line) => {
-      if (!line.when) { setTimeout(() => speak(line), 1600); return; }
+      if (!line.when) {
+        /* the greeting is the first A/B test on the hub (experiment "pseudo-greeting" in data/experiments.json).
+           Both arms are exposed at the same moment and under the same conditions; only treatment speaks.
+           With the experiment off, variant() is null and Pseudo greets as usual. */
+        const exp = window.hubExperiment;
+        const gate = exp ? exp.variant("pseudo-greeting", 1200) : Promise.resolve(null);
+        setTimeout(() => gate.then((v) => {
+          const eligible = !quiet() && panel.hidden && !spoke && !said().includes(`${page}:${line.id}`);
+          if (v && eligible) exp.expose("pseudo-greeting");
+          if (v !== "control") speak(line);
+        }), 1600);
+        return;
+      }
       if (line.when === "half") {
         const onScroll = () => {
           if (scrollY + innerHeight < document.documentElement.scrollHeight * 0.55) return;
