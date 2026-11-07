@@ -48,6 +48,7 @@
 | 기능 | 하는 일 |
 | --- | --- |
 | [자료실](https://causalinferencelab.github.io/library.html) | 인과추론 13개, 온라인 실험 10개 주제로 웹북 장, 영상, 책 코드, 발표 자료, 실험 플랫폼 사례를 찾습니다. 웹북 용어집 183개도 함께 있어 이중차분, CUPED, 실험군처럼 방법이나 용어 이름으로 찾을 수 있습니다 |
+| 자료실 도우미 | 허브, 자료실, 연재 글 오른쪽 아래의 마스코트입니다. 공부하고 싶은 주제나 모르는 용어를 적으면 자료실에서 맞는 자료를 세 개까지 골라 주고, 그 자료를 담은 프롬프트로 Claude에게 이어서 물어볼 수 있습니다 |
 | [레벨 진단](https://causalinferencelab.github.io/?level) | 문제 10개로 시작할 Level, 첫 자료, 다시 볼 웹북 장을 알려 줍니다. 결과를 동료에게 보낼 수 있습니다 |
 | [상관일까, 인과일까?](https://causalinferencelab.github.io/game.html) | 데이터 상황 10개를 보고 고르는 2분 게임 |
 | [교란 실험실](https://causalinferencelab.github.io/lab.html) | 가상 사용자 800명으로 교란이 단순 비교를 얼마나 속이는지 직접 움직여 봅니다 |

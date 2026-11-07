@@ -1180,15 +1180,13 @@
     if (!box) return;
     let d;
     try { d = await getJSON("data/topics.json"); } catch (e) { box.innerHTML = `<p class="tp-all"><a href="library.html">자료실로 가기</a></p>`; return; }
-    /* published hub posts count toward their topics, the same way the library page lists them */
-    const today = kstToday();
-    (state.articles || []).filter((a) => String(a.date || "") <= today && Array.isArray(a.topics)).forEach((a) => a.topics.forEach((id) => { const tp = d.topics.find((x) => x.id === id); if (tp) tp.items.push(a); }));
-    const items = d.topics.reduce((n, t) => n + t.items.length, 0);
+    /* a few topics per shelf is enough here; the rest wait on the library page */
+    const SHOW = 5;
     box.innerHTML = d.shelves.map((s) => {
       const ts = d.topics.filter((t) => t.shelf === tok(s.id));
-      return `<div class="tp-shelf s-${esc(tok(s.id))}"><h3>${esc(s.name)}<span>${esc(s.about)}</span></h3>
-        <ul>${ts.map((t) => `<li><a href="library.html#${esc(tok(t.id))}" data-event="library_topic" data-event-params='${esc(JSON.stringify({ topic: tok(t.id), source: "hub" }))}'>${esc(t.name)}<span>${t.items.length}</span></a></li>`).join("")}</ul></div>`;
-    }).join("") + `<p class="tp-all"><a href="library.html">주제 ${d.topics.length}개, 자료 ${items}개 모두 보기</a><a href="library.html?view=glossary" data-event="library_view" data-event-params='{"view":"glossary","source":"hub"}'>용어집 보기</a></p>`;
+      return `<div class="tp-shelf s-${esc(tok(s.id))}"><h3>${esc(s.name)}</h3>
+        <ul>${ts.slice(0, SHOW).map((t) => `<li><a href="library.html#${esc(tok(t.id))}" data-event="library_topic" data-event-params='${esc(JSON.stringify({ topic: tok(t.id), source: "hub" }))}'>${esc(t.name)}</a></li>`).join("")}${ts.length > SHOW ? `<li><a class="tp-more" href="library.html?shelf=${esc(tok(s.id))}">${ts.length - SHOW}개 더</a></li>` : ""}</ul></div>`;
+    }).join("");
   }
 
   /* the next Data Forum gets the space; past ones are one line each */
@@ -1894,7 +1892,7 @@
   }
   function navSpy() {
     if (!("IntersectionObserver" in window)) return;
-    const ids = ["topics", "curriculum", "contrib", "events", "posts", "join"];
+    const ids = ["curriculum", "topics", "contrib", "events", "posts", "join"];
     const seen = new Map();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
@@ -1935,7 +1933,7 @@
       seen.add(id); io.unobserve(en.target);
       track("section_view", { section: id });
     }), { threshold: [0.35] });
-    ["topics", "curriculum", "contrib", "events", "posts", "join"].forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+    ["curriculum", "topics", "contrib", "events", "posts", "join"].forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
   }
   async function init() {
     loadRidden(); loadRecent();
