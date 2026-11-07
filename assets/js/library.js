@@ -12,6 +12,7 @@
   const norm = (s) => String(s || "").toLowerCase().replace(/[\s·\-_/()]/g, "");
   const BOOK = "https://causalinferencelab.github.io/Causal-Inference-with-Python/";
   const KIND_ORDER = ["video", "read", "code", "slides", "case", "post"];
+  const FIRST = 3;
   /* the sources in the order a newcomer meets them, with what each one is */
   const SOURCES = [
     ["causal-studio", "Causal Studio", "짧은 입문 영상과 노트북"],
@@ -71,7 +72,9 @@
           items = st.open.has(t.id) && hit.length ? pool : hit;
         }
       }
-      return { t, items, partial, total: pool.length };
+      /* three items per topic at first; the rest open on request, so a topic never reads as a wall of links */
+      if (!q && !st.open.has(t.id) && items.length > FIRST) { partial = true; items = items.slice(0, FIRST); }
+      return { t, items, partial, total: pool.length, n: q ? items.length : pool.length };
     }).filter((v) => v.items.length);
   }
 
@@ -89,12 +92,12 @@
   }
 
   function renderTopics(list) {
-    const nItems = list.reduce((a, v) => a + v.items.length, 0);
+    const nItems = list.reduce((a, v) => a + v.n, 0);
     const filt = [st.src && srcName(st.src), st.kinds.size && [...st.kinds].map((k) => data.kinds[k]).join("·"), st.q && `‘${st.q}’ 검색`].filter(Boolean).join(" · ");
     $("#lib-count").innerHTML = list.length ? `주제 ${list.length}개 · 자료 ${nItems}개${filt ? ` · ${esc(filt)}` : ""}${st.src || st.kinds.size ? ' <button type="button" class="lib-clear" data-lib-reset>거르기 풀기</button>' : ""}` : "";
     $("#lib-index").innerHTML = data.shelves.filter((s) => st.shelf === "all" || s.id === st.shelf).map((s) => {
       const ts = list.filter((v) => v.t.shelf === s.id);
-      return ts.length ? `<div class="lib-ix s-${esc(s.id)}"><p>${esc(s.name)}</p><ul>${ts.map((v) => `<li><a href="#${esc(v.t.id)}">${esc(v.t.name)}<span>${v.items.length}</span></a></li>`).join("")}</ul></div>` : "";
+      return ts.length ? `<div class="lib-ix s-${esc(s.id)}"><p>${esc(s.name)}</p><ul>${ts.map((v) => `<li><a href="#${esc(v.t.id)}">${esc(v.t.name)}<span>${v.n}</span></a></li>`).join("")}</ul></div>` : "";
     }).join("");
     if (!list.length) {
       const terms = st.q ? visibleTerms().reduce((n, v) => n + v.terms.length, 0) : 0;
@@ -109,14 +112,14 @@
       const t = v.t, s = shelfOf(t.shelf);
       const head = t.shelf !== lastShelf && st.shelf === "all" ? `<h2 class="lib-shelf s-${esc(t.shelf)}">${esc(s.name)}<span>${esc(s.about)}</span></h2>` : "";
       lastShelf = t.shelf;
-      const terms = termsFor(t).slice(0, 6);
+      const terms = termsFor(t).slice(0, 3);
       return `${head}<article class="lib-topic s-${esc(t.shelf)}" id="${esc(t.id)}" tabindex="-1" aria-labelledby="t-${esc(t.id)}">
         <header><h3 id="t-${esc(t.id)}">${esc(t.name)}</h3><span class="lib-en" lang="en">${esc(t.en)}</span>
           <button type="button" class="lib-link" data-copy="${esc(`https://causalinferencelab.github.io/library.html#${t.id}`)}" data-share="library_topic" aria-label="${esc(t.name)} 링크 복사">링크 복사</button></header>
         <p class="lib-about">${esc(t.about)}</p>
         ${terms.length ? `<p class="lib-terms"><span>먼저 알아 둘 용어</span>${terms.map((x) => `<a href="#${esc(x.id)}" data-term="${esc(x.id)}">${esc(x.ko)}</a>`).join("")}</p>` : ""}
         <ol class="lib-items">${v.items.map((x) => itemHTML(x, t)).join("")}</ol>
-        ${v.partial ? `<button type="button" class="lib-all" data-lib-open="${esc(t.id)}">이 주제 자료 ${v.total}개 모두 보기</button>` : ""}
+        ${v.partial ? `<button type="button" class="lib-all" data-lib-open="${esc(t.id)}">${v.total - v.items.length}개 더 보기</button>` : ""}
       </article>`;
     }).join("");
   }
@@ -174,41 +177,19 @@
   /* ---------- page ---------- */
   function render() {
     const topics = visibleTopics(), terms = visibleTerms();
-    $("#n-topics").textContent = topics.reduce((a, v) => a + v.items.length, 0);
+    $("#n-topics").textContent = topics.reduce((a, v) => a + v.n, 0);
     $("#n-glossary").textContent = terms.reduce((a, v) => a + v.terms.length, 0);
     const g = st.view === "glossary";
     $("#tab-topics").setAttribute("aria-selected", String(!g)); $("#tab-topics").tabIndex = g ? -1 : 0;
     $("#tab-glossary").setAttribute("aria-selected", String(g)); $("#tab-glossary").tabIndex = g ? 0 : -1;
     $("#panel-topics").hidden = g; $("#panel-glossary").hidden = !g;
     if (g) renderGlossary(terms); else renderTopics(topics);
-    document.querySelectorAll("#lib-src [data-src]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.src === st.src)));
-  }
-
-  function head() {
-    const all = data.topics.flatMap((t) => t.items);
-    const nTerms = allTerms().length;
-    const shelfN = (id) => data.topics.filter((t) => t.shelf === id).length;
-    $("#lib-stats").innerHTML = [["주제", data.topics.length, `인과추론 ${shelfN("causal")} · 온라인 실험 ${shelfN("exp")}`], ["자료", all.length, "모두 무료"], nTerms && ["용어", nTerms, "번역어와 원어"], ["출처", SOURCES.filter(([id]) => all.some((x) => x.repo === id)).length, "팀이 만든 레포"]]
-      .filter(Boolean).map(([k, v, s]) => `<li><b>${v}</b><span>${k}</span><small>${esc(s)}</small></li>`).join("");
-    /* where to start: the first two items of the first topic on each shelf, and the glossary */
-    const topic = (id) => data.topics.find((t) => t.id === id);
-    const card = (t, title, text) => (t ? `<li class="lib-sc s-${esc(t.shelf)}"><h3>${esc(title)}</h3><p>${esc(text)}</p><ol>${t.items.slice(0, 2).map((x) => `<li><span>${esc(data.kinds[x.kind])}</span><a href="${esc(x.url)}"${/^https:\/\/causalinferencelab\.github\.io\//.test(x.url) ? "" : ' target="_blank" rel="noopener"'} data-event="library_click" data-event-params='${esc(JSON.stringify({ topic: t.id, kind: x.kind, repo: x.repo, target: "start" }))}'>${esc(x.title)}</a></li>`).join("")}</ol><a class="lib-sc-go" href="#${esc(t.id)}" data-goto-topic="${esc(t.id)}">${esc(t.name)} 자료 ${t.items.length}개 보기</a></li>` : "");
-    const sample = ["term-실험군", "term-교란-요인", "term-평균-처치효과-ATE", "term-표본-비율-불일치-SRM"].map((id) => allTerms().find((x) => x.id === id)).filter(Boolean);
-    $("#lib-start").innerHTML = card(topic("why-causal"), "인과추론이 처음이라면", "상관과 인과가 왜 다른지부터 시작합니다. 짧은 입문 영상 하나와 웹북 1장이면 됩니다.")
-      + card(topic("ab-basics"), "A/B 테스트가 처음이라면", "무작위 배정이 왜 효과를 보장하는지, 실험 하나를 처음부터 끝까지 따라갑니다.")
-      + (gloss ? `<li class="lib-sc s-glossary"><h3>용어가 낯설다면</h3><p>실험군, 교란 요인, 평균 처치효과처럼 자주 나오는 말을 원어와 함께 찾습니다.</p>${sample.length ? `<p class="lib-sc-terms">${sample.map((x) => `<a href="#${esc(x.id)}" data-term="${esc(x.id)}">${esc(x.ko)}</a>`).join("")}</p>` : ""}<button type="button" class="lib-sc-go" data-view="glossary">용어 ${nTerms}개 보기</button></li>` : "");
-    $("#lib-src").innerHTML = SOURCES.map(([id, name, about]) => {
-      const n = all.filter((x) => x.repo === id).length;
-      return n ? `<button type="button" class="lib-srcb" data-src="${esc(id)}" aria-pressed="${st.src === id}"><b>${esc(name)}</b><span>${esc(about)}</span><i>${n}개</i></button>` : "";
-    }).join("");
   }
 
   function controls() {
     const n = (id) => data.topics.filter((t) => id === "all" || t.shelf === id).length;
     $("#lib-shelves").innerHTML = [{ id: "all", name: "전체" }, ...data.shelves].map((s) =>
       `<button type="button" role="radio" class="lib-sh s-${esc(s.id)}" data-shelf="${esc(s.id)}" aria-checked="${st.shelf === s.id}" tabindex="${st.shelf === s.id ? 0 : -1}">${esc(s.name)}<span>${n(s.id)}</span></button>`).join("");
-    $("#lib-kinds").innerHTML = KIND_ORDER.filter((k) => data.kinds[k] && data.topics.some((t) => t.items.some((x) => x.kind === k))).map((k) =>
-      `<button type="button" class="chip lib-k k-${k}" data-kind="${k}" aria-pressed="${st.kinds.has(k)}">${esc(data.kinds[k])}</button>`).join("");
     $("#lib-q").value = st.q;
   }
 
@@ -268,21 +249,6 @@
     document.querySelector(".lib-tabs").addEventListener("keydown", arrows(".lib-tabs [role=tab]", "id"));
     $("#tab-topics").addEventListener("click", () => { if (st.view !== "topics") { setView("topics"); track("library_view", { view: "topics", source: "tab" }); } });
     $("#tab-glossary").addEventListener("click", () => { if (st.view !== "glossary") { setView("glossary"); track("library_view", { view: "glossary", source: "tab" }); } });
-    $("#lib-kinds").addEventListener("click", (e) => {
-      const b = e.target.closest("[data-kind]"); if (!b) return;
-      const k = b.dataset.kind;
-      st.kinds.has(k) ? st.kinds.delete(k) : st.kinds.add(k);
-      b.setAttribute("aria-pressed", String(st.kinds.has(k)));
-      toURL(); render();
-      track("library_filter", { filter: "kind", value: [...st.kinds].join(",") || "all" });
-    });
-    $("#lib-src").addEventListener("click", (e) => {
-      const b = e.target.closest("[data-src]"); if (!b) return;
-      st.src = st.src === b.dataset.src ? "" : b.dataset.src;
-      st.view = "topics"; toURL(); render();
-      track("library_filter", { filter: "source", value: st.src || "all" });
-      if (st.src) $(".lib-tabs").scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" });
-    });
     document.addEventListener("click", (e) => {
       const o = e.target.closest("[data-lib-open]");
       if (o) { st.open.add(o.dataset.libOpen); render(); go(o.dataset.libOpen); return; }
@@ -324,7 +290,7 @@
     indexKeys();
     allTerms().forEach((x) => { x._topics = topicsForTerm(x); });
     if (!gloss) $("#tab-glossary").hidden = true;
-    fromURL(); head(); controls(); render(); bind();
+    fromURL(); controls(); render(); bind();
     const id = decodeURIComponent(location.hash.slice(1));
     if (id && (data.topics.some((t) => t.id === id) || (/^term-/.test(id) && gloss))) {
       reveal(id);

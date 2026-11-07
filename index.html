@@ -33,8 +33,8 @@
       <span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span>
     </a>
     <nav class="site-nav" aria-label="주요 메뉴">
-      <a href="#topics" class="stn s-topics">자료실</a>
       <a href="#curriculum" class="stn s-main">커리큘럼</a>
+      <a href="#topics" class="stn s-topics">자료실</a>
       <a href="#contrib" class="stn s-ml">Builder</a>
       <a href="#events" class="stn s-exp">행사</a>
       <a href="#posts" class="stn s-behavior">연재</a>
@@ -72,24 +72,6 @@
       <div class="hero-grid">
         <ul class="growth" id="growth" aria-label="팀의 성장 지표"></ul>
       </div>
-    </div>
-  </section>
-
-  <section class="band" id="topics" aria-labelledby="topics-title">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="topics-title">자료실</h2>
-        <p>인과추론과 온라인 실험을 주제별로 공부할 수 있게 모았습니다. 주제를 고르면 웹북·영상·코드·발표 자료로 바로 이어지고, 낯선 용어는 용어집에서 찾습니다.</p>
-      </div>
-      <form class="tp-search" action="library.html" method="get" role="search">
-        <label class="lib-search">
-          <span class="sr-only">주제나 방법 이름으로 찾기</span>
-          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input type="search" name="q" placeholder="이중차분, CUPED, 실험군…" autocomplete="off" enterkeyhint="search">
-        </label>
-        <button type="submit" class="btn">찾기</button>
-      </form>
-      <div class="tp-shelves" id="tp-shelves"></div>
     </div>
   </section>
 
@@ -136,6 +118,24 @@
 
 
 
+    </div>
+  </section>
+
+  <section class="band" id="topics" aria-labelledby="topics-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="topics-title">자료실</h2>
+        <p>커리큘럼 밖에서 궁금한 주제나 용어가 생기면 여기서 찾으세요.</p>
+      </div>
+      <form class="tp-search" action="library.html" method="get" role="search">
+        <label class="lib-search">
+          <span class="sr-only">주제나 방법 이름으로 찾기</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input type="search" name="q" placeholder="이중차분, CUPED, 실험군…" autocomplete="off" enterkeyhint="search">
+        </label>
+        <button type="submit" class="btn">찾기</button>
+      </form>
+      <div class="tp-shelves" id="tp-shelves"></div>
     </div>
   </section>
 
@@ -238,5 +238,6 @@
 <script src="assets/js/track.js" defer></script>
 <script src="assets/js/passport.js" defer></script>
 <script src="assets/js/hub.js" defer></script>
+<script src="assets/js/helper.js" defer></script>
 </body>
 </html>
