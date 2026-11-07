@@ -1149,6 +1149,31 @@
       `<li class="lp-back" aria-hidden="true">내가 공유한 Builder 페이지나 완주 카드를 본 사람이 다시 1. 배우기부터 시작합니다 ↺</li>`;
   }
 
+  /* how long signup stays open, counted in Korean days */
+  function signupLeft(e) {
+    if (!e.signupEnd) return "지금 신청을 받고 있습니다.";
+    const n = daysTo(e.signupEnd);
+    return n <= 0 ? "오늘 신청이 마감됩니다." : `신청 마감 ${md(e.signupEnd)}까지 ${n}일 남았습니다.`;
+  }
+  /* a Google Calendar link and an .ics file for the event; times like "13:30–17:30" are Korean time */
+  function calendarLinks(e) {
+    const m = /(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})/.exec(e.time || "");
+    const ymd = e.date.replace(/-/g, "");
+    const utc = (h, mi) => new Date(Date.parse(`${e.date}T${String(h).padStart(2, "0")}:${mi}:00+09:00`)).toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z";
+    const nextDay = new Date(Date.parse(`${e.date}T00:00:00Z`) + DAY).toISOString().slice(0, 10).replace(/-/g, "");
+    const [start, end] = m ? [utc(m[1], m[2]), utc(m[3], m[4])] : [ymd, nextDay];
+    const title = eventTitle(e), place = [e.venue, e.address].filter(Boolean).join(", ");
+    const details = [e.tagline, e.link].filter(Boolean).join("\n");
+    const q = new URLSearchParams({ action: "TEMPLATE", text: title, dates: `${start}/${end}`, details, location: place, ctz: "Asia/Seoul" });
+    const ics = (v) => String(v).replace(/[\\;,]/g, (c) => `\\${c}`).replace(/\n/g, "\\n");
+    const stamp = new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z";
+    const body = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//CausalInferenceLab//Hub//KO", "CALSCALE:GREGORIAN", "BEGIN:VEVENT",
+      `UID:forum-${e.order}-${ymd}@causalinferencelab.github.io`, `DTSTAMP:${stamp}`,
+      m ? `DTSTART:${start}` : `DTSTART;VALUE=DATE:${start}`, m ? `DTEND:${end}` : `DTEND;VALUE=DATE:${end}`,
+      `SUMMARY:${ics(title)}`, place ? `LOCATION:${ics(place)}` : "", details ? `DESCRIPTION:${ics(details)}` : "", e.link ? `URL:${e.link}` : "",
+      "END:VEVENT", "END:VCALENDAR"].filter(Boolean).join("\r\n");
+    return { google: `https://calendar.google.com/calendar/render?${q}`, ics: `data:text/calendar;charset=utf-8,${encodeURIComponent(body)}`, file: `data-forum-${e.order}.ics` };
+  }
   /* the next Data Forum gets the space; past ones are one line each */
   function renderEvents() {
     const list = [...state.events].sort((a, b) => b.order - a.order);
@@ -1166,10 +1191,16 @@
         : { state: "done", cta: next.link ? "행사 페이지" : "", action: "event_page" })
       : signup(next);
     const go = (placement) => next && su.cta ? `<a class="btn${placement === "button" ? "" : " ghost"} sm" href="${esc(su.url || next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: su.action, placement }))}'>${esc(su.cta)}<span aria-hidden="true"> ↗</span></a>` : "";
+    /* before the day: save the date to a calendar and open the venue on a map */
+    const evLink = (href, label, action, extra = "") => `<a href="${esc(href)}"${extra} data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action, placement: "card" }))}'>${label}</a>`;
+    const cal = next && !ended && next.date ? calendarLinks(next) : null;
+    const calHTML = cal ? `<div class="ev-x">${evLink(cal.google, "Google 캘린더에 추가", "calendar_google", ' target="_blank" rel="noopener"')}${evLink(cal.ics, "캘린더 파일(.ics)", "calendar_ics", ` download="${esc(cal.file)}"`)}</div>` : "";
+    const where = next && (next.address || next.venue);
+    const mapHTML = where && !ended ? `<div class="ev-x">${evLink(`https://map.naver.com/p/search/${encodeURIComponent(where)}`, "네이버 지도", "map_naver", ' target="_blank" rel="noopener"')}${evLink(`https://map.kakao.com/?q=${encodeURIComponent(where)}`, "카카오맵", "map_kakao", ' target="_blank" rel="noopener"')}</div>` : "";
     const facts = next ? [
-      ["일시", `${dot(next.date)}(${wd(next.date)})${next.time ? ` ${esc(next.time)}` : ""}`],
+      ["일시", `${dot(next.date)}(${wd(next.date)})${next.time ? ` ${esc(next.time)}` : ""}${calHTML}`],
       next.signupStart && !ended ? ["신청", `${md(next.signupStart)} – ${next.signupEnd ? md(next.signupEnd) : ""}${next.capacity ? ` · 선착순 ${next.capacity}명` : ""}`] : null,
-      next.venue ? ["장소", `${esc(next.venue)}${next.address ? `<span>${esc(next.address)}</span>` : ""}`] : null,
+      next.venue ? ["장소", `${esc(next.venue)}${next.address ? `<span>${esc(next.address)}</span>` : ""}${mapHTML}`] : null,
       next.audience && !ended ? ["대상", esc(next.audience)] : null
     ].filter(Boolean) : [];
     const tt = next && (next.timetable || []).length ? `<details class="ev-tt" data-event-fold><summary>타임테이블<span>${esc(next.timetable[0].time.split("–")[0])}–${esc(next.timetable[next.timetable.length - 1].time.split("–")[1] || "")}</span></summary>
@@ -1191,7 +1222,7 @@
           ${next.tagline ? `<p class="ev-tag">${esc(next.tagline)}</p>` : ""}
           <dl class="ev-facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
           ${next.code && !ended ? `<div class="ev-code"><p><b>${esc(next.code.label)}</b></p><ol>${next.code.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol></div>` : ""}
-          <div class="ev-acts">${go("button")}<p class="ev-state ${su.state}">${esc({ soon: `신청은 ${next.signupStart ? md(next.signupStart) : ""}에 열립니다. 지금은 행사 페이지에서 내용을 볼 수 있습니다.`, open: `지금 신청을 받고 있습니다${next.capacity ? `. 선착순 ${next.capacity}명이라 일찍 마감될 수 있습니다` : ""}.`, closed: "신청이 마감되었습니다.", none: "신청 링크는 곧 열립니다.", done: next.participants ? `${fmt(next.participants)}명이 함께했습니다. 고맙습니다.` : "함께해 주셔서 고맙습니다. 참가 인원과 후기를 정리하고 있습니다." }[su.state])}</p></div>
+          <div class="ev-acts">${go("button")}<p class="ev-state ${su.state}">${esc({ soon: `신청은 ${next.signupStart ? md(next.signupStart) : ""}에 열립니다. 지금은 행사 페이지에서 내용을 볼 수 있습니다.`, open: `${signupLeft(next)}${next.capacity ? ` 선착순 ${next.capacity}명이라 일찍 마감될 수 있습니다.` : ""}`, closed: "신청이 마감되었습니다.", none: "신청 링크는 곧 열립니다.", done: next.participants ? `${fmt(next.participants)}명이 함께했습니다. 고맙습니다.` : "함께해 주셔서 고맙습니다. 참가 인원과 후기를 정리하고 있습니다." }[su.state])}</p></div>
           ${imgs.length ? "" : org}
           ${tt}
         </div>
