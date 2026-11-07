@@ -13,12 +13,12 @@
 | 이럴 때 | 여기서 |
 | --- | --- |
 | 내 수준부터 알고 싶다 | [3분 레벨 진단](https://causalinferencelab.github.io/?level): 실무 상황 문제 10개로 시작할 Level과 첫 자료를 알려 줍니다 |
-| 처음 공부한다 | [Causal Studio](https://www.youtube.com/@CausalStudio): 영상과 Colab 노트북으로 상관과 인과의 차이부터 |
+| 처음 공부한다 | [Causal Studio](https://www.youtube.com/@CausalStudio): 짧은 입문 영상과 Colab 노트북으로 상관과 인과의 차이부터 |
 | 글로 차근차근 읽고 싶다 | [Brave & True 웹북](https://causalinferencelab.github.io/Causal-Inference-with-Python/): 원서 25장과 부록 5편을 모두 옮긴 한국어판 |
-| 현업 문제에 바로 쓰고 싶다 | [산업 사례 템플릿](https://github.com/CausalInferenceLab/causal-inference-practice), [온라인 실험 자료](https://github.com/CausalInferenceLab/OCE-Materials) |
+| 현업 문제에 바로 쓰고 싶다 | [실무자 특강 영상 17강](https://www.youtube.com/playlist?list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE), [산업 사례 템플릿](https://github.com/CausalInferenceLab/causal-inference-practice), [온라인 실험 자료](https://github.com/CausalInferenceLab/OCE-Materials) |
 | 직접 만들고 싶다 | [참여하는 방법](#참여하는-방법) |
 
-여기까지의 자료는 모두 무료입니다.
+여기까지의 자료는 모두 무료입니다. Causal Studio는 처음 보는 분을 위한 입문 영상이고, 실무자 특강 영상은 책의 장마다 현업 사례를 다루는 Level 2 자료라 개념을 익힌 뒤 보는 편이 좋습니다.
 
 ## 5th Data Forum: 2026.11.21(토)
 
@@ -37,7 +37,7 @@
 | --- | --- | --- |
 | L0 입문 | 왜 인과추론인가 | [Causal Studio](https://github.com/CausalInferenceLab/causal-studio), [웹북 1장](https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html) |
 | L1 개념 완성 | 어떻게 추정하나 | [Brave & True 웹북](https://github.com/CausalInferenceLab/Causal-Inference-with-Python), [온라인 실험 이해하기](https://github.com/CausalInferenceLab/OCE-Materials) |
-| L2 실전 적용 | 내 데이터에 어떻게 쓰나 | [책 예제 코드](https://github.com/CausalInferenceLab/causal-inference-in-python-code), [산업 사례 템플릿](https://github.com/CausalInferenceLab/causal-inference-practice), [특강·발표 자료](https://github.com/CausalInferenceLab/causal-inference-lecture) |
+| L2 실전 적용 | 내 데이터에 어떻게 쓰나 | [책 예제 코드](https://github.com/CausalInferenceLab/causal-inference-in-python-code), [실무자 특강 영상](https://www.youtube.com/playlist?list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE)([발표 자료](https://github.com/CausalInferenceLab/causal-inference-lecture)), [산업 사례 템플릿](https://github.com/CausalInferenceLab/causal-inference-practice) |
 | L3 도구 개발 | 분석을 어떻게 키우나 | [Lang2SQL](https://github.com/CausalInferenceLab/Lang2SQL), [정책 효과 분석 에이전트](https://github.com/CausalInferenceLab/policy-effect-analytics-agent) |
 | L4 연구 | 무엇이 아직 안 풀렸나 | [ccwr](https://github.com/CausalInferenceLab/ccwr), RWE 가이드라인·적응형 설계 스터디, 외부 오픈소스 기여 |
 

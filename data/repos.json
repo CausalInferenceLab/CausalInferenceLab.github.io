@@ -2,7 +2,7 @@
   {
     "repo": "causal-studio",
     "title": "영상으로 여는 인과추론",
-    "summary": "영상으로 먼저 보고 Binder나 Colab 노트북으로 따라 하는 인과추론 입문 스튜디오입니다. 첫 챕터 '왜 인과추론인가'가 공개되어 있습니다.",
+    "summary": "처음 시작하는 분을 위한 짧은 입문 영상입니다. 영상으로 먼저 보고 Binder나 Colab 노트북으로 따라 합니다. 첫 챕터 '왜 인과추론인가'가 공개되어 있습니다.",
     "level": "L0",
     "lines": [
       "main"
@@ -16,14 +16,14 @@
     ],
     "site": "https://causalinferencelab.github.io/causal-studio",
     "stars": 15,
-    "format": "영상 + 실행 노트북 (한·영)",
+    "format": "입문 영상 + 실행 노트북 (한·영)",
     "tags": [
-      "영상으로 먼저",
+      "처음이라면 여기부터",
       "Colab에서 바로 실행",
       "상관과 인과"
     ],
     "preview": "https://www.youtube.com/@CausalStudio",
-    "previewLabel": "영상 보기"
+    "previewLabel": "입문 영상 보기"
   },
   {
     "repo": "Causal-Inference-with-Python",
@@ -218,8 +218,8 @@
   },
   {
     "repo": "causal-inference-lecture",
-    "title": "특강·발표 자료",
-    "summary": "책의 장마다 현업 연사가 진행한 특강과 발표 자료 모음입니다.",
+    "title": "실무자 특강 영상",
+    "summary": "『실무로 통하는 인과추론 with 파이썬』의 장마다 현업 실무자가 자기 회사 사례로 진행한 특강 17강(약 8시간 30분)입니다. 박지용 교수님의 YouTube 채널 '인과추론의 데이터과학'에 무료로 공개되어 있고, 발표 자료는 이 레포에 있습니다. 게임·마케팅·금융 사례로 기법을 바로 적용하기 때문에 입문 영상보다 어렵습니다. Level 1을 마치고, 책의 같은 장을 읽은 뒤 보기를 권합니다.",
     "level": "L2",
     "lines": [
       "behavior"
@@ -232,15 +232,15 @@
       8
     ],
     "stars": 47,
-    "format": "책 장별 현업 특강 · YouTube",
+    "format": "현업 특강 17강 · YouTube 무료 · Level 1 이후",
     "tags": [
-      "현업 연사",
-      "장별 특강",
-      "무료 영상"
+      "Level 1 이후",
+      "현업 사례",
+      "책 장별 특강"
     ],
     "textbook": "paid-book",
     "preview": "https://www.youtube.com/playlist?list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
-    "previewLabel": "특강 보기"
+    "previewLabel": "특강 17강 보기"
   },
   {
     "repo": "Marketing_Science",
