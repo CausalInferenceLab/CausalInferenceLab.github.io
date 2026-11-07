@@ -47,6 +47,7 @@
 
 | 기능 | 하는 일 |
 | --- | --- |
+| [자료 찾기](https://causalinferencelab.github.io/library.html) | 인과추론 13개, 온라인 실험 10개 주제로 웹북 장, 영상, 책 코드, 발표 자료, 실험 플랫폼 사례를 찾습니다. 이중차분, CUPED, SRM처럼 이름으로도 찾을 수 있습니다 |
 | [레벨 진단](https://causalinferencelab.github.io/?level) | 문제 10개로 시작할 Level, 첫 자료, 다시 볼 웹북 장을 알려 줍니다. 결과를 동료에게 보낼 수 있습니다 |
 | [상관일까, 인과일까?](https://causalinferencelab.github.io/game.html) | 데이터 상황 10개를 보고 고르는 2분 게임 |
 | [교란 실험실](https://causalinferencelab.github.io/lab.html) | 가상 사용자 800명으로 교란이 단순 비교를 얼마나 속이는지 직접 움직여 봅니다 |
@@ -93,7 +94,7 @@ The Causal Inference Hub is the home of the Pseudo-Lab Causal Inference Team (�
 
 | 폴더·파일 | 들어 있는 것 |
 | --- | --- |
-| `index.html`, `article.html`, `game.html`, `lab.html` | 허브, 연재 글, 게임, 실험실 페이지 |
+| `index.html`, `library.html`, `article.html`, `game.html`, `lab.html` | 허브, 자료 찾기, 연재 글, 게임, 실험실 페이지 |
 | `data/` | 레포, 커리큘럼, 레벨 진단, 행사, Builder 정보. 내용을 바꿀 때는 대부분 여기만 고칩니다 |
 | `articles/` | 연재 글 원고(Markdown) |
 | `assets/` | 스타일, 스크립트, 이미지 |

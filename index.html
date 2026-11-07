@@ -33,6 +33,7 @@
       <span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span>
     </a>
     <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="#topics" class="stn s-topics">자료 찾기</a>
       <a href="#curriculum" class="stn s-main">커리큘럼</a>
       <a href="#contrib" class="stn s-ml">Builder</a>
       <a href="#events" class="stn s-exp">행사</a>
@@ -51,7 +52,7 @@
         <div class="banner-main">
           <p class="banner-kicker"><span>Pseudo-Lab</span><span class="sep" aria-hidden="true"></span>인과추론팀 <b>Causal-Lab</b></p>
           <h1 id="hero-title">Causal Inference Hub</h1>
-          <p class="banner-lede">2022년부터 함께 만든 인과추론 오픈소스와 자료를 Level 0–4 커리큘럼으로 엮었습니다.</p>
+          <p class="banner-lede">2022년부터 함께 만든 인과추론과 온라인 실험 자료를 주제별로 찾고, Level 0–4 커리큘럼으로 따라갈 수 있게 엮었습니다.</p>
           <div class="banner-cta">
             <a class="pill solid" href="https://www.youtube.com/@CausalStudio" target="_blank" rel="noopener" data-event="start_click" data-event-params='{"target":"youtube","placement":"hero"}'><svg class="yt" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="#FF0033"/><path d="M10 8.8v6.4l5.4-3.2z" fill="#fff"/></svg>입문 영상으로 시작하기</a>
             <a class="pill" href="https://causalinferencelab.github.io/Causal-Inference-with-Python/" data-event="start_click" data-event-params='{"target":"webbook","placement":"hero"}'>웹북으로 시작하기</a>
@@ -71,6 +72,24 @@
       <div class="hero-grid">
         <ul class="growth" id="growth" aria-label="팀의 성장 지표"></ul>
       </div>
+    </div>
+  </section>
+
+  <section class="band" id="topics" aria-labelledby="topics-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="topics-title">주제로 찾기</h2>
+        <p>인과추론과 온라인 실험, 주제를 고르면 웹북·영상·코드·발표 자료로 바로 이어집니다.</p>
+      </div>
+      <form class="tp-search" action="library.html" method="get" role="search">
+        <label class="lib-search">
+          <span class="sr-only">주제나 방법 이름으로 찾기</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input type="search" name="q" placeholder="이중차분, CUPED, SRM…" autocomplete="off" enterkeyhint="search">
+        </label>
+        <button type="submit" class="btn">찾기</button>
+      </form>
+      <div class="tp-shelves" id="tp-shelves"></div>
     </div>
   </section>
 

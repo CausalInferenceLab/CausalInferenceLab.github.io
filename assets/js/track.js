@@ -49,11 +49,11 @@
    unless the reader asked for a new one, and send webbook_click or team_site_click. */
 (() => {
   "use strict";
-  const HUB_PATHS = /^\/(?:$|index\.html$|article\.html$|404\.html$|game\.html$|lab\.html$|assets\/|data\/|articles\/|builders\/|badges\/)/;
+  const HUB_PATHS = /^\/(?:$|index\.html$|article\.html$|404\.html$|game\.html$|lab\.html$|library\.html$|assets\/|data\/|articles\/|builders\/|badges\/)/;
   const WEBBOOK = "Causal-Inference-with-Python";
   const SPOTS = [
     ["#featured", "featured"], [".partner", "partner"], ["#station-dialog", "station"], ["#daily", "daily"], ["#posts", "posts"], ["#passport-dialog", "passport"],
-    ["#shelf, #week, .spot", "curriculum"], [".gm", "game"], [".lab", "lab"], [".bp", "builder_page"],
+    ["#shelf, #week, .spot", "curriculum"], [".gm", "game"], [".lab", "lab"], [".lib", "library"], ["#topics", "topics"], [".bp", "builder_page"],
     [".post-related, .reader, .prose", "article"], ["#lt-sheet", "level_test"], [".site-footer", "footer"], [".banner", "banner"]
   ];
   function teamSite(a) {

@@ -20,7 +20,7 @@ def load(name):
 
 def main():
     today = datetime.date.today().isoformat()
-    urls = [(BASE, "1.0"), (BASE + "game.html", "0.6"), (BASE + "lab.html", "0.6"), (BASE + "builders/", "0.7")]
+    urls = [(BASE, "1.0"), (BASE + "library.html", "0.9"), (BASE + "game.html", "0.6"), (BASE + "lab.html", "0.6"), (BASE + "builders/", "0.7")]
     urls += [(f"{BASE}builders/{b['slug']}.html", "0.5") for b in load("builders.json") if b.get("slug")]
     for r in load("repos.json"):
         site = (r.get("site") or "").split("#")[0]

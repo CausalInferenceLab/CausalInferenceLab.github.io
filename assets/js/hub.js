@@ -1174,6 +1174,23 @@
       "END:VEVENT", "END:VCALENDAR"].filter(Boolean).join("\r\n");
     return { google: `https://calendar.google.com/calendar/render?${q}`, ics: `data:text/calendar;charset=utf-8,${encodeURIComponent(body)}`, file: `data-forum-${e.order}.ics` };
   }
+  /* topics on two shelves, each a link into the library page; the search box submits to the library */
+  async function renderTopics() {
+    const box = $("#tp-shelves");
+    if (!box) return;
+    let d;
+    try { d = await getJSON("data/topics.json"); } catch (e) { box.innerHTML = `<p class="tp-all"><a href="library.html">자료 찾기 페이지로 가기</a></p>`; return; }
+    /* published hub posts count toward their topics, the same way the library page lists them */
+    const today = kstToday();
+    (state.articles || []).filter((a) => String(a.date || "") <= today && Array.isArray(a.topics)).forEach((a) => a.topics.forEach((id) => { const tp = d.topics.find((x) => x.id === id); if (tp) tp.items.push(a); }));
+    const items = d.topics.reduce((n, t) => n + t.items.length, 0);
+    box.innerHTML = d.shelves.map((s) => {
+      const ts = d.topics.filter((t) => t.shelf === tok(s.id));
+      return `<div class="tp-shelf s-${esc(tok(s.id))}"><h3>${esc(s.name)}<span>${esc(s.about)}</span></h3>
+        <ul>${ts.map((t) => `<li><a href="library.html#${esc(tok(t.id))}" data-event="library_topic" data-event-params='${esc(JSON.stringify({ topic: tok(t.id), source: "hub" }))}'>${esc(t.name)}<span>${t.items.length}</span></a></li>`).join("")}</ul></div>`;
+    }).join("") + `<p class="tp-all"><a href="library.html">주제 ${d.topics.length}개, 자료 ${items}개 모두 보기</a></p>`;
+  }
+
   /* the next Data Forum gets the space; past ones are one line each */
   function renderEvents() {
     const list = [...state.events].sort((a, b) => b.order - a.order);
@@ -1877,7 +1894,7 @@
   }
   function navSpy() {
     if (!("IntersectionObserver" in window)) return;
-    const ids = ["curriculum", "contrib", "events", "posts", "join"];
+    const ids = ["topics", "curriculum", "contrib", "events", "posts", "join"];
     const seen = new Map();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
@@ -1885,7 +1902,7 @@
       paintNav();
     }, { rootMargin: "-45% 0px -50% 0px" });
     ids.forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
-    /* the nav is a line through the five sections: --p is how far down that line the reader is (0 to 1) */
+    /* the nav is a line through the six sections: --p is how far down that line the reader is (0 to 1) */
     const nav = $(".site-nav");
     if (!nav) return;
     let queued = false;
@@ -1918,7 +1935,7 @@
       seen.add(id); io.unobserve(en.target);
       track("section_view", { section: id });
     }), { threshold: [0.35] });
-    ["curriculum", "contrib", "events", "posts", "join"].forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+    ["topics", "curriculum", "contrib", "events", "posts", "join"].forEach((id) => { const el = document.getElementById(id); if (el) io.observe(el); });
   }
   async function init() {
     loadRidden(); loadRecent();
@@ -1934,7 +1951,7 @@
     setHeader(); window.addEventListener("resize", setHeader);
     renderLegend(); renderMap(); wireTabs();
     renderFeatured(); renderPartner(); renderEvents(); renderNextEvent(); renderHeaderEvent(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
-    renderLoop(); loadActivity(); watchSections();
+    renderLoop(); loadActivity(); watchSections(); renderTopics();
     /* sections fill in after the data loads, so jump again once they have their height */
     if (/^#(contrib|events|reading|join)$/.test(location.hash)) requestAnimationFrame(() => { const el = $(location.hash); if (el) el.scrollIntoView(); });
     openFromHash();

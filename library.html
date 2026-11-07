@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com; img-src 'self' data: blob: https://github.com https://avatars.githubusercontent.com https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://api.github.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<script src="assets/js/ga.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>자료 찾기 | Causal Inference Hub</title>
+<meta name="description" content="인과추론과 온라인 실험을 주제별로 찾습니다. 이중차분법, 성향점수, A/B 테스트, SRM, 분산 감소까지 가짜연구소 인과추론팀의 웹북·영상·코드·발표 자료로 바로 이어집니다.">
+<meta property="og:title" content="자료 찾기 | Causal Inference Hub">
+<meta property="og:description" content="인과추론과 온라인 실험, 주제를 고르면 웹북·영상·코드·발표 자료가 한 번에 나옵니다. 모두 무료입니다.">
+<meta property="og:image" content="https://causalinferencelab.github.io/assets/img/og-hub.png">
+<link rel="canonical" href="https://causalinferencelab.github.io/library.html">
+<meta property="og:url" content="https://causalinferencelab.github.io/library.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Causal Inference Hub">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/team-mark.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" integrity="sha384-/uC/GIvKJ/9RN6i1izHoBY9ubYo60OAsQRNQ3NRFiNsN+N/MVQJHD5OYcZz6wvwn" crossorigin="anonymous">
+<link rel="stylesheet" href="assets/css/hub.css">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="./" aria-label="Causal Inference Hub 처음으로"><img class="brand-logo" src="assets/img/team-mark.png" alt="" width="34" height="34"><span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span></a>
+    <nav class="site-nav" aria-label="주요 메뉴"><a href="library.html" aria-current="page">자료 찾기</a><a href="./#curriculum">커리큘럼</a><a href="game.html">게임</a><a href="lab.html">실험실</a><a href="builders/">Builder</a></nav>
+    <button type="button" class="pass-btn" data-passport aria-label="활동 여권 열기">여권 <b data-passport-count>0/9</b></button>
+  </div>
+</header>
+
+<main id="main" class="lib">
+  <div class="wrap">
+    <div class="lib-head">
+      <h1>자료 찾기</h1>
+      <p>인과추론과 온라인 실험을 주제별로 모았습니다. 주제를 고르면 팀이 만든 웹북, 영상, 코드, 발표 자료로 바로 이어집니다. 모두 무료입니다.</p>
+    </div>
+
+    <form class="lib-tools" role="search" id="lib-form">
+      <label class="lib-search">
+        <span class="sr-only">주제나 방법 이름으로 찾기</span>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="search" id="lib-q" name="q" placeholder="이중차분, CUPED, SRM…" autocomplete="off" enterkeyhint="search">
+      </label>
+      <div class="lib-shelves" role="radiogroup" aria-label="분야" id="lib-shelves"></div>
+      <div class="lib-kinds" role="group" aria-label="자료 종류" id="lib-kinds"></div>
+    </form>
+
+    <p class="lib-count" id="lib-count" aria-live="polite"></p>
+
+    <div class="lib-grid">
+      <nav class="lib-index" id="lib-index" aria-label="주제 목록"></nav>
+      <div class="lib-topics" id="lib-topics"><p class="lib-loading">자료를 불러오는 중입니다.</p></div>
+    </div>
+
+    <aside class="lib-more" aria-labelledby="lib-more-title">
+      <h2 id="lib-more-title">순서대로 배우고 싶다면</h2>
+      <p>무엇부터 봐야 할지 모르겠다면 커리큘럼의 레벨별 코스를 따라가세요. 레벨 진단 10문항으로 시작점을 정할 수 있습니다.</p>
+      <p class="lib-more-links"><a class="btn sm" href="./?level">내 레벨 진단하기</a><a class="btn ghost sm" href="./#curriculum">커리큘럼 보기</a></p>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <div><p class="footer-brand">가짜연구소 인과추론팀</p><p>빠진 자료나 잘못된 링크는 <a href="https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/issues" target="_blank" rel="noopener">이슈</a>로 알려 주세요.</p></div>
+    <ul class="footer-links"><li><a href="./">허브</a></li><li><a href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://pseudo-lab.com/" target="_blank" rel="noopener">가짜연구소</a></li></ul>
+  </div>
+</footer>
+<script src="assets/js/track.js" defer></script>
+<script src="assets/js/passport.js" defer></script>
+<script src="assets/js/library.js" defer></script>
+</body>
+</html>
