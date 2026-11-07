@@ -1179,7 +1179,7 @@
     const box = $("#tp-shelves");
     if (!box) return;
     let d;
-    try { d = await getJSON("data/topics.json"); } catch (e) { box.innerHTML = `<p class="tp-all"><a href="library.html">자료 찾기 페이지로 가기</a></p>`; return; }
+    try { d = await getJSON("data/topics.json"); } catch (e) { box.innerHTML = `<p class="tp-all"><a href="library.html">자료실로 가기</a></p>`; return; }
     /* published hub posts count toward their topics, the same way the library page lists them */
     const today = kstToday();
     (state.articles || []).filter((a) => String(a.date || "") <= today && Array.isArray(a.topics)).forEach((a) => a.topics.forEach((id) => { const tp = d.topics.find((x) => x.id === id); if (tp) tp.items.push(a); }));
@@ -1188,7 +1188,7 @@
       const ts = d.topics.filter((t) => t.shelf === tok(s.id));
       return `<div class="tp-shelf s-${esc(tok(s.id))}"><h3>${esc(s.name)}<span>${esc(s.about)}</span></h3>
         <ul>${ts.map((t) => `<li><a href="library.html#${esc(tok(t.id))}" data-event="library_topic" data-event-params='${esc(JSON.stringify({ topic: tok(t.id), source: "hub" }))}'>${esc(t.name)}<span>${t.items.length}</span></a></li>`).join("")}</ul></div>`;
-    }).join("") + `<p class="tp-all"><a href="library.html">주제 ${d.topics.length}개, 자료 ${items}개 모두 보기</a></p>`;
+    }).join("") + `<p class="tp-all"><a href="library.html">주제 ${d.topics.length}개, 자료 ${items}개 모두 보기</a><a href="library.html?view=glossary" data-event="library_view" data-event-params='{"view":"glossary","source":"hub"}'>용어집 보기</a></p>`;
   }
 
   /* the next Data Forum gets the space; past ones are one line each */

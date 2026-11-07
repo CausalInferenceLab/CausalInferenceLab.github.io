@@ -245,6 +245,17 @@ def main():
             for x in a.get("topics") or []:
                 if x not in seen:
                     err(f"articles.json[{i}]", f"topic {x!r} is not in topics.json")
+    gl = data.get("glossary.json")
+    if gl is not None:
+        if not isinstance(gl.get("sections"), list) or not gl["sections"]:
+            err("glossary.json", "sections must be a non-empty list (rebuild with scripts/build_glossary.py)")
+        for i, s in enumerate(gl.get("sections") or []):
+            for j, t in enumerate(s.get("terms") or []):
+                if not (str(t.get("id", "")).startswith("term-") and t.get("ko")):
+                    err(f"glossary.json sections[{i}].terms[{j}]", "needs an id starting with term- and ko")
+                for c in t.get("chapters") or []:
+                    if not re.fullmatch(r"[A-Za-z0-9-]+", str(c.get("slug", ""))):
+                        err(f"glossary.json sections[{i}].terms[{j}]", f"chapter slug {c.get('slug')!r} is not a page name")
     for i, x in enumerate((data.get("stages.json") or {}).get("items", [])):
         w = f"stages.json items[{i}]"
         token(x.get("id"), w, "id")
