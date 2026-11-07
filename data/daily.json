@@ -1,0 +1,192 @@
+{
+  "title": "오늘의 한 문제",
+  "questions": [
+    {
+      "id": "reviews",
+      "text": "리뷰가 많은 상품일수록 판매량이 많았다.",
+      "claim": "리뷰를 늘리면 판매가 는다",
+      "answer": "corr",
+      "why": "많이 팔린 상품에 리뷰가 많이 쌓이는 방향도 있습니다. 원인과 결과가 서로를 움직이면 관측만으로는 방향을 가를 수 없습니다.",
+      "chapter": {
+        "title": "1장 인과추론 소개",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html"
+      }
+    },
+    {
+      "id": "onboarding",
+      "text": "새 온보딩을 도입한 국가와 비교 국가의 가입 전환율은 도입 전 2년 동안 나란히 움직였다. 도입 뒤에는 도입 국가만 올랐고, 같은 시기 그 나라에만 있던 다른 캠페인은 없었다. 차이는 매달 같은 방향으로 이어졌다.",
+      "claim": "새 온보딩이 가입 전환율을 올렸다",
+      "answer": "cause",
+      "why": "도입이 없었다면 두 나라가 계속 나란히 움직였을 것이라는 평행 추세 가정이 받아들일 만합니다. 그러면 벌어진 차이를 온보딩의 효과로 읽을 수 있습니다.",
+      "chapter": {
+        "title": "13장 이중차분법",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/13-Difference-in-Differences.html"
+      }
+    },
+    {
+      "id": "delivery_geo",
+      "text": "전국 250개 시군구 중 무작위로 고른 125곳에서만 한 달 동안 배달비를 낮췄더니, 그 지역의 주문이 다른 지역보다 12% 늘었고 통계적으로 유의했다.",
+      "claim": "배달비 인하가 주문을 늘렸다",
+      "answer": "cause",
+      "why": "배달비를 낮출 지역을 무작위로 골랐기 때문에 지역 간 다른 차이는 평균적으로 고르게 나뉩니다. 지역 단위 무작위 실험입니다.",
+      "chapter": {
+        "title": "2장 무작위 실험",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html"
+      }
+    },
+    {
+      "id": "firefighters",
+      "text": "소방관이 많이 출동한 화재일수록 피해액이 컸다.",
+      "claim": "소방관이 많이 출동하면 피해가 커진다",
+      "answer": "corr",
+      "why": "큰 불일수록 소방관이 많이 출동하고 피해도 큽니다. 화재 규모가 둘을 함께 움직이는 교란 요인입니다.",
+      "chapter": {
+        "title": "4장 그래프 인과 모델",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/04-Graphical-Causal-Models.html"
+      }
+    },
+    {
+      "id": "tutoring_show",
+      "text": "추첨으로 절반의 학생에게 무료 과외를 배정했다. 그중 실제로 과외에 꾸준히 나온 학생만 골라, 배정받지 못한 학생과 비교했더니 점수 차이가 컸다.",
+      "claim": "과외가 그만큼 점수를 올렸다",
+      "answer": "corr",
+      "why": "배정은 추첨이었지만, 꾸준히 나온 학생은 스스로 골라졌습니다. 성실한 학생이 더 잘 나옵니다. 배정 기준으로 그대로 비교하거나, 배정을 도구변수로 써서 ‘배정되면 나오는 학생’에 대한 효과를 따로 추정해야 합니다.",
+      "chapter": {
+        "title": "9장 불응과 LATE",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/09-Non-Compliance-and-LATE.html"
+      }
+    },
+    {
+      "id": "tutoring",
+      "text": "학생 1,000명 중 추첨으로 절반에게만 무료 과외를 제공했다. 과외를 받은 쪽의 시험 점수가 평균 6점 높았고, 통계적으로 유의했다.",
+      "claim": "무료 과외가 점수를 올렸다",
+      "answer": "cause",
+      "why": "추첨으로 나눴기 때문에 두 집단은 과외 말고는 평균적으로 같습니다. 남은 차이는 과외의 효과로 볼 수 있습니다.",
+      "chapter": {
+        "title": "2장 무작위 실험",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html"
+      }
+    },
+    {
+      "id": "gym",
+      "text": "헬스장 회원권을 산 사람은 사지 않은 사람보다 1년 동안 체중이 덜 늘었다.",
+      "claim": "회원권을 사면 체중 증가가 줄어든다",
+      "answer": "corr",
+      "why": "원래 건강에 관심이 많은 사람이 회원권을 삽니다. 누가 샀는지를 스스로 정했기 때문에 선택 편향이 섞여 있습니다.",
+      "chapter": {
+        "title": "1장 인과추론 소개",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html"
+      }
+    },
+    {
+      "id": "coffee",
+      "text": "커피를 많이 마시는 사람일수록 폐암 발병률이 높았다. 흡연자는 커피도 많이 마시는 경향이 있었다.",
+      "claim": "커피가 폐암 위험을 높인다",
+      "answer": "corr",
+      "why": "흡연이 커피 소비와 폐암을 함께 늘립니다. 흡연이라는 교란 요인을 빼고 보면 커피의 효과는 사라질 수 있습니다.",
+      "chapter": {
+        "title": "4장 그래프 인과 모델",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/04-Graphical-Causal-Models.html"
+      }
+    },
+    {
+      "id": "loan_rdd",
+      "text": "대출 심사 점수 600점을 기준으로 금리가 갈렸다. 600점에서 달라지는 것은 금리뿐이고, 양쪽 모두 대출이 승인됐다. 600점 바로 위와 바로 아래 고객을 비교했더니 낮은 금리를 받은 쪽의 연체율이 낮았다. 고객이 점수를 조정할 방법은 없었다.",
+      "claim": "기준선 근처 고객에게 낮은 금리가 연체율을 낮췄다",
+      "answer": "cause",
+      "why": "기준선 바로 근처 고객은 신용이 거의 같고 금리만 갈립니다. 그래서 그 근처의 차이는 금리의 효과로 볼 수 있습니다. 기준선 근처 고객에 대한 효과입니다.",
+      "chapter": {
+        "title": "16장 회귀 불연속 설계",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/16-Regression-Discontinuity-Design.html"
+      }
+    },
+    {
+      "id": "did_diverge",
+      "text": "새 요금제를 출시한 국가와 비교 국가의 매출을 이중차분법으로 비교했다. 그런데 두 나라 매출은 출시 1년 전부터 이미 벌어지고 있었다.",
+      "claim": "새 요금제가 매출 격차를 만들었다",
+      "answer": "corr",
+      "why": "이중차분법은 ‘처치가 없었다면 두 집단이 나란히 갔을 것’이라는 가정 위에 서 있습니다. 출시 전부터 벌어지고 있었다면 그 가정이 깨져, 출시 뒤의 격차를 요금제 효과로 읽을 수 없습니다.",
+      "chapter": {
+        "title": "13장 이중차분법",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/13-Difference-in-Differences.html"
+      }
+    },
+    {
+      "id": "housing_lottery",
+      "text": "공공임대 입주자를 추첨으로 뽑았다. 신청한 가구 4,000곳을 당첨 여부로 나눠 비교했더니, 당첨 가구 아이들의 결석률이 낮았고 통계적으로 유의했다.",
+      "claim": "공공임대 당첨이 아이들의 결석률을 낮췄다",
+      "answer": "cause",
+      "why": "추첨은 무작위 배정과 같습니다. 당첨 여부로 그대로 비교했으니 차이는 당첨의 효과입니다. 실제로 입주한 가구만 고르면 다시 선택 편향이 생깁니다.",
+      "chapter": {
+        "title": "9장 불응과 LATE",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/09-Non-Compliance-and-LATE.html"
+      }
+    },
+    {
+      "id": "trial",
+      "text": "컴퓨터 추첨으로 신약과 위약을 배정하고, 환자도 의사도 무엇을 받았는지 모르게 한 임상시험에서 신약 쪽 회복률이 높았고 통계적으로 유의했다.",
+      "claim": "신약이 회복률을 높였다",
+      "answer": "cause",
+      "why": "무작위 배정이 두 집단을 같게 만들고, 이중맹검이 기대 효과를 막습니다. 남은 차이는 약의 효과로 볼 수 있습니다.",
+      "chapter": {
+        "title": "2장 무작위 실험",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html"
+      }
+    },
+    {
+      "id": "premium",
+      "text": "프리미엄 요금제로 바꾼 사용자는 바꾸기 전보다 사용 시간이 늘었다.",
+      "claim": "프리미엄 전환이 사용 시간을 늘렸다",
+      "answer": "corr",
+      "why": "원래 사용이 늘던 사람이 프리미엄으로 바꾸기 쉽습니다. 전후 비교는 그 추세와 전환 효과를 가를 수 없습니다. 바꾸지 않은 사용자와 비교하더라도 전환 전 추세까지 같아야 하고, 그래도 바꿀 시점을 스스로 골랐다는 문제가 남습니다.",
+      "chapter": {
+        "title": "13장 이중차분법",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/13-Difference-in-Differences.html"
+      }
+    },
+    {
+      "id": "training",
+      "text": "사내 교육을 들은 직원의 다음 해 성과 평가가 더 높았다. 교육은 팀장이 추천한 사람만 들었다.",
+      "claim": "교육이 성과를 올렸다",
+      "answer": "corr",
+      "why": "팀장은 성과가 좋을 사람을 추천했을 가능성이 큽니다. 추천 기준이 기록에 남아 있다면 비슷한 사람끼리 짝지어 비교(매칭)할 수 있지만, 팀장의 감처럼 기록되지 않은 기준이 있다면 매칭으로도 가를 수 없습니다.",
+      "chapter": {
+        "title": "10장 매칭",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/10-Matching.html"
+      }
+    },
+    {
+      "id": "tobacco_sc",
+      "text": "한 나라가 담배세를 올렸다. 담배세를 올리지 않은 여러 나라를 섞어 그 나라의 과거 흡연율 추세를 거의 똑같이 따라가는 ‘합성 비교군’을 만들었더니, 인상 뒤 그 나라의 흡연율이 합성 비교군보다 크게 떨어졌다. 같은 시기 다른 금연 정책은 없었고, 다른 나라에 같은 방법을 적용했을 때는 이만큼 큰 차이가 나온 적이 없었다.",
+      "claim": "담배세 인상이 흡연율을 낮췄다",
+      "answer": "cause",
+      "why": "과거를 잘 따라가는 합성 비교군은 ‘인상하지 않았다면’의 모습을 대신합니다. 정책이 없던 나라들에 같은 방법을 써 봐도 이만큼 차이가 나지 않았다면 우연으로 보기 어렵습니다. 다른 충격이 없었다는 전제에서 정책 효과로 읽을 수 있습니다. 통제집단합성법입니다.",
+      "chapter": {
+        "title": "15장 통제집단합성법",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/15-Synthetic-Control.html"
+      }
+    },
+    {
+      "id": "rdd_manip",
+      "text": "장학금 기준 점수 바로 위와 바로 아래 학생을 비교했더니 장학금을 받은 쪽의 졸업률이 높았다. 다만 기준에 조금 못 미친 학생은 재시험으로 점수를 올릴 수 있었고, 의욕 있는 학생이 많이 응시했다.",
+      "claim": "기준선 근처 학생에게 장학금이 졸업률을 올렸다",
+      "answer": "corr",
+      "why": "재시험으로 기준선을 넘은 학생은 의욕이 높은 쪽으로 골라졌습니다. 기준선 위와 아래가 더는 비슷한 학생이 아니어서, 회귀 불연속 설계의 전제(기준선 근처는 운으로 갈린다)가 깨집니다.",
+      "chapter": {
+        "title": "16장 회귀 불연속 설계",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/16-Regression-Discontinuity-Design.html"
+      }
+    },
+    {
+      "id": "books",
+      "text": "책을 많이 읽는 아이일수록 성적이 높았다.",
+      "claim": "아이에게 책을 더 읽히면 성적이 오른다",
+      "answer": "corr",
+      "why": "부모의 관심이나 가정 환경이 독서량과 성적을 함께 올릴 수 있습니다. 이런 교란 요인을 다 재지 않으면 독서만의 효과는 알 수 없습니다.",
+      "chapter": {
+        "title": "4장 그래프 인과 모델",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/04-Graphical-Causal-Models.html"
+      }
+    }
+  ]
+}

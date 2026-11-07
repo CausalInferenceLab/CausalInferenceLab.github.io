@@ -1,0 +1,115 @@
+{
+  "title": "상관일까, 인과일까?",
+  "questions": [
+    {
+      "id": "icecream",
+      "text": "아이스크림이 많이 팔린 날일수록 물놀이 사고도 많았다.",
+      "claim": "아이스크림 판매가 물놀이 사고를 늘린다",
+      "answer": "corr",
+      "why": "더운 날씨가 아이스크림 판매와 물놀이를 함께 늘립니다. 둘을 같이 움직이는 교란 요인이 있으면, 관계가 있어 보여도 한쪽이 다른 쪽의 원인이라고 할 수 없습니다.",
+      "chapter": {
+        "title": "4장 그래프 인과 모델",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/04-Graphical-Causal-Models.html"
+      }
+    },
+    {
+      "id": "random_ui",
+      "text": "사용자 10만 명을 무작위로 반씩 나눠 한쪽에만 새 추천 화면을 보여 줬다. 두 집단의 크기는 계획대로 나뉘었고, 새 화면 쪽 구매율이 2%p 높았으며 통계적으로 유의했다.",
+      "claim": "새 추천 화면이 구매율을 올렸다",
+      "answer": "cause",
+      "why": "무작위 배정은 두 집단을 평균적으로 같게 만듭니다. 배정이 제대로 됐고 차이가 우연으로 보기 어렵다면, 남은 차이는 새 화면 때문이라고 볼 수 있습니다.",
+      "chapter": {
+        "title": "2장 무작위 실험",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html"
+      }
+    },
+    {
+      "id": "push",
+      "text": "앱 알림을 켜 둔 사용자는 끈 사용자보다 30일 뒤 남아 있는 비율이 두 배 높았다.",
+      "claim": "알림을 켜게 하면 사용자가 더 남는다",
+      "answer": "corr",
+      "why": "원래 앱을 좋아하는 사람이 알림을 켜기 쉽습니다. 누가 알림을 켰는지를 사용자가 스스로 정했기 때문에 선택 편향이 섞여 있습니다.",
+      "chapter": {
+        "title": "1장 인과추론 소개",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html"
+      }
+    },
+    {
+      "id": "ai_launch",
+      "text": "AI 요약 기능을 출시한 달에 매출이 10% 늘었다. 마침 연말 성수기였다.",
+      "claim": "AI 요약 기능이 매출을 10% 올렸다",
+      "answer": "corr",
+      "why": "출시 전후만 비교하면 같은 시기의 다른 변화(계절, 프로모션)와 효과가 섞입니다. 기능을 받지 않은 비교 대상을 함께 놓아야 효과를 떼어 낼 수 있습니다.",
+      "chapter": {
+        "title": "13장 이중차분법",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/13-Difference-in-Differences.html"
+      }
+    },
+    {
+      "id": "geo_holdout",
+      "text": "전국 200개 지역 중 무작위로 고른 100곳에서만 한 달 동안 TV 광고를 껐다. 광고를 끈 지역의 매출이 다른 지역보다 4% 낮았다.",
+      "claim": "TV 광고가 매출을 올린다",
+      "answer": "cause",
+      "why": "광고를 끌 지역을 무작위로 골랐기 때문에, 지역 간 다른 차이는 평균적으로 비슷하게 나뉩니다. 사람 대신 지역을 무작위로 나누는 지역 단위 실험입니다.",
+      "chapter": {
+        "title": "2장 무작위 실험",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html"
+      }
+    },
+    {
+      "id": "did",
+      "text": "시범 지역과 비교 지역의 매출은 정책 전 3년 동안 나란히 움직였다. 정책 뒤에는 시범 지역만 올랐고, 같은 시기 시범 지역에만 생긴 다른 변화는 없었다.",
+      "claim": "정책이 시범 지역의 매출을 올렸다",
+      "answer": "cause",
+      "why": "정책이 없었다면 두 지역이 계속 나란히 움직였을 것이라는 평행 추세 가정이 받아들일 만하면, 벌어진 차이를 정책 효과로 읽을 수 있습니다. 과거에 나란했다는 것은 이 가정의 근거일 뿐 증명은 아닙니다.",
+      "chapter": {
+        "title": "13장 이중차분법",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/13-Difference-in-Differences.html"
+      }
+    },
+    {
+      "id": "ads",
+      "text": "광고를 본 사람의 구매율이 안 본 사람보다 높았다. 광고는 구매 가능성이 높은 사람에게 보여 주도록 설정되어 있었다.",
+      "claim": "광고가 구매율을 올렸다",
+      "answer": "corr",
+      "why": "타기팅 자체가 구매할 사람을 골라냈습니다. 타기팅에 쓴 정보를 모두 알고 있다면 성향점수로 비슷한 사람끼리 비교할 수 있고, 가장 깔끔한 방법은 일부에게 광고를 무작위로 보여 주지 않는 실험입니다.",
+      "chapter": {
+        "title": "11장 성향점수",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/11-Propensity-Score.html"
+      }
+    },
+    {
+      "id": "rdd",
+      "text": "장학금 기준 점수 바로 위와 바로 아래 학생을 비교했더니, 장학금을 받은 쪽의 졸업률이 높았다. 학생이 점수를 기준선에 맞춰 조정할 방법은 없었다.",
+      "claim": "기준선 근처 학생에게 장학금은 졸업률을 올렸다",
+      "answer": "cause",
+      "why": "기준선 바로 근처의 학생들은 실력이 거의 같고, 받았는지 여부만 운처럼 갈립니다. 그래서 그 근처의 차이는 장학금 효과로 볼 수 있습니다. 다만 기준선 근처 학생에 대한 효과입니다.",
+      "chapter": {
+        "title": "16장 회귀 불연속 설계",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/16-Regression-Discontinuity-Design.html"
+      }
+    },
+    {
+      "id": "coupon_itt",
+      "text": "쿠폰을 무작위로 절반에게 보냈다. 쿠폰을 받은 사람 전체(쓰지 않은 사람 포함)의 평균 구매액이 받지 않은 사람보다 컸다.",
+      "claim": "쿠폰을 보내는 것이 구매액을 늘렸다",
+      "answer": "cause",
+      "why": "무작위로 나눈 집단을 그대로 비교했기 때문에, 차이는 쿠폰을 보낸 효과입니다. 쓴 사람만 고르지 않고 배정대로 비교하는 것이 핵심입니다.",
+      "chapter": {
+        "title": "9장 불응과 LATE",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/09-Non-Compliance-and-LATE.html"
+      }
+    },
+    {
+      "id": "coupon_used",
+      "text": "같은 실험에서 이번에는 쿠폰을 실제로 쓴 사람만 골라 받지 않은 사람과 비교했더니, 차이가 훨씬 더 컸다.",
+      "claim": "쿠폰을 쓰면 구매액이 그만큼 늘어난다",
+      "answer": "corr",
+      "why": "보낸 것은 무작위지만, 쓴 사람은 스스로 골라졌습니다. 원래 살 사람이 쿠폰을 쓰기 쉽습니다. 배정을 도구변수로 쓰면 ‘받으면 쓰는 사람’에 대한 효과(LATE)를 따로 추정할 수 있습니다.",
+      "chapter": {
+        "title": "9장 불응과 LATE",
+        "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/09-Non-Compliance-and-LATE.html"
+      }
+    }
+  ]
+}

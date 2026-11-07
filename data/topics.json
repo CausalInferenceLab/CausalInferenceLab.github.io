@@ -1,0 +1,1239 @@
+{
+  "shelves": [
+    {
+      "id": "causal",
+      "name": "인과추론",
+      "about": "실험을 할 수 없을 때, 관찰 데이터로 효과를 추정하는 방법"
+    },
+    {
+      "id": "exp",
+      "name": "온라인 실험",
+      "about": "A/B 테스트를 설계하고, 믿을 수 있게 분석하고, 조직에서 운영하는 방법"
+    }
+  ],
+  "kinds": {
+    "video": "영상",
+    "read": "글",
+    "code": "코드",
+    "slides": "발표 자료",
+    "case": "사례 모음",
+    "post": "연재"
+  },
+  "topics": [
+    {
+      "id": "why-causal",
+      "shelf": "causal",
+      "name": "상관과 인과",
+      "en": "Correlation vs. Causation",
+      "about": "상관이 왜 인과가 아닌지, 잠재적 결과와 반사실로 처음 정리합니다. 어느 방법을 배우든 여기서 출발합니다.",
+      "keys": [
+        "잠재적 결과",
+        "반사실",
+        "potential outcomes",
+        "counterfactual",
+        "편향",
+        "입문"
+      ],
+      "items": [
+        {
+          "kind": "video",
+          "repo": "causal-studio",
+          "title": "우리가 왜 인과추론에 관심을 가져야 할까요?",
+          "url": "https://www.youtube.com/watch?v=IKurxtuTb3o",
+          "notebook": "https://causalinferencelab.github.io/causal-studio/why-causal-inference-ko"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "1장: 인과추론 소개",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/01-Introduction-To-Causality.html"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "1-1. 인과추론 기초",
+          "url": "https://www.youtube.com/watch?v=PwtogIPFPQQ&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "신진수",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/01_%ED%94%84%EB%A1%9C%EB%AA%A8%EC%85%98%20%ED%9A%A8%EA%B3%BC%EB%B6%84%EC%84%9D%EC%9C%BC%EB%A1%9C%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20%EA%B8%B0%EC%B4%88%20%EB%B0%B0%EC%9A%B0%EA%B8%B0.pdf"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "1-2. 인과추론의 목적",
+          "url": "https://www.youtube.com/watch?v=eH9uFEotTm0&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "신진수",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/01_%ED%94%84%EB%A1%9C%EB%AA%A8%EC%85%98%20%ED%9A%A8%EA%B3%BC%EB%B6%84%EC%84%9D%EC%9C%BC%EB%A1%9C%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20%EA%B8%B0%EC%B4%88%20%EB%B0%B0%EC%9A%B0%EA%B8%B0.pdf"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "1-3. 가격할인과 인과추론",
+          "url": "https://www.youtube.com/watch?v=o5gRS1uOAdA&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "신진수",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/01_%ED%94%84%EB%A1%9C%EB%AA%A8%EC%85%98%20%ED%9A%A8%EA%B3%BC%EB%B6%84%EC%84%9D%EC%9C%BC%EB%A1%9C%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20%EA%B8%B0%EC%B4%88%20%EB%B0%B0%EC%9A%B0%EA%B8%B0.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "1장: 인과추론 소개",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/01%EC%9E%A5-%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20%EC%86%8C%EA%B0%9C.ipynb"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "인과추론 Overview",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week02_Causal_inference_overview.pdf"
+        }
+      ]
+    },
+    {
+      "id": "dag",
+      "shelf": "causal",
+      "name": "그래프 인과 모델",
+      "en": "Causal Graphs (DAG)",
+      "about": "변수 사이 인과 구조를 그림으로 그리고, 무엇을 통제해야 하고 무엇을 통제하면 안 되는지 가립니다.",
+      "keys": [
+        "DAG",
+        "백도어",
+        "프론트도어",
+        "backdoor",
+        "frontdoor",
+        "교란",
+        "충돌부",
+        "collider",
+        "선택 편향"
+      ],
+      "items": [
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "4장: 그래프 인과 모델",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/04-Graphical-Causal-Models.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "7장: 교란 요인을 넘어서",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/07-Beyond-Confounders.html"
+        },
+        {
+          "kind": "read",
+          "repo": "causal-studio",
+          "title": "프론트도어 기준",
+          "url": "https://causalinferencelab.github.io/causal-studio/frontdoor-ko"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "3. 유저 이탈 관점에서의 그래프 인과 모형 소개",
+          "url": "https://www.youtube.com/watch?v=V4vbCr-EraQ&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "박시온",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/04_%EC%9C%A0%EC%A0%80%20%EC%9D%B4%ED%83%88%EA%B4%80%EC%A0%90%EC%97%90%EC%84%9C%EC%9D%98%20%EA%B7%B8%EB%9E%98%ED%94%84%20%EC%9D%B8%EA%B3%BC%20%EB%AA%A8%ED%98%95%20%EC%86%8C%EA%B0%9C.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "3장: 그래프 인과모델",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/03%EC%9E%A5-%EA%B7%B8%EB%9E%98%ED%94%84%20%EC%9D%B8%EA%B3%BC%EB%AA%A8%EB%8D%B8.ipynb"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "인과 그래프 산업 사례",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week06_Graphical_causal_model.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Backdoor Criterion",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/backdoor_criterion.ipynb"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Frontdoor Criterion",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/examples/frontdoor_criterion.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "regression",
+      "shelf": "causal",
+      "name": "회귀분석",
+      "en": "Linear Regression",
+      "about": "회귀로 교란을 통제해 효과를 추정합니다. 다른 방법 대부분이 회귀를 기반으로 하므로 먼저 익혀 두면 좋습니다.",
+      "keys": [
+        "OLS",
+        "선형회귀",
+        "더미",
+        "FWL",
+        "통제 변수"
+      ],
+      "items": [
+        {
+          "kind": "read",
+          "repo": "causal-studio",
+          "title": "선형회귀",
+          "url": "https://causalinferencelab.github.io/causal-studio/linear-regression-ko"
+        },
+        {
+          "kind": "read",
+          "repo": "causal-studio",
+          "title": "그룹화 회귀와 더미 회귀",
+          "url": "https://causalinferencelab.github.io/causal-studio/grouped-dummy-regression-ko"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "5장: 선형회귀의 터무니없는 효과",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/05-The-Unreasonable-Effectiveness-of-Linear-Regression.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "6장: 그룹 회귀와 더미 회귀",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/06-Grouped-and-Dummy-Regression.html"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "4-1. 실무자가 바라본 고객 신용한도와 채무불이행률의 인과적 관계",
+          "url": "https://www.youtube.com/watch?v=IxVzz_2fq4k&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "정호재",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/05_%EC%8B%A4%EB%AC%B4%EC%9E%90%EA%B0%80%20%EB%B0%94%EB%9D%BC%EB%B3%B8%20%EA%B3%A0%EA%B0%9D%20%EC%8B%A0%EC%9A%A9%ED%95%9C%EB%8F%84%EC%99%80%20%EC%B1%84%EB%AC%B4%EB%B6%88%EC%9D%B4%ED%96%89%EB%A5%A0%EC%9D%98%20%EC%9D%B8%EA%B3%BC%EC%A0%81%20%EA%B4%80%EA%B3%84.pdf"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "4-2. 온라인 마케팅 분야에서의 회귀분석",
+          "url": "https://www.youtube.com/watch?v=07SWlTOqxpY&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "최은희",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/06_%EC%98%A8%EB%9D%BC%EC%9D%B8%20%EB%A7%88%EC%BC%80%ED%8C%85%20%EB%B6%84%EC%95%BC%EC%97%90%EC%84%9C%EC%9D%98%20%ED%9A%8C%EA%B7%80%EB%B6%84%EC%84%9D.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "4장: 유용한 선형회귀",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/04%EC%9E%A5-%EC%9C%A0%EC%9A%A9%ED%95%9C%20%EC%84%A0%ED%98%95%ED%9A%8C%EA%B7%80.ipynb"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "OLS",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/ols.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "propensity",
+      "shelf": "causal",
+      "name": "매칭과 성향점수",
+      "en": "Matching & Propensity Score",
+      "about": "처치를 받을 확률로 비슷한 사람끼리 비교하거나 가중치를 줘서, 관찰 데이터에서 무작위 실험에 가까운 비교를 만듭니다.",
+      "keys": [
+        "PSM",
+        "IPW",
+        "역확률 가중치",
+        "매칭",
+        "이중 강건",
+        "doubly robust",
+        "AIPW"
+      ],
+      "items": [
+        {
+          "kind": "video",
+          "repo": "causal-studio",
+          "title": "역확률 가중치(IPW)",
+          "url": "https://www.youtube.com/watch?v=eUBoSXqsrOE",
+          "notebook": "https://causalinferencelab.github.io/causal-studio/basics-ko"
+        },
+        {
+          "kind": "read",
+          "repo": "causal-studio",
+          "title": "IPW 실습",
+          "url": "https://causalinferencelab.github.io/causal-studio/practice-ko"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "10장: 매칭",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/10-Matching.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "11장: 성향점수",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/11-Propensity-Score.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "12장: 이중 강건 추정",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/12-Doubly-Robust-Estimation.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "부록: 성향점수로 편향 제거하기",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/Debiasing-with-Propensity-Score.html"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "5. 실험 설계에서의 매칭 활용",
+          "url": "https://www.youtube.com/watch?v=xHw9KTmML84&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "유정현",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/07_%EC%8B%A4%ED%97%98%20%EC%84%A4%EA%B3%84%EC%97%90%EC%84%9C%EC%9D%98%20%EB%A7%A4%EC%B9%AD%20%ED%99%9C%EC%9A%A9.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "5장: 성향점수",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/05%EC%9E%A5-%EC%84%B1%ED%96%A5%EC%A0%90%EC%88%98.ipynb"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "성향점수 산업 사례",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week07_Propensity_score.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Propensity Score & DML",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/ipw_psm.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "iv",
+      "shelf": "causal",
+      "name": "도구변수와 불응",
+      "en": "Instrumental Variables & LATE",
+      "about": "배정과 실제 처치가 어긋날 때(불응), 처치에만 영향을 주는 변수로 효과를 추정합니다.",
+      "keys": [
+        "IV",
+        "2SLS",
+        "LATE",
+        "불응",
+        "non-compliance",
+        "의도 처치",
+        "ITT",
+        "Wald"
+      ],
+      "items": [
+        {
+          "kind": "read",
+          "repo": "causal-studio",
+          "title": "도구변수",
+          "url": "https://causalinferencelab.github.io/causal-studio/instrumental-variables-ko"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "8장: 도구변수",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/08-Instrumental-Variables.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "9장: 불응과 LATE",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/09-Non-Compliance-and-LATE.html"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "11장: 불응과 도구변수",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/11%EC%9E%A5-%EB%B6%88%EC%9D%91%EA%B3%BC%20%EB%8F%84%EA%B5%AC%EB%B3%80%EC%88%98.ipynb"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "불응과 도구변수 산업 사례",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week12_%EB%B6%88%EC%9D%91%EA%B3%BC%EB%8F%84%EA%B5%AC%EB%B3%80%EC%88%98.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Instrumental Variables (IV)",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/iv.ipynb"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "IV로 CATE 추정하기",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/iv_cate.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "did",
+      "shelf": "causal",
+      "name": "이중차분법과 패널 데이터",
+      "en": "Difference-in-Differences",
+      "about": "처치 전후 변화를 대조군의 변화와 비교합니다. 정책, 업데이트, 지역 출시처럼 무작위 배정이 없을 때 가장 자주 씁니다.",
+      "keys": [
+        "DID",
+        "DiD",
+        "패널",
+        "고정효과",
+        "fixed effects",
+        "평행 추세",
+        "parallel trends",
+        "이벤트 스터디",
+        "staggered"
+      ],
+      "items": [
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "13장: 이중차분법",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/13-Difference-in-Differences.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "14장: 패널데이터와 고정효과",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/14-Panel-Data-and-Fixed-Effects.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "24장: 이중차분법 시리즈",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/24-The-Diff-in-Diff-Saga.html"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "8. 라이브 게임에서의 이중차분법 활용",
+          "url": "https://www.youtube.com/watch?v=C18W4l837YQ&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "8장: 이중차분법",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/08%EC%9E%A5-%EC%9D%B4%EC%A4%91%EC%B0%A8%EB%B6%84%EB%B2%95.ipynb"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "이중차분법 산업 사례",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week09_DID.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Difference-in-Differences (DiD)",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/did.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "synthetic",
+      "shelf": "causal",
+      "name": "통제집단합성법",
+      "en": "Synthetic Control",
+      "about": "처치를 받은 단위가 하나뿐일 때, 다른 단위를 가중 합성해 '처치가 없었다면'의 궤적을 만듭니다.",
+      "keys": [
+        "SC",
+        "SDID",
+        "합성 이중차분",
+        "synthetic diff-in-diff",
+        "컨포멀",
+        "conformal"
+      ],
+      "items": [
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "15장: 통제집단합성법",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/15-Synthetic-Control.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "25장: 합성 이중차분법",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/25-Synthetic-Diff-in-Diff.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "부록: 통제집단합성법의 컨포멀 추론",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/Conformal-Inference-for-Synthetic-Control.html"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "9. 던전앤파이터 캐릭터 리뉴얼로 알아보는 통제집단합성법",
+          "url": "https://www.youtube.com/watch?v=14WPSfXfBQA&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/12_%ED%86%B5%EC%A0%9C%EC%A7%91%EB%8B%A8%ED%95%A9%EC%84%B1%EB%B2%95%EC%9D%84%20%ED%99%9C%EC%9A%A9%ED%95%9C%20%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8%20%ED%9A%A8%EA%B3%BC%EB%B6%84%EC%84%9D.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "9장: 통제집단합성법",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/09%EC%9E%A5-%ED%86%B5%EC%A0%9C%EC%A7%91%EB%8B%A8%ED%95%A9%EC%84%B1%EB%B2%95.ipynb"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "통제집단합성법 산업 사례",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week10_Synthetic.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Synthetic Control (SC)",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/sc.ipynb"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Synthetic Difference-in-Differences (SDID)",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/sdid.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "rdd",
+      "shelf": "causal",
+      "name": "회귀 불연속 설계",
+      "en": "Regression Discontinuity",
+      "about": "점수나 기준선 바로 위아래 사람을 비교해 효과를 냅니다. 기준이 처치를 완전히 정하지 않으면 Fuzzy RDD를 씁니다.",
+      "keys": [
+        "RDD",
+        "Fuzzy RDD",
+        "임계값",
+        "cutoff",
+        "bandwidth"
+      ],
+      "items": [
+        {
+          "kind": "video",
+          "repo": "causal-studio",
+          "title": "회귀 불연속 설계(RDD)",
+          "url": "https://www.youtube.com/watch?v=65C9J1yJwhc",
+          "notebook": "https://causalinferencelab.github.io/causal-studio/rdd-basic-ko"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-studio",
+          "title": "Fuzzy RDD",
+          "url": "https://www.youtube.com/watch?v=PPYkTG79ff0",
+          "notebook": "https://causalinferencelab.github.io/causal-studio/fuzzy-rdd-ko"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "16장: 회귀 불연속 설계",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/16-Regression-Discontinuity-Design.html"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "RDD 산업 사례",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week14_RDD.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Regression Discontinuity Design (RDD)",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/rdd.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "hte",
+      "shelf": "causal",
+      "name": "이질적 처치효과와 메타러너",
+      "en": "Heterogeneous Effects & Meta-learners",
+      "about": "효과가 사람마다 어떻게 다른지(CATE) 추정합니다. 누구에게 쿠폰을 줄지, 어떤 세그먼트에 기능을 켤지 정할 때 씁니다.",
+      "keys": [
+        "HTE",
+        "CATE",
+        "메타러너",
+        "S-learner",
+        "T-learner",
+        "X-learner",
+        "업리프트",
+        "uplift",
+        "개인화",
+        "세그먼트"
+      ],
+      "items": [
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "18장: 이질적 처치효과와 개인화",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/18-Heterogeneous-Treatment-Effects-and-Personalization.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "19장: 인과 모델 평가",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/19-Evaluating-Causal-Models.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "20장: 플러그 앤 플레이 추정량",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/20-Plug-and-Play-Estimators.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "21장: 메타러너",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/21-Meta-Learners.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "23장: 효과 이질성과 비선형성",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/23-Challenges-with-Effect-Heterogeneity-and-Nonlinearity.html"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "6-1. 유저 세그먼트와 이질적 처치 효과",
+          "url": "https://www.youtube.com/watch?v=5WajxLl-Qdk&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "박병수",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/08_%EC%9C%A0%EC%A0%80%20%EC%84%B8%EA%B7%B8%EB%A8%BC%ED%8A%B8%EC%99%80%20%EC%9D%B4%EC%A7%88%EC%A0%81%20%EC%B2%98%EC%B9%98%20%ED%9A%A8%EA%B3%BC.pdf"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "6-2. 게임 업데이트 효과에 따른 이질적 처치효과 추정",
+          "url": "https://www.youtube.com/watch?v=13E_VKps_KE&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "박이삭",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/09_%EA%B2%8C%EC%9E%84%20%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8%20%ED%9A%A8%EA%B3%BC%EC%97%90%20%EB%94%B0%EB%A5%B8%20%EC%9D%B4%EC%A7%88%EC%A0%81%20%EC%B2%98%EC%B9%98%ED%9A%A8%EA%B3%BC%EC%B6%94%EC%A0%95.pdf"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "7. 메타러너: 머신러닝 모델로 인과추론하기",
+          "url": "https://www.youtube.com/watch?v=ngLlzqprL3M&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "김준영",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/10_%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D%20%EB%AA%A8%EB%8D%B8%EB%A1%9C%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%ED%95%98%EA%B8%B0.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "6장: 이질적 처치효과",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/06%EC%9E%A5-%EC%9D%B4%EC%A7%88%EC%A0%81%20%EC%B2%98%EC%B9%98%ED%9A%A8%EA%B3%BC.ipynb"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "7장: 메타러너",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/07%EC%9E%A5-%EB%A9%94%ED%83%80%EB%9F%AC%EB%84%88.ipynb"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "이질적 처치효과와 메타러너 산업 사례",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week08_%EC%9D%B4%EC%A7%88%EC%A0%81_%EC%B2%98%EC%B9%98%ED%9A%A8%EA%B3%BC%EC%99%80_%EB%A9%94%ED%83%80%EB%9F%AC%EB%84%88.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "비모수적 개별 처치 효과(CATE) 추정",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/meta_learner.ipynb"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "신경망으로 CATE 추정하기",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/cate_with_nn.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "dml",
+      "shelf": "causal",
+      "name": "Double ML과 직교화",
+      "en": "Double / Debiased ML",
+      "about": "머신러닝으로 교란을 걸러 내고 남은 변동으로 효과를 추정합니다. 변수가 많고 관계가 복잡할 때 씁니다.",
+      "keys": [
+        "DML",
+        "Double ML",
+        "직교화",
+        "orthogonalization",
+        "R-learner",
+        "편향 제거"
+      ],
+      "items": [
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "22장: 편향 제거/직교화 머신러닝",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/22-Debiased-Orthogonal-Machine-Learning.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "부록: 직교화로 편향 제거하기",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/Debiasing-with-Orthogonalization.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "17장: 예측 모델 101",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/17-Predictive-Models-101.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "부록: 예측이 실패할 때",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/When-Prediction-Fails.html"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "부록: 예측 지표가 인과 모델에 위험한 이유",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/Prediction-Metrics-For-Causal-Models.html"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Double Machine Learning",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/dml.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "policy",
+      "shelf": "causal",
+      "name": "정책 학습과 예산 배분",
+      "en": "Policy Learning & Uplift",
+      "about": "추정한 효과로 '누구에게 처치를 줄지' 규칙을 만들고, 예산 안에서 효과가 가장 큰 대상을 고릅니다.",
+      "keys": [
+        "policy learning",
+        "업리프트",
+        "uplift",
+        "예산",
+        "타깃팅",
+        "쿠폰"
+      ],
+      "items": [
+        {
+          "kind": "read",
+          "repo": "causal-studio",
+          "title": "정책 학습",
+          "url": "https://causalinferencelab.github.io/causal-studio/policy-learning-ko"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Policy Learning",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/policy_learning.ipynb"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Fractional uplift modelling",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/examples/fractional_uplift.ipynb"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "예산 제약 최적화",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/examples/budget_constrained_optimization.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "discovery",
+      "shelf": "causal",
+      "name": "인과 발견",
+      "en": "Causal Discovery",
+      "about": "데이터에서 인과 구조 자체를 찾아냅니다. 그래프를 미리 그리기 어려운 운영·장애 분석 같은 곳에서 씁니다.",
+      "keys": [
+        "causal discovery",
+        "PC 알고리즘",
+        "구조 학습",
+        "Causal Ops"
+      ],
+      "items": [
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "12. 인과관계 발견(Causal Discovery)과 Causal Ops 소개",
+          "url": "https://www.youtube.com/watch?v=U0bKOyrsFPk&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "김성수"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "인과 발견 산업 사례",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week13_Causal%20Discovery%20with%20Industrial%20Case_v2.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Causal discovery",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/causal_discovery.ipynb"
+        }
+      ]
+    },
+    {
+      "id": "clinical",
+      "shelf": "causal",
+      "name": "임상·관찰 연구",
+      "en": "Target Trial & Real-World Evidence",
+      "about": "무작위 임상시험을 할 수 없을 때 관찰 데이터로 시험을 흉내 내는 방법과, 규제기관이 요구하는 근거 기준을 다룹니다.",
+      "keys": [
+        "TTE",
+        "target trial emulation",
+        "RWE",
+        "FDA",
+        "MSM",
+        "시간에 따라 변하는 교란",
+        "적응형 설계",
+        "clone-censor-weight"
+      ],
+      "items": [
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "13-1. 임상 관찰 연구에서의 Target Trial Emulation",
+          "url": "https://www.youtube.com/watch?v=2wWYJrxe5_g&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "박상호"
+        },
+        {
+          "kind": "code",
+          "repo": "awesome-causal-inference-python",
+          "title": "Marginal Structural Models",
+          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/MSM.ipynb"
+        },
+        {
+          "kind": "code",
+          "repo": "ccwr",
+          "title": "ccwr: Clone-Censor-Weight R 패키지",
+          "url": "https://causalinferencelab.github.io/ccwr/"
+        },
+        {
+          "kind": "read",
+          "repo": "Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines",
+          "title": "RWE 규제 가이드라인 리딩",
+          "url": "https://github.com/CausalInferenceLab/Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines"
+        },
+        {
+          "kind": "read",
+          "repo": "From-Fixed-to-Flexible-Your-Guide-to-Adaptive-Designs-and-Master-Protocols",
+          "title": "적응형 임상 설계와 마스터 프로토콜",
+          "url": "https://github.com/CausalInferenceLab/From-Fixed-to-Flexible-Your-Guide-to-Adaptive-Designs-and-Master-Protocols"
+        }
+      ]
+    },
+    {
+      "id": "ab-basics",
+      "shelf": "exp",
+      "name": "A/B 테스트 기초",
+      "en": "A/B Testing Basics",
+      "about": "무작위 배정이 왜 인과효과를 보장하는지, 실험 하나를 설계해서 결과를 읽기까지의 과정을 처음부터 따라갑니다.",
+      "keys": [
+        "A/B",
+        "AB 테스트",
+        "RCT",
+        "무작위 실험",
+        "온라인 통제 실험",
+        "OCE",
+        "randomized",
+        "무작위 배정",
+        "실험 조건",
+        "variant",
+        "실험군",
+        "대조군"
+      ],
+      "items": [
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "2장: 무작위 실험",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/02-Randomised-Experiments.html"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "2-1. 온라인 통제 실험 소개 및 통계 분석 기초",
+          "url": "https://www.youtube.com/watch?v=FYTPUnBl-lQ&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "방태모",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/02_%EC%98%A8%EB%9D%BC%EC%9D%B8%20%ED%86%B5%EC%A0%9C%20%EC%8B%A4%ED%97%98%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%ED%86%B5%EA%B3%84%20%EB%B6%84%EC%84%9D%20%EA%B8%B0%EC%B4%88.pdf"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "2-2. 경제성 평가를 위한 무작위 통제 실험",
+          "url": "https://www.youtube.com/watch?v=VQuWltYAxRU&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "조인서",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/03_%EA%B2%BD%EC%A0%9C%EC%84%B1%ED%8F%89%EA%B0%80%EB%A5%BC%20%EC%9C%84%ED%95%9C%20%EB%AC%B4%EC%9E%91%EC%9C%84%20%ED%86%B5%EC%A0%9C%EC%8B%A4%ED%97%98.pdf"
+        },
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "2회: 온라인 통제 실험 소개와 분석 기초",
+          "by": "방태모",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240319_%EC%98%A8%EB%9D%BC%EC%9D%B8%20%ED%86%B5%EC%A0%9C%20%EC%8B%A4%ED%97%98%20%EC%86%8C%EA%B0%9C%20%EB%B0%8F%20%EB%B6%84%EC%84%9D%20%EA%B8%B0%EC%B4%88.pdf"
+        },
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "3회: 예제로 보는 A/B 실험의 과정",
+          "by": "방태모",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240326_%EC%98%88%EC%A0%9C%EB%A5%BC%20%ED%86%B5%ED%95%9C%20AB%20%EC%8B%A4%ED%97%98%EC%9D%98%20%EA%B3%BC%EC%A0%95%20%EC%9D%B4%ED%95%B4.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "2장: 무작위 실험 및 기초 통계 리뷰",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/02%EC%9E%A5-%EB%AC%B4%EC%9E%91%EC%9C%84%20%EC%8B%A4%ED%97%98%20%EB%B0%8F%20%EA%B8%B0%EC%B4%88%20%ED%86%B5%EA%B3%84%20%EB%A6%AC%EB%B7%B0.ipynb"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "RCT와 실험 플랫폼",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week04_05_RCT_experiment_platform.pdf"
+        }
+      ]
+    },
+    {
+      "id": "metrics",
+      "shelf": "exp",
+      "name": "지표와 OEC",
+      "en": "Metrics & OEC",
+      "about": "무엇으로 성공을 판단할지 정합니다. 핵심 지표, 가드레일 지표, 여러 지표를 묶은 종합 평가 기준(OEC)을 다룹니다.",
+      "keys": [
+        "지표",
+        "OEC",
+        "종합 평가 기준",
+        "종합평가기준",
+        "북극성 지표",
+        "north star",
+        "가드레일",
+        "guardrail",
+        "핵심 지표",
+        "보조 지표",
+        "metric"
+      ],
+      "items": [
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "4회: 조직 운영을 위한 지표",
+          "by": "이재호",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240402_%EC%A1%B0%EC%A7%81%20%EC%9A%B4%EC%98%81%EC%9D%84%20%EC%9C%84%ED%95%9C%20%EC%A7%80%ED%91%9C.pdf"
+        },
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "5회: 실험을 위한 지표와 종합 평가 기준(OEC)",
+          "by": "양유승",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240409_%EC%8B%A4%ED%97%98%EC%9D%84%20%EC%9C%84%ED%95%9C%20%EC%A7%80%ED%91%9C%EC%99%80%20%EC%A2%85%ED%95%A9%ED%8F%89%EA%B0%80%EA%B8%B0%EC%A4%80.pdf"
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "shelf": "exp",
+      "name": "검정과 통계 이론",
+      "en": "Statistics for Experiments",
+      "about": "표본 크기, 유의수준, 검정력, 신뢰구간처럼 실험 결과를 읽는 데 필요한 통계를 정리합니다.",
+      "keys": [
+        "p-value",
+        "검정력",
+        "power",
+        "표본 크기",
+        "sample size",
+        "t-test",
+        "신뢰구간",
+        "MDE",
+        "최소 검출 효과",
+        "다중 검정",
+        "FDR",
+        "순차 검정",
+        "sequential",
+        "peeking",
+        "엿보기"
+      ],
+      "items": [
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "3장: 통계 복습: 가장 위험한 수식",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/03-Stats-Review-The-Most-Dangerous-Equation.html"
+        },
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "6회: 온라인 대조 실험에 쓰는 통계 이론",
+          "by": "조동민",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240416_%EC%98%A8%EB%9D%BC%EC%9D%B8%20%EC%A2%85%ED%95%A9%20%EB%8C%80%EC%A1%B0%20%EC%8B%A4%ED%97%98%EC%97%90%20%EC%82%AC%EC%9A%A9%EB%90%98%EB%8A%94%20%ED%86%B5%EA%B3%84%20%EC%9D%B4%EB%A1%A0.pdf"
+        }
+      ]
+    },
+    {
+      "id": "variance",
+      "shelf": "exp",
+      "name": "분산 감소와 민감도",
+      "en": "Variance Reduction",
+      "about": "같은 트래픽으로 더 작은 효과를 잡아냅니다. 분산 추정의 함정, 공변량 보정(CUPED), 트리거링을 다룹니다.",
+      "keys": [
+        "CUPED",
+        "분산 감소",
+        "variance reduction",
+        "실험 민감도",
+        "트리거링",
+        "triggering",
+        "델타 방법"
+      ],
+      "items": [
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "7회: 분산 추정과 민감도 개선: 함정과 해결책",
+          "by": "지서영",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240423_%EB%B6%84%EC%82%B0%20%EC%B6%94%EC%A0%95%20%EB%B0%8F%20%EB%AF%BC%EA%B0%90%EB%8F%84%20%EA%B0%9C%EC%84%A0.pdf"
+        },
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "10회: 민감도를 높이는 트리거링",
+          "by": "황의림",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240514_%EB%AF%BC%EA%B0%90%EB%8F%84%20%ED%96%A5%EC%83%81%EC%9D%84%20%EC%9C%84%ED%95%9C%20%ED%8A%B8%EB%A6%AC%EA%B1%B0%EB%A7%81.pdf"
+        }
+      ]
+    },
+    {
+      "id": "trust",
+      "shelf": "exp",
+      "name": "A/A 테스트와 SRM",
+      "en": "Trustworthiness: A/A & SRM",
+      "about": "결과를 믿어도 되는지 먼저 확인합니다. A/A 테스트, 표본 비율 불일치(SRM), 신뢰 가드레일 지표를 다룹니다.",
+      "keys": [
+        "A/A",
+        "SRM",
+        "표본 비율 불일치",
+        "샘플 비율 불일치",
+        "sample ratio mismatch",
+        "가드레일",
+        "신뢰성"
+      ],
+      "items": [
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "9회: A/A 테스트",
+          "by": "박혜지",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240507_A%3AA%20%ED%85%8C%EC%8A%A4%ED%8A%B8.pdf"
+        },
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "11회: 표본 비율 불일치(SRM)와 신뢰 가드레일 지표",
+          "by": "문정하",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240521_%EC%83%98%ED%94%8C%20%EB%B9%84%EC%9C%A8%20%EB%B6%88%EC%9D%BC%EC%B9%98%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%20%EC%8B%A0%EB%A2%B0%20%EA%B4%80%EB%A0%A8%20%EA%B0%80%EB%93%9C%EB%A0%88%EC%9D%BC%20%EC%B2%99%EB%8F%84.pdf"
+        }
+      ]
+    },
+    {
+      "id": "interference",
+      "shelf": "exp",
+      "name": "간섭과 스위치백 실험",
+      "en": "Interference & Switchback",
+      "about": "사용자끼리 영향을 주고받으면 A/B 비교가 깨집니다. 실험 간 누출, 네트워크 효과, 지역 실험과 스위치백 실험을 다룹니다.",
+      "keys": [
+        "간섭",
+        "interference",
+        "SUTVA",
+        "네트워크 효과",
+        "스위치백",
+        "switchback",
+        "지역 실험",
+        "geo",
+        "마켓플레이스",
+        "누출"
+      ],
+      "items": [
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "12회: 실험 간의 누출과 간섭",
+          "by": "유연승",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240528_%EC%8B%A4%ED%97%98%EA%B0%84%EC%9D%98%20%EB%88%84%EC%B6%9C%20%EB%B0%8F%20%EA%B0%84%EC%84%AD.pdf"
+        },
+        {
+          "kind": "code",
+          "repo": "causal-inference-in-python-code",
+          "title": "10장: 지역 실험과 스위치백 실험",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-in-python-code/blob/main/%EC%8B%A4%EB%AC%B4%EB%A1%9C%20%ED%86%B5%ED%95%98%EB%8A%94%20%EC%9D%B8%EA%B3%BC%EC%B6%94%EB%A1%A0%20with%20%ED%8C%8C%EC%9D%B4%EC%8D%AC/10%EC%9E%A5-%EC%A7%80%EC%97%AD%20%EC%8B%A4%ED%97%98%EA%B3%BC%20%EC%8A%A4%EC%9C%84%EC%B9%98%EB%B0%B1%20%EC%8B%A4%ED%97%98.ipynb"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "스위치백 산업 사례",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week11_Switchback.pdf"
+        }
+      ]
+    },
+    {
+      "id": "long-term",
+      "shelf": "exp",
+      "name": "장기 효과와 단계적 확대",
+      "en": "Long-term Effects & Ramp-up",
+      "about": "짧은 실험으로 장기 효과를 어떻게 추정할지, 노출 비율을 어떻게 늘려 갈지 다룹니다.",
+      "keys": [
+        "장기 효과",
+        "long-term",
+        "신기 효과",
+        "초두 효과",
+        "novelty",
+        "단계적 확대",
+        "램프업",
+        "ramp-up",
+        "노출",
+        "holdout",
+        "홀드아웃"
+      ],
+      "items": [
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "13회: 장기 실험 효과 측정",
+          "by": "황영산",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240603_%EC%9E%A5%EA%B8%B0%20%EC%8B%A4%ED%97%98%ED%9A%A8%EA%B3%BC%20%EC%B8%A1%EC%A0%95.pdf"
+        },
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "14회: 실험 노출 늘리기(단계적 확대)",
+          "by": "이재호",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240611_%EC%8B%A4%ED%97%98%20%EB%85%B8%EC%B6%9C%20%EC%A6%9D%EA%B0%80%EC%8B%9C%ED%82%A4%EA%B8%B0.pdf"
+        }
+      ]
+    },
+    {
+      "id": "exp-analysis",
+      "shelf": "exp",
+      "name": "실험 분석의 확장",
+      "en": "Beyond the Average Effect",
+      "about": "평균 효과 다음 단계입니다. 세그먼트별 효과, 실험 설계에서의 매칭, 불응이 있을 때의 분석으로 넓힙니다.",
+      "keys": [
+        "세그먼트",
+        "HTE",
+        "매칭",
+        "불응",
+        "ITT",
+        "CACE"
+      ],
+      "items": [
+        {
+          "kind": "slides",
+          "repo": "OCE-Materials",
+          "title": "15회: 실험 분석의 확장",
+          "by": "양유승",
+          "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240618_%EC%8B%A4%ED%97%98%20%EB%B6%84%EC%84%9D%EC%9D%98%20%ED%99%95%EC%9E%A5.pdf"
+        },
+        {
+          "kind": "video",
+          "repo": "causal-inference-lecture",
+          "title": "5. 실험 설계에서의 매칭 활용",
+          "url": "https://www.youtube.com/watch?v=xHw9KTmML84&list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE",
+          "by": "유정현",
+          "slides": "https://github.com/CausalInferenceLab/causal-inference-lecture/blob/main/Lecture%20Notes/07_%EC%8B%A4%ED%97%98%20%EC%84%A4%EA%B3%84%EC%97%90%EC%84%9C%EC%9D%98%20%EB%A7%A4%EC%B9%AD%20%ED%99%9C%EC%9A%A9.pdf"
+        },
+        {
+          "kind": "read",
+          "repo": "Causal-Inference-with-Python",
+          "title": "9장: 불응과 LATE",
+          "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/09-Non-Compliance-and-LATE.html"
+        }
+      ]
+    },
+    {
+      "id": "platform",
+      "shelf": "exp",
+      "name": "실험 플랫폼",
+      "en": "Experimentation Platforms",
+      "about": "국내외 회사가 실험 플랫폼을 어떻게 만들고, 지표를 어떻게 계산하고, 배정을 어떻게 나누는지 기술 블로그로 모았습니다.",
+      "keys": [
+        "실험 플랫폼",
+        "experimentation platform",
+        "배정",
+        "assignment",
+        "기능 플래그",
+        "feature flag",
+        "Netflix",
+        "넷플릭스",
+        "Airbnb",
+        "에어비앤비",
+        "Uber",
+        "우버",
+        "LinkedIn",
+        "링크드인",
+        "Spotify",
+        "카카오페이",
+        "네이버",
+        "뱅크샐러드",
+        "우아한형제들",
+        "배민",
+        "오늘의집",
+        "쿠팡",
+        "하이퍼커넥트"
+      ],
+      "items": [
+        {
+          "kind": "case",
+          "repo": "Experimentation-platform-materials",
+          "title": "실험 플랫폼 구축 사례 17편",
+          "url": "https://github.com/CausalInferenceLab/Experimentation-platform-materials#%EC%8B%A4%ED%97%98-%ED%94%8C%EB%9E%AB%ED%8F%BC-%EA%B5%AC%EC%B6%95"
+        },
+        {
+          "kind": "case",
+          "repo": "Experimentation-platform-materials",
+          "title": "실험 플랫폼 기능 사례 9편",
+          "url": "https://github.com/CausalInferenceLab/Experimentation-platform-materials#%EC%8B%A4%ED%97%98-%ED%94%8C%EB%9E%AB%ED%8F%BC-%EA%B8%B0%EB%8A%A5"
+        },
+        {
+          "kind": "case",
+          "repo": "Experimentation-platform-materials",
+          "title": "실험 플랫폼 활용 사례 4편",
+          "url": "https://github.com/CausalInferenceLab/Experimentation-platform-materials#%EC%8B%A4%ED%97%98-%ED%94%8C%EB%9E%AB%ED%8F%BC-%ED%99%9C%EC%9A%A9"
+        },
+        {
+          "kind": "slides",
+          "repo": "causal-inference-practice",
+          "title": "RCT와 실험 플랫폼",
+          "url": "https://github.com/CausalInferenceLab/causal-inference-practice/blob/main/Materials/Week04_05_RCT_experiment_platform.pdf"
+        }
+      ]
+    },
+    {
+      "id": "culture",
+      "shelf": "exp",
+      "name": "실험 문화",
+      "en": "Experimentation Culture",
+      "about": "실험을 한 번 하는 것과 조직이 매주 실험하는 것은 다릅니다. 실험 문화를 만든 회사들의 경험을 모았습니다.",
+      "keys": [
+        "실험 문화",
+        "조직",
+        "실패",
+        "의사결정",
+        "데이터 기반",
+        "당근",
+        "강남언니",
+        "여기어때",
+        "Netflix",
+        "넷플릭스",
+        "Airbnb"
+      ],
+      "items": [
+        {
+          "kind": "case",
+          "repo": "Experimentation-platform-materials",
+          "title": "실험 문화 사례 9편",
+          "url": "https://github.com/CausalInferenceLab/Experimentation-platform-materials#%EC%8B%A4%ED%97%98-%EB%AC%B8%ED%99%94"
+        }
+      ]
+    }
+  ]
+}

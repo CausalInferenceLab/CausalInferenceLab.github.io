@@ -1,0 +1,533 @@
+{
+ "updated": "2026-11-07T16:32:48Z",
+ "items": [
+  {
+   "id": "19431172585",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T16:32:33Z",
+   "kind": "pr_merge",
+   "number": 99,
+   "title": "Prepare Iterglow A/B testing for the hub (off until keys are set)",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/99"
+  },
+  {
+   "id": "19431149595",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T16:32:06Z",
+   "kind": "pr_open",
+   "number": 99,
+   "title": "Prepare Iterglow A/B testing for the hub (off until keys are set)",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/99"
+  },
+  {
+   "id": "19430956761",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T16:27:56Z",
+   "kind": "pr_merge",
+   "number": 81,
+   "title": "feat: 문장 검증·검토 배지 + PyWhy·CausalML 연계 + 첫 화면 정리 (#79·#80 대체)",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/81"
+  },
+  {
+   "id": "19430930620",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T16:27:22Z",
+   "kind": "pr_merge",
+   "number": 97,
+   "title": "Name the mascot Pseudo and teach it to explain terms and follow a conversation",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/97"
+  },
+  {
+   "id": "19428422344",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T15:33:38Z",
+   "kind": "pr_open",
+   "number": 98,
+   "title": "Prepare Iterglow A/B testing for the hub (off until keys are set)",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/98"
+  },
+  {
+   "id": "19428177865",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T15:28:18Z",
+   "kind": "pr_open",
+   "number": 97,
+   "title": "Name the mascot Pseudo and teach it to explain terms and follow a conversation",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/97"
+  },
+  {
+   "id": "19427528629",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T15:14:16Z",
+   "kind": "comment",
+   "number": 80,
+   "title": "feat(causal): PyWhy·CausalML 연계(가설·데이터 점검·plan 초안·두 번째 의견) + 첫 화면 정리 + 주제별 묶어 보기·뉴스 신호",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/80#issuecomment-6708812194"
+  },
+  {
+   "id": "19427526892",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T15:14:14Z",
+   "kind": "comment",
+   "number": 79,
+   "title": "feat(trust): 배제 범위 전면 배치 · 뉴스 문장 검증 · 검토 배지 · 구조화 데이터",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/79#issuecomment-6708811609"
+  },
+  {
+   "id": "19427521848",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T15:14:08Z",
+   "kind": "pr_open",
+   "number": 81,
+   "title": "feat: 문장 검증·검토 배지 + PyWhy·CausalML 연계 + 첫 화면 정리 (#79·#80 대체)",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/81"
+  },
+  {
+   "id": "19427278161",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T15:08:54Z",
+   "kind": "pr_merge",
+   "number": 96,
+   "title": "Give the mascot a warmer voice and link ccwr to its docs site",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/96"
+  },
+  {
+   "id": "19427249311",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T15:08:17Z",
+   "kind": "pr_open",
+   "number": 96,
+   "title": "Give the mascot a warmer voice and link ccwr to its docs site",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/96"
+  },
+  {
+   "id": "19426535879",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T14:52:47Z",
+   "kind": "pr_merge",
+   "number": 78,
+   "title": "ui(search): 판정 패널 중심 검색 화면, 홈 검색창 통일",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/78"
+  },
+  {
+   "id": "19426519087",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T14:52:23Z",
+   "kind": "pr_merge",
+   "number": 95,
+   "title": "Show OCE Materials and ccwr in the hero on phones",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/95"
+  },
+  {
+   "id": "19426396987",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T14:49:43Z",
+   "kind": "pr_open",
+   "number": 80,
+   "title": "feat(causal): PyWhy·CausalML 연계(가설·데이터 점검·plan 초안·두 번째 의견) + 첫 화면 정리 + 주제별 묶어 보기·뉴스 신호",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/80"
+  },
+  {
+   "id": "19426008405",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T14:40:56Z",
+   "kind": "pr_open",
+   "number": 95,
+   "title": "Show OCE Materials and ccwr in the hero on phones",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/95"
+  },
+  {
+   "id": "19425718789",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T14:34:11Z",
+   "kind": "pr_merge",
+   "number": 94,
+   "title": "Let the mascot speak first and type on its laptop",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/94"
+  },
+  {
+   "id": "19425676966",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T14:33:13Z",
+   "kind": "pr_open",
+   "number": 94,
+   "title": "Let the mascot speak first and type on its laptop",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/94"
+  },
+  {
+   "id": "19425417967",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T14:27:17Z",
+   "kind": "pr_open",
+   "number": 79,
+   "title": "feat(trust): 배제 범위 전면 배치 · 뉴스 문장 검증 · 검토 배지 · 구조화 데이터",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/79"
+  },
+  {
+   "id": "19425134973",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T14:20:33Z",
+   "kind": "pr_merge",
+   "number": 93,
+   "title": "Move the library below the curriculum and add the mascot helper",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/93"
+  },
+  {
+   "id": "19424724693",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T14:11:03Z",
+   "kind": "pr_open",
+   "number": 78,
+   "title": "ui(search): 판정 패널 중심 검색 화면, 홈 검색창 통일",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/78"
+  },
+  {
+   "id": "19424545855",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T14:06:54Z",
+   "kind": "pr_open",
+   "number": 93,
+   "title": "Move the library below the curriculum and add the mascot helper",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/93"
+  },
+  {
+   "id": "19424138999",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T13:57:30Z",
+   "kind": "pr_merge",
+   "number": 77,
+   "title": "feat: 사례 ↔ 데이터 ↔ 계보 자동 연결 + 통합 검색 + 검색어 지표",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/77"
+  },
+  {
+   "id": "19423861491",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T13:51:00Z",
+   "kind": "pr_open",
+   "number": 77,
+   "title": "feat: 사례 ↔ 데이터 ↔ 계보 자동 연결 + 통합 검색 + 검색어 지표",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/77"
+  },
+  {
+   "id": "19423778290",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T13:49:00Z",
+   "kind": "pr_merge",
+   "number": 92,
+   "title": "Add a study library for causal inference and online experiments, with the web book glossary",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/92"
+  },
+  {
+   "id": "19422710702",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T13:22:53Z",
+   "kind": "pr_open",
+   "number": 92,
+   "title": "Add a study library for causal inference and online experiments, with the web book glossary",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/92"
+  },
+  {
+   "id": "19421990212",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T13:05:03Z",
+   "kind": "pr_merge",
+   "number": 91,
+   "title": "Add calendar and map links to the forum card",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/91"
+  },
+  {
+   "id": "19421580447",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T12:54:51Z",
+   "kind": "pr_open",
+   "number": 91,
+   "title": "Add calendar and map links to the forum card",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/91"
+  },
+  {
+   "id": "19414075388",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T09:35:55Z",
+   "kind": "pr_merge",
+   "number": 90,
+   "title": "Keep the forum that just ended in the events card for six weeks",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/90"
+  },
+  {
+   "id": "19414005195",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T09:34:01Z",
+   "kind": "pr_open",
+   "number": 90,
+   "title": "Keep the forum that just ended in the events card for six weeks",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/90"
+  },
+  {
+   "id": "19413640204",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T09:24:12Z",
+   "kind": "pr_merge",
+   "number": 89,
+   "title": "Add the practitioner lecture to Level 2, queue the Brunch series, and fix hub feedback",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/89"
+  },
+  {
+   "id": "19412868281",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T09:03:34Z",
+   "kind": "pr_open",
+   "number": 89,
+   "title": "Add the practitioner lecture to Level 2, queue the Brunch series, and fix hub feedback",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/89"
+  },
+  {
+   "id": "26383387249",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-06T15:58:17Z",
+   "kind": "push"
+  },
+  {
+   "id": "19387736026",
+   "login": "shstat1729",
+   "repo": "ccwr",
+   "at": "2026-11-06T23:18:48Z",
+   "kind": "issue",
+   "number": 24,
+   "title": "Improve vignette: censoring-model covariates, survival-difference bootstrap CI, and adherence indicators",
+   "url": "https://github.com/CausalInferenceLab/ccwr/issues/24"
+  },
+  {
+   "id": "19350250073",
+   "login": "gyeom-yee",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-06T15:58:15Z",
+   "kind": "pr_merge",
+   "number": 76,
+   "title": "run(gyeom-yee-public-markdown): 행안부 AI 친화 보고서 — 수집·추정·해석",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/76"
+  },
+  {
+   "id": "19197774291",
+   "login": "itso-wavy",
+   "repo": "Causal-Inference-with-Python",
+   "at": "2026-11-05T07:01:35Z",
+   "kind": "star"
+  },
+  {
+   "id": "26049879567",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-01T11:45:19Z",
+   "kind": "push"
+  },
+  {
+   "id": "26003495694",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-01T14:24:23Z",
+   "kind": "push"
+  },
+  {
+   "id": "26002345971",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-01T12:32:44Z",
+   "kind": "push"
+  },
+  {
+   "id": "25996838407",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-01T12:48:25Z",
+   "kind": "push"
+  },
+  {
+   "id": "25996826239",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-01T12:48:15Z",
+   "kind": "push"
+  },
+  {
+   "id": "25993427154",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-01T12:32:27Z",
+   "kind": "push"
+  },
+  {
+   "id": "25992612781",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-01T11:45:03Z",
+   "kind": "push"
+  },
+  {
+   "id": "25988505076",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-01T11:23:24Z",
+   "kind": "push"
+  },
+  {
+   "id": "18948883878",
+   "login": "whatfontisthis",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-03T00:12:04Z",
+   "kind": "comment",
+   "number": 25,
+   "title": "plan(whatfontisthis-wonju-voucher-202409): 원주사랑상품권 월 단위 분석 계획 개정과 첫 결과",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/25#issuecomment-6591827202"
+  },
+  {
+   "id": "25984638519",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-01T12:08:08Z",
+   "kind": "push"
+  },
+  {
+   "id": "18945816028",
+   "login": "whatfontisthis",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-03T00:12:07Z",
+   "kind": "comment",
+   "number": 24,
+   "title": "[작업] B 트랙 — 원주사랑상품권 할인 상향과 단기 결제 변화",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/issues/24#issuecomment-6591828015"
+  },
+  {
+   "id": "25981850338",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-01T11:23:54Z",
+   "kind": "push"
+  },
+  {
+   "id": "25980019732",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-01T10:56:28Z",
+   "kind": "push"
+  },
+  {
+   "id": "25978877045",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-01T14:33:28Z",
+   "kind": "push"
+  },
+  {
+   "id": "25963050634",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-01T12:49:41Z",
+   "kind": "push"
+  },
+  {
+   "id": "25928780176",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-10-31T03:13:46Z",
+   "kind": "push"
+  },
+  {
+   "id": "18862999025",
+   "login": "kajsweofijaw",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-02T07:47:40Z",
+   "kind": "star"
+  },
+  {
+   "id": "18860506897",
+   "login": "howith29",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-02T07:09:13Z",
+   "kind": "star"
+  },
+  {
+   "id": "18860466705",
+   "login": "kims001",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-02T07:08:18Z",
+   "kind": "star"
+  },
+  {
+   "id": "18843925576",
+   "login": "gyeom-yee",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-02T01:56:09Z",
+   "kind": "pr_open",
+   "number": 76,
+   "title": "run(gyeom-yee-public-markdown): 행안부 AI 친화 보고서 — 수집·추정·해석",
+   "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent/pull/76"
+  },
+  {
+   "id": "25877268112",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T03:14:01Z",
+   "kind": "push"
+  },
+  {
+   "id": "25874820866",
+   "login": "jsshin2022",
+   "repo": "Causal-Inference-with-Python",
+   "at": "2026-10-31T04:05:49Z",
+   "kind": "push"
+  },
+  {
+   "id": "25867704561",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T02:05:50Z",
+   "kind": "push"
+  },
+  {
+   "id": "25866838089",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T01:54:20Z",
+   "kind": "push"
+  },
+  {
+   "id": "25858786041",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-10-31T03:14:15Z",
+   "kind": "push"
+  }
+ ]
+}
