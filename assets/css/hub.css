@@ -826,7 +826,7 @@ button.btn.sm { font-size: 14px; }
 @media (prefers-reduced-motion: reduce) { .hdr-ev-dot { animation: none; } }
 
 /* Learning passport: header button, stamps, toast, dialog */
-.pass-btn { font: inherit; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border-radius: 999px; border: 1.5px solid color-mix(in srgb, var(--accent) 45%, var(--rule)); background: var(--accent-soft); color: var(--accent); cursor: pointer; flex-shrink: 0; }
+.pass-btn { font: inherit; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border-radius: 999px; border: 1.5px solid color-mix(in srgb, var(--accent) 45%, var(--rule)); background: color-mix(in srgb, var(--accent) 14%, var(--surface)); color: var(--accent); cursor: pointer; flex-shrink: 0; }
 .pass-btn b { font-variant-numeric: tabular-nums; color: var(--ink); }
 .pass-btn:hover { border-color: var(--accent); }
 .pass-btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
@@ -2243,8 +2243,7 @@ dialog.sheet .toast:not(.show) { transition: opacity .25s ease, visibility 0s li
 @media (max-width: 860px) {
   .hero .banner { padding: 24px 20px; align-items: stretch; }
   .hero .banner-side { width: 100%; margin-top: 16px; }
-  /* on a phone the hero keeps three open-source links; the rest are one tap away in the curriculum */
-  .hero .featured li:nth-child(n+4) { display: none; }
+  /* on a phone the hero keeps every open-source link, one short line each */
   .hero .featured .d { display: none; }
   .hero .banner-cta .pill { min-height: 44px; }
 }
