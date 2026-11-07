@@ -256,6 +256,14 @@ def main():
                 for c in t.get("chapters") or []:
                     if not re.fullmatch(r"[A-Za-z0-9-]+", str(c.get("slug", ""))):
                         err(f"glossary.json sections[{i}].terms[{j}]", f"chapter slug {c.get('slug')!r} is not a page name")
+    ps = data.get("pseudo.json")
+    if ps is not None:
+        gl_ids = {t.get("id") for s in (data.get("glossary.json") or {}).get("sections") or [] for t in s.get("terms") or []}
+        for k, v in (ps.get("defs") or {}).items():
+            if k not in gl_ids:
+                err("pseudo.json defs", f"{k!r} is not a term id in glossary.json")
+            if not (isinstance(v, str) and 10 <= len(v) <= 240):
+                err("pseudo.json defs", f"{k!r} needs a one- or two-sentence explanation (10-240 characters)")
     for i, x in enumerate((data.get("stages.json") or {}).get("items", [])):
         w = f"stages.json items[{i}]"
         token(x.get("id"), w, "id")
