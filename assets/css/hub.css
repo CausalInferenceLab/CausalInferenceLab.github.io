@@ -2609,3 +2609,28 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .hp-say-x:hover { background: var(--surface-2); color: var(--ink); }
 @media (prefers-reduced-motion: no-preference) { .hp-say:not([hidden]) { animation: hp-in .3s ease-out both; } }
 .hp-msg.typing-now .hp-links, .hp-msg.typing-now .hp-ai { visibility: hidden; }
+
+/* a warmer helper: the mascot's own colour, its face beside what it says, softer bubbles for the reader */
+.hp { --mint: #2f9e76; --mint-ink: #1b6e50; --mint-soft: color-mix(in srgb, #3dbb8c 13%, var(--surface)); }
+.hp-panel { border-radius: 22px; }
+.hp-head { background: linear-gradient(180deg, var(--mint-soft), var(--surface)); border-bottom-color: color-mix(in srgb, #3dbb8c 22%, var(--rule)); }
+.hp-head h2 { display: grid; gap: 1px; font-size: 16px; }
+.hp-head h2 span { font-size: 12px; font-weight: 600; color: var(--muted); }
+.hp-msg.bot { position: relative; margin-left: 38px; background: var(--mint-soft); border-radius: 16px 16px 16px 6px; max-width: calc(100% - 38px); }
+.hp-msg.bot::before { content: ""; position: absolute; left: -40px; bottom: -2px; width: 34px; height: 29px; background: url("../img/mascot.webp") center / contain no-repeat; }
+.hp-msg.me { background: var(--surface-2); color: var(--ink); border-radius: 16px 16px 6px 16px; }
+.hp-links li { border: 1px solid color-mix(in srgb, #3dbb8c 18%, var(--rule)); }
+.hp-links a:hover { color: var(--mint-ink); }
+.hp-sug button { border-radius: 999px; padding: 7px 12px; border-color: color-mix(in srgb, #3dbb8c 30%, var(--rule)); }
+.hp-sug button:hover { border-color: var(--mint); color: var(--mint-ink); }
+.hp-send { background: var(--mint); }
+.hp-form textarea:focus { border-color: var(--mint); }
+.hp-claude { color: var(--mint-ink); }
+.hp-say { border-color: color-mix(in srgb, #3dbb8c 30%, var(--rule)); }
+.hp-say::after { border-color: color-mix(in srgb, #3dbb8c 30%, var(--rule)); }
+.hp-say.bye { width: auto; padding-right: 14px; }
+.hp-say.bye .hp-say-x { display: none; }
+.hp-say-acts button { border-color: color-mix(in srgb, #3dbb8c 30%, var(--rule)); background: var(--mint-soft); }
+.hp-say-acts button:hover { border-color: var(--mint); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hp { --mint: #4fd1a1; --mint-ink: #7fe3bf; } }
+:root[data-theme="dark"] .hp { --mint: #4fd1a1; --mint-ink: #7fe3bf; }
