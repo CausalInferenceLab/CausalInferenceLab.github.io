@@ -32,6 +32,6 @@
     "title": "ccwr",
     "desc": "Target trial emulation을 위한 R 패키지",
     "repo": "ccwr",
-    "url": "https://github.com/CausalInferenceLab/ccwr"
+    "url": "https://causalinferencelab.github.io/ccwr/"
   }
 ]
