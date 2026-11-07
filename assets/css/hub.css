@@ -2325,3 +2325,13 @@ dialog.sheet .toast:not(.show) { transition: opacity .25s ease, visibility 0s li
   .hero .tile .mini-bars { display: grid; gap: 4px; font-size: 11.5px; }
   .hero .tile .mini-bars .tr { height: 4px; }
 }
+
+/* after the forum: the card says it has ended, and the list takes the full width once no card is left */
+.event .soon-tag.done, .event.next .soon-tag.done { background: var(--surface-2); color: var(--ink); }
+.ev-state.done { color: var(--muted); }
+.ev-wait { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+@media (min-width: 1081px) {
+  .events.solo { grid-template-columns: minmax(0, 1fr); }
+  .events.solo .event-past { grid-column: 1; }
+  .events.solo .event-past ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
+}

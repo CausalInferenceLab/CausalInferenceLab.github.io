@@ -171,13 +171,15 @@
     const events = state.events.filter((e) => e.participants).sort((a, b) => a.order - b.order)
       .map((e) => { ppl += e.participants; return { x: `${e.order}회`, y: ppl, add: e.participants }; });
     const next = state.events.find((e) => e.upcoming);
+    const lastEv = [...state.events].filter((e) => !e.upcoming).sort((a, b) => b.order - a.order)[0];
+    const evNote = next ? `다음: ${next.date ? `${dot(next.date.slice(5))} ` : ""}${String(next.name).split(" - ")[0]}` : lastEv && !lastEv.participants ? `${lastEv.order}회 집계 중` : "";
 
     const lastR = runners[runners.length - 1], lastP = projects[projects.length - 1];
     return [
       { key: "runners", label: "함께한 러너", unit: "명", value: lastR ? lastR.y : 0, series: runners, delta: lastR ? `${lastR.x}에 새로 ${lastR.add}명` : "", tip: (p) => `${p.x}까지 ${fmt(p.y)}명` },
       { key: "projects", label: "프로젝트", unit: "개", value: lastP ? lastP.y : 0, series: projects, delta: lastP ? `${lastP.x} +${lastP.add}개` : "", tip: (p) => `${p.x}까지 ${fmt(p.y)}개` },
       { key: "stars", label: "GitHub 스타", unit: "", value: totalStars(), series: stars, delta: `레포 ${[...state.repos.values()].filter((r) => !r.kind).length}개 합계`, plain: true, empty: "월별 추이는 매주 자동으로 쌓입니다.", tip: (p) => `${p.x} ${fmt(p.y)}` },
-      { key: "events", label: "행사 참가자", unit: "명", value: ppl, series: events, delta: next ? `다음: ${next.date ? `${dot(next.date.slice(5))} ` : ""}${String(next.name).split(" - ")[0]}` : "", plain: true, tip: (p) => `${p.x}까지 ${fmt(p.y)}명` }
+      { key: "events", label: "행사 참가자", unit: "명", value: ppl, series: events, delta: evNote, plain: true, tip: (p) => `${p.x}까지 ${fmt(p.y)}명` }
     ];
   }
 
@@ -1056,6 +1058,7 @@
     }
   }
 
+  const RECENT_DAYS = 42;
   const daysTo = (iso) => Math.ceil((Date.parse(`${iso}T00:00:00+09:00`) - Date.now()) / DAY);
   /* dates in Korean time: today's key, the weekday, and where signup stands */
   const kstToday = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
@@ -1149,18 +1152,25 @@
   /* the next Data Forum gets the space; past ones are one line each */
   function renderEvents() {
     const list = [...state.events].sort((a, b) => b.order - a.order);
-    const next = list.find((e) => e.upcoming), past = list.filter((e) => !e.upcoming);
+    const upcoming = list.find((e) => e.upcoming), past = list.filter((e) => !e.upcoming);
+    /* after the day, the forum that just ended keeps the big card for six weeks: date, place, timetable, poster, recap */
+    const recent = upcoming ? null : past.find((e) => e.date && (e.poster || e.tagline) && daysTo(e.date) >= -RECENT_DAYS);
+    const next = upcoming || recent, ended = !upcoming && !!recent;
     const when = (e) => (e.date ? dot(e.date) : `${e.year}년`);
     const total = past.reduce((s, e) => s + (e.participants || 0), 0);
     const maxP = Math.max(1, ...past.map((e) => e.participants || 0));
     const dd = next && next.date ? daysTo(next.date) : null;
-    const su = next ? signup(next) : null;
-    const go = (placement) => next && su.cta ? `<a class="btn${placement === "button" ? "" : " ghost"} sm" href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: su.action, placement }))}'>${esc(su.cta)}<span aria-hidden="true"> ↗</span></a>` : "";
+    const su = !next ? null : ended
+      ? (next.recap && next.recap.url
+        ? { state: "done", cta: next.recap.label || "후기 보기", action: "recap", url: next.recap.url }
+        : { state: "done", cta: next.link ? "행사 페이지" : "", action: "event_page" })
+      : signup(next);
+    const go = (placement) => next && su.cta ? `<a class="btn${placement === "button" ? "" : " ghost"} sm" href="${esc(su.url || next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: su.action, placement }))}'>${esc(su.cta)}<span aria-hidden="true"> ↗</span></a>` : "";
     const facts = next ? [
       ["일시", `${dot(next.date)}(${wd(next.date)})${next.time ? ` ${esc(next.time)}` : ""}`],
-      next.signupStart ? ["신청", `${md(next.signupStart)} – ${next.signupEnd ? md(next.signupEnd) : ""}${next.capacity ? ` · 선착순 ${next.capacity}명` : ""}`] : null,
+      next.signupStart && !ended ? ["신청", `${md(next.signupStart)} – ${next.signupEnd ? md(next.signupEnd) : ""}${next.capacity ? ` · 선착순 ${next.capacity}명` : ""}`] : null,
       next.venue ? ["장소", `${esc(next.venue)}${next.address ? `<span>${esc(next.address)}</span>` : ""}`] : null,
-      next.audience ? ["대상", esc(next.audience)] : null
+      next.audience && !ended ? ["대상", esc(next.audience)] : null
     ].filter(Boolean) : [];
     const tt = next && (next.timetable || []).length ? `<details class="ev-tt" data-event-fold><summary>타임테이블<span>${esc(next.timetable[0].time.split("–")[0])}–${esc(next.timetable[next.timetable.length - 1].time.split("–")[1] || "")}</span></summary>
         <ol>${next.timetable.map((r) => `<li class="${r.talk ? "talk" : ""}"><span class="t">${esc(r.time)}</span><span class="k">${esc(r.kind)}</span><span class="w"><b>${esc(r.title)}</b>${r.who ? `<span>${speakerHTML(r.who)}</span>` : ""}</span></li>`).join("")}</ol>
@@ -1174,14 +1184,14 @@
         <button type="button" class="ev-poster" data-ev-zoom="0"><img src="${esc(imgs[0].src)}" alt="${esc(imgs[0].alt)}" width="1414" height="2000" loading="lazy"><span>눌러서 크게 보기</span></button>
         ${org}
       </div>` : "";
-    const nextHTML = next ? `<li class="event next${imgs.length ? " has-poster" : ""}">
+    const nextHTML = next ? `<li class="event next${ended ? " ended" : ""}${imgs.length ? " has-poster" : ""}">
         <div class="ev-main">
-          <div class="ev-head"><span class="soon-tag">다음 행사${dd != null && dd >= 0 ? ` · ${dd === 0 ? "오늘" : `D-${dd}`}` : ""}</span>
+          <div class="ev-head"><span class="soon-tag${ended ? " done" : ""}">${ended ? "지난 행사" : `다음 행사${dd != null && dd >= 0 ? ` · ${dd === 0 ? "오늘" : `D-${dd}`}` : ""}`}</span>
           <h3>${next.link ? `<a href="${esc(next.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: next.order, action: su.action || "event_page", placement: "title" }))}'>${esc(eventTitle(next))}</a>` : esc(eventTitle(next))}</h3></div>
           ${next.tagline ? `<p class="ev-tag">${esc(next.tagline)}</p>` : ""}
           <dl class="ev-facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
-          ${next.code ? `<div class="ev-code"><p><b>${esc(next.code.label)}</b></p><ol>${next.code.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol></div>` : ""}
-          <div class="ev-acts">${go("button")}<p class="ev-state ${su.state}">${esc({ soon: `신청은 ${next.signupStart ? md(next.signupStart) : ""}에 열립니다. 지금은 행사 페이지에서 내용을 볼 수 있습니다.`, open: `지금 신청을 받고 있습니다${next.capacity ? `. 선착순 ${next.capacity}명이라 일찍 마감될 수 있습니다` : ""}.`, closed: "신청이 마감되었습니다.", none: "신청 링크는 곧 열립니다." }[su.state])}</p></div>
+          ${next.code && !ended ? `<div class="ev-code"><p><b>${esc(next.code.label)}</b></p><ol>${next.code.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol></div>` : ""}
+          <div class="ev-acts">${go("button")}<p class="ev-state ${su.state}">${esc({ soon: `신청은 ${next.signupStart ? md(next.signupStart) : ""}에 열립니다. 지금은 행사 페이지에서 내용을 볼 수 있습니다.`, open: `지금 신청을 받고 있습니다${next.capacity ? `. 선착순 ${next.capacity}명이라 일찍 마감될 수 있습니다` : ""}.`, closed: "신청이 마감되었습니다.", none: "신청 링크는 곧 열립니다.", done: next.participants ? `${fmt(next.participants)}명이 함께했습니다. 고맙습니다.` : "함께해 주셔서 고맙습니다. 참가 인원과 후기를 정리하고 있습니다." }[su.state])}</p></div>
           ${imgs.length ? "" : org}
           ${tt}
         </div>
@@ -1190,8 +1200,9 @@
     const pastHTML = past.map((e) => `<li class="event past">
         <span class="ord">${e.order}회</span>
         <span class="ev-name">${e.link ? `<a href="${esc(e.link)}" target="_blank" rel="noopener" data-event="click_event" data-event-params='${esc(JSON.stringify({ event_order: e.order, action: "record", placement: "past" }))}'>${esc(e.name)}</a>` : esc(e.name)}<span class="when">${when(e)}</span></span>
-        <span class="ev-n">${e.participants ? `<span class="ev-num"><b>${fmt(e.participants)}</b>명</span><i class="ev-bar" aria-hidden="true"><i style="width:${Math.round((e.participants / maxP) * 100)}%"></i></i>` : ""}</span>
+        <span class="ev-n">${e.participants ? `<span class="ev-num"><b>${fmt(e.participants)}</b>명</span><i class="ev-bar" aria-hidden="true"><i style="width:${Math.round((e.participants / maxP) * 100)}%"></i></i>` : `<span class="ev-wait">집계 중</span>`}</span>
       </li>`).join("");
+    $("#event-list").classList.toggle("solo", !next);
     $("#event-list").innerHTML = nextHTML + (past.length ? `<li class="event-past"><h3 class="ev-sum">지난 Data Forum<span>${past.length}회 · 누적 참가 ${fmt(total)}명</span></h3><ol>${pastHTML}</ol></li>` : "");
     const fold = $("#event-list [data-event-fold]");
     if (fold) fold.querySelector("summary").addEventListener("click", () => { if (!fold.open) track("click_event", { event_order: next.order, action: "timetable", placement: "card" }); });

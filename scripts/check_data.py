@@ -141,6 +141,9 @@ def main():
                 err(w, f"{k} must look like 2026-11-04")
         if e.get("capacity") is not None and not is_int(e.get("capacity")):
             err(w, "capacity must be a whole number")
+        rc = e.get("recap")
+        if rc is not None and not (isinstance(rc, dict) and re.fullmatch(r"https://\S+", str(rc.get("url", "")))):
+            err(w, "recap must look like {\"label\": \"후기 보기\", \"url\": \"https://...\"}")
         for k in ("poster", "timetableImage"):
             v = e.get(k)
             if v is not None and not re.fullmatch(r"assets/img/[\w.-]+\.(?:jpg|png|webp)", str(v)):
