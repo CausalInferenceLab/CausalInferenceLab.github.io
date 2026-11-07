@@ -2635,3 +2635,7 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hp { --mint: #4fd1a1; --mint-ink: #7fe3bf; } }
 :root[data-theme="dark"] .hp { --mint: #4fd1a1; --mint-ink: #7fe3bf; }
 .hp-log:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+/* next-step chips under a reply sit in a row, smaller than the opening suggestions */
+.hp-sug.hp-next { display: flex; flex-wrap: wrap; gap: 6px; }
+.hp-sug.hp-next[hidden] { display: none; }
+.hp-next button { font-size: 13px; padding: 5px 11px; min-height: 32px; background: var(--surface); }
