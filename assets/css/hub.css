@@ -2527,12 +2527,8 @@ dialog.sheet .toast:not(.show) { transition: opacity .25s ease, visibility 0s li
 .hp { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 40; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; pointer-events: none; }
 .hp > * { pointer-events: auto; }
 .hp-open { width: 84px; height: 76px; padding: 0; border: 0; background: none; cursor: pointer; filter: drop-shadow(0 6px 14px rgba(20, 22, 43, .22)); transition: transform .2s ease; border-radius: 20px; }
-.hp-open img { width: 84px; height: auto; display: block; }
-.hp-open:hover { transform: translateY(-2px) rotate(-3deg); }
 .hp-open:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .hp.open .hp-open { transform: scale(.86); }
-.hp-bubble { margin: 0 6px -4px 0; padding: 8px 12px; border-radius: 12px 12px 4px 12px; background: var(--ink); color: var(--surface); font-size: 13.5px; font-weight: 700; box-shadow: 0 8px 20px rgba(20, 22, 43, .2); }
-@media (prefers-reduced-motion: no-preference) { .hp-bubble { animation: hp-in .4s ease-out 1.2s both; } }
 @keyframes hp-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .hp-panel { width: min(380px, calc(100vw - 32px)); max-height: min(560px, calc(100dvh - 140px)); display: flex; flex-direction: column; background: var(--surface); color: var(--ink); border: 1px solid var(--rule); border-radius: 18px; box-shadow: 0 18px 48px rgba(20, 22, 43, .22); overflow: hidden; }
 .hp-panel[hidden] { display: none; }
@@ -2571,10 +2567,46 @@ dialog.sheet .toast:not(.show) { transition: opacity .25s ease, visibility 0s li
 .hp-note { margin: 0; padding: 0 12px 10px; font-size: 11.5px; color: var(--muted); }
 @media (max-width: 560px) {
   .hp { right: max(10px, env(safe-area-inset-right, 0px)); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); }
-  .hp-open, .hp-open img { width: 66px; }
+  .hp-open, .hp-mascot { width: 66px; }
   .hp-open { height: 60px; }
   .hp-panel { width: calc(100vw - 20px); max-height: calc(100dvh - 120px); }
 }
 @media print { .hp { display: none; } }
 /* room under the last links so the mascot never sits on them */
 body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+
+/* the mascot: a blank laptop image with its screen drawn on top, so the screen can be typed */
+.hp-mascot { position: relative; display: block; width: 84px; transform-origin: 50% 90%; }
+.hp-mascot img { width: 100%; height: auto; display: block; }
+.hp-screen { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.hp-caret { opacity: 0; }
+.hp.typing .hp-caret { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .hp.typing .hp-mascot { animation: hp-bob .26s ease-in-out infinite alternate; }
+  .hp.typing .hp-k1 { animation: hp-key1 1.5s steps(1, end) infinite; }
+  .hp.typing .hp-k2 { animation: hp-key2 1.5s steps(1, end) infinite; }
+  .hp.typing .hp-k3 { animation: hp-key3 1.5s steps(1, end) infinite; }
+  .hp.typing .hp-caret { animation: hp-caret 1.5s steps(1, end) infinite; }
+}
+@keyframes hp-bob { from { transform: translateY(0) rotate(0); } to { transform: translateY(-2px) rotate(-1.2deg); } }
+@keyframes hp-key1 { 0% { opacity: 0; } 12% { opacity: 1; } }
+@keyframes hp-key2 { 0% { opacity: 0; } 30% { opacity: 1; } }
+@keyframes hp-key3 { 0% { opacity: 0; } 48% { opacity: 1; } }
+/* the caret walks with the keys: after <, after /, after >, then blinks */
+@keyframes hp-caret { 0% { transform: translateX(-150px); opacity: 1; } 12% { transform: translateX(-104px); } 30% { transform: translateX(-68px); } 48% { transform: translateX(0); } 64% { opacity: 0; } 78% { opacity: 1; } 92% { opacity: 0; } }
+.hp-open:hover .hp-mascot { filter: brightness(1.03); }
+
+/* what the mascot says on its own: a bubble above it, typed out, with one or two ways to answer */
+.hp-say { position: relative; width: min(290px, calc(100vw - 32px)); margin-right: 8px; padding: 12px 36px 12px 14px; border-radius: 16px 16px 4px 16px; background: var(--surface); color: var(--ink); border: 1px solid var(--rule); box-shadow: 0 12px 30px rgba(20, 22, 43, .18); }
+.hp-say[hidden] { display: none; }
+.hp-say::after { content: ""; position: absolute; right: 18px; bottom: -7px; width: 12px; height: 12px; background: var(--surface); border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); transform: rotate(45deg); }
+.hp-say-t { margin: 0; font-size: 14.5px; line-height: 1.6; font-weight: 600; min-height: 1.6em; }
+.hp-say-acts { margin: 8px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.hp-say-acts:empty { display: none; }
+.hp-say-acts button { font: inherit; font-size: 13px; font-weight: 700; padding: 6px 10px; min-height: 34px; border-radius: 999px; border: 1.5px solid var(--rule); background: var(--surface-2); color: var(--ink); cursor: pointer; }
+.hp-say-acts button:hover { border-color: var(--l-behavior); }
+.hp-say-x { position: absolute; top: 4px; right: 4px; width: 32px; height: 32px; border: 0; background: none; color: var(--muted); border-radius: 8px; cursor: pointer; display: grid; place-items: center; }
+.hp-say-x svg { width: 14px; height: 14px; }
+.hp-say-x:hover { background: var(--surface-2); color: var(--ink); }
+@media (prefers-reduced-motion: no-preference) { .hp-say:not([hidden]) { animation: hp-in .3s ease-out both; } }
+.hp-msg.typing-now .hp-links, .hp-msg.typing-now .hp-ai { visibility: hidden; }
