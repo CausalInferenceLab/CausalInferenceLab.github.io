@@ -264,6 +264,21 @@ def main():
                 err("pseudo.json defs", f"{k!r} is not a term id in glossary.json")
             if not (isinstance(v, str) and 10 <= len(v) <= 240):
                 err("pseudo.json defs", f"{k!r} needs a one- or two-sentence explanation (10-240 characters)")
+    ex = data.get("experiments.json")
+    if ex is not None:
+        if not str(ex.get("baseUrl", "")).startswith("https://"):
+            err("experiments.json", "baseUrl must be an https address ending in /api/v1")
+        ids = set()
+        for i, x in enumerate(ex.get("experiments") or []):
+            w = f"experiments.json experiments[{i}]"
+            token(x.get("id"), w, "id")
+            if x.get("id") in ids:
+                err(w, f"id {x.get('id')!r} is used twice")
+            ids.add(x.get("id"))
+            if ex.get("enabled") and not (x.get("flagKey") and x.get("experimentId")):
+                err(w, "an enabled setup needs flagKey and experimentId for every experiment")
+        if ex.get("enabled") and not str(ex.get("apiKey", "")).startswith("pk_"):
+            err("experiments.json", "apiKey must be the project's public SDK key (pk_...), never a server key")
     for i, x in enumerate((data.get("stages.json") or {}).get("items", [])):
         w = f"stages.json items[{i}]"
         token(x.get("id"), w, "id")
