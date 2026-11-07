@@ -2335,3 +2335,9 @@ dialog.sheet .toast:not(.show) { transition: opacity .25s ease, visibility 0s li
   .events.solo .event-past { grid-column: 1; }
   .events.solo .event-past ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; }
 }
+
+/* forum card: calendar and map links under the date and the venue */
+.ev-facts dd .ev-x { display: flex; flex-wrap: wrap; gap: 2px 14px; margin-top: 3px; font-size: 13.5px; line-height: 1.6; }
+.ev-x a { color: var(--accent); font-weight: 700; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; padding-block: 2px; }
+.ev-x a:hover { text-decoration-thickness: 2px; }
+.event.next .ev-facts > div { align-content: start; }
