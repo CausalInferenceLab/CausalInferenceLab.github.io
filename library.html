@@ -5,10 +5,10 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com; img-src 'self' data: blob: https://github.com https://avatars.githubusercontent.com https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://api.github.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'">
 <script src="assets/js/ga.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>자료 찾기 | Causal Inference Hub</title>
-<meta name="description" content="인과추론과 온라인 실험을 주제별로 찾습니다. 이중차분법, 성향점수, A/B 테스트, SRM, 분산 감소까지 가짜연구소 인과추론팀의 웹북·영상·코드·발표 자료로 바로 이어집니다.">
-<meta property="og:title" content="자료 찾기 | Causal Inference Hub">
-<meta property="og:description" content="인과추론과 온라인 실험, 주제를 고르면 웹북·영상·코드·발표 자료가 한 번에 나옵니다. 모두 무료입니다.">
+<title>자료실 | Causal Inference Hub</title>
+<meta name="description" content="인과추론과 온라인 실험을 주제별로 공부할 수 있는 자료실입니다. 이중차분법, 성향점수, A/B 테스트, SRM, 분산 감소까지 가짜연구소 인과추론팀의 웹북·영상·코드·발표 자료와 용어집 183개를 한곳에 모았습니다.">
+<meta property="og:title" content="인과추론·온라인 실험 자료실 | Causal Inference Hub">
+<meta property="og:description" content="주제별 자료 119개와 용어집 183개. 인과추론과 온라인 실험을 무료 자료로 공부하세요.">
 <meta property="og:image" content="https://causalinferencelab.github.io/assets/img/og-hub.png">
 <link rel="canonical" href="https://causalinferencelab.github.io/library.html">
 <meta property="og:url" content="https://causalinferencelab.github.io/library.html">
@@ -25,7 +25,7 @@
 <header class="site-header">
   <div class="wrap header-row">
     <a class="brand" href="./" aria-label="Causal Inference Hub 처음으로"><img class="brand-logo" src="assets/img/team-mark.png" alt="" width="34" height="34"><span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span></a>
-    <nav class="site-nav" aria-label="주요 메뉴"><a href="library.html" aria-current="page">자료 찾기</a><a href="./#curriculum">커리큘럼</a><a href="game.html">게임</a><a href="lab.html">실험실</a><a href="builders/">Builder</a></nav>
+    <nav class="site-nav" aria-label="주요 메뉴"><a href="library.html" aria-current="page">자료실</a><a href="./#curriculum">커리큘럼</a><a href="game.html">게임</a><a href="lab.html">실험실</a><a href="builders/">Builder</a></nav>
     <button type="button" class="pass-btn" data-passport aria-label="활동 여권 열기">여권 <b data-passport-count>0/9</b></button>
   </div>
 </header>
@@ -33,25 +33,52 @@
 <main id="main" class="lib">
   <div class="wrap">
     <div class="lib-head">
-      <h1>자료 찾기</h1>
-      <p>인과추론과 온라인 실험을 주제별로 모았습니다. 주제를 고르면 팀이 만든 웹북, 영상, 코드, 발표 자료로 바로 이어집니다. 모두 무료입니다.</p>
+      <h1>인과추론·온라인 실험 자료실</h1>
+      <p>가짜연구소 인과추론팀이 2022년부터 만든 웹북, 영상, 코드, 발표 자료를 주제별로 모았습니다. 낯선 용어는 용어집에서 바로 찾을 수 있습니다. 모두 무료입니다.</p>
+      <ul class="lib-stats" id="lib-stats" aria-label="자료실 규모"></ul>
     </div>
+
+    <section class="lib-start" aria-labelledby="lib-start-title">
+      <h2 id="lib-start-title">처음이라면 여기서</h2>
+      <ul class="lib-start-list" id="lib-start"></ul>
+    </section>
+
+    <section class="lib-sources" aria-labelledby="lib-src-title">
+      <h2 id="lib-src-title">자료가 나오는 곳</h2>
+      <p>누르면 그 출처의 자료만 봅니다.</p>
+      <div class="lib-src-list" role="group" aria-label="출처로 거르기" id="lib-src"></div>
+    </section>
 
     <form class="lib-tools" role="search" id="lib-form">
       <label class="lib-search">
-        <span class="sr-only">주제나 방법 이름으로 찾기</span>
+        <span class="sr-only">주제, 방법, 용어로 찾기</span>
         <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input type="search" id="lib-q" name="q" placeholder="이중차분, CUPED, SRM…" autocomplete="off" enterkeyhint="search">
+        <input type="search" id="lib-q" name="q" placeholder="이중차분, CUPED, 실험군…" autocomplete="off" enterkeyhint="search">
       </label>
       <div class="lib-shelves" role="radiogroup" aria-label="분야" id="lib-shelves"></div>
-      <div class="lib-kinds" role="group" aria-label="자료 종류" id="lib-kinds"></div>
     </form>
 
-    <p class="lib-count" id="lib-count" aria-live="polite"></p>
+    <div class="tabs big lib-tabs" role="tablist" aria-label="보기">
+      <button type="button" role="tab" id="tab-topics" aria-controls="panel-topics" aria-selected="true">주제별 자료<span class="tab-n" id="n-topics"></span></button>
+      <button type="button" role="tab" id="tab-glossary" aria-controls="panel-glossary" aria-selected="false" tabindex="-1">용어집<span class="tab-n" id="n-glossary"></span></button>
+    </div>
 
-    <div class="lib-grid">
-      <nav class="lib-index" id="lib-index" aria-label="주제 목록"></nav>
-      <div class="lib-topics" id="lib-topics"><p class="lib-loading">자료를 불러오는 중입니다.</p></div>
+    <div id="panel-topics" role="tabpanel" aria-labelledby="tab-topics">
+      <div class="lib-kinds" role="group" aria-label="자료 종류" id="lib-kinds"></div>
+      <p class="lib-count" id="lib-count" aria-live="polite"></p>
+      <div class="lib-grid">
+        <nav class="lib-index" id="lib-index" aria-label="주제 목록"></nav>
+        <div class="lib-topics" id="lib-topics"><p class="lib-loading">자료를 불러오는 중입니다.</p></div>
+      </div>
+    </div>
+
+    <div id="panel-glossary" role="tabpanel" aria-labelledby="tab-glossary" hidden>
+      <p class="lib-count" id="gl-count" aria-live="polite"></p>
+      <div class="lib-grid">
+        <nav class="lib-index" id="gl-index" aria-label="용어 분류"></nav>
+        <div class="gl-body" id="gl-body"></div>
+      </div>
+      <p class="gl-foot">번역어는 『실무로 통하는 인과추론 with 파이썬』과 Brave &amp; True 웹북을 기준으로 합니다. 빠진 용어나 더 나은 번역어는 <a href="https://github.com/CausalInferenceLab/Causal-Inference-with-Python/issues/new?template=term-proposal.yml" target="_blank" rel="noopener">용어 제안</a>으로 알려 주세요. 웹북의 <a href="https://causalinferencelab.github.io/Causal-Inference-with-Python/glossary.html">용어집 페이지</a>와 같은 내용입니다.</p>
     </div>
 
     <aside class="lib-more" aria-labelledby="lib-more-title">

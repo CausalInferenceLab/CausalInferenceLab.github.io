@@ -838,7 +838,12 @@
         "무작위 실험",
         "온라인 통제 실험",
         "OCE",
-        "randomized"
+        "randomized",
+        "무작위 배정",
+        "실험 조건",
+        "variant",
+        "실험군",
+        "대조군"
       ],
       "items": [
         {
@@ -896,13 +901,18 @@
       "shelf": "exp",
       "name": "지표와 OEC",
       "en": "Metrics & OEC",
-      "about": "무엇으로 성공을 판단할지 정합니다. 목표 지표, 가드레일 지표, 여러 지표를 묶은 종합평가기준(OEC)을 다룹니다.",
+      "about": "무엇으로 성공을 판단할지 정합니다. 핵심 지표, 가드레일 지표, 여러 지표를 묶은 종합 평가 기준(OEC)을 다룹니다.",
       "keys": [
         "지표",
         "OEC",
+        "종합 평가 기준",
         "종합평가기준",
         "북극성 지표",
+        "north star",
         "가드레일",
+        "guardrail",
+        "핵심 지표",
+        "보조 지표",
         "metric"
       ],
       "items": [
@@ -916,7 +926,7 @@
         {
           "kind": "slides",
           "repo": "OCE-Materials",
-          "title": "5회: 실험을 위한 지표와 종합평가기준(OEC)",
+          "title": "5회: 실험을 위한 지표와 종합 평가 기준(OEC)",
           "by": "양유승",
           "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240409_%EC%8B%A4%ED%97%98%EC%9D%84%20%EC%9C%84%ED%95%9C%20%EC%A7%80%ED%91%9C%EC%99%80%20%EC%A2%85%ED%95%A9%ED%8F%89%EA%B0%80%EA%B8%B0%EC%A4%80.pdf"
         }
@@ -937,7 +947,13 @@
         "t-test",
         "신뢰구간",
         "MDE",
-        "다중 검정"
+        "최소 검출 효과",
+        "다중 검정",
+        "FDR",
+        "순차 검정",
+        "sequential",
+        "peeking",
+        "엿보기"
       ],
       "items": [
         {
@@ -965,8 +981,7 @@
         "CUPED",
         "분산 감소",
         "variance reduction",
-        "민감도",
-        "sensitivity",
+        "실험 민감도",
         "트리거링",
         "triggering",
         "델타 방법"
@@ -993,10 +1008,11 @@
       "shelf": "exp",
       "name": "A/A 테스트와 SRM",
       "en": "Trustworthiness: A/A & SRM",
-      "about": "결과를 믿어도 되는지 먼저 확인합니다. A/A 테스트, 샘플 비율 불일치(SRM), 신뢰 가드레일 지표를 다룹니다.",
+      "about": "결과를 믿어도 되는지 먼저 확인합니다. A/A 테스트, 표본 비율 불일치(SRM), 신뢰 가드레일 지표를 다룹니다.",
       "keys": [
         "A/A",
         "SRM",
+        "표본 비율 불일치",
         "샘플 비율 불일치",
         "sample ratio mismatch",
         "가드레일",
@@ -1013,7 +1029,7 @@
         {
           "kind": "slides",
           "repo": "OCE-Materials",
-          "title": "11회: 샘플 비율 불일치(SRM)와 신뢰 가드레일 지표",
+          "title": "11회: 표본 비율 불일치(SRM)와 신뢰 가드레일 지표",
           "by": "문정하",
           "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240521_%EC%83%98%ED%94%8C%20%EB%B9%84%EC%9C%A8%20%EB%B6%88%EC%9D%BC%EC%B9%98%20%EB%B0%8F%20%EA%B8%B0%ED%83%80%20%EC%8B%A0%EB%A2%B0%20%EA%B4%80%EB%A0%A8%20%EA%B0%80%EB%93%9C%EB%A0%88%EC%9D%BC%20%EC%B2%99%EB%8F%84.pdf"
         }
@@ -1062,18 +1078,21 @@
     {
       "id": "long-term",
       "shelf": "exp",
-      "name": "장기 효과와 램프업",
+      "name": "장기 효과와 단계적 확대",
       "en": "Long-term Effects & Ramp-up",
       "about": "짧은 실험으로 장기 효과를 어떻게 추정할지, 노출 비율을 어떻게 늘려 갈지 다룹니다.",
       "keys": [
         "장기 효과",
         "long-term",
-        "새로움 효과",
+        "신기 효과",
+        "초두 효과",
         "novelty",
+        "단계적 확대",
         "램프업",
-        "ramp",
+        "ramp-up",
         "노출",
-        "holdout"
+        "holdout",
+        "홀드아웃"
       ],
       "items": [
         {
@@ -1086,7 +1105,7 @@
         {
           "kind": "slides",
           "repo": "OCE-Materials",
-          "title": "14회: 실험 노출 늘리기(램프업)",
+          "title": "14회: 실험 노출 늘리기(단계적 확대)",
           "by": "이재호",
           "url": "https://github.com/CausalInferenceLab/OCE-Materials/blob/main/%EB%B0%9C%ED%91%9C%20%EC%9E%90%EB%A3%8C/20240611_%EC%8B%A4%ED%97%98%20%EB%85%B8%EC%B6%9C%20%EC%A6%9D%EA%B0%80%EC%8B%9C%ED%82%A4%EA%B8%B0.pdf"
         }
