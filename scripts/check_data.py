@@ -18,7 +18,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOKEN = re.compile(r"[A-Za-z0-9_.-]+")
 SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
-URL_KEYS = {"url", "link", "linkedin", "site", "cover", "href", "builderUrl", "preview", "poster", "timetableImage"}
+URL_KEYS = {"url", "link", "linkedin", "site", "cover", "href", "builderUrl", "preview", "poster", "timetableImage", "slides", "notebook"}
 errors = []
 
 
@@ -214,6 +214,37 @@ def main():
             if not (isinstance(o, list) and len(o) == 2 and o[0] in route_ids):
                 err("leveltest.json interest", f"option {o!r} must be [route id, label]")
 
+    tp = data.get("topics.json")
+    if tp is not None:
+        shelves = {x.get("id") for x in tp.get("shelves") or []}
+        kinds = set((tp.get("kinds") or {}).keys())
+        repo_ids = {r.get("repo") for r in data.get("repos.json") or []}
+        seen = set()
+        for i, t in enumerate(tp.get("topics") or []):
+            w = f"topics.json topics[{i}]"
+            token(t.get("id"), w, "id")
+            if t.get("id") in seen:
+                err(w, f"id {t.get('id')!r} is used twice")
+            seen.add(t.get("id"))
+            if t.get("shelf") not in shelves:
+                err(w, f"shelf {t.get('shelf')!r} is not in shelves")
+            if not (isinstance(t.get("name"), str) and t["name"].strip()):
+                err(w, "name is required")
+            if not t.get("items"):
+                err(w, "a topic needs at least one item")
+            for j, x in enumerate(t.get("items") or []):
+                wi = f"{w}.items[{j}]"
+                if x.get("kind") not in kinds:
+                    err(wi, f"kind {x.get('kind')!r} is not in kinds")
+                if x.get("repo") not in repo_ids:
+                    err(wi, f"repo {x.get('repo')!r} is not in repos.json")
+                for k in ("url", "slides", "notebook"):
+                    if x.get(k) is not None and not str(x[k]).startswith("https://"):
+                        err(wi, f"{k} must be an https link")
+        for i, a in enumerate(data.get("articles.json") or []):
+            for x in a.get("topics") or []:
+                if x not in seen:
+                    err(f"articles.json[{i}]", f"topic {x!r} is not in topics.json")
     for i, x in enumerate((data.get("stages.json") or {}).get("items", [])):
         w = f"stages.json items[{i}]"
         token(x.get("id"), w, "id")

@@ -7,7 +7,10 @@
     "author": "신진수",
     "series": "데이터 기반 의사결정 문화 만들기",
     "episode": 11,
-    "weekOf": "2027-01-25"
+    "weekOf": "2027-01-25",
+    "topics": [
+      "culture"
+    ]
   },
   {
     "slug": "abcde-10-beyond-experiments",
@@ -20,6 +23,10 @@
     "weekOf": "2027-01-18",
     "related": [
       "paid-lecture"
+    ],
+    "topics": [
+      "why-causal",
+      "culture"
     ]
   },
   {
@@ -33,6 +40,10 @@
     "weekOf": "2027-01-11",
     "related": [
       "paid-lecture"
+    ],
+    "topics": [
+      "trust",
+      "metrics"
     ]
   },
   {
@@ -43,7 +54,10 @@
     "author": "신진수",
     "series": "데이터 기반 의사결정 문화 만들기",
     "episode": 8,
-    "weekOf": "2027-01-04"
+    "weekOf": "2027-01-04",
+    "topics": [
+      "culture"
+    ]
   },
   {
     "slug": "abcde-07-embeddedness",
@@ -53,7 +67,10 @@
     "author": "신진수",
     "series": "데이터 기반 의사결정 문화 만들기",
     "episode": 7,
-    "weekOf": "2026-12-28"
+    "weekOf": "2026-12-28",
+    "topics": [
+      "culture"
+    ]
   },
   {
     "slug": "abcde-06-diffusion-2",
@@ -63,7 +80,10 @@
     "author": "신진수",
     "series": "데이터 기반 의사결정 문화 만들기",
     "episode": 6,
-    "weekOf": "2026-12-21"
+    "weekOf": "2026-12-21",
+    "topics": [
+      "culture"
+    ]
   },
   {
     "slug": "abcde-05-diffusion-1",
@@ -73,7 +93,11 @@
     "author": "신진수",
     "series": "데이터 기반 의사결정 문화 만들기",
     "episode": 5,
-    "weekOf": "2026-12-14"
+    "weekOf": "2026-12-14",
+    "topics": [
+      "culture",
+      "platform"
+    ]
   },
   {
     "slug": "abcde-04-commitment",
@@ -83,7 +107,10 @@
     "author": "신진수",
     "series": "데이터 기반 의사결정 문화 만들기",
     "episode": 4,
-    "weekOf": "2026-12-07"
+    "weekOf": "2026-12-07",
+    "topics": [
+      "culture"
+    ]
   },
   {
     "slug": "abcde-03-belief",
@@ -93,7 +120,10 @@
     "author": "신진수",
     "series": "데이터 기반 의사결정 문화 만들기",
     "episode": 3,
-    "weekOf": "2026-11-30"
+    "weekOf": "2026-11-30",
+    "topics": [
+      "culture"
+    ]
   },
   {
     "slug": "abcde-02-awareness",
@@ -103,7 +133,10 @@
     "author": "신진수",
     "series": "데이터 기반 의사결정 문화 만들기",
     "episode": 2,
-    "weekOf": "2026-11-23"
+    "weekOf": "2026-11-23",
+    "topics": [
+      "culture"
+    ]
   },
   {
     "slug": "abcde-01-introduction",
@@ -113,7 +146,10 @@
     "author": "신진수",
     "series": "데이터 기반 의사결정 문화 만들기",
     "episode": 1,
-    "weekOf": "2026-11-16"
+    "weekOf": "2026-11-16",
+    "topics": [
+      "culture"
+    ]
   },
   {
     "slug": "brave-true-errata-03",
