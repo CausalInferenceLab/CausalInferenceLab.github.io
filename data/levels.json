@@ -16,7 +16,7 @@
     "steps": [
       {
         "repo": "causal-studio",
-        "note": "영상을 보고 Colab 노트북으로 따라 하기"
+        "note": "짧은 입문 영상을 보고 Colab 노트북으로 따라 하기"
       }
     ],
     "more": [
@@ -73,7 +73,7 @@
     "tier": "실전 적용",
     "name": "Application",
     "question": "내 데이터에 어떻게 쓰나",
-    "goal": "책 코드, 산업 사례 템플릿, 현업 특강으로 실제 문제에 적용합니다.",
+    "goal": "책 코드, 현업 실무자 특강, 산업 사례 템플릿으로 실제 문제에 적용합니다.",
     "layer": "learn",
     "for": "회사 데이터에 기법을 붙여 보려는 실무자",
     "learn": [
@@ -88,6 +88,10 @@
       {
         "repo": "causal-inference-in-python-code",
         "note": "책 장별 예제 코드를 직접 돌려 보기"
+      },
+      {
+        "repo": "causal-inference-lecture",
+        "note": "책의 같은 장을 읽고 현업 특강 보기. 입문 영상보다 어렵습니다"
       },
       {
         "repo": "causal-inference-practice",

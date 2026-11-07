@@ -100,21 +100,6 @@
     });
   }
 
-  async function refreshStars() {
-    try {
-      const res = await fetch(`https://api.github.com/orgs/${ORG}/repos?per_page=100`, { headers: { Accept: "application/vnd.github+json" } });
-      if (!res.ok) return;
-      const list = await res.json();
-      list.forEach((g) => {
-        const r = state.repos.get(g.name);
-        if (!r) return;
-        if (typeof g.stargazers_count === "number") r.stars = g.stargazers_count;
-        if (g.pushed_at) r.pushed = g.pushed_at;
-      });
-      renderGrowth(false); renderShelf(); renderWeek(); renderFeatured();
-    } catch (e) { /* offline or rate limited: keep the snapshot */ }
-  }
-
   /* ---------- helpers ---------- */
   const primaryLine = (r) => (r && r.lines && r.lines[0]) || "none";
   const repoUrl = (r) => `https://github.com/${ORG}/${r.repo}`;
@@ -466,7 +451,7 @@
       <div class="lr-body">
         ${(lv.learn || []).length ? `<p class="lr-k">배우는 것</p><ul class="lr-learn">${lv.learn.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
         ${lv.outcome ? `<p class="lr-out"><b>끝나면</b>${esc(lv.outcome)}</p>` : ""}
-        ${crew.length ? `<p class="lr-crew"><span>만든 Builder</span>${crew.slice(0, 5).map((n) => `<span title="${esc(n)}">${avatarHTML(n, "sm")}</span>`).join("")}${crew.length > 5 ? `<i>외 ${crew.length - 5}명</i>` : ""}<span class="sr-only">${esc(crew.join(", "))}</span></p>` : ""}
+        ${crew.length ? `<p class="lr-crew"><span>만든 Builder</span>${crew.slice(0, 5).map((n) => `<span class="lr-who">${avatarHTML(n, "sm")}<span>${esc(n)}</span></span>`).join("")}${crew.length > 5 ? `<i>외 ${crew.length - 5}명</i>` : ""}</p>` : ""}
       </div>
       <div class="lr-steps">${list}${text}${more}${goal}</div>
       ${nav}
@@ -1036,7 +1021,7 @@
           <span class="pt-text"><b>${esc(p.shortTitle || p.title)}</b><span class="pt-lv"><span class="pt-type">${esc(p.type)}</span>${esc(who)}</span></span>
           <svg class="pt-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <button type="button" class="pt-goto" data-goto="${esc(p.id)}">커리큘럼 ${esc(LV(p.level))}</button>
+        <button type="button" class="pt-goto" data-goto="${esc(p.id)}" aria-label="${esc(`커리큘럼 ${LV(p.level)}에서 보기`)}">${esc(LV(p.level))}</button>
       </li>`;
     }).join("");
   }
@@ -1158,7 +1143,7 @@
       ["공유하기", "Builder 페이지·완주 카드", "#contrib"]
     ];
     box.innerHTML = steps.map(([t, n, href], i) => `<li><a href="${href}"${/^https:/.test(href) ? ' target="_blank" rel="noopener"' : ""} data-event="loop_click" data-event-params='${esc(JSON.stringify({ step: i + 1 }))}'><span class="lp-n">${i + 1}</span><b>${t}</b><span>${esc(n)}</span></a></li>`).join("") +
-      `<li class="lp-back" aria-hidden="true">공유한 링크로 다음 사람이 1부터 시작합니다 ↺</li>`;
+      `<li class="lp-back" aria-hidden="true">내가 공유한 Builder 페이지나 완주 카드를 본 사람이 다시 1. 배우기부터 시작합니다 ↺</li>`;
   }
 
   /* the next Data Forum gets the space; past ones are one line each */
@@ -1833,12 +1818,10 @@
     });
     window.addEventListener("hashchange", openFromHash);
     let t;
-    window.addEventListener("resize", () => {
-      clearTimeout(t);
-      t = setTimeout(() => {
-        document.querySelectorAll("#growth .tile").forEach((el, i) => { if (growthTiles[i] && growthTiles[i].series.length > 1) drawSpark(el, growthTiles[i]); });
-      }, 120);
-    });
+    const redrawSparks = () => document.querySelectorAll("#growth .tile").forEach((el, i) => { if (growthTiles[i] && growthTiles[i].series.length > 1) drawSpark(el, growthTiles[i]); });
+    window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(redrawSparks, 120); });
+    /* cohort labels are measured to decide which to show, so measure again once the web font is in */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawSparks);
   }
 
   /* Highlight the nav item for the section in view. */
@@ -1916,7 +1899,6 @@
     const qs = new URLSearchParams(location.search);
     if (location.hash === "#start" || qs.has("level") || qs.has("quiz")) openLevelTest("link");
     navSpy();
-    refreshStars();
   }
 
   init();

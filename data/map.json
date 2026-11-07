@@ -313,7 +313,8 @@
       "type": "도서",
       "meta": "2024 · 464쪽",
       "cover": "assets/img/hanbit-book.jpg",
-      "credit": "마테우스 파쿠레 지음, 신진수·가짜연구소 인과추론팀 옮김"
+      "credit": "마테우스 파쿠레 지음, 신진수·가짜연구소 인과추론팀 옮김",
+      "shortTitle": "실무로 통하는 인과추론"
     },
     {
       "id": "paid-lecture",
