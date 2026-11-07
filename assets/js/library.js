@@ -203,12 +203,17 @@
   }
   function setView(v) { st.view = v; toURL(); render(); }
   /* open a topic or a term even when the current filters hide it */
-  function reveal(id) {
+  /* a jump the reader clicked (a term from a topic, a topic from a term) gets its own history entry,
+     so the back button returns to where they were */
+  function reveal(id, push) {
+    const before = location.href;
     st.view = /^term-/.test(id) && gloss ? "glossary" : "topics";
     render();
     if (!document.getElementById(id)) { st.q = ""; st.shelf = "all"; st.kinds.clear(); st.src = ""; controls(); render(); }
     toURL();
-    history.replaceState(history.state, "", `${location.pathname}${location.search}#${encodeURIComponent(id)}`);
+    const url = `${location.pathname}${location.search}#${encodeURIComponent(id)}`;
+    if (push) { history.replaceState(history.state, "", before); history.pushState(null, "", url); }
+    else history.replaceState(history.state, "", url);
     requestAnimationFrame(() => go(id, true));
   }
 
@@ -258,15 +263,20 @@
       if (v) { setView(v.dataset.view); $(".lib-tabs").scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" }); track("library_view", { view: v.dataset.view, source: "button" }); return; }
       if (e.target.closest("[data-lib-reset]")) { st.q = ""; st.shelf = "all"; st.kinds.clear(); st.src = ""; st.open.clear(); controls(); toURL(); render(); return; }
       const term = e.target.closest("[data-term]");
-      if (term) { e.preventDefault(); reveal(term.dataset.term); track("library_term", { term: term.dataset.term, source: term.closest(".lib-topic") ? "topic" : "start" }); return; }
+      if (term) { e.preventDefault(); reveal(term.dataset.term, true); track("library_term", { term: term.dataset.term, source: term.closest(".lib-topic") ? "topic" : "start" }); return; }
       const tp = e.target.closest("[data-goto-topic]");
-      if (tp) { e.preventDefault(); reveal(tp.dataset.gotoTopic); track("library_topic", { topic: tp.dataset.gotoTopic, source: tp.closest(".gl-row") ? "glossary" : "start" }); return; }
+      if (tp) { e.preventDefault(); reveal(tp.dataset.gotoTopic, true); track("library_topic", { topic: tp.dataset.gotoTopic, source: tp.closest(".gl-row") ? "glossary" : "start" }); return; }
       const gj = e.target.closest("[data-gl-jump]");
       if (gj) { e.preventDefault(); go(gj.dataset.glJump, true); return; }
       const a = e.target.closest('#lib-index a[href^="#"]');
       if (a) { e.preventDefault(); const id = a.getAttribute("href").slice(1); history.replaceState(history.state, "", `#${id}`); go(id, true); track("library_topic", { topic: id, source: "index" }); }
     });
     addEventListener("hashchange", () => { const id = decodeURIComponent(location.hash.slice(1)); if (id) reveal(id); });
+    addEventListener("popstate", () => {
+      fromURL(); st.open.clear(); controls(); render();
+      const id = decodeURIComponent(location.hash.slice(1));
+      if (id) requestAnimationFrame(() => go(id, false));
+    });
   }
 
   async function init() {

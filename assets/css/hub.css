@@ -2576,3 +2576,5 @@ dialog.sheet .toast:not(.show) { transition: opacity .25s ease, visibility 0s li
   .hp-panel { width: calc(100vw - 20px); max-height: calc(100dvh - 120px); }
 }
 @media print { .hp { display: none; } }
+/* room under the last links so the mascot never sits on them */
+body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }

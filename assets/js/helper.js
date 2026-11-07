@@ -202,6 +202,7 @@
       ${seen ? "" : `<p class="hp-bubble" aria-hidden="true">궁금한 걸 물어보세요</p>`}
       <button type="button" class="hp-open" aria-controls="hp-panel" aria-expanded="false" aria-label="자료실 도우미에게 묻기"><img src="assets/img/mascot.webp" alt="" width="84" height="72"></button>`;
     document.body.appendChild(root);
+    document.body.classList.add("has-helper");
     panel = root.querySelector(".hp-panel"); log = root.querySelector(".hp-log"); input = root.querySelector("#hp-q"); opener = root.querySelector(".hp-open");
     opener.addEventListener("click", () => (panel.hidden ? open() : close()));
     root.querySelector(".hp-x").addEventListener("click", close);
@@ -209,7 +210,13 @@
     input.addEventListener("input", grow);
     input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); ask(input.value); } });
     root.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
-    log.addEventListener("click", (e) => { const b = e.target.closest("[data-ask]"); if (b) ask(b.dataset.ask); });
+    log.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-ask]");
+      if (b) { ask(b.dataset.ask); return; }
+      /* a link to a spot on this same page: get out of the way so the reader sees where it went */
+      const a = e.target.closest("a[href]");
+      if (a && !a.target) { const u = new URL(a.href, location.href); if (u.pathname === location.pathname) { panel.hidden = true; opener.setAttribute("aria-expanded", "false"); root.classList.remove("open"); } }
+    });
     if (!seen) setTimeout(hideBubble, 9000);
   }
 
