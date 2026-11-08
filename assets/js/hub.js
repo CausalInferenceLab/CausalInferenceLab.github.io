@@ -1794,8 +1794,8 @@
     document.addEventListener("click", (e) => {
       const fa = e.target.closest("#featured a");
       if (fa) track("click_featured", { repo: fa.dataset.repo || "" });
-      const ja = e.target.closest("#join .steps a, #join .join-foot a, .footer-links a[href*='discord']");
-      if (ja) track("click_join", { target: joinTarget(ja.getAttribute("href") || ""), source: ja.closest("#join") ? "join_section" : "footer" });
+      const ja = e.target.closest(".footer-links a[href*='discord']");
+      if (ja) track("click_join", { target: joinTarget(ja.getAttribute("href") || ""), source: "footer" });
       const sa = e.target.closest("#station-body .links a");
       if (sa && state.openRepo) track("click_outbound", { repo: state.openRepo.repo, kind: state.openRepo.kind === "paid" ? "paid" : /github\.com/.test(sa.href) ? "github" : "site" });
       const ep = e.target.closest("[data-ev-pick]");
@@ -1892,7 +1892,8 @@
   }
   function navSpy() {
     if (!("IntersectionObserver" in window)) return;
-    const ids = ["curriculum", "topics", "contrib", "events", "posts", "join"];
+    /* 참여하기, the last stop, is Pseudo rather than a section: the line reaches it at the end of the page */
+    const ids = ["curriculum", "topics", "contrib", "events", "posts"];
     const seen = new Map();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
@@ -1907,6 +1908,7 @@
     const update = () => {
       queued = false;
       const tops = ids.map((id) => document.getElementById(id)).filter(Boolean).map((el) => el.getBoundingClientRect().top + scrollY);
+      tops.push(Math.max(tops[tops.length - 1] + 1, document.documentElement.scrollHeight - innerHeight * 0.55 - 2));
       const y = scrollY + innerHeight * 0.45;
       let p = 0;
       tops.forEach((t, i) => { if (y >= t) p = i + (i + 1 < tops.length ? Math.min(1, (y - t) / (tops[i + 1] - t)) : 0); });

@@ -38,7 +38,7 @@
       <a href="#contrib" class="stn s-ml">Builder</a>
       <a href="#events" class="stn s-exp">행사</a>
       <a href="#posts" class="stn s-behavior">연재</a>
-      <a href="#join" class="stn s-research">참여하기</a>
+      <a href="#join" class="stn s-research" data-helper-ask="같이 하고 싶어요" data-event="click_join" data-event-params='{"target":"pseudo","source":"nav"}'>참여하기</a>
     </nav>
     <a class="hdr-ev" id="hdr-event" hidden></a>
     <button type="button" class="pass-btn" data-passport aria-label="활동 여권 열기">여권 <b data-passport-count>0/9</b></button>
@@ -148,7 +148,7 @@
       <ol class="top3" id="top3"></ol>
       <div class="crew-row">
         <div class="people-rail" id="people-rail" aria-label="함께한 Builder"></div>
-        <div class="contrib-cta"><a class="btn" href="#join" data-event="click_join" data-event-params='{"target":"join_section","source":"builder_section"}'>다음 기수 Builder 되기</a><a class="contrib-form" href="https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/issues/new?template=builder-profile.yml" target="_blank" rel="noopener" data-event="click_join" data-event-params='{"target":"builder_profile","source":"builder_section"}'>Builder라면 사진·소개·회고 보내기</a></div>
+        <div class="contrib-cta"><a class="btn" href="#join" data-helper-ask="Builder가 되려면요?" data-event="click_join" data-event-params='{"target":"pseudo","source":"builder_section"}'>다음 기수 Builder 되기</a><a class="contrib-form" href="https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/issues/new?template=builder-profile.yml" target="_blank" rel="noopener" data-event="click_join" data-event-params='{"target":"builder_profile","source":"builder_section"}'>Builder라면 사진·소개·회고 보내기</a></div>
       </div>
       <details class="fold" id="roster-fold">
         <summary><span>전체 Builder 이력</span><small>누가 어느 기수에 무엇을 열었는지</small></summary>
@@ -176,35 +176,6 @@
         <p>팀원이 쓰는 인과추론 이야기입니다. 이번 주 포스트는 월요일마다 바뀝니다.</p>
       </div>
       <div id="post-box"></div>
-    </div>
-  </section>
-
-
-  <section class="band" id="join" aria-labelledby="join-title">
-    <div class="wrap join">
-      <div class="section-head">
-        <h2 id="join-title">참여하기</h2>
-        <p>러너로 시작해 기여를 쌓고, Builder로 다음 기수의 프로젝트를 엽니다.</p>
-      </div>
-      <ol class="loop" id="loop" aria-label="허브가 도는 방식"></ol>
-      <ol class="steps">
-        <li>
-          <h3>러너로 참여</h3>
-          <p>가짜연구소는 반기마다 기수를 모집합니다. 인과추론팀 프로젝트에 러너로 들어와 14주 동안 함께 공부하고 만듭니다.</p>
-          <a class="btn" href="https://pseudo-lab.com/" target="_blank" rel="noopener">가짜연구소 프로젝트 보기</a>
-        </li>
-        <li>
-          <h3>첫 기여 남기기</h3>
-          <p>오탈자 하나, 예제 하나도 기여입니다. 진행 중인 레포의 이슈를 보고 PR을 보내 주세요.</p>
-          <a class="btn" href="https://github.com/search?q=org%3ACausalInferenceLab+is%3Aissue+is%3Aopen&type=issues" target="_blank" rel="noopener">열린 이슈 보기</a>
-        </li>
-        <li>
-          <h3>Builder로 프로젝트 열기</h3>
-          <p>다음 기수에 직접 프로젝트를 열어 보세요. 레포는 템플릿으로 시작하고, 이 허브에는 데이터 파일 PR 한 번으로 올라갑니다.</p>
-          <a class="btn" href="https://github.com/CausalInferenceLab/Project-template" target="_blank" rel="noopener">프로젝트 템플릿</a>
-        </li>
-      </ol>
-      <p class="join-foot">질문은 <a href="https://discord.gg/HeHbFAvmSZ" target="_blank" rel="noopener">가짜연구소 디스코드</a>에 남겨 주세요.</p>
     </div>
   </section>
 </main>

@@ -61,6 +61,31 @@ jobs:
           mkdir _site
           cp -r index.html article.html game.html lab.html library.html 404.html .nojekyll robots.txt sitemap.xml assets data articles builders badges _site/
 
+      # The Iterglow public SDK key lives in the ITERGLOW_SDK_KEY secret, not in the repo. It is added to the
+      # published experiments.json only while an experiment is switched on; with no key, experiments stay off.
+      - name: Add the Iterglow key
+        env:
+          ITERGLOW_SDK_KEY: ${{ secrets.ITERGLOW_SDK_KEY }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          path = "_site/data/experiments.json"
+          with open(path, encoding="utf-8") as f:
+              cfg = json.load(f)
+          key = os.environ.get("ITERGLOW_SDK_KEY", "").strip()
+          if not cfg.get("enabled"):
+              print("experiments off")
+          elif key.startswith("pk_"):
+              cfg["apiKey"] = key
+              print("experiments on")
+          else:
+              cfg["enabled"] = False
+              print("::warning::experiments.json is enabled but the ITERGLOW_SDK_KEY secret is missing; experiments stay off")
+          with open(path, "w", encoding="utf-8") as f:
+              json.dump(cfg, f, ensure_ascii=False, indent=2)
+              f.write("\n")
+          PY
+
       # Browsers keep scripts and styles for up to ten minutes; a version on their URLs makes each deploy load
       # its own files instead of new HTML running last deploy's scripts.
       - name: Version script and style URLs
