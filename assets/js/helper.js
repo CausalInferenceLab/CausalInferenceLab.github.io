@@ -15,7 +15,8 @@
   /* what the mascot says on its own: once per visit each, and never again after the reader closes a bubble */
   const LINES = {
     hub: [
-      { id: "hello", text: "안녕하세요, 저는 Pseudo예요! 어디서부터 볼지 막막하면 저를 불러 주세요. 같이 골라 봐요.", acts: [["처음 왔어요", "처음인데 뭐부터 볼까요?"], ["궁금한 말이 있어요", ""]] },
+      { id: "hello", text: "안녕하세요, 저는 Pseudo예요! 어디서부터 볼지 막막하면 저를 불러 주세요. 같이 골라 봐요.", acts: [["처음 왔어요", "처음인데 뭐부터 볼까요?"], ["궁금한 말이 있어요", ""]], make: () => forumHello() },
+      { id: "forum", when: "#events", make: () => forumLine() },
       { id: "topics", when: "#topics", text: "여기가 제 자리예요. 낯선 말이 보이면 저한테 툭 던져 주세요.", acts: [["SRM이 뭐예요?", "SRM이 뭐예요?"], ["이중차분법이 뭐예요?", "이중차분법이 뭐예요?"]] }
     ],
     library: [
@@ -27,7 +28,7 @@
   };
   const page = /library\.html$/.test(location.pathname) ? "library" : /article\.html$/.test(location.pathname) ? "article" : "hub";
   const SUGGEST = {
-    hub: ["처음인데 뭐부터 볼까요?", "A/B 테스트 결과, 믿어도 될까요?", "이중차분법이 뭐예요?"],
+    hub: ["처음인데 뭐부터 볼까요?", "이번 행사 알려 주세요", "같이 하고 싶어요"],
     library: ["A/B 테스트는 처음이에요", "SRM이 뭐예요?", "쿠폰 효과를 재고 싶어요"],
     article: ["이 글에 나온 말이 궁금해요", "이 주제 더 공부하고 싶어요", "실험군이랑 대조군이 뭐가 달라요?"]
   };
@@ -151,7 +152,8 @@
     greet: /^(안녕|하이|헬로|hello|hi\b|hey|반가|ㅎㅇ)/i,
     thanks: /(고마|감사|땡큐|thank|thx|ㄱㅅ)/i,
     who: /((너|넌|당신|pseudo|슈도)\s*(는|은)?\s*(누구|뭐야|뭐니|정체))|이름이 뭐|자기\s*소개/i,
-    event: /(포럼|행사|forum|밋업|세미나|오프라인|모임)/i,
+    event: /(포럼|행사|forum|밋업|세미나|오프라인|모임|연사|발표자|누가 발표|타임테이블|프로그램|행사장|추천 코드|신청)/i,
+    ask: /(디스코드|discord|문의|질문은 어디|어디에 물어|어디서 물어)/i,
     level: /(레벨|진단|내 수준|실력 테스트)/,
     curriculum: /(커리큘럼|로드맵|순서대로|공부 순서)/,
     join: /(기여|참여|빌더|builder|러너|스터디 신청|같이 하고|오픈소스 하고|PR 올)/i,
@@ -188,6 +190,80 @@
   const WD = "일월화수목금토";
   const md = (iso) => { const [y, m, d] = iso.split("-").map(Number); return `${m}월 ${d}일(${WD[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]})`; };
   const kstToday = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+  const subj = (w) => (topicMark(w) === "은" ? "이" : "가");
+  const named = (w) => (topicMark(w) === "은" ? "이라는" : "라는");
+
+  /* ---------- the next Data Forum, from data/events.json ---------- */
+  const evName = (e) => String(e.name).split(" - ")[0];
+  const dayGap = (iso) => Math.round((Date.parse(iso) - Date.parse(kstToday())) / 864e5);
+  function nextForum() {
+    const today = kstToday();
+    return events.filter((e) => e.date && e.date >= today).sort((a, b) => (a.date < b.date ? -1 : 1))[0] || null;
+  }
+  const signupOpen = (e) => { const t = kstToday(); return !!(e.signupEnd && e.signupEnd >= t && (!e.signupStart || e.signupStart <= t)); };
+  const talksOf = (e) => (e.timetable || []).filter((t) => t.talk && t.who && !/패널|네트워킹/.test(t.kind));
+  const whenOf = (e) => { const n = dayGap(e.date); return n === 0 ? "오늘" : n === 1 ? "내일" : md(e.date); };
+  /* the visit opens with the forum while it is close (six weeks) */
+  function forumHello() {
+    const e = nextForum();
+    if (!e || dayGap(e.date) > 42) return null;
+    const name = evName(e);
+    return { text: `안녕하세요, 저는 Pseudo예요! ${whenOf(e)} ${name}${subj(name)} 열려요. ${signupOpen(e) ? `신청은 ${md(e.signupEnd)}까지 받아요. 같이 가요!` : "현장에서 만나요!"}`,
+      acts: [["행사 이야기 들려줘", "이번 행사 알려 주세요"], ["공부하러 왔어요", "처음인데 뭐부터 볼까요?"]] };
+  }
+  function forumLine() {
+    const e = nextForum();
+    if (!e || !e.tagline) return null;
+    const n = talksOf(e).length;
+    return { text: `이번 포럼은 ‘${e.tagline}’${named(e.tagline)} 주제로 열려요.${n ? ` 발표 ${n}개에 패널토크, 네트워킹까지 있어요.` : ""} 궁금한 건 저한테 물어봐요!`,
+      acts: [["누가 발표해요?", "누가 발표해요?"], ["어떻게 가요?", "행사장 어떻게 가요?"]] };
+  }
+  function forumAnswer(q) {
+    const e = nextForum();
+    if (!e) return { text: "지금 잡힌 다음 행사는 아직 없어요. 정해지면 허브 첫 화면에 바로 올라와요!", links: [{ title: "지난 행사 보기", url: "./#events", note: "Data Forum" }], chips: [], matched: "event" };
+    const name = evName(e), open = signupOpen(e), talks = talksOf(e), start = e.time ? e.time.split("–")[0] : "";
+    const evPage = e.link && { title: `${name} 행사 페이지`, url: e.link, note: open ? "참가 신청" : "행사 안내" };
+    const hub = { title: "허브에서 행사 보기", url: "./#events", note: "타임테이블 · 캘린더 · 지도" };
+    const signupChip = e.code ? "추천 코드가 뭐예요?" : "신청은 어떻게 해요?";
+    if (/(누가|발표|연사|타임테이블|프로그램|세션)/.test(q) && talks.length) {
+      const list = talks.map((t) => `${t.time.split("–")[0]} ‘${t.title}’(${String(t.who).split(" (")[0]})`).join(", ");
+      const panel = (e.timetable || []).some((t) => /패널/.test(t.kind));
+      return { text: `${list} 순서로 발표가 있어요.${panel ? " 그다음 패널토크와 네트워킹으로 이어져요." : ""}`, links: [hub, evPage].filter(Boolean), chips: ["행사장 어떻게 가요?", signupChip], matched: "event_program" };
+    }
+    if (/(어디|장소|가는|가요|위치|지도|행사장|주차|오시는)/.test(q) && (e.venue || e.address)) {
+      const where = e.address || e.venue;
+      return { text: `${e.venue ? `${e.venue}에서 열려요. ` : ""}${e.address ? `주소는 ${e.address}${end(e.address)}. ` : ""}${md(e.date)}${start ? ` ${start}` : ""}에 시작해요.`,
+        links: [{ title: "네이버 지도", url: `https://map.naver.com/p/search/${encodeURIComponent(where)}`, note: "길찾기" }, { title: "카카오맵", url: `https://map.kakao.com/?q=${encodeURIComponent(where)}`, note: "길찾기" }],
+        chips: ["누가 발표해요?", signupChip], matched: "event_place" };
+    }
+    if (/(신청|등록|코드|추천|마감|정원|자리)/.test(q)) {
+      const t = kstToday();
+      const status = open ? `${md(e.signupEnd)}까지 신청을 받아요.${e.capacity ? ` 자리는 ${e.capacity}명이에요.` : ""}` : e.signupStart && e.signupStart > t ? `신청은 ${md(e.signupStart)}부터 받아요.` : "신청은 마감됐어요. 다음 포럼에서 만나요!";
+      const code = open && e.code ? " 인과추론팀 Builder에게 받은 추천 코드가 있으면 신청할 때 넣어 주세요." : "";
+      return { text: `${open ? "가짜연구소 행사 페이지에서 ‘참여하기’를 눌러 신청하면 돼요. " : ""}${status}${code}`, links: [evPage].filter(Boolean), chips: ["누가 발표해요?", "행사장 어떻게 가요?"], matched: "event_signup" };
+    }
+    const topic = e.tagline ? ` ‘${e.tagline}’${named(e.tagline)} 주제로${talks.length ? ` 발표 ${talks.length}개와 패널토크, 네트워킹이 이어져요` : " 열려요"}.` : "";
+    return { text: `${whenOf(e)}${start ? ` ${start}` : ""}${e.venue ? `, ${e.venue}` : ""}에서 ${name}${subj(name)} 열려요.${topic}${open ? ` 신청은 ${md(e.signupEnd)}까지예요. 같이 가요!` : ""}`,
+      links: [evPage, hub].filter(Boolean), chips: ["누가 발표해요?", "행사장 어떻게 가요?", signupChip], matched: "event" };
+  }
+
+  /* ---------- taking part: runner, first contribution, Builder ---------- */
+  const ISSUES = "https://github.com/search?q=org%3ACausalInferenceLab+is%3Aissue+is%3Aopen&type=issues";
+  const J = {
+    runner: { title: "가짜연구소 프로젝트 보기", url: "https://pseudo-lab.com/", note: "러너 · 반기마다 모집" },
+    issues: { title: "열린 이슈 보기", url: ISSUES, note: "첫 기여" },
+    template: { title: "프로젝트 템플릿", url: "https://github.com/CausalInferenceLab/Project-template", note: "Builder · 레포 시작" },
+    builders: { title: "Builder 둘러보기", url: "builders/", note: "지난 기수 프로젝트" },
+    term: { title: "용어 제안하기", url: "https://github.com/CausalInferenceLab/Causal-Inference-with-Python/issues/new?template=term-proposal.yml", note: "웹북 번역어" },
+    guide: { title: "허브에 올리는 방법", url: "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/blob/main/CONTRIBUTING.md", note: "데이터 파일 PR" },
+    discord: { title: "가짜연구소 디스코드", url: "https://discord.gg/HeHbFAvmSZ", note: "질문 · 이야기" }
+  };
+  function joinAnswer(q) {
+    if (/러너/.test(q)) return { text: "러너는 가짜연구소 기수 모집 때 인과추론팀 프로젝트에 지원해서 들어와요. 14주 동안 Builder와 같이 공부하고 결과물을 만들어요. 모집은 반기마다 있어요.", links: [J.runner, J.builders], chips: ["첫 기여는 어떻게 해요?", "Builder가 되려면요?"], matched: "join_runner" };
+    if (/(빌더|builder|프로젝트.{0,3}열)/i.test(q)) return { text: "다음 기수에 직접 프로젝트를 열면 Builder예요. 레포는 프로젝트 템플릿으로 시작하고, 이 허브에는 데이터 파일 PR 한 번으로 올라가요.", links: [J.template, J.guide, J.builders], chips: ["러너는 뭘 해요?", "질문은 어디에 해요?"], matched: "join_builder" };
+    if (/(기여|pr|이슈|오픈소스)/i.test(q)) return { text: "오탈자 하나, 예제 하나도 기여예요. 열린 이슈에서 하나 골라 PR을 보내 주세요. 웹북 번역어가 어색하면 용어 제안부터 해도 좋아요.", links: [J.issues, J.term], chips: ["Builder가 되려면요?", "질문은 어디에 해요?"], matched: "join_contribute" };
+    return { text: "같이 하고 싶다니 너무 반가워요! 방법은 세 가지예요. 러너로 기수 프로젝트에 들어오거나, 열린 이슈에 PR 하나로 먼저 기여하거나, 다음 기수에 Builder로 직접 프로젝트를 열 수 있어요.", links: [J.runner, J.issues, J.template], chips: ["러너는 뭘 해요?", "첫 기여는 어떻게 해요?", "Builder가 되려면요?"], matched: "join" };
+  }
 
   /* chips under a reply: the most likely next questions, never more than three */
   function nextFor(t, used = {}) {
@@ -234,24 +310,15 @@
     const topic0 = syn.topic || findTopic(q) || ctx;
     const nothingElse = !term && !topic0;
     /* small talk first: Pseudo answers like a person, then offers a way back to the materials */
-    if (INTENT.who.test(q)) return { text: "저는 Pseudo예요! 가짜연구소 인과추론팀 자료실을 지키고 있어요. 공부하고 싶은 주제나 낯선 말을 알려 주면 팀이 만든 자료 중에서 딱 맞는 걸 골라 드려요.", links: [], chips: SUGGEST[page], matched: "who" };
+    if (INTENT.who.test(q)) return { text: "저는 Pseudo예요! 가짜연구소 인과추론팀 자료실을 지키고 있어요. 공부하고 싶은 주제나 낯선 말을 알려 주면 팀이 만든 자료 중에서 딱 맞는 걸 골라 드려요. 행사 소식이나 같이 하는 방법도 물어봐 주세요.", links: [], chips: SUGGEST[page], matched: "who" };
     if (INTENT.thanks.test(q) && nothingElse) return { text: "도움이 됐다니 저도 기뻐요! 공부하다 또 막히면 언제든 불러 주세요.", links: [], chips: [], matched: "thanks" };
     if (INTENT.greet.test(q) && nothingElse && q.length < 20) return { text: "안녕하세요! 저는 Pseudo예요. 오늘은 어떤 걸 공부해 볼까요?", links: [], chips: SUGGEST[page], matched: "greet" };
     /* questions about the site itself */
-    if (INTENT.event.test(q) && !term) {
-      const today = kstToday();
-      const next = events.filter((e) => e.date && e.date >= today).sort((a, b) => (a.date < b.date ? -1 : 1))[0];
-      if (next) {
-        const name = String(next.name).split(" - ")[0];
-        const open = next.signupEnd && next.signupEnd >= today && (!next.signupStart || next.signupStart <= today);
-        const links = [next.link && { title: `${name} 행사 페이지`, url: next.link, note: open ? "참가 신청" : "행사 안내" }, { title: "허브에서 행사 보기", url: "./#events", note: "일정 · 장소 · 타임테이블" }].filter(Boolean);
-        return { text: `다음 행사는 ${md(next.date)}${next.time ? ` ${next.time.split("–")[0]}` : ""}${next.venue ? `, ${next.venue}` : ""}에서 열리는 ${name}${end(name)}.${open ? ` 신청은 ${md(next.signupEnd)}까지 받아요. 같이 가요!` : ""}`, links, chips: [], matched: "event" };
-      }
-      return { text: "지금 잡힌 다음 행사는 아직 없어요. 정해지면 허브 첫 화면에 바로 올라와요!", links: [{ title: "지난 행사 보기", url: "./#events", note: "Data Forum" }], chips: [], matched: "event" };
-    }
+    if (INTENT.event.test(q) && !term && !/스터디/.test(q)) return forumAnswer(q);
+    if (INTENT.ask.test(q) && !term) return { text: "가짜연구소 디스코드에 남겨 주세요. 팀원들이 보고 답해 드려요.", links: [J.discord], chips: ["같이 하고 싶어요"], matched: "ask" };
     if (INTENT.level.test(q) && !term) return { text: "열 문제만 풀면 지금 어느 레벨에서 시작하면 좋을지 알려 드려요. 3분이면 돼요!", links: [{ title: "내 레벨 진단하기", url: "./?level", note: "10문항 · 3분" }, { title: "커리큘럼 보기", url: "./#curriculum", note: "Level 0–4" }], chips: [], matched: "level" };
     if (INTENT.curriculum.test(q) && !term) return { text: "순서대로 공부하고 싶다면 커리큘럼이 딱이에요. Level 0부터 4까지, 레벨마다 볼 자료가 정해져 있어요.", links: [{ title: "커리큘럼 보기", url: "./#curriculum", note: "Level 0–4" }, { title: "내 레벨 진단하기", url: "./?level", note: "시작 레벨 찾기" }], chips: [], matched: "curriculum" };
-    if (INTENT.join.test(q) && !term) return { text: "같이 하고 싶다니 너무 반가워요! 기수마다 러너로 프로젝트에 참여할 수 있고, 이슈 하나나 PR 하나로 시작해도 좋아요.", links: [{ title: "참여하는 방법", url: "./#join", note: "러너 · Builder · 기여" }, { title: "Builder 둘러보기", url: "builders/", note: "프로젝트를 연 사람들" }], chips: [], matched: "join" };
+    if (INTENT.join.test(q) && !term) return joinAnswer(q);
     if (INTENT.glossary.test(q) && !term) return { text: `용어집에 ${terms.length}개가 있어요. 한국어로도, 영어로도 찾을 수 있어요.`, links: [{ title: "용어집 열기", url: "library.html?view=glossary", note: "자료실" }], chips: ["SRM이 뭐예요?", "교란 요인이 뭐예요?"], matched: "glossary" };
 
     /* books: the free web book and the book the team translated */
@@ -299,7 +366,7 @@
       const t = mem.topic;
       const offset = INTENT.more.test(q) && !kind ? mem.shown : 0;
       const items = pick(t, { kind, easy, offset, n: 2 });
-      if (!items.length) return { text: kind ? `아쉽지만 ‘${t.name}’에는 ${KIND[kind]} 자료가 아직 없어요. 대신 다른 자료를 보여 드릴게요.` : `‘${t.name}’ 자료는 여기까지예요! 자료실에서 전부 한눈에 볼 수 있어요.`, links: kind ? [...pick(t, { n: 2 }).map(linkOf), allLink(t)] : [allLink(t)], chips: [], matched: `follow:${t.id}` };
+      if (!items.length) return { text: kind ? `아쉽지만 ‘${t.name}’에는 ${kind === "slides" ? "발표 자료가" : `${KIND[kind]} 자료가`} 아직 없어요. 대신 다른 자료를 보여 드릴게요.` : `‘${t.name}’ 자료는 여기까지예요! 자료실에서 전부 한눈에 볼 수 있어요.`, links: kind ? [...pick(t, { n: 2 }).map(linkOf), allLink(t)] : [allLink(t)], chips: [], matched: `follow:${t.id}` };
       mem.shown = offset + items.length;
       return { text: kind ? `‘${t.name}’ ${KIND[kind]} 자료는 이거예요.` : `그럼 이것도 같이 봐요.`, links: [...items.map(linkOf), allLink(t)].slice(0, 3), chips: nextFor(t, { kind, shown: mem.shown }), matched: `follow:${t.id}` };
     }
@@ -380,6 +447,11 @@
   let sayEl = null, sayTimer = 0, spoke = false;
   function speak(line) {
     if (quiet() || !panel.hidden || said().includes(`${page}:${line.id}`)) return;
+    if (line.make) {
+      const made = line.make();
+      if (!made && line.when) return;
+      line = { ...line, ...(made || {}) };
+    }
     /* the greeting only opens a visit; if the reader already reached a section that has its own line, that one wins */
     if (!line.when && spoke) return;
     spoke = true;
@@ -405,7 +477,7 @@
            Both arms are exposed at the same moment and under the same conditions; only treatment speaks.
            With the experiment off, variant() is null and Pseudo greets as usual. */
         const exp = window.hubExperiment;
-        const gate = exp ? exp.variant("pseudo-greeting", 1200) : Promise.resolve(null);
+        const gate = Promise.all([exp ? exp.variant("pseudo-greeting", 1200) : null, load()]).then(([v]) => v);
         setTimeout(() => gate.then((v) => {
           const eligible = !quiet() && panel.hidden && !spoke && !said().includes(`${page}:${line.id}`);
           if (v && eligible) exp.expose("pseudo-greeting");
@@ -470,14 +542,14 @@
   }
   function grow() { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 120) + "px"; }
 
-  function open() {
+  function open(withQuestion) {
     if (!panel.hidden) return;
     panel.hidden = false;
     opener.setAttribute("aria-expanded", "true");
     root.classList.add("open");
     hush(false);
     load();
-    if (!log.children.length) {
+    if (!log.children.length && !withQuestion) {
       const first = say(`<p class="hp-said"></p><p class="hp-sug" hidden>${SUGGEST[page].map((s) => `<button type="button" data-ask="${esc(s)}">${esc(s)}</button>`).join("")}</p>`, "bot");
       typeOut(first.querySelector(".hp-said"), page === "article" ? "반가워요, 저는 Pseudo예요! 글에서 걸리는 말이 있으면 편하게 적어 주세요. 뜻을 풀고 더 볼 자료도 찾아 드릴게요." : "반가워요, 저는 Pseudo예요! 공부하고 싶은 거나 낯선 말을 편하게 적어 주세요. 뜻도 풀어 드리고, 팀 자료 중에 딱 맞는 걸 골라 올게요.")
         .then(() => { first.querySelector(".hp-sug").hidden = false; log.scrollTop = log.scrollHeight; });
@@ -546,6 +618,18 @@
       if (b.dataset.sayAsk) ask(b.dataset.sayAsk); else input.focus();
     });
     opener.addEventListener("mouseenter", () => { if (!reduced()) { typing(true); setTimeout(() => typing(false), 1500); } });
+    /* the page asks Pseudo: data-helper-ask="..." on any link or button outside the widget opens it with that question */
+    const askFromPage = (q) => { open(true); ask(q); };
+    document.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-helper-ask]");
+      if (!b || root.contains(b)) return;
+      e.preventDefault();
+      askFromPage(b.dataset.helperAsk);
+    });
+    /* old links to the join section (#join) now open Pseudo on taking part */
+    const joinHash = () => { if (location.hash === "#join") { history.replaceState(history.state, "", location.pathname + location.search); askFromPage("같이 하고 싶어요"); } };
+    addEventListener("hashchange", joinHash);
+    setTimeout(joinHash, 300);
     listen();
   }
 

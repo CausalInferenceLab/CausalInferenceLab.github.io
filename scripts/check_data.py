@@ -20,6 +20,7 @@ SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 URL_KEYS = {"url", "link", "linkedin", "site", "cover", "href", "builderUrl", "preview", "poster", "timetableImage", "slides", "notebook"}
 errors = []
+warnings = []
 
 
 def load(name):
@@ -34,6 +35,11 @@ def load(name):
 
 def err(where, msg):
     errors.append(f"{where}: {msg}")
+
+
+def warn(where, msg):
+    """Printed, and shown on the Actions run, but does not stop the deploy."""
+    warnings.append(f"{where}: {msg}")
 
 
 def is_int(v, allow_none=False):
@@ -256,14 +262,28 @@ def main():
                 for c in t.get("chapters") or []:
                     if not re.fullmatch(r"[A-Za-z0-9-]+", str(c.get("slug", ""))):
                         err(f"glossary.json sections[{i}].terms[{j}]", f"chapter slug {c.get('slug')!r} is not a page name")
+    # Pseudo's explanations follow the web book glossary, which the deploy re-reads every time. A term the
+    # web book renamed or dropped, or an explanation that uses a term's other spelling instead of the
+    # glossary's own, is reported but does not stop the deploy (Pseudo then answers from the glossary alone).
     ps = data.get("pseudo.json")
     if ps is not None:
-        gl_ids = {t.get("id") for s in (data.get("glossary.json") or {}).get("sections") or [] for t in s.get("terms") or []}
-        for k, v in (ps.get("defs") or {}).items():
+        gl_terms = [t for s in (data.get("glossary.json") or {}).get("sections") or [] for t in s.get("terms") or []]
+        gl_ids = {t.get("id") for t in gl_terms}
+        defs = ps.get("defs") or {}
+        for k, v in defs.items():
             if k not in gl_ids:
-                err("pseudo.json defs", f"{k!r} is not a term id in glossary.json")
+                warn("pseudo.json defs", f"{k!r} is no longer a term in the web book glossary; Pseudo skips it")
             if not (isinstance(v, str) and 10 <= len(v) <= 240):
                 err("pseudo.json defs", f"{k!r} needs a one- or two-sentence explanation (10-240 characters)")
+        for t in gl_terms:
+            main = re.sub(r"\([^)]*\)", "", t.get("ko", "")).split("/")[0].strip()
+            for alt in t.get("alias") or []:
+                alt = alt.strip()
+                if not alt or alt in (main, t.get("ko")):
+                    continue
+                for k, v in defs.items():
+                    if isinstance(v, str) and alt in v:
+                        warn("pseudo.json defs", f"{k!r} writes {alt!r}; the glossary's form is {main!r}")
     ex = data.get("experiments.json")
     if ex is not None:
         if not str(ex.get("baseUrl", "")).startswith("https://"):
@@ -277,8 +297,8 @@ def main():
             ids.add(x.get("id"))
             if ex.get("enabled") and not (x.get("flagKey") and x.get("experimentId")):
                 err(w, "an enabled setup needs flagKey and experimentId for every experiment")
-        if ex.get("enabled") and not str(ex.get("apiKey", "")).startswith("pk_"):
-            err("experiments.json", "apiKey must be the project's public SDK key (pk_...), never a server key")
+        if ex.get("apiKey"):
+            err("experiments.json", "leave apiKey empty; the deploy adds the public SDK key from the ITERGLOW_SDK_KEY secret")
     for i, x in enumerate((data.get("stages.json") or {}).get("items", [])):
         w = f"stages.json items[{i}]"
         token(x.get("id"), w, "id")
@@ -296,6 +316,8 @@ def main():
             if not str((q.get("chapter") or {}).get("url", "")).startswith("https://"):
                 err(w, "chapter.url must be an https link")
 
+    for w in warnings:
+        print(f"::warning::{w}" if os.environ.get("GITHUB_ACTIONS") else f"warning: {w}")
     if errors:
         print("Data check failed:")
         for e in errors:

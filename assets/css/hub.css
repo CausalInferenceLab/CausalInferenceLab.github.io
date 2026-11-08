@@ -584,7 +584,6 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--rule); }
 .btn.ghost:hover { border-color: var(--ink); }
 button.btn { font: inherit; font-weight: 600; font-size: 15px; cursor: pointer; }
-.join-foot { margin-top: 18px; color: var(--muted); }
 
 /* Footer */
 .site-footer { border-top: 1px solid var(--rule); background: var(--surface); padding-block: 28px calc(28px + env(safe-area-inset-bottom, 0px)); font-size: 14px; color: var(--muted); }
@@ -1730,7 +1729,6 @@ a.ac-title:hover { text-decoration: underline; }
   .loop { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .loop > li:nth-child(2) > a::after { display: none; }
 }
-#join .steps li::before { display: none; }
 
 /* ==========================================================================
    The page is a line: the nav is six stations, each section a stop on it,
@@ -1740,7 +1738,7 @@ a.ac-title:hover { text-decoration: underline; }
 #contrib, .s-ml { --sec: var(--l-ml); }
 #events, .s-exp { --sec: var(--l-exp); }
 #posts, .s-behavior { --sec: var(--l-behavior); }
-#join, .s-research { --sec: var(--l-research); }
+.s-research { --sec: var(--l-research); }
 
 /* nav: a rail under the six labels, a stop under each, filled up to where the reader is */
 .site-nav { position: relative; gap: 22px; padding: 0 6px; overflow: visible; }
@@ -1770,7 +1768,7 @@ a.ac-title:hover { text-decoration: underline; }
 
 /* section heads: the station for that section, then the name */
 .section-head h2 { display: flex; align-items: center; gap: 14px; font-size: clamp(28px, 3.4vw, 40px); letter-spacing: -.035em; }
-#curriculum .section-head h2::before, #contrib .section-head h2::before, #events .section-head h2::before, #posts .section-head h2::before, #join .section-head h2::before {
+#curriculum .section-head h2::before, #contrib .section-head h2::before, #events .section-head h2::before, #posts .section-head h2::before {
   content: ""; width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%; background: var(--surface); border: 5px solid var(--sec); box-sizing: border-box; }
 .section-head > p { max-width: 40em; }
 
