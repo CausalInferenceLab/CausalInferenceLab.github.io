@@ -153,7 +153,7 @@
     thanks: /(고마|감사|땡큐|thank|thx|ㄱㅅ)/i,
     who: /((너|넌|당신|pseudo|슈도)\s*(는|은)?\s*(누구|뭐야|뭐니|정체))|이름이 뭐|자기\s*소개/i,
     event: /(포럼|행사|forum|밋업|세미나|오프라인|모임|연사|발표자|누가 발표|타임테이블|프로그램|행사장|추천 코드|신청)/i,
-    ask: /(디스코드|discord|문의|질문은 어디|어디에 물어|어디서 물어)/i,
+    ask: /(디스코드|discord|문의|연락|협업|강연|섭외|제안하고|메일|링크드인|linkedin|질문은 어디|어디에 물어|어디서 물어)/i,
     level: /(레벨|진단|내 수준|실력 테스트)/,
     curriculum: /(커리큘럼|로드맵|순서대로|공부 순서)/,
     join: /(기여|참여|빌더|builder|러너|스터디 신청|같이 하고|오픈소스 하고|PR 올)/i,
@@ -256,13 +256,16 @@
     builders: { title: "Builder 둘러보기", url: "builders/", note: "지난 기수 프로젝트" },
     term: { title: "용어 제안하기", url: "https://github.com/CausalInferenceLab/Causal-Inference-with-Python/issues/new?template=term-proposal.yml", note: "웹북 번역어" },
     guide: { title: "허브에 올리는 방법", url: "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/blob/main/CONTRIBUTING.md", note: "데이터 파일 PR" },
-    discord: { title: "가짜연구소 디스코드", url: "https://discord.gg/HeHbFAvmSZ", note: "질문 · 이야기" }
+    discord: { title: "가짜연구소 디스코드", url: "https://discord.gg/QEdcGbYSQ", note: "질문 · 참여 이야기", t: "discord" },
+    linkedin: { title: "신진수 LinkedIn", url: "https://www.linkedin.com/in/jinsoo-shin-436060162", note: "협업 · 강연 · 제안", t: "linkedin" },
+    /* the address is put together here so it is not sitting whole in the page source */
+    mail: { title: "메일 보내기", url: "mailto:" + ["jsshin2013", "gmail.com"].join("@"), note: ["jsshin2013", "gmail.com"].join("@"), t: "email" }
   };
   function joinAnswer(q) {
-    if (/러너/.test(q)) return { text: "러너는 가짜연구소 기수 모집 때 인과추론팀 프로젝트에 지원해서 들어와요. 14주 동안 Builder와 같이 공부하고 결과물을 만들어요. 모집은 반기마다 있어요.", links: [J.runner, J.builders], chips: ["첫 기여는 어떻게 해요?", "Builder가 되려면요?"], matched: "join_runner" };
-    if (/(빌더|builder|프로젝트.{0,3}열)/i.test(q)) return { text: "다음 기수에 직접 프로젝트를 열면 Builder예요. 레포는 프로젝트 템플릿으로 시작하고, 이 허브에는 데이터 파일 PR 한 번으로 올라가요.", links: [J.template, J.guide, J.builders], chips: ["러너는 뭘 해요?", "질문은 어디에 해요?"], matched: "join_builder" };
-    if (/(기여|pr|이슈|오픈소스)/i.test(q)) return { text: "오탈자 하나, 예제 하나도 기여예요. 열린 이슈에서 하나 골라 PR을 보내 주세요. 웹북 번역어가 어색하면 용어 제안부터 해도 좋아요.", links: [J.issues, J.term], chips: ["Builder가 되려면요?", "질문은 어디에 해요?"], matched: "join_contribute" };
-    return { text: "같이 하고 싶다니 너무 반가워요! 방법은 세 가지예요. 러너로 기수 프로젝트에 들어오거나, 열린 이슈에 PR 하나로 먼저 기여하거나, 다음 기수에 Builder로 직접 프로젝트를 열 수 있어요.", links: [J.runner, J.issues, J.template], chips: ["러너는 뭘 해요?", "첫 기여는 어떻게 해요?", "Builder가 되려면요?"], matched: "join" };
+    if (/러너/.test(q)) return { text: "러너는 가짜연구소 기수 모집 때 인과추론팀 프로젝트에 지원해서 들어와요. 14주 동안 Builder와 같이 공부하고 결과물을 만들어요. 모집은 반기마다 있어요.", links: [J.runner, J.builders], chips: ["첫 기여는 어떻게 해요?", "Builder가 되려면요?", "연락하고 싶어요"], matched: "join_runner" };
+    if (/(빌더|builder|프로젝트.{0,3}열)/i.test(q)) return { text: "다음 기수에 직접 프로젝트를 열면 Builder예요. 레포는 프로젝트 템플릿으로 시작하고, 이 허브에는 데이터 파일 PR 한 번으로 올라가요.", links: [J.template, J.guide, J.builders], chips: ["러너는 뭘 해요?", "연락하고 싶어요"], matched: "join_builder" };
+    if (/(기여|pr|이슈|오픈소스)/i.test(q)) return { text: "오탈자 하나, 예제 하나도 기여예요. 열린 이슈에서 하나 골라 PR을 보내 주세요. 웹북 번역어가 어색하면 용어 제안부터 해도 좋아요.", links: [J.issues, J.term], chips: ["Builder가 되려면요?", "연락하고 싶어요"], matched: "join_contribute" };
+    return { text: "같이 하고 싶다니 너무 반가워요! 방법은 세 가지예요. 러너로 기수 프로젝트에 들어오거나, 열린 이슈에 PR 하나로 먼저 기여하거나, 다음 기수에 Builder로 직접 프로젝트를 열 수 있어요.", links: [J.runner, J.issues, J.template], chips: ["러너는 뭘 해요?", "첫 기여는 어떻게 해요?", "연락하고 싶어요"], matched: "join" };
   }
 
   /* chips under a reply: the most likely next questions, never more than three */
@@ -315,7 +318,7 @@
     if (INTENT.greet.test(q) && nothingElse && q.length < 20) return { text: "안녕하세요! 저는 Pseudo예요. 오늘은 어떤 걸 공부해 볼까요?", links: [], chips: SUGGEST[page], matched: "greet" };
     /* questions about the site itself */
     if (INTENT.event.test(q) && !term && !/스터디/.test(q)) return forumAnswer(q);
-    if (INTENT.ask.test(q) && !term) return { text: "가짜연구소 디스코드에 남겨 주세요. 팀원들이 보고 답해 드려요.", links: [J.discord], chips: ["같이 하고 싶어요"], matched: "ask" };
+    if (INTENT.ask.test(q) && !term) return { text: "궁금한 건 가짜연구소 디스코드에 편하게 남겨 주세요. 협업이나 강연처럼 따로 이야기할 일은 인과추론팀을 맡고 있는 신진수 님에게 바로 연락해도 돼요.", links: [J.discord, J.linkedin, J.mail], chips: ["같이 하고 싶어요"], matched: "contact" };
     if (INTENT.level.test(q) && !term) return { text: "열 문제만 풀면 지금 어느 레벨에서 시작하면 좋을지 알려 드려요. 3분이면 돼요!", links: [{ title: "내 레벨 진단하기", url: "./?level", note: "10문항 · 3분" }, { title: "커리큘럼 보기", url: "./#curriculum", note: "Level 0–4" }], chips: [], matched: "level" };
     if (INTENT.curriculum.test(q) && !term) return { text: "순서대로 공부하고 싶다면 커리큘럼이 딱이에요. Level 0부터 4까지, 레벨마다 볼 자료가 정해져 있어요.", links: [{ title: "커리큘럼 보기", url: "./#curriculum", note: "Level 0–4" }, { title: "내 레벨 진단하기", url: "./?level", note: "시작 레벨 찾기" }], chips: [], matched: "curriculum" };
     if (INTENT.join.test(q) && !term) return joinAnswer(q);
@@ -533,7 +536,7 @@
     const p = prompt(q, a.links);
     /* only the newest reply offers next steps and Claude; older ones stay quiet */
     log.querySelectorAll(".hp-ai, .hp-next").forEach((el) => el.remove());
-    wait.innerHTML = `<p class="hp-said"></p>${a.links.length ? `<ul class="hp-links">${a.links.map((l) => `<li><a href="${esc(l.url)}"${/^https?:/.test(l.url) && !l.url.startsWith(SITE) ? ' target="_blank" rel="noopener"' : ""} data-event="helper_click" data-event-params='${esc(JSON.stringify({ matched: a.matched, page }))}'>${esc(l.title)}</a><span>${esc(l.note)}</span></li>`).join("")}</ul>` : ""}
+    wait.innerHTML = `<p class="hp-said"></p>${a.links.length ? `<ul class="hp-links">${a.links.map((l) => `<li><a href="${esc(l.url)}"${/^https?:/.test(l.url) && !l.url.startsWith(SITE) ? ' target="_blank" rel="noopener"' : ""} data-event="helper_click" data-event-params='${esc(JSON.stringify({ matched: a.matched, page, ...(l.t ? { target: l.t } : {}) }))}'>${esc(l.title)}</a><span>${esc(l.note)}</span></li>`).join("")}</ul>` : ""}
       ${a.chips && a.chips.length ? `<p class="hp-sug hp-next">${a.chips.map((c) => `<button type="button" data-ask="${esc(c)}">${esc(c)}</button>`).join("")}</p>` : ""}
       <p class="hp-ai"><a class="hp-claude" href="https://claude.ai/new?q=${encodeURIComponent(p)}" target="_blank" rel="noopener" data-event="helper_handoff" data-event-params='${esc(JSON.stringify({ target: "claude", matched: a.matched, page }))}'>Claude랑 더 이야기하기<span aria-hidden="true"> ↗</span></a><button type="button" class="hp-copy" data-copy="${esc(p)}" data-label="질문 복사하기">질문 복사하기</button></p>`;
     wait.querySelector(".hp-copy").addEventListener("click", () => track("helper_handoff", { target: "copy", matched: a.matched, page }));
