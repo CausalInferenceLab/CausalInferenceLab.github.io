@@ -2664,3 +2664,21 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 @media (max-width: 520px) { .lt-card.lt-slim { grid-template-columns: minmax(0, 1fr); } .lt-card.lt-slim .lt-t p:last-child { display: none; } }
 /* the open-source list keeps to the top of its panel when the left column grows */
 @media (min-width: 861px) { .hero .banner-side { justify-content: flex-start; align-self: center; } .hero .featured { align-content: start; } }
+
+/* related searches under a search box (suggest.js) */
+.sg-host { position: relative; }
+.sg { position: absolute; z-index: 60; list-style: none; margin: 0; padding: 6px; min-width: 260px; background: var(--surface); color: var(--ink); border: 1px solid var(--rule); border-radius: 14px; box-shadow: 0 14px 36px rgba(20, 22, 43, .2); max-height: min(56vh, 430px); overflow-y: auto; overscroll-behavior: contain; text-align: left; }
+.sg-head { padding: 6px 10px 6px; font-size: 12px; color: var(--muted); }
+.sg-o { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 1px; align-items: center; min-height: 46px; padding: 7px 10px; border-radius: 10px; cursor: pointer; }
+.sg-o[aria-selected="true"] { background: var(--surface-2); box-shadow: inset 3px 0 0 var(--accent); }
+.sg-k { grid-row: 1 / 3; align-self: center; font-size: 11.5px; font-weight: 800; padding: 3px 7px; border-radius: 6px; background: color-mix(in srgb, var(--l-main) 12%, var(--surface)); color: var(--l-main); }
+.sg-o.t-term .sg-k { background: color-mix(in srgb, var(--l-exp) 12%, var(--surface)); color: var(--l-exp); }
+.sg-l { font-size: 15px; font-weight: 600; line-height: 1.35; }
+.sg-l b { font-weight: 800; color: var(--accent); }
+.sg-s { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 520px) { .sg { max-height: 46vh; } .sg-head { display: none; } }
+/* the hero lets the list hang below its card */
+.hero .banner { overflow: visible; }
+/* the header's current page on pages other than the hub */
+.site-nav a.stn[aria-current="page"] { background: none; color: var(--ink); font-weight: 800; }
+.site-nav a.stn[aria-current="page"]::after { background: var(--sec); transform: scale(1.25); }

@@ -25,7 +25,8 @@
 <header class="site-header">
   <div class="wrap header-row">
     <a class="brand" href="./" aria-label="Causal Inference Hub 처음으로"><img class="brand-logo" src="assets/img/team-mark.png" alt="" width="34" height="34"><span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span></a>
-    <nav class="site-nav" aria-label="주요 메뉴"><a href="library.html" aria-current="page">자료실</a><a href="./#curriculum">커리큘럼</a><a href="game.html">게임</a><a href="lab.html">실험실</a><a href="builders/">Builder</a></nav>
+    <nav class="site-nav" aria-label="주요 메뉴"><a href="/#curriculum" class="stn s-main">커리큘럼</a><a href="/library.html" class="stn s-topics" aria-current="page">자료실</a><a href="/#contrib" class="stn s-ml">Builder</a><a href="/#events" class="stn s-exp">행사</a><a href="/#posts" class="stn s-behavior">연재</a><a href="/#join" class="stn s-research" data-helper-ask="같이 하고 싶어요" data-event="click_join" data-event-params='{"target":"pseudo","source":"nav"}'>참여하기</a></nav>
+    <a class="hdr-ev" id="hdr-event" hidden></a>
     <button type="button" class="pass-btn" data-passport aria-label="활동 여권 열기">여권 <b data-passport-count>0/9</b></button>
   </div>
 </header>
@@ -41,7 +42,7 @@
       <label class="lib-search">
         <span class="sr-only">주제, 방법, 용어로 찾기</span>
         <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input type="search" id="lib-q" name="q" placeholder="이중차분, CUPED, 실험군…" autocomplete="off" enterkeyhint="search">
+        <input type="search" id="lib-q" name="q" placeholder="이중차분, CUPED, 실험군…" autocomplete="off" enterkeyhint="search" data-suggest="library">
       </label>
       <div class="lib-shelves" role="radiogroup" aria-label="분야" id="lib-shelves"></div>
     </form>
@@ -79,11 +80,13 @@
 <footer class="site-footer">
   <div class="wrap footer-row">
     <div><p class="footer-brand">가짜연구소 인과추론팀</p><p>빠진 자료나 잘못된 링크는 <a href="https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/issues" target="_blank" rel="noopener">이슈</a>로 알려 주세요.</p></div>
-    <ul class="footer-links"><li><a href="./">허브</a></li><li><a href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://pseudo-lab.com/" target="_blank" rel="noopener">가짜연구소</a></li><li><a href="https://discord.gg/QEdcGbYSQ" target="_blank" rel="noopener" data-event="click_join" data-event-params='{"target":"discord","source":"footer"}'>Discord</a></li><li><a href="https://www.linkedin.com/in/jinsoo-shin-436060162" target="_blank" rel="noopener" data-helper-ask="연락하고 싶어요" data-event="click_join" data-event-params='{"target":"contact","source":"footer"}'>문의하기</a></li></ul>
+    <ul class="footer-links"><li><a href="./">허브</a></li><li><a href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a></li><li><a href="https://pseudo-lab.com/" target="_blank" rel="noopener">가짜연구소</a></li><li><a href="https://discord.com/invite/EPurkHVtp2" target="_blank" rel="noopener" data-event="click_join" data-event-params='{"target":"discord","source":"footer"}'>Discord</a></li><li><a href="https://www.linkedin.com/in/jinsoo-shin-436060162" target="_blank" rel="noopener" data-helper-ask="연락하고 싶어요" data-event="click_join" data-event-params='{"target":"contact","source":"footer"}'>문의하기</a></li></ul>
   </div>
 </footer>
 <script src="assets/js/track.js" defer></script>
 <script src="assets/js/passport.js" defer></script>
+<script src="assets/js/header.js" defer></script>
+<script src="assets/js/suggest.js" defer></script>
 <script src="assets/js/library.js" defer></script>
 <script src="assets/js/experiment.js" defer></script>
 <script src="assets/js/helper.js" defer></script>

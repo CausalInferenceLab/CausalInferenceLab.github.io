@@ -53,11 +53,11 @@
           <p class="banner-kicker"><span>Pseudo-Lab</span><span class="sep" aria-hidden="true"></span>인과추론팀 <b>Causal-Lab</b></p>
           <h1 id="hero-title">Causal Inference Hub</h1>
           <p class="banner-lede">2022년부터 함께 만든 인과추론과 온라인 실험 자료를 주제별로 찾고, Level 0–4 커리큘럼으로 따라갈 수 있게 엮었습니다.</p>
-          <form class="hero-search" action="library.html" method="get" role="search">
+          <form class="hero-search" action="library.html" method="get" role="search"><input type="hidden" name="from" value="hero">
             <label class="hs-box">
               <span class="sr-only">자료실에서 주제, 방법, 용어로 찾기</span>
               <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              <input type="search" name="q" placeholder="이중차분, CUPED, 실험군…" autocomplete="off" enterkeyhint="search">
+              <input type="search" name="q" placeholder="이중차분, CUPED, 실험군…" autocomplete="off" enterkeyhint="search" data-suggest="hero">
             </label>
             <button type="submit" class="hs-go">찾기</button>
             <p class="hs-note" id="hs-note"><a href="library.html">자료실</a>과 <a href="library.html?view=glossary">용어집</a>에서 찾습니다.</p>
@@ -133,11 +133,11 @@
         <h2 id="topics-title">자료실</h2>
         <p>커리큘럼 밖에서 궁금한 주제나 용어가 생기면 여기서 찾으세요.</p>
       </div>
-      <form class="tp-search" action="library.html" method="get" role="search">
+      <form class="tp-search" action="library.html" method="get" role="search"><input type="hidden" name="from" value="topics">
         <label class="lib-search">
           <span class="sr-only">주제나 방법 이름으로 찾기</span>
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input type="search" name="q" placeholder="이중차분, CUPED, 실험군…" autocomplete="off" enterkeyhint="search">
+          <input type="search" name="q" placeholder="이중차분, CUPED, 실험군…" autocomplete="off" enterkeyhint="search" data-suggest="topics">
         </label>
         <button type="submit" class="btn">찾기</button>
       </form>
@@ -198,7 +198,7 @@
     <ul class="footer-links">
       <li><a href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub</a></li>
       <li><a href="https://pseudo-lab.com/" target="_blank" rel="noopener">가짜연구소</a></li>
-      <li><a href="https://discord.gg/QEdcGbYSQ" target="_blank" rel="noopener">Discord</a></li>
+      <li><a href="https://discord.com/invite/EPurkHVtp2" target="_blank" rel="noopener">Discord</a></li>
       <li><a href="https://www.linkedin.com/in/jinsoo-shin-436060162" target="_blank" rel="noopener" data-helper-ask="연락하고 싶어요" data-event="click_join" data-event-params='{"target":"contact","source":"footer"}'>문의하기</a></li>
       <li><a href="builders/">Builder</a></li>
       <li><a href="game.html">상관일까, 인과일까?</a></li>
@@ -218,6 +218,7 @@
 
 <script src="assets/js/track.js" defer></script>
 <script src="assets/js/passport.js" defer></script>
+<script src="assets/js/suggest.js" defer></script>
 <script src="assets/js/hub.js" defer></script>
 <script src="assets/js/experiment.js" defer></script>
 <script src="assets/js/helper.js" defer></script>
