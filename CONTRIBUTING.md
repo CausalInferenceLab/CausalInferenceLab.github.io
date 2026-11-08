@@ -27,6 +27,7 @@ PR을 올리기 전에 `python3 scripts/check_data.py`를 실행해 주세요. �
 | `assets/js/header.js` | 허브가 아닌 페이지(자료실, 게임, 실험실, 글, Builder, 404)의 상단. 메뉴는 허브와 같은 여섯 곳이고, 다음 Data Forum 배지를 `events.json`에서 그립니다. 메뉴를 바꿀 때는 `index.html`, 각 페이지, `scripts/build_builders.py`의 `site-nav`를 함께 고칩니다. |
 | `assets/js/suggest.js` | 검색창 아래 관련 검색어. `data-suggest`가 붙은 입력창에서 `topics.json`의 주제(이름·영문·`keys`)와 `glossary.json`의 용어(번역어·다른 표기·원어)를 찾고, 한글 초성(ㅇㅈㅊㅂ)과 영문 약어(DID)도 받습니다. 주제가 숨은 키워드로만 걸리면 어떤 키워드인지 함께 보여 줍니다. 팀 프로젝트(`repos.json`)도 함께 제안하고, 전체 문구로 없으면 가장 긴 낱말로 다시 찾습니다. 잘 안 걸리는 말이 있으면 해당 주제의 `keys`를 늘리세요. |
 | `data/glossary.json` | 직접 고치지 않습니다. 배포할 때 `scripts/build_glossary.py`가 웹북 용어집 페이지를 읽어 새로 만듭니다. 용어를 고치려면 Causal-Inference-with-Python의 `TRANSLATION_GUIDE.md` 용어표를 고치세요. 웹북이 다시 배포된 다음 허브 배포 때 반영됩니다. |
+| `data/term_links.json` | 자료실 용어집의 ‘팀 자료에서’ 목록. 손으로 고치지 않고, 팀 저장소를 한 폴더에 clone한 뒤 `python3 scripts/build_term_links.py <폴더> --check-urls`로 다시 만듭니다. 발표 자료(PDF, `pdftotext` 필요), 노트북과 마크다운에서 용어의 번역어·다른 표기·원어를 찾아, 용어마다 많이 다룬 문서를 4개까지(저장소당 2개) 고릅니다. 팀 저장소에 자료가 늘면 다시 돌려 커밋하세요. 용어의 한 줄 풀이는 `data/pseudo.json`에 있고 Pseudo와 용어집이 함께 씁니다. |
 | `data/repos.json` | 레포를 추가하거나 설명·단계·트랙·상태를 바꿀 때. 자료실 검색은 레포 이름·`title`·`tags`·`builders`와 검색어 `keys`로 팀 프로젝트를 찾아 주제 위에 보여 줍니다(예: `CausalML`, `LLM`). 주제에 넣기 어려운 프로젝트가 검색에 안 걸리면 `keys`를 늘리세요. |
 | `data/map.json` | 트랙 지도에서 레포의 위치를 정할 때. 책과 강의(`paid`)의 표지와 소개도 여기서 고칩니다. |
 | `data/levels.json` | 레벨의 설명과 볼 순서를 바꿀 때. `learn`(배우는 것), `outcome`(끝나면), `steps`(순서대로 볼 레포와 한 줄 `note`), `more`(웹북 장이나 허브 페이지 같은 더 해 보기 링크)를 적습니다. `steps`에 없는 같은 레벨의 레포는 ‘골라 보기’로 나옵니다. |
