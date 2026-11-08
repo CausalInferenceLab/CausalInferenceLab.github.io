@@ -122,6 +122,10 @@
       "발표 자료",
       "함께 읽기"
     ],
+    "keys": [
+      "실무로 통하는 인과추론",
+      "책 스터디"
+    ],
     "textbook": "paid-book",
     "previewLabel": "정리 노트 보기"
   },
@@ -171,6 +175,12 @@
       "uber/causalml",
       "메타러너",
       "이론에서 코드로"
+    ],
+    "keys": [
+      "CausalML",
+      "uber causalml",
+      "uplift",
+      "업리프트"
     ],
     "textbook": "paid-book"
   },
@@ -263,6 +273,11 @@
       "마케팅 성과 측정",
       "베이지안",
       "인과를 곁들인 분석"
+    ],
+    "keys": [
+      "마케팅",
+      "베이지안",
+      "Bayesian"
     ]
   },
   {
@@ -285,6 +300,10 @@
       "행동 데이터 분석",
       "코드 재현",
       "동료 리뷰"
+    ],
+    "keys": [
+      "행동 데이터",
+      "리딩 살롱"
     ],
     "preview": "https://causalinferencelab.github.io/data-still-does-not-speak/",
     "previewLabel": "발표 자료 보기"
@@ -313,6 +332,12 @@
       "Text-to-SQL",
       "데이터 에이전트",
       "함께 개발"
+    ],
+    "keys": [
+      "LLM",
+      "SQL",
+      "Text2SQL",
+      "AI 에이전트"
     ]
   },
   {
@@ -335,6 +360,10 @@
       "정책 효과",
       "공공데이터",
       "분석 계획 먼저 공개"
+    ],
+    "keys": [
+      "AI 에이전트",
+      "정책 평가"
     ],
     "preview": "https://causalinferencelab.github.io/policy-effect-analytics-agent/",
     "previewLabel": "사이트 열기"

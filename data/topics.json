@@ -32,7 +32,11 @@
         "potential outcomes",
         "counterfactual",
         "편향",
-        "입문"
+        "입문",
+        "상관관계",
+        "인과관계",
+        "correlation",
+        "causation"
       ],
       "items": [
         {
@@ -101,7 +105,16 @@
         "교란",
         "충돌부",
         "collider",
-        "선택 편향"
+        "선택 편향",
+        "교란 변수",
+        "교란 요인",
+        "confounder",
+        "confounding",
+        "콜라이더",
+        "충돌 변수",
+        "do-calculus",
+        "do 연산자",
+        "selection bias"
       ],
       "items": [
         {
@@ -440,7 +453,10 @@
         "합성 이중차분",
         "synthetic diff-in-diff",
         "컨포멀",
-        "conformal"
+        "conformal",
+        "합성통제법",
+        "합성 대조군",
+        "합성대조법"
       ],
       "items": [
         {
@@ -712,7 +728,10 @@
         "uplift",
         "예산",
         "타깃팅",
-        "쿠폰"
+        "쿠폰",
+        "타겟팅",
+        "targeting",
+        "정책 평가"
       ],
       "items": [
         {
@@ -953,7 +972,16 @@
         "순차 검정",
         "sequential",
         "peeking",
-        "엿보기"
+        "엿보기",
+        "유의성",
+        "통계적 유의성",
+        "유의 수준",
+        "p값",
+        "최소 탐지 효과",
+        "다중 비교",
+        "multiple testing",
+        "본페로니",
+        "Bonferroni"
       ],
       "items": [
         {
@@ -984,7 +1012,11 @@
         "실험 민감도",
         "트리거링",
         "triggering",
-        "델타 방법"
+        "델타 방법",
+        "델타 메소드",
+        "delta method",
+        "비율 지표",
+        "ratio metric"
       ],
       "items": [
         {
@@ -1051,7 +1083,10 @@
         "지역 실험",
         "geo",
         "마켓플레이스",
-        "누출"
+        "누출",
+        "클러스터 무작위",
+        "군집 무작위",
+        "cluster randomization"
       ],
       "items": [
         {
@@ -1092,7 +1127,11 @@
         "ramp-up",
         "노출",
         "holdout",
-        "홀드아웃"
+        "홀드아웃",
+        "노벨티 효과",
+        "노벨티",
+        "신기성 효과",
+        "novelty effect"
       ],
       "items": [
         {

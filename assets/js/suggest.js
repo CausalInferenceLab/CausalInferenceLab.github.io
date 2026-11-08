@@ -3,7 +3,9 @@
    …); Korean initials work too ("ㅇㅈㅊㅂ"), as do English names and abbreviations ("did", "cuped").
    An input opts in with data-suggest="<placement>". Picking a suggestion fires a cancelable
    "hub:suggest" event on the input ({ type, id, label, href }); unless a page handles it, the browser goes to
-   href. Data: data/topics.json and data/glossary.json, loaded on first focus. */
+   href. The team's projects are suggested too ("caus" → CausalML 스터디). When nothing has the whole phrase, the
+   longest word decides ("성향점수 매칭 예제" → 성향점수), with a particle at its end let go ("도구변수란").
+   Data: data/topics.json, data/glossary.json and data/repos.json, loaded on first focus. */
 (() => {
   "use strict";
   const ROOT = new URL("../../", document.currentScript ? document.currentScript.src : location.href).href;
@@ -22,7 +24,7 @@
   function load() {
     if (loading) return loading;
     const get = (p) => fetch(ROOT + p).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-    loading = Promise.all([get("data/topics.json"), get("data/glossary.json")]).then(([t, g]) => {
+    loading = Promise.all([get("data/topics.json"), get("data/glossary.json"), get("data/repos.json")]).then(([t, g, r]) => {
       const shelves = Object.fromEntries(((t && t.shelves) || []).map((s) => [s.id, s.name]));
       const topics = ((t && t.topics) || []).map((x) => ({
         type: "topic", id: x.id, label: x.name, sub: `${shelves[x.shelf] || "주제"} · 자료 ${(x.items || []).length}개`,
@@ -32,7 +34,12 @@
         type: "term", id: x.id, label: x.ko, sub: `용어 · ${x.en || ""}`,
         href: `${ROOT}library.html?view=glossary#${encodeURIComponent(x.id)}`, keys: [x.ko, ...(x.alias || []), x.en, ...String(x.en || "").split("/")]
       }));
-      index = [...topics, ...terms].map((e) => {
+      const skip = new Set(["CausalInferenceLab.github.io", "Project-template", "python-causality-handbook"]);
+      const projects = (Array.isArray(r) ? r : []).filter((x) => x && x.title && !skip.has(x.repo) && x.status !== "depot").map((x) => ({
+        type: "project", id: `pj-${x.repo}`, label: x.title, sub: `프로젝트 · ${(x.tags || []).slice(0, 2).join(" · ") || x.repo}`,
+        href: `${ROOT}library.html#pj-${encodeURIComponent(x.repo)}`, keys: [x.title, x.repo, ...(x.keys || []), ...(x.tags || [])]
+      }));
+      index = [...topics, ...terms, ...projects].map((e) => {
         const keys = e.keys.filter(Boolean).map(String);
         return { ...e, n: keys.map(norm), c: keys.map((k) => norm(cho(k))), words: keys.flatMap((k) => k.toLowerCase().split(/[\s/()·-]+/)).filter(Boolean) };
       });
@@ -42,7 +49,17 @@
 
   /* a match in the name itself beats one in a hidden keyword; then starts with > a word starts with > contains;
      topics before terms; shorter names first. A hit only in a keyword says which one. */
+  const ENDING = /(이란|란|은|는|을|를|의|에서|으로|로|이|가|과|와)$/;
   function find(raw) {
+    const hit = findOne(raw);
+    const words = String(raw || "").trim().split(/\s+/);
+    if (hit.length) return hit;
+    const word = words.length > 1 ? words.slice().sort((a, b) => b.length - a.length)[0] : words[0];
+    const cut = /[가-힣]$/.test(word) ? word.replace(ENDING, "") : word;
+    if (words.length > 1 && word.length >= 2) { const w = findOne(word); if (w.length) return w; }
+    return cut !== word && cut.length >= 2 ? findOne(cut) : [];
+  }
+  function findOne(raw) {
     const q = norm(raw);
     if (!index || !q) return [];
     const jamo = onlyCho(q);
@@ -65,10 +82,11 @@
     const seen = new Set();
     return scored.map((x) => x.e).filter((e) => { const k = e.type + norm(e.label); if (seen.has(k)) return false; seen.add(k); return true; }).slice(0, MAX);
   }
-  /* the typed part of a name, in bold */
+  /* the typed part of a name, in bold (or the word of it that matched) */
   function mark(label, raw) {
-    const q = String(raw || "").trim();
-    const i = q ? label.toLowerCase().indexOf(q.toLowerCase()) : -1;
+    const low = label.toLowerCase();
+    const q = [String(raw || "").trim(), ...String(raw || "").trim().split(/\s+/).sort((a, b) => b.length - a.length)].find((w) => w && low.includes(w.toLowerCase())) || "";
+    const i = q ? low.indexOf(q.toLowerCase()) : -1;
     return i < 0 ? esc(label) : `${esc(label.slice(0, i))}<b>${esc(label.slice(i, i + q.length))}</b>${esc(label.slice(i + q.length))}`;
   }
 
@@ -107,7 +125,7 @@
       at = -1;
       if (!raw.trim() || !items.length) { close(); return; }
       box.innerHTML = `<li class="sg-head" role="presentation">관련 검색어 ${items.length}개 · ↑↓로 고르고 Enter</li>` + items.map((e, i) => `<li role="option" id="${id}-${i}" class="sg-o t-${e.type}" aria-selected="false" data-i="${i}">
-          <span class="sg-k">${e.type === "topic" ? "주제" : "용어"}</span><span class="sg-l">${mark(e.label, raw)}</span><span class="sg-s">${esc(e.sub)}</span></li>`).join("");
+          <span class="sg-k">${{ topic: "주제", term: "용어", project: "프로젝트" }[e.type]}</span><span class="sg-l">${mark(e.label, raw)}</span><span class="sg-s">${esc(e.sub)}</span></li>`).join("");
       place();
       box.hidden = false;
       input.setAttribute("aria-expanded", "true");

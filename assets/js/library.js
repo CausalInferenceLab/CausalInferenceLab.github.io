@@ -1,7 +1,7 @@
 /* 자료실: causal inference and online experiment topics with deep links into the team's web book,
    Causal Studio, the practitioner lectures, book code, study slides and case lists, plus the web
    book's glossary. Data: data/topics.json, data/glossary.json (scripts/build_glossary.py),
-   data/repos.json (source names) and data/articles.json (posts tagged with topics).
+   data/repos.json (source names, and the team's projects a search can name) and data/articles.json (posts tagged with topics).
    State lives in the address: ?q= search, ?shelf= causal|exp, ?kind=, ?src=, ?view=glossary,
    and #topic-id or #term-... for a topic or a term. */
 (() => {
@@ -73,9 +73,62 @@
     history.replaceState(history.state, "", `${location.pathname}${s ? `?${s}` : ""}${location.hash}`);
   }
 
+  /* ---------- search ---------- */
+  /* A search first looks for the whole phrase. When nothing has it, each word counts on its own
+     ("성향점수 매칭 예제"), a particle at the end is let go ("도구변수란" → 도구변수), a longer word still finds
+     its topic ("교란변수" → 교란), and words like 예제·영상 pick the kind of material instead. Words such as
+     효과·분석 only count when nothing more specific was typed. */
+  const WANT = { code: ["예제", "코드", "구현", "실습", "파이썬", "python", "노트북", "notebook"], video: ["영상", "강의", "유튜브"], read: ["웹북", "책", "글"], slides: ["발표", "슬라이드"], case: ["사례"] };
+  const GENERIC = new Set(["효과", "분석", "방법", "데이터", "실험", "모델", "추정", "개념", "정리", "이해", "원인", "차이", "문제", "기법", "공부", "자료"]);
+  const ENDING = /(이란|란|은|는|을|를|의|에서|으로|로|이|가|과|와)$/;
+  const hasKo = (s) => /[가-힣]/.test(s);
+  let looseUsed = false;
+  function parseQuery(raw) {
+    const words = String(raw || "").split(/\s+/).map(norm).filter((w) => w.length >= 2);
+    const kinds = new Set(), kindWords = [], forms = [];
+    words.forEach((w) => {
+      const k = Object.keys(WANT).find((kk) => WANT[kk].includes(w));
+      if (k) { kinds.add(k); kindWords.push(w); return; }
+      const cut = hasKo(w) ? w.replace(ENDING, "") : w;
+      forms.push(cut.length >= 2 && cut !== w ? [w, cut] : [w]);
+    });
+    const specific = forms.filter((f) => !GENERIC.has(f[f.length - 1]));
+    return { forms: specific.length ? specific : forms, kinds, kindWords };
+  }
+  const anyForm = (fs, text) => fs.some((f) => text.includes(f));
+
   /* ---------- topics ---------- */
   const itemOk = (x) => (!st.kinds.size || st.kinds.has(x.kind)) && (!st.src || x.repo === st.src) && lvOk(x);
   function visibleTopics() {
+    const strict = phraseTopics();
+    looseUsed = false;
+    if (!st.q || strict.length) return strict;
+    const loose = wordTopics();
+    looseUsed = loose.length > 0;
+    return loose;
+  }
+  const itemText = (x) => norm(`${x.title} ${srcName(x.repo)} ${x.by || ""}`);
+  function wordTopics() {
+    const pq = parseQuery(st.q);
+    if (!pq.forms.length && !pq.kinds.size) return [];
+    const scored = data.topics.filter((t) => st.shelf === "all" || t.shelf === st.shelf).map((t) => {
+      const pool = t.items.filter(itemOk);
+      const head = [t.name, t.en, t.about, ...(t.keys || [])].map(norm);
+      const keysKo = [t.name, ...(t.keys || [])].map(norm).filter((k) => k.length >= 2 && hasKo(k));
+      const headHits = pq.forms.filter((fs) => fs.some((f) => head.some((h) => h.includes(f)) || keysKo.some((k) => f.includes(k)))).length;
+      const hits = (x) => pq.forms.filter((fs) => anyForm(fs, itemText(x))).length;
+      let items = pq.forms.length && !headHits ? pool.filter((x) => hits(x) > 0) : pool;
+      if (pq.kinds.size && !st.kinds.size) {
+        const want = items.filter((x) => pq.kinds.has(x.kind) || pq.kindWords.some((w) => itemText(x).includes(w)));
+        items = want.length || !pq.forms.length ? want : items;
+      }
+      const score = pq.forms.length ? headHits * 2 + Math.max(0, ...items.map(hits)) : items.length ? 1 : 0;
+      return { t, items, total: pool.length, score };
+    }).filter((v) => v.items.length && v.score > 0);
+    const top = Math.max(0, ...scored.map((v) => v.score));
+    return scored.filter((v) => v.score * 2 >= top).map((v) => ({ t: v.t, items: v.items, partial: false, total: v.total, n: v.items.length }));
+  }
+  function phraseTopics() {
     const q = norm(st.q);
     return data.topics.filter((t) => st.shelf === "all" || t.shelf === st.shelf).map((t) => {
       const pool = t.items.filter(itemOk);
@@ -83,7 +136,7 @@
       if (q && pool.length) {
         const head = [t.name, t.en, t.about, ...(t.keys || [])].some((s) => norm(s).includes(q));
         if (!head) {
-          const hit = pool.filter((x) => norm(`${x.title} ${srcName(x.repo)} ${x.by || ""}`).includes(q));
+          const hit = pool.filter((x) => itemText(x).includes(q));
           partial = hit.length > 0 && hit.length < pool.length && !st.open.has(t.id);
           items = st.open.has(t.id) && hit.length ? pool : hit;
         }
@@ -92,6 +145,28 @@
       if (!q && !st.open.has(t.id) && items.length > FIRST) { partial = true; items = items.slice(0, FIRST); }
       return { t, items, partial, total: pool.length, n: q ? items.length : pool.length };
     }).filter((v) => v.items.length);
+  }
+
+  /* the team's projects that a search names (CausalML 스터디, Lang2SQL, …): a hit in the name, the repository,
+     its tags or search words always shows; one only in the summary shows when no topic has the search */
+  const NOT_PROJECTS = new Set(["CausalInferenceLab.github.io", "Project-template", "python-causality-handbook"]);
+  function visibleProjects(topicsFound) {
+    if (!st.q || st.src) return [];
+    const q = norm(st.q), pq = looseUsed || !topicsFound ? parseQuery(st.q) : null;
+    const strong = (r) => [r.title, r.repo, ...(r.tags || []), ...(r.keys || []), ...(r.builders || [])].map(norm);
+    const weak = (r) => [r.summary, r.format].map(norm);
+    const has = (texts) => texts.some((t) => t.includes(q)) || (pq && pq.forms.length > 0 && pq.forms.every((fs) => texts.some((t) => anyForm(fs, t))));
+    return [...repos.values()].filter((r) => !NOT_PROJECTS.has(r.repo) && r.status !== "depot")
+      .filter((r) => has(strong(r)) || (!topicsFound && has([...strong(r), ...weak(r)]))).slice(0, 4);
+  }
+  function projectsHTML(list) {
+    if (!list.length) return "";
+    return `<section class="lib-pjs" aria-labelledby="lib-pjs-h"><h2 class="lib-pjs-h" id="lib-pjs-h">팀 프로젝트<span>저장소째 살펴보기</span></h2><ul>${list.map((r) => {
+      const url = r.site ? (/^https?:/.test(r.site) ? r.site : `https://causalinferencelab.github.io/${String(r.site).replace(/^\//, "")}`) : `https://github.com/CausalInferenceLab/${r.repo}`;
+      const lv = /^L[0-4]$/.test(r.level || "") ? `<b class="lib-lv lv-${r.level}">${r.level} ${LV_NAME[r.level]}</b>` : "";
+      return `<li class="lib-pj" id="pj-${esc(r.repo)}" tabindex="-1"><a href="${esc(url)}" target="_blank" rel="noopener" data-event="library_click" data-event-params='${esc(JSON.stringify({ topic: "project", kind: "project", repo: r.repo, target: "project" }))}'>
+        <span class="lib-pj-t">${esc(r.title)}<span class="lib-out" aria-hidden="true"> ↗</span></span><span class="lib-pj-s">${esc(r.summary || "")}</span><span class="lib-src">${lv}${r.site ? "사이트" : "GitHub"} · ${esc(r.repo)}</span></a></li>`;
+    }).join("")}</ul></section>`;
   }
 
   function itemHTML(x, t) {
@@ -109,12 +184,19 @@
 
   function renderTopics(list) {
     const nItems = list.reduce((a, v) => a + v.n, 0);
-    const filt = [st.lv !== "all" && LV_PICK.find(([v]) => v === st.lv)[1], st.src && srcName(st.src), st.kinds.size && [...st.kinds].map((k) => data.kinds[k]).join("·"), st.q && `‘${st.q}’ 검색`].filter(Boolean).join(" · ");
-    $("#lib-count").innerHTML = list.length ? `주제 ${list.length}개 · 자료 ${nItems}개${filt ? ` · ${esc(filt)}` : ""}${st.src || st.kinds.size || st.lv !== "all" ? ' <button type="button" class="lib-clear" data-lib-reset>거르기 풀기</button>' : ""}` : "";
+    const pjs = visibleProjects(list.length > 0);
+    const filt = [st.lv !== "all" && LV_PICK.find(([v]) => v === st.lv)[1], st.src && srcName(st.src), st.kinds.size && [...st.kinds].map((k) => data.kinds[k]).join("·"), st.q && `‘${st.q}’ ${looseUsed ? "낱말별 검색" : "검색"}`].filter(Boolean).join(" · ");
+    const counts = [pjs.length && `프로젝트 ${pjs.length}개`, list.length && `주제 ${list.length}개 · 자료 ${nItems}개`].filter(Boolean).join(" · ");
+    $("#lib-count").innerHTML = counts ? `${counts}${filt ? ` · ${esc(filt)}` : ""}${st.src || st.kinds.size || st.lv !== "all" ? ' <button type="button" class="lib-clear" data-lib-reset>거르기 풀기</button>' : ""}` : "";
+    const note = looseUsed ? `<p class="lib-note">‘${esc(st.q)}’ 전체와 맞는 자료가 없어, 낱말마다 찾은 결과입니다.</p>` : "";
     $("#lib-index").innerHTML = data.shelves.filter((s) => st.shelf === "all" || s.id === st.shelf).map((s) => {
       const ts = list.filter((v) => v.t.shelf === s.id);
       return ts.length ? `<div class="lib-ix s-${esc(s.id)}"><p>${esc(s.name)}</p><ul>${ts.map((v) => `<li><a href="#${esc(v.t.id)}">${esc(v.t.name)}<span>${v.n}</span></a></li>`).join("")}</ul></div>` : "";
     }).join("");
+    if (!list.length && pjs.length) {
+      $("#lib-topics").innerHTML = `${projectsHTML(pjs)}<div class="lib-empty"><p><b>‘${esc(st.q)}’${wa(st.q)} 맞는 주제별 자료는 아직 없습니다.</b> 위 프로젝트에서 시작해 보세요.</p><p>${askPseudo(st.q)}</p></div>`;
+      return;
+    }
     if (!list.length) {
       const terms = st.q ? visibleTerms().reduce((n, v) => n + v.terms.length, 0) : 0;
       const sug = ["이중차분", "성향점수", "A/B", "SRM", "메타러너"].map((w) => `<button type="button" class="chip" data-lib-try="${esc(w)}">${esc(w)}</button>`).join("");
@@ -124,7 +206,7 @@
       return;
     }
     let lastShelf = null;
-    $("#lib-topics").innerHTML = list.map((v) => {
+    $("#lib-topics").innerHTML = note + projectsHTML(pjs) + list.map((v) => {
       const t = v.t, s = shelfOf(t.shelf);
       const head = t.shelf !== lastShelf && st.shelf === "all" ? `<h2 class="lib-shelf s-${esc(t.shelf)}">${esc(s.name)}<span>${esc(s.about)}</span></h2>` : "";
       lastShelf = t.shelf;
@@ -163,9 +245,14 @@
   function visibleTerms() {
     if (!gloss) return [];
     const q = norm(st.q);
-    return gloss.sections.filter((s) => st.shelf === "all" || glShelf(s.name) === st.shelf)
-      .map((s) => ({ s, terms: s.terms.filter((x) => !q || termText(x).includes(q)) }))
+    const pick = (ok) => gloss.sections.filter((s) => st.shelf === "all" || glShelf(s.name) === st.shelf)
+      .map((s) => ({ s, terms: s.terms.filter((x) => !q || ok(termText(x))) }))
       .filter((v) => v.terms.length);
+    const strict = pick((t) => t.includes(q));
+    if (!q || strict.length) return strict;
+    /* nothing has the whole phrase: a term that has one of its words */
+    const pq = parseQuery(st.q);
+    return pq.forms.length ? pick((t) => pq.forms.some((fs) => anyForm(fs, t))) : [];
   }
   function renderGlossary(list) {
     const n = list.reduce((a, v) => a + v.terms.length, 0);
@@ -214,7 +301,7 @@
 
   function go(id, smooth) {
     const el = id && document.getElementById(id);
-    if (!el || !(el.classList.contains("lib-topic") || el.classList.contains("gl-row") || el.classList.contains("lib-shelf"))) return false;
+    if (!el || !["lib-topic", "gl-row", "lib-shelf", "lib-pj"].some((c) => el.classList.contains(c))) return false;
     el.scrollIntoView({ behavior: smooth && !reduced() ? "smooth" : "auto", block: "start" });
     if (el.tabIndex === -1) el.focus({ preventScroll: true });
     el.classList.remove("hit"); void el.offsetWidth; el.classList.add("hit");
@@ -243,15 +330,16 @@
     clearTimeout(searchTimer);
     if (!st.q || `${source}|${st.q}` === lastLogged) return;
     lastLogged = `${source}|${st.q}`;
-    const results = visibleTopics().reduce((a, v) => a + v.n, 0), terms = visibleTerms().reduce((a, v) => a + v.terms.length, 0);
-    track("search", { search_term: st.q, results, terms, found: results + terms > 0 ? "yes" : "no", source, view: st.view, page: "library" });
+    const tl = visibleTopics(), loose = looseUsed;
+    const results = tl.reduce((a, v) => a + v.n, 0) + visibleProjects(tl.length > 0).length, terms = visibleTerms().reduce((a, v) => a + v.terms.length, 0);
+    track("search", { search_term: st.q, results, terms, found: results + terms > 0 ? "yes" : "no", match: loose ? "words" : "phrase", source, view: st.view, page: "library" });
   }
   function onSearch(source) {
     st.q = $("#lib-q").value.trim().slice(0, 60);
     st.open.clear();
     /* stay on the tab the reader is on, unless it has nothing and the other one has something */
     if (st.q) {
-      const nt = visibleTopics().length, ng = visibleTerms().length;
+      const tl = visibleTopics(), nt = tl.length + visibleProjects(tl.length > 0).length, ng = visibleTerms().length;
       if (st.view === "topics" && !nt && ng) st.view = "glossary";
       else if (st.view === "glossary" && !ng && nt) st.view = "topics";
     }
@@ -358,13 +446,14 @@
     const from = new URLSearchParams(location.search).get("from");
     fromURL();
     /* a search that arrives with no topics but some glossary terms opens on the glossary */
-    if (st.q && st.view === "topics" && !visibleTopics().length && visibleTerms().length) st.view = "glossary";
+    if (st.q && st.view === "topics" && !visibleTopics().length && !visibleProjects(false).length && visibleTerms().length) st.view = "glossary";
     controls(); render(); bind();
     /* a search that arrived from the hub (or a shared ?q= link) is recorded once, then the address is tidied */
     if (st.q) logSearch(["hero", "topics", "suggest"].includes(from) ? from : "link");
     if (from) toURL();
     const id = decodeURIComponent(location.hash.slice(1));
-    if (id && (data.topics.some((t) => t.id === id) || (/^term-/.test(id) && gloss))) {
+    if (/^pj-/.test(id) && document.getElementById(id)) requestAnimationFrame(() => go(id, false));
+    else if (id && (data.topics.some((t) => t.id === id) || (/^term-/.test(id) && gloss))) {
       reveal(id);
       const isTerm = /^term-/.test(id);
       track(isTerm ? "library_term" : "library_topic", { [isTerm ? "term" : "topic"]: id, source: "link" });
