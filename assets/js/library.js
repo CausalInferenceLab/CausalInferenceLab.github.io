@@ -25,6 +25,10 @@
     ["awesome-causal-inference-python", "메서드 코드북", "주제별 파이썬 코드"]
   ];
   const SRC_NAME = Object.fromEntries(SOURCES.map(([id, name]) => [id, name]));
+  /* each material's curriculum level, so a newcomer can tell an intro from a research paper */
+  const LV_NAME = { L0: "입문", L1: "개념", L2: "실전", L3: "도구", L4: "연구" };
+  const LV_FULL = { L0: "입문", L1: "개념 완성", L2: "실전 적용", L3: "도구 개발", L4: "연구" };
+  const LV_PICK = [["all", "전체"], ["L0", "L0 입문"], ["L1", "L1 개념"], ["L2", "L2 실전"], ["L3", "L3–4 도구·연구"]];
   SRC_NAME.hub = "허브 연재";
   /* the glossary's "온라인 실험" section is the experiments shelf; every other section is causal inference */
   const glShelf = (name) => (/실험/.test(name) ? "exp" : "causal");
@@ -34,9 +38,16 @@
   const askPseudo = (q) => `<button type="button" class="btn ghost sm" data-helper-ask="${esc(q)} 알려 주세요">Pseudo에게 물어보기</button>`;
 
   let data = null, gloss = null, repos = new Map(), read = {};
-  const st = { q: "", shelf: "all", kinds: new Set(), src: "", view: "topics", open: new Set() };
+  const st = { q: "", shelf: "all", kinds: new Set(), src: "", lv: "all", view: "topics", open: new Set() };
 
   const srcName = (id) => SRC_NAME[id] || (repos.get(id) && repos.get(id).title) || id;
+  /* the web book's second part (chapters 17–25) and its appendices are Level 2, as in the curriculum */
+  function levelOf(x) {
+    if (x.repo === "Causal-Inference-with-Python") { const m = /\/(\d+)-[^/]*\.html$/.exec(x.url || ""); return m && Number(m[1]) < 17 ? "L1" : "L2"; }
+    const r = repos.get(x.repo);
+    return r && /^L[0-4]$/.test(r.level || "") ? r.level : null;
+  }
+  const lvOk = (x) => st.lv === "all" || (st.lv === "L3" ? ["L3", "L4"].includes(levelOf(x)) : levelOf(x) === st.lv);
   const bookSlug = (url) => { const m = /\/Causal-Inference-with-Python\/([A-Za-z0-9-]+)\.html$/.exec(url || ""); return m ? m[1] : null; };
   const shelfOf = (id) => data.shelves.find((s) => s.id === id);
   const allTerms = () => (gloss ? gloss.sections.flatMap((s) => s.terms) : []);
@@ -47,6 +58,7 @@
     st.shelf = ["causal", "exp"].includes(p.get("shelf")) ? p.get("shelf") : "all";
     st.kinds = new Set((p.get("kind") || "").split(",").filter((k) => KIND_ORDER.includes(k)));
     st.src = SRC_NAME[p.get("src")] ? p.get("src") : "";
+    st.lv = LV_PICK.some(([v]) => v === p.get("lv")) ? p.get("lv") : "all";
     st.view = gloss && (p.get("view") === "glossary" || /^#term-/.test(decodeURIComponent(location.hash))) ? "glossary" : "topics";
   }
   function toURL() {
@@ -55,13 +67,14 @@
     if (st.shelf !== "all") p.set("shelf", st.shelf);
     if (st.kinds.size) p.set("kind", [...st.kinds].join(","));
     if (st.src) p.set("src", st.src);
+    if (st.lv !== "all") p.set("lv", st.lv);
     if (st.view === "glossary") p.set("view", "glossary");
     const s = p.toString();
     history.replaceState(history.state, "", `${location.pathname}${s ? `?${s}` : ""}${location.hash}`);
   }
 
   /* ---------- topics ---------- */
-  const itemOk = (x) => (!st.kinds.size || st.kinds.has(x.kind)) && (!st.src || x.repo === st.src);
+  const itemOk = (x) => (!st.kinds.size || st.kinds.has(x.kind)) && (!st.src || x.repo === st.src) && lvOk(x);
   function visibleTopics() {
     const q = norm(st.q);
     return data.topics.filter((t) => st.shelf === "all" || t.shelf === st.shelf).map((t) => {
@@ -90,14 +103,14 @@
     return `<li class="lib-item k-${esc(x.kind)}">
       <span class="lib-kind">${esc(kind)}</span>
       <span class="lib-main"><a href="${esc(x.url)}"${out ? ' target="_blank" rel="noopener"' : ""} ${ev("main")}>${esc(x.title)}${out ? '<span class="lib-out" aria-hidden="true"> ↗</span>' : ""}</a>
-        <span class="lib-src">${esc(srcName(x.repo))}${x.by ? ` · ${esc(x.by)}` : ""}${done ? ' · <b class="lib-done">읽음</b>' : ""}${extra ? `<span class="lib-extra">${extra}</span>` : ""}</span></span>
+        <span class="lib-src">${(() => { const l = levelOf(x); return l ? `<b class="lib-lv lv-${l}" title="커리큘럼 Level ${l.slice(1)} · ${LV_FULL[l]}">${l} ${LV_NAME[l]}</b>` : ""; })()}${esc(srcName(x.repo))}${x.by ? ` · ${esc(x.by)}` : ""}${done ? ' · <b class="lib-done">읽음</b>' : ""}${extra ? `<span class="lib-extra">${extra}</span>` : ""}</span></span>
     </li>`;
   }
 
   function renderTopics(list) {
     const nItems = list.reduce((a, v) => a + v.n, 0);
-    const filt = [st.src && srcName(st.src), st.kinds.size && [...st.kinds].map((k) => data.kinds[k]).join("·"), st.q && `‘${st.q}’ 검색`].filter(Boolean).join(" · ");
-    $("#lib-count").innerHTML = list.length ? `주제 ${list.length}개 · 자료 ${nItems}개${filt ? ` · ${esc(filt)}` : ""}${st.src || st.kinds.size ? ' <button type="button" class="lib-clear" data-lib-reset>거르기 풀기</button>' : ""}` : "";
+    const filt = [st.lv !== "all" && LV_PICK.find(([v]) => v === st.lv)[1], st.src && srcName(st.src), st.kinds.size && [...st.kinds].map((k) => data.kinds[k]).join("·"), st.q && `‘${st.q}’ 검색`].filter(Boolean).join(" · ");
+    $("#lib-count").innerHTML = list.length ? `주제 ${list.length}개 · 자료 ${nItems}개${filt ? ` · ${esc(filt)}` : ""}${st.src || st.kinds.size || st.lv !== "all" ? ' <button type="button" class="lib-clear" data-lib-reset>거르기 풀기</button>' : ""}` : "";
     $("#lib-index").innerHTML = data.shelves.filter((s) => st.shelf === "all" || s.id === st.shelf).map((s) => {
       const ts = list.filter((v) => v.t.shelf === s.id);
       return ts.length ? `<div class="lib-ix s-${esc(s.id)}"><p>${esc(s.name)}</p><ul>${ts.map((v) => `<li><a href="#${esc(v.t.id)}">${esc(v.t.name)}<span>${v.n}</span></a></li>`).join("")}</ul></div>` : "";
@@ -193,6 +206,9 @@
     const n = (id) => data.topics.filter((t) => id === "all" || t.shelf === id).length;
     $("#lib-shelves").innerHTML = [{ id: "all", name: "전체" }, ...data.shelves].map((s) =>
       `<button type="button" role="radio" class="lib-sh s-${esc(s.id)}" data-shelf="${esc(s.id)}" aria-checked="${st.shelf === s.id}" tabindex="${st.shelf === s.id ? 0 : -1}">${esc(s.name)}<span>${n(s.id)}</span></button>`).join("");
+    const lvBox = $("#lib-levels");
+    if (lvBox) lvBox.innerHTML = `<span class="lib-lv-k" aria-hidden="true">난이도</span>` + LV_PICK.map(([v, name]) =>
+      `<button type="button" role="radio" class="lib-lvb${v === "all" ? "" : ` lv-${v}`}" data-lv="${v}" aria-checked="${st.lv === v}" tabindex="${st.lv === v ? 0 : -1}">${esc(name)}</button>`).join("");
     $("#lib-q").value = st.q;
   }
 
@@ -212,7 +228,7 @@
     const before = location.href;
     st.view = /^term-/.test(id) && gloss ? "glossary" : "topics";
     render();
-    if (!document.getElementById(id)) { st.q = ""; st.shelf = "all"; st.kinds.clear(); st.src = ""; controls(); render(); }
+    if (!document.getElementById(id)) { st.q = ""; st.shelf = "all"; st.kinds.clear(); st.src = ""; st.lv = "all"; controls(); render(); }
     toURL();
     const url = `${location.pathname}${location.search}#${encodeURIComponent(id)}`;
     if (push) { history.replaceState(history.state, "", before); history.pushState(null, "", url); }
@@ -281,6 +297,15 @@
       nb.click(); (document.querySelector(`${sel}[${attr}="${key}"]`) || nb).focus();
     };
     $("#lib-shelves").addEventListener("keydown", arrows("#lib-shelves [data-shelf]", "data-shelf"));
+    const lvBox = $("#lib-levels");
+    if (lvBox) {
+      lvBox.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-lv]"); if (!b) return;
+        st.lv = b.dataset.lv; st.open.clear(); controls(); toURL(); render();
+        track("library_filter", { filter: "level", value: st.lv });
+      });
+      lvBox.addEventListener("keydown", arrows("#lib-levels [data-lv]", "data-lv"));
+    }
     document.querySelector(".lib-tabs").addEventListener("keydown", arrows(".lib-tabs [role=tab]", "id"));
     $("#tab-topics").addEventListener("click", () => { if (st.view !== "topics") { setView("topics"); track("library_view", { view: "topics", source: "tab" }); } });
     $("#tab-glossary").addEventListener("click", () => { if (st.view !== "glossary") { setView("glossary"); track("library_view", { view: "glossary", source: "tab" }); } });
@@ -291,7 +316,7 @@
       if (tr) { $("#lib-q").value = tr.dataset.libTry; onSearch("try"); return; }
       const v = e.target.closest("[data-view]");
       if (v) { setView(v.dataset.view); $(".lib-tabs").scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" }); track("library_view", { view: v.dataset.view, source: "button" }); return; }
-      if (e.target.closest("[data-lib-reset]")) { st.q = ""; st.shelf = "all"; st.kinds.clear(); st.src = ""; st.open.clear(); controls(); toURL(); render(); return; }
+      if (e.target.closest("[data-lib-reset]")) { st.q = ""; st.shelf = "all"; st.kinds.clear(); st.src = ""; st.lv = "all"; st.open.clear(); controls(); toURL(); render(); return; }
       const term = e.target.closest("[data-term]");
       if (term) { e.preventDefault(); reveal(term.dataset.term, true); track("library_term", { term: term.dataset.term, source: term.closest(".lib-topic") ? "topic" : "start" }); return; }
       const tp = e.target.closest("[data-goto-topic]");

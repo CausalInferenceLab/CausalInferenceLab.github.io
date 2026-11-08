@@ -200,6 +200,11 @@
     const today = kstToday();
     return events.filter((e) => e.date && e.date >= today).sort((a, b) => (a.date < b.date ? -1 : 1))[0] || null;
   }
+  /* the forum that ended in the last six weeks, for the days after it */
+  function lastForum() {
+    const today = kstToday();
+    return events.filter((e) => e.date && e.date < today && dayGap(e.date) >= -42).sort((a, b) => (a.date < b.date ? 1 : -1))[0] || null;
+  }
   const signupOpen = (e) => { const t = kstToday(); return !!(e.signupEnd && e.signupEnd >= t && (!e.signupStart || e.signupStart <= t)); };
   const talksOf = (e) => (e.timetable || []).filter((t) => t.talk && t.who && !/패널|네트워킹/.test(t.kind));
   const whenOf = (e) => { const n = dayGap(e.date); return n === 0 ? "오늘" : n === 1 ? "내일" : md(e.date); };
@@ -213,28 +218,42 @@
   }
   function forumLine() {
     const e = nextForum();
-    if (!e || !e.tagline) return null;
+    if (!e) {
+      const p = lastForum();
+      return p ? { as: "forum_after", text: `${md(p.date)} ${evName(p)}에 함께해 주셔서 고마워요! ${p.recap && p.recap.url ? "후기가 올라왔어요." : "후기와 사진은 이 카드에 올라와요."}`, acts: [["지난 포럼 이야기", "이번 행사 알려 주세요"]] } : null;
+    }
+    if (!e.tagline) return null;
     const n = talksOf(e).length;
     return { text: `이번 포럼은 ‘${e.tagline}’${named(e.tagline)} 주제로 열려요.${n ? ` 발표 ${n}개에 패널토크, 네트워킹까지 있어요.` : ""} 궁금한 건 저한테 물어봐요!`,
       acts: [["누가 발표해요?", "누가 발표해요?"], ["어떻게 가요?", "행사장 어떻게 가요?"]] };
   }
   function forumAnswer(q) {
     const e = nextForum();
-    if (!e) return { text: "지금 잡힌 다음 행사는 아직 없어요. 정해지면 허브 첫 화면에 바로 올라와요!", links: [{ title: "지난 행사 보기", url: "./#events", note: "Data Forum" }], chips: [], matched: "event" };
+    if (!e) {
+      /* in the six weeks after a forum, talk about that one and say the next will be announced here */
+      const p = lastForum();
+      if (p) {
+        const recap = p.recap && p.recap.url ? { title: p.recap.label || "후기 보기", url: p.recap.url, note: evName(p) } : null;
+        return { text: `${md(p.date)} ${evName(p)}${subj(evName(p))} 끝났어요.${p.participants ? ` ${p.participants}명이 함께했어요.` : ""} ${recap ? "후기가 올라와 있어요." : "후기와 사진은 곧 허브의 행사 카드에 올라와요."} 다음 포럼이 정해지면 허브 첫 화면과 제가 먼저 알려 드릴게요.`,
+          links: [recap, { title: "허브에서 행사 보기", url: "./#events", note: "지난 Data Forum" }].filter(Boolean), chips: ["같이 하고 싶어요"], matched: "event_after" };
+      }
+      return { text: "지금 잡힌 다음 행사는 아직 없어요. 정해지면 허브 첫 화면에 바로 올라와요!", links: [{ title: "지난 행사 보기", url: "./#events", note: "Data Forum" }], chips: [], matched: "event" };
+    }
     const name = evName(e), open = signupOpen(e), talks = talksOf(e), start = e.time ? e.time.split("–")[0] : "";
     const evPage = e.link && { title: `${name} 행사 페이지`, url: e.link, note: open ? "참가 신청" : "행사 안내" };
     const hub = { title: "허브에서 행사 보기", url: "./#events", note: "타임테이블 · 캘린더 · 지도" };
-    const signupChip = e.code ? "추천 코드가 뭐예요?" : "신청은 어떻게 해요?";
+    /* once signup has closed there is nothing to sign up for, so that chip goes */
+    const signupChip = !open ? null : e.code ? "추천 코드가 뭐예요?" : "신청은 어떻게 해요?";
     if (/(누가|발표|연사|타임테이블|프로그램|세션)/.test(q) && talks.length) {
       const list = talks.map((t) => `${t.time.split("–")[0]} ‘${t.title}’(${String(t.who).split(" (")[0]})`).join(", ");
       const panel = (e.timetable || []).some((t) => /패널/.test(t.kind));
-      return { text: `${list} 순서로 발표가 있어요.${panel ? " 그다음 패널토크와 네트워킹으로 이어져요." : ""}`, links: [hub, evPage].filter(Boolean), chips: ["행사장 어떻게 가요?", signupChip], matched: "event_program" };
+      return { text: `${list} 순서로 발표가 있어요.${panel ? " 그다음 패널토크와 네트워킹으로 이어져요." : ""}`, links: [hub, evPage].filter(Boolean), chips: ["행사장 어떻게 가요?", signupChip].filter(Boolean), matched: "event_program" };
     }
     if (/(어디|장소|가는|가요|위치|지도|행사장|주차|오시는)/.test(q) && (e.venue || e.address)) {
       const where = e.address || e.venue;
       return { text: `${e.venue ? `${e.venue}에서 열려요. ` : ""}${e.address ? `주소는 ${e.address}${end(e.address)}. ` : ""}${md(e.date)}${start ? ` ${start}` : ""}에 시작해요.`,
         links: [{ title: "네이버 지도", url: `https://map.naver.com/p/search/${encodeURIComponent(where)}`, note: "길찾기" }, { title: "카카오맵", url: `https://map.kakao.com/?q=${encodeURIComponent(where)}`, note: "길찾기" }],
-        chips: ["누가 발표해요?", signupChip], matched: "event_place" };
+        chips: ["누가 발표해요?", signupChip].filter(Boolean), matched: "event_place" };
     }
     if (/(신청|등록|코드|추천|마감|정원|자리)/.test(q)) {
       const t = kstToday();
@@ -244,7 +263,7 @@
     }
     const topic = e.tagline ? ` ‘${e.tagline}’${named(e.tagline)} 주제로${talks.length ? ` 발표 ${talks.length}개와 패널토크, 네트워킹이 이어져요` : " 열려요"}.` : "";
     return { text: `${whenOf(e)}${start ? ` ${start}` : ""}${e.venue ? `, ${e.venue}` : ""}에서 ${name}${subj(name)} 열려요.${topic}${open ? ` 신청은 ${md(e.signupEnd)}까지예요. 같이 가요!` : ""}`,
-      links: [evPage, hub].filter(Boolean), chips: ["누가 발표해요?", "행사장 어떻게 가요?", signupChip], matched: "event" };
+      links: [evPage, hub].filter(Boolean), chips: ["누가 발표해요?", "행사장 어떻게 가요?", signupChip].filter(Boolean), matched: "event" };
   }
 
   /* ---------- taking part: runner, first contribution, Builder ---------- */
@@ -641,6 +660,23 @@
     const joinHash = () => { if (location.hash === "#join") { history.replaceState(history.state, "", location.pathname + location.search); askFromPage("같이 하고 싶어요"); } };
     addEventListener("hashchange", joinHash);
     setTimeout(joinHash, 300);
+    /* when a link or button of the page sits under the mascot, it steps half aside so the page stays usable;
+       pointing at it or tabbing to it brings it back */
+    let shyQueued = false;
+    const shy = () => {
+      shyQueued = false;
+      if (!panel.hidden) { root.classList.remove("shy"); return; }
+      /* measured where the mascot rests (bottom right of its fixed box), not where it has stepped to */
+      const box = root.getBoundingClientRect(), w = opener.offsetWidth, h = opener.offsetHeight;
+      const r = { left: box.right - w, right: box.right, top: box.bottom - h, bottom: box.bottom, width: w, height: h };
+      const pts = [[r.left + 6, r.top + r.height / 2], [r.left + r.width / 2, r.top + 6], [r.left + r.width / 2, r.bottom - 6], [r.left + r.width / 2, r.top + r.height / 2], [r.right - 6, r.top + r.height / 2]];
+      const under = pts.some(([x, y]) => document.elementsFromPoint(x, y).some((el) => !root.contains(el) && el.closest("a[href], button, input, select, textarea, [role=button]")));
+      root.classList.toggle("shy", under);
+    };
+    const queueShy = () => { if (!shyQueued) { shyQueued = true; requestAnimationFrame(shy); } };
+    addEventListener("scroll", queueShy, { passive: true });
+    addEventListener("resize", queueShy);
+    setTimeout(queueShy, 1200);
     listen();
   }
 
