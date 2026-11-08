@@ -2682,3 +2682,22 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 /* the header's current page on pages other than the hub */
 .site-nav a.stn[aria-current="page"] { background: none; color: var(--ink); font-weight: 800; }
 .site-nav a.stn[aria-current="page"]::after { background: var(--sec); transform: scale(1.25); }
+
+/* the mascot steps half aside while a link or button of the page is under it */
+.hp-open { transition: transform .25s ease, opacity .25s ease; }
+.hp.shy:not(.open) .hp-open { transform: translateX(72%); opacity: .85; }
+.hp.shy:not(.open) .hp-open:hover, .hp.shy:not(.open) .hp-open:focus-visible { transform: none; opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .hp-open { transition: none; } }
+
+/* the library: each material's curriculum level, and a filter by level */
+.lib-lv { display: inline-block; margin-right: 6px; padding: 1px 6px; border-radius: 6px; font-size: 11.5px; font-weight: 800; line-height: 1.5; vertical-align: 1px; background: var(--surface-2); color: var(--ink); }
+.lib-lv.lv-L0 { background: color-mix(in srgb, var(--l-main) 14%, var(--surface)); color: var(--l-main); }
+.lib-lv.lv-L1 { background: color-mix(in srgb, var(--l-ai) 16%, var(--surface)); color: var(--ink); }
+.lib-lv.lv-L2 { background: color-mix(in srgb, var(--l-exp) 14%, var(--surface)); color: var(--l-exp); }
+.lib-lv.lv-L3, .lib-lv.lv-L4 { background: color-mix(in srgb, var(--l-ml) 14%, var(--surface)); color: var(--l-ml); }
+.lib-levels { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; flex: 1 1 100%; }
+.lib-lv-k { font-size: 13px; font-weight: 700; color: var(--muted); margin-right: 4px; }
+.lib-lvb { font: inherit; font-size: 13.5px; font-weight: 600; min-height: 36px; padding: 0 12px; border-radius: 999px; border: 1.5px solid var(--rule); background: var(--surface); color: var(--ink); cursor: pointer; }
+.lib-lvb:hover { border-color: var(--ink); }
+.lib-lvb[aria-checked="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.lib-lvb:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
