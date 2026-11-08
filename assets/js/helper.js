@@ -478,11 +478,16 @@
            With the experiment off, variant() is null and Pseudo greets as usual. */
         const exp = window.hubExperiment;
         const gate = Promise.all([exp ? exp.variant("pseudo-greeting", 1200) : null, load()]).then(([v]) => v);
-        setTimeout(() => gate.then((v) => {
+        const greet = () => gate.then((v) => {
           const eligible = !quiet() && panel.hidden && !spoke && !said().includes(`${page}:${line.id}`);
           if (v && eligible) exp.expose("pseudo-greeting");
           if (v !== "control") speak(line);
-        }), 1600);
+        });
+        /* on a phone the bubble would cover the first screen, so Pseudo waits until the reader starts scrolling */
+        if (matchMedia("(max-width: 760px)").matches && scrollY < 40) {
+          const onScroll = () => { if (scrollY < 40) return; removeEventListener("scroll", onScroll); setTimeout(greet, 900); };
+          addEventListener("scroll", onScroll, { passive: true });
+        } else setTimeout(greet, 1600);
         return;
       }
       if (line.when === "half") {
