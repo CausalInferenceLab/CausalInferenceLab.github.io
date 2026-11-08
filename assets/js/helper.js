@@ -208,7 +208,7 @@
     const e = nextForum();
     if (!e || dayGap(e.date) > 42) return null;
     const name = evName(e);
-    return { text: `안녕하세요, 저는 Pseudo예요! ${whenOf(e)} ${name}${subj(name)} 열려요. ${signupOpen(e) ? `신청은 ${md(e.signupEnd)}까지 받아요. 같이 가요!` : "현장에서 만나요!"}`,
+    return { as: "hello_forum", text: `안녕하세요, 저는 Pseudo예요! ${whenOf(e)} ${name}${subj(name)} 열려요. ${signupOpen(e) ? `신청은 ${md(e.signupEnd)}까지 받아요. 같이 가요!` : "현장에서 만나요!"}`,
       acts: [["행사 이야기 들려줘", "이번 행사 알려 주세요"], ["공부하러 왔어요", "처음인데 뭐부터 볼까요?"]] };
   }
   function forumLine() {
@@ -463,7 +463,7 @@
     });
     clearTimeout(sayTimer);
     sayTimer = setTimeout(() => { if (!sayEl.matches(":hover, :focus-within")) hush(false); }, 14000);
-    track("helper_say", { line: line.id, page });
+    track("helper_say", { line: line.as || line.id, page });
   }
   function hush(forGood) {
     clearTimeout(sayTimer);
@@ -514,7 +514,8 @@
     log.scrollTop = log.scrollHeight;
     return li;
   }
-  async function ask(q) {
+  /* source: typed, suggest (the first chips), chip (a follow-up chip), bubble (the speech bubble), page */
+  async function ask(q, source = "typed") {
     q = String(q || "").trim().slice(0, 300);
     if (!q) return;
     say(esc(q), "me");
@@ -538,11 +539,13 @@
     wait.classList.remove("typing-now");
     const nx = wait.querySelector(".hp-next"); if (nx) nx.hidden = false;
     log.scrollTop = log.scrollHeight;
-    track("helper_ask", { search_term: q.slice(0, 100), matched: a.matched, page });
+    /* what was typed stays in the browser (the panel says so); GA gets how it came in and what Pseudo answered */
+    track("helper_ask", { source, answer: String(a.matched).split(":")[0], matched: a.matched, links: a.links.length, page });
   }
   function grow() { input.style.height = "auto"; input.style.height = Math.min(input.scrollHeight, 120) + "px"; }
 
-  function open(withQuestion) {
+  /* source: button (the mascot), bubble (a reply chip under its speech bubble), page (a link or button on the page) */
+  function open(withQuestion, source = "button") {
     if (!panel.hidden) return;
     panel.hidden = false;
     opener.setAttribute("aria-expanded", "true");
@@ -555,7 +558,7 @@
         .then(() => { first.querySelector(".hp-sug").hidden = false; log.scrollTop = log.scrollHeight; });
     }
     setTimeout(() => input.focus(), 30);
-    track("helper_open", { page });
+    track("helper_open", { page, source });
   }
   let waved = false;
   function close() {
@@ -596,7 +599,7 @@
     document.body.appendChild(root);
     document.body.classList.add("has-helper");
     panel = root.querySelector(".hp-panel"); log = root.querySelector(".hp-log"); input = root.querySelector("#hp-q"); opener = root.querySelector(".hp-open");
-    opener.addEventListener("click", () => (panel.hidden ? open() : close()));
+    opener.addEventListener("click", () => (panel.hidden ? open(false, "button") : close()));
     root.querySelector(".hp-x").addEventListener("click", close);
     root.querySelector(".hp-form").addEventListener("submit", (e) => { e.preventDefault(); ask(input.value); });
     input.addEventListener("input", grow);
@@ -604,7 +607,7 @@
     root.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
     log.addEventListener("click", (e) => {
       const b = e.target.closest("[data-ask]");
-      if (b) { ask(b.dataset.ask); return; }
+      if (b) { ask(b.dataset.ask, b.closest(".hp-next") ? "chip" : "suggest"); return; }
       /* a link to a spot on this same page: get out of the way so the reader sees where it went */
       const a = e.target.closest("a[href]");
       if (a && !a.target) { const u = new URL(a.href, location.href); if (u.pathname === location.pathname) { panel.hidden = true; opener.setAttribute("aria-expanded", "false"); root.classList.remove("open"); } }
@@ -614,12 +617,12 @@
     sayEl.addEventListener("click", (e) => {
       const b = e.target.closest("[data-say-ask]");
       if (!b) return;
-      open();
-      if (b.dataset.sayAsk) ask(b.dataset.sayAsk); else input.focus();
+      open(!!b.dataset.sayAsk, "bubble");
+      if (b.dataset.sayAsk) ask(b.dataset.sayAsk, "bubble"); else input.focus();
     });
     opener.addEventListener("mouseenter", () => { if (!reduced()) { typing(true); setTimeout(() => typing(false), 1500); } });
     /* the page asks Pseudo: data-helper-ask="..." on any link or button outside the widget opens it with that question */
-    const askFromPage = (q) => { open(true); ask(q); };
+    const askFromPage = (q) => { open(true, "page"); ask(q, "page"); };
     document.addEventListener("click", (e) => {
       const b = e.target.closest("[data-helper-ask]");
       if (!b || root.contains(b)) return;
