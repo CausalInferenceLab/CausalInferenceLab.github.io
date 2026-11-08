@@ -519,10 +519,11 @@
     if (!box || !state.leveltest) return;
     const mine = myLevel(), lv = mine && levelOf(mine.level);
     const n = state.leveltest.questions.length;
+    box.classList.toggle("lt-slim", !lv);
     box.innerHTML = lv
       ? `<div class="lt-t"><p class="lt-k">내 레벨 진단 결과</p><h3>${LV(lv.id)} · ${esc(lv.tier || lv.name)}</h3><p>${esc(bandLine(mine))}</p></div>
         <div class="lt-acts"><button type="button" class="pill solid" data-goto-level="${lv.id}">내 코스 보기</button><button type="button" class="pill" data-test-open="retry">다시 진단</button></div>`
-      : `<div class="lt-t"><p class="lt-k">어디서 시작할지 모르겠다면</p><h3>3분 진단으로 내 레벨 찾기</h3><p>실무 상황 문제 ${n}개를 풀면 시작할 Level과 첫 자료, 다시 볼 개념을 알려 드립니다.</p></div>
+      : `<div class="lt-t"><h3>어디서 시작할지 모르겠다면, 3분 레벨 진단</h3><p>실무 상황 문제 ${n}개를 풀면 시작할 Level과 첫 자료, 다시 볼 개념을 알려 드립니다.</p></div>
         <div class="lt-acts"><button type="button" class="pill solid" data-test-open="card">진단 시작</button></div>`;
   }
   function scoreTest() {
@@ -1187,6 +1188,14 @@
       return `<div class="tp-shelf s-${esc(tok(s.id))}"><h3>${esc(s.name)}</h3>
         <ul>${ts.slice(0, SHOW).map((t) => `<li><a href="library.html#${esc(tok(t.id))}" data-event="library_topic" data-event-params='${esc(JSON.stringify({ topic: tok(t.id), source: "hub" }))}'>${esc(t.name)}</a></li>`).join("")}${ts.length > SHOW ? `<li><a class="tp-more" href="library.html?shelf=${esc(tok(s.id))}">${ts.length - SHOW}개 더</a></li>` : ""}</ul></div>`;
     }).join("");
+    /* the hero's search line says how much there is to find */
+    const note = $("#hs-note");
+    if (note) {
+      const items = d.topics.reduce((n, t) => n + (t.items || []).length, 0);
+      const line = (terms) => `<a href="library.html">자료 ${items}개</a>와 <a href="library.html?view=glossary">${terms ? `용어 ${terms}개` : "용어집"}</a>에서 찾습니다.`;
+      note.innerHTML = line(0);
+      getJSON("data/glossary.json").then((g) => { note.innerHTML = line((g.sections || []).reduce((n, x) => n + (x.terms || []).length, 0)); }).catch(() => {});
+    }
   }
 
   /* the next Data Forum gets the space; past ones are one line each */
@@ -1791,6 +1800,11 @@
   const joinTarget = (href) => (/discord/.test(href) ? "discord" : /Project-template/.test(href) ? "template" : /is%3Aissue|is:issue/.test(href) ? "issue" : /pseudo-lab\.com/.test(href) ? "runner" : "other");
 
   function wire() {
+    /* a search from the hero or the topics section goes to the library page, which records the words it searched */
+    document.addEventListener("submit", (e) => {
+      const f = e.target.closest(".hero-search, .tp-search");
+      if (f) track("start_click", { target: "library_search", placement: f.classList.contains("hero-search") ? "hero" : "topics" });
+    });
     document.addEventListener("click", (e) => {
       const fa = e.target.closest("#featured a");
       if (fa) track("click_featured", { repo: fa.dataset.repo || "" });
