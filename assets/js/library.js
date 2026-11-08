@@ -1,6 +1,7 @@
 /* 자료실: causal inference and online experiment topics with deep links into the team's web book,
    Causal Studio, the practitioner lectures, book code, study slides and case lists, plus the web
-   book's glossary. Data: data/topics.json, data/glossary.json (scripts/build_glossary.py),
+   book's glossary. Data: data/topics.json, data/glossary.json (scripts/build_glossary.py), data/pseudo.json
+   (one-line meanings), data/term_links.json (team materials per term, scripts/build_term_links.py),
    data/repos.json (source names, and the team's projects a search can name) and data/articles.json (posts tagged with topics).
    State lives in the address: ?q= search, ?shelf= causal|exp, ?kind=, ?src=, ?view=glossary,
    and #topic-id or #term-... for a topic or a term. */
@@ -37,7 +38,7 @@
   const wa = (w) => { const c = String(w).trim().slice(-1).charCodeAt(0) - 0xac00; return c >= 0 && c <= 11171 && c % 28 ? "과" : "와"; };
   const askPseudo = (q) => `<button type="button" class="btn ghost sm" data-helper-ask="${esc(q)} 알려 주세요">Pseudo에게 물어보기</button>`;
 
-  let data = null, gloss = null, repos = new Map(), read = {};
+  let data = null, gloss = null, repos = new Map(), read = {}, defs = {}, teamLinks = {};
   const st = { q: "", shelf: "all", kinds: new Set(), src: "", lv: "all", view: "topics", open: new Set() };
 
   const srcName = (id) => SRC_NAME[id] || (repos.get(id) && repos.get(id).title) || id;
@@ -254,26 +255,71 @@
     const pq = parseQuery(st.q);
     return pq.forms.length ? pick((t) => pq.forms.some((fs) => anyForm(fs, t))) : [];
   }
+  /* Each term is a dictionary entry: the name, the English, and a one-line meaning (data/pseudo.json) in the
+     list; opening it shows the full meaning, the web book chapters that use the term, the team's other
+     materials that use it most (data/term_links.json: slides, Causal Studio, book code, study notes) and the
+     library topics it belongs to. A link to #term-... opens that entry; a search with one or two hits opens them. */
+  const TEAM_KIND = { slides: "발표 자료", code: "노트북", read: "글" };
+  const glOpen = new Set();
+  function termDetail(x) {
+    const def = defs[x.id];
+    const ch = (x.chapters || []).map((c) => `<li><a href="${BOOK}${esc(c.slug)}.html" data-event="library_click" data-event-params='${esc(JSON.stringify({ topic: "glossary", kind: "read", repo: "Causal-Inference-with-Python", target: "term_chapter" }))}'><b>${esc(c.num)}</b>${esc(c.title)}</a></li>`).join("");
+    const team = (teamLinks[x.id] || []).map((d) => `<li><a href="${esc(d.url)}" target="_blank" rel="noopener" data-event="library_click" data-event-params='${esc(JSON.stringify({ topic: "glossary", kind: d.kind, repo: d.repo, target: "term_team" }))}'>
+        <span class="gl-tk k-${esc(d.kind)}">${esc(TEAM_KIND[d.kind] || "자료")}</span><span class="gl-tt">${esc(d.title)}<span class="lib-out" aria-hidden="true"> ↗</span></span>
+        <span class="gl-ts">${esc(srcName(d.repo))}${d.page ? ` · ${d.page}쪽` : ""}</span></a></li>`).join("");
+    const tp = x._topics.map((t) => `<a class="gl-tp s-${esc(t.shelf)}" href="#${esc(t.id)}" data-goto-topic="${esc(t.id)}">${esc(t.name)}</a>`).join("");
+    return `<div class="gl-detail">
+      <p class="gl-def">${def ? esc(def) : "아직 풀이가 없습니다. Pseudo에게 물어보면 웹북과 팀 자료에서 찾아 드립니다."}</p>
+      ${(x.alias || []).length ? `<p class="gl-alias">다른 표기 <span>${esc(x.alias.join(", "))}</span></p>` : ""}
+      <div class="gl-where">
+        <section class="gl-col"><h4>웹북에서 읽기</h4>${ch ? `<ul class="gl-chs">${ch}</ul>` : '<p class="gl-none">웹북 본문에는 나오지 않는 용어입니다.</p>'}</section>
+        <section class="gl-col"><h4>팀 자료에서</h4>${team ? `<ul class="gl-team">${team}</ul>` : '<p class="gl-none">이 용어를 주로 다룬 팀 자료를 아직 찾지 못했습니다.</p>'}</section>
+      </div>
+      <p class="gl-acts">${tp ? `<span class="gl-tps"><span>자료실 주제</span>${tp}</span>` : ""}
+        <span class="gl-btns"><button type="button" class="lib-link" data-copy="${esc(`https://causalinferencelab.github.io/library.html#${x.id}`)}" data-share="library_term" aria-label="${esc(x.ko)} 링크 복사">링크 복사</button>
+        <button type="button" class="lib-link" data-helper-ask="${esc(x.ko)} 알려 주세요">Pseudo에게 묻기</button>
+        <a class="lib-link" href="${BOOK}glossary.html#${encodeURIComponent(x.id)}">웹북 용어집</a></span></p>
+    </div>`;
+  }
+  function termRow(x, sh) {
+    const open = glOpen.has(x.id), def = defs[x.id], nCh = (x.chapters || []).length, nTeam = (teamLinks[x.id] || []).length;
+    return `<li class="gl-row s-${sh}${open ? " open" : ""}" id="${esc(x.id)}" tabindex="-1">
+      <h3 class="gl-h"><button type="button" class="gl-btn" aria-expanded="${open}" aria-controls="${esc(x.id)}-d" data-gl-toggle="${esc(x.id)}">
+        <span class="gl-name"><span class="gl-ko">${esc(x.ko)}</span><span class="gl-en" lang="en">${esc(x.en)}</span></span>
+        <span class="gl-sum">${def ? esc(def) : ""}</span>
+        <span class="gl-meta">${nCh ? `<span>웹북 ${nCh}</span>` : ""}${nTeam ? `<span>팀 자료 ${nTeam}</span>` : ""}</span>
+        <span class="gl-chev" aria-hidden="true"></span>
+      </button></h3>
+      <div id="${esc(x.id)}-d" class="gl-d"${open ? "" : " hidden"}>${open ? termDetail(x) : ""}</div>
+    </li>`;
+  }
+  function toggleTerm(id, force, source) {
+    const row = document.getElementById(id);
+    if (!row || !row.classList.contains("gl-row")) return;
+    const open = force ?? !glOpen.has(id);
+    if (open) glOpen.add(id); else glOpen.delete(id);
+    const x = allTerms().find((t) => t.id === id);
+    row.classList.toggle("open", open);
+    row.querySelector(".gl-btn").setAttribute("aria-expanded", String(open));
+    const d = row.querySelector(".gl-d");
+    d.innerHTML = open && x ? termDetail(x) : "";
+    d.hidden = !open;
+    if (open && source) track("library_term", { term: id, source });
+  }
   function renderGlossary(list) {
     const n = list.reduce((a, v) => a + v.terms.length, 0);
-    $("#gl-count").textContent = n ? `용어 ${n}개${st.q ? ` · ‘${st.q}’ 검색` : ""}` : "";
+    $("#gl-count").textContent = n ? `용어 ${n}개${st.q ? ` · ‘${st.q}’ 검색` : " · 이름을 누르면 풀이와 관련 자료가 열립니다"}` : "";
     $("#gl-index").innerHTML = list.length ? `<div class="lib-ix"><p>분류</p><ul>${list.map((v) => `<li><a href="#gl-${esc(v.s.key)}" data-gl-jump="gl-${esc(v.s.key)}">${esc(v.s.name)}<span>${v.terms.length}</span></a></li>`).join("")}</ul></div>` : "";
     if (!list.length) {
       $("#gl-body").innerHTML = `<div class="lib-empty"><p><b>‘${esc(st.q)}’${wa(st.q)} 맞는 용어가 없습니다.</b> 영어 원어나 다른 표기로도 찾을 수 있습니다.</p><p><button type="button" class="btn ghost sm" data-lib-reset>조건 모두 지우기</button> ${askPseudo(st.q)}</p></div>`;
       return;
     }
+    /* a search that narrows to one or two terms opens them */
+    if (st.q && n <= 2) list.forEach((v) => v.terms.forEach((x) => glOpen.add(x.id)));
     $("#gl-body").innerHTML = list.map((v) => {
       const sh = glShelf(v.s.name);
       return `<section class="gl-sec" aria-labelledby="gl-${esc(v.s.key)}"><h2 class="lib-shelf s-${sh}" id="gl-${esc(v.s.key)}" tabindex="-1">${esc(v.s.name)}<span>${v.terms.length}개</span></h2>
-      <dl class="gl-list">${v.terms.map((x) => {
-        const ch = (x.chapters || []).slice(0, 3).map((c) => `<a class="gl-ch" href="${BOOK}${esc(c.slug)}.html" title="${esc(c.title)}" data-event="library_click" data-event-params='${esc(JSON.stringify({ topic: "glossary", kind: "read", repo: "Causal-Inference-with-Python", target: "term_chapter" }))}'><b>${esc(c.num)}</b> ${esc(c.title)}</a>`).join("");
-        const tp = x._topics.map((t) => `<a class="gl-tp s-${esc(t.shelf)}" href="#${esc(t.id)}" data-goto-topic="${esc(t.id)}">${esc(t.name)}</a>`).join("");
-        return `<div class="gl-row s-${sh}" id="${esc(x.id)}" tabindex="-1">
-          <dt><a class="gl-ko" href="${BOOK}glossary.html#${encodeURIComponent(x.id)}" title="웹북 용어집에서 보기">${esc(x.ko)}</a>${(x.alias || []).length ? `<span class="gl-alias">다른 표기: ${esc(x.alias.join(", "))}</span>` : ""}</dt>
-          <dd class="gl-en" lang="en">${esc(x.en)}</dd>
-          <dd class="gl-links">${ch}${tp}${!ch && !tp ? '<span class="gl-none">웹북 밖의 용어</span>' : ""}</dd>
-        </div>`;
-      }).join("")}</dl></section>`;
+      <ul class="gl-list">${v.terms.map((x) => termRow(x, sh)).join("")}</ul></section>`;
     }).join("");
   }
 
@@ -313,6 +359,7 @@
      so the back button returns to where they were */
   function reveal(id, push) {
     const before = location.href;
+    if (/^term-/.test(id)) glOpen.add(id);
     st.view = /^term-/.test(id) && gloss ? "glossary" : "topics";
     render();
     if (!document.getElementById(id)) { st.q = ""; st.shelf = "all"; st.kinds.clear(); st.src = ""; st.lv = "all"; controls(); render(); }
@@ -409,6 +456,8 @@
       if (term) { e.preventDefault(); reveal(term.dataset.term, true); track("library_term", { term: term.dataset.term, source: term.closest(".lib-topic") ? "topic" : "start" }); return; }
       const tp = e.target.closest("[data-goto-topic]");
       if (tp) { e.preventDefault(); reveal(tp.dataset.gotoTopic, true); track("library_topic", { topic: tp.dataset.gotoTopic, source: tp.closest(".gl-row") ? "glossary" : "start" }); return; }
+      const gt = e.target.closest("[data-gl-toggle]");
+      if (gt) { toggleTerm(gt.dataset.glToggle, undefined, "glossary"); return; }
       const gj = e.target.closest("[data-gl-jump]");
       if (gj) { e.preventDefault(); go(gj.dataset.glJump, true); return; }
       const a = e.target.closest('#lib-index a[href^="#"]');
@@ -426,8 +475,10 @@
     try { const r = JSON.parse(localStorage.getItem("cil-book-read") || "{}"); read = r && typeof r === "object" ? r : {}; } catch (e) { read = {}; }
     const get = (p) => fetch(p).then((x) => { if (!x.ok) throw new Error(p); return x.json(); });
     try {
-      const [t, r, g, posts] = await Promise.all([get("data/topics.json"), get("data/repos.json").catch(() => []), get("data/glossary.json").catch(() => null), get("data/articles.json").catch(() => [])]);
+      const [t, r, g, posts, ps, tl] = await Promise.all([get("data/topics.json"), get("data/repos.json").catch(() => []), get("data/glossary.json").catch(() => null), get("data/articles.json").catch(() => []),
+        get("data/pseudo.json").catch(() => null), get("data/term_links.json").catch(() => null)]);
       data = t; repos = new Map((r || []).map((x) => [x.repo, x]));
+      defs = (ps && ps.defs) || {}; teamLinks = (tl && tl.terms) || {};
       gloss = g && Array.isArray(g.sections) && g.sections.length ? g : null;
       if (gloss) gloss.sections.forEach((s, i) => { s.key = String(i + 1); s.terms = (s.terms || []).filter((x) => x && x.ko && /^term-/.test(x.id || "")); });
       /* hub posts tagged with topics join their topic on the day they are published (Korean time) */

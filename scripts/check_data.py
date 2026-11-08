@@ -284,6 +284,22 @@ def main():
                 for k, v in defs.items():
                     if isinstance(v, str) and alt in v:
                         warn("pseudo.json defs", f"{k!r} writes {alt!r}; the glossary's form is {main!r}")
+    # the team materials per glossary term (scripts/build_term_links.py): a term the web book dropped is
+    # reported; a link must be https and say what kind of material it is
+    tl = data.get("term_links.json")
+    if tl is not None:
+        gl_ids = {t.get("id") for s in (data.get("glossary.json") or {}).get("sections") or [] for t in s.get("terms") or []}
+        for k, docs in (tl.get("terms") or {}).items():
+            if k not in gl_ids:
+                warn("term_links.json terms", f"{k!r} is no longer a term in the web book glossary; it is not shown")
+            for j, d in enumerate(docs or []):
+                w = f"term_links.json {k!r}[{j}]"
+                if not str(d.get("url", "")).startswith("https://"):
+                    err(w, "url must be an https address")
+                if d.get("kind") not in ("slides", "code", "read"):
+                    err(w, f"kind {d.get('kind')!r} must be slides, code or read")
+                if not d.get("title") or not d.get("repo"):
+                    err(w, "needs a title and a repo")
     ex = data.get("experiments.json")
     if ex is not None:
         if not str(ex.get("baseUrl", "")).startswith("https://"):
