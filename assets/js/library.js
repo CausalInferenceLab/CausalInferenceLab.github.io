@@ -29,6 +29,9 @@
   /* the glossary's "온라인 실험" section is the experiments shelf; every other section is causal inference */
   const glShelf = (name) => (/실험/.test(name) ? "exp" : "causal");
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* 와/과 after a word: 과 when its last Korean syllable ends in a consonant */
+  const wa = (w) => { const c = String(w).trim().slice(-1).charCodeAt(0) - 0xac00; return c >= 0 && c <= 11171 && c % 28 ? "과" : "와"; };
+  const askPseudo = (q) => `<button type="button" class="btn ghost sm" data-helper-ask="${esc(q)} 알려 주세요">Pseudo에게 물어보기</button>`;
 
   let data = null, gloss = null, repos = new Map(), read = {};
   const st = { q: "", shelf: "all", kinds: new Set(), src: "", view: "topics", open: new Set() };
@@ -102,9 +105,9 @@
     if (!list.length) {
       const terms = st.q ? visibleTerms().reduce((n, v) => n + v.terms.length, 0) : 0;
       const sug = ["이중차분", "성향점수", "A/B", "SRM", "메타러너"].map((w) => `<button type="button" class="chip" data-lib-try="${esc(w)}">${esc(w)}</button>`).join("");
-      $("#lib-topics").innerHTML = `<div class="lib-empty"><p><b>${st.q ? `‘${esc(st.q)}’와 맞는 자료가 없습니다.` : "고른 조건에 맞는 자료가 없습니다."}</b> ${terms ? `용어집에는 ${terms}개가 있습니다.` : "다른 말로 찾거나 조건을 풀어 보세요."}</p>
+      $("#lib-topics").innerHTML = `<div class="lib-empty"><p><b>${st.q ? `‘${esc(st.q)}’${wa(st.q)} 맞는 자료가 없습니다.` : "고른 조건에 맞는 자료가 없습니다."}</b> ${terms ? `용어집에는 ${terms}개가 있습니다.` : "다른 말로 찾거나 조건을 풀어 보세요."}</p>
         ${terms ? `<p><button type="button" class="btn sm" data-view="glossary">용어집에서 보기</button></p>` : `<p class="lib-try">${sug}</p>`}
-        <p><button type="button" class="btn ghost sm" data-lib-reset>조건 모두 지우기</button></p></div>`;
+        <p><button type="button" class="btn ghost sm" data-lib-reset>조건 모두 지우기</button>${st.q ? ` ${askPseudo(st.q)}` : ""}</p></div>`;
       return;
     }
     let lastShelf = null;
@@ -156,7 +159,7 @@
     $("#gl-count").textContent = n ? `용어 ${n}개${st.q ? ` · ‘${st.q}’ 검색` : ""}` : "";
     $("#gl-index").innerHTML = list.length ? `<div class="lib-ix"><p>분류</p><ul>${list.map((v) => `<li><a href="#gl-${esc(v.s.key)}" data-gl-jump="gl-${esc(v.s.key)}">${esc(v.s.name)}<span>${v.terms.length}</span></a></li>`).join("")}</ul></div>` : "";
     if (!list.length) {
-      $("#gl-body").innerHTML = `<div class="lib-empty"><p><b>‘${esc(st.q)}’와 맞는 용어가 없습니다.</b> 영어 원어나 다른 표기로도 찾을 수 있습니다.</p><p><button type="button" class="btn ghost sm" data-lib-reset>조건 모두 지우기</button></p></div>`;
+      $("#gl-body").innerHTML = `<div class="lib-empty"><p><b>‘${esc(st.q)}’${wa(st.q)} 맞는 용어가 없습니다.</b> 영어 원어나 다른 표기로도 찾을 수 있습니다.</p><p><button type="button" class="btn ghost sm" data-lib-reset>조건 모두 지우기</button> ${askPseudo(st.q)}</p></div>`;
       return;
     }
     $("#gl-body").innerHTML = list.map((v) => {
@@ -217,8 +220,17 @@
     requestAnimationFrame(() => go(id, true));
   }
 
-  let searchTimer = 0;
-  function onSearch() {
+  let searchTimer = 0, lastLogged = "";
+  /* what people look for, where the search started, and whether it found anything: the gaps to fill next.
+     source: typed (paused typing), enter, suggest, try (a chip on the empty result), hero/topics (the hub's boxes), link */
+  function logSearch(source) {
+    clearTimeout(searchTimer);
+    if (!st.q || `${source}|${st.q}` === lastLogged) return;
+    lastLogged = `${source}|${st.q}`;
+    const results = visibleTopics().reduce((a, v) => a + v.n, 0), terms = visibleTerms().reduce((a, v) => a + v.terms.length, 0);
+    track("search", { search_term: st.q, results, terms, found: results + terms > 0 ? "yes" : "no", source, view: st.view, page: "library" });
+  }
+  function onSearch(source) {
     st.q = $("#lib-q").value.trim().slice(0, 60);
     st.open.clear();
     /* stay on the tab the reader is on, unless it has nothing and the other one has something */
@@ -230,12 +242,30 @@
     toURL(); render();
     clearTimeout(searchTimer);
     /* what people look for and whether it was there: the gaps to fill next */
-    if (st.q) searchTimer = setTimeout(() => track("search", { search_term: st.q, results: visibleTopics().length, terms: visibleTerms().reduce((a, v) => a + v.terms.length, 0), page: "library" }), 1200);
+    if (source) logSearch(source);
+    else if (st.q) searchTimer = setTimeout(() => logSearch("typed"), 1500);
   }
 
   function bind() {
-    $("#lib-form").addEventListener("submit", (e) => { e.preventDefault(); onSearch(); const first = document.querySelector(st.view === "glossary" ? "#gl-body .gl-row" : "#lib-topics .lib-topic"); if (first) go(first.id, true); });
-    $("#lib-q").addEventListener("input", onSearch);
+    $("#lib-form").addEventListener("submit", (e) => { e.preventDefault(); onSearch("enter"); const first = document.querySelector(st.view === "glossary" ? "#gl-body .gl-row" : "#lib-topics .lib-topic"); if (first) go(first.id, true); });
+    $("#lib-q").addEventListener("input", () => onSearch());
+    /* a related search picked under the box: search for its name and go straight to it */
+    $("#lib-q").addEventListener("hub:suggest", (e) => {
+      e.preventDefault();
+      const { type, id, label } = e.detail;
+      $("#lib-q").value = label;
+      st.q = label.slice(0, 60); st.open.clear(); st.shelf = "all"; controls();
+      st.view = type === "term" && gloss ? "glossary" : "topics";
+      toURL(); render(); logSearch("suggest");
+      if (!document.getElementById(id)) { st.q = ""; controls(); render(); }
+      history.replaceState(history.state, "", `${location.pathname}${location.search}#${encodeURIComponent(id)}`);
+      requestAnimationFrame(() => go(id, true));
+    });
+    /* "/" jumps to the search box, as on most search pages */
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "/" || e.metaKey || e.ctrlKey || e.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) || document.activeElement.isContentEditable) return;
+      e.preventDefault(); $("#lib-q").focus(); $("#lib-q").select();
+    });
     $("#lib-shelves").addEventListener("click", (e) => {
       const b = e.target.closest("[data-shelf]"); if (!b) return;
       st.shelf = b.dataset.shelf; controls(); toURL(); render();
@@ -258,7 +288,7 @@
       const o = e.target.closest("[data-lib-open]");
       if (o) { st.open.add(o.dataset.libOpen); render(); go(o.dataset.libOpen); return; }
       const tr = e.target.closest("[data-lib-try]");
-      if (tr) { $("#lib-q").value = tr.dataset.libTry; onSearch(); return; }
+      if (tr) { $("#lib-q").value = tr.dataset.libTry; onSearch("try"); return; }
       const v = e.target.closest("[data-view]");
       if (v) { setView(v.dataset.view); $(".lib-tabs").scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" }); track("library_view", { view: v.dataset.view, source: "button" }); return; }
       if (e.target.closest("[data-lib-reset]")) { st.q = ""; st.shelf = "all"; st.kinds.clear(); st.src = ""; st.open.clear(); controls(); toURL(); render(); return; }
@@ -300,7 +330,14 @@
     indexKeys();
     allTerms().forEach((x) => { x._topics = topicsForTerm(x); });
     if (!gloss) $("#tab-glossary").hidden = true;
-    fromURL(); controls(); render(); bind();
+    const from = new URLSearchParams(location.search).get("from");
+    fromURL();
+    /* a search that arrives with no topics but some glossary terms opens on the glossary */
+    if (st.q && st.view === "topics" && !visibleTopics().length && visibleTerms().length) st.view = "glossary";
+    controls(); render(); bind();
+    /* a search that arrived from the hub (or a shared ?q= link) is recorded once, then the address is tidied */
+    if (st.q) logSearch(["hero", "topics", "suggest"].includes(from) ? from : "link");
+    if (from) toURL();
     const id = decodeURIComponent(location.hash.slice(1));
     if (id && (data.topics.some((t) => t.id === id) || (/^term-/.test(id) && gloss))) {
       reveal(id);

@@ -256,7 +256,7 @@
     builders: { title: "Builder 둘러보기", url: "builders/", note: "지난 기수 프로젝트" },
     term: { title: "용어 제안하기", url: "https://github.com/CausalInferenceLab/Causal-Inference-with-Python/issues/new?template=term-proposal.yml", note: "웹북 번역어" },
     guide: { title: "허브에 올리는 방법", url: "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/blob/main/CONTRIBUTING.md", note: "데이터 파일 PR" },
-    discord: { title: "가짜연구소 디스코드", url: "https://discord.gg/QEdcGbYSQ", note: "질문 · 참여 이야기", t: "discord" },
+    discord: { title: "가짜연구소 디스코드", url: "https://discord.com/invite/EPurkHVtp2", note: "질문 · 참여 이야기", t: "discord" },
     linkedin: { title: "신진수 LinkedIn", url: "https://www.linkedin.com/in/jinsoo-shin-436060162", note: "협업 · 강연 · 제안", t: "linkedin" },
     /* the address is put together here so it is not sitting whole in the page source */
     mail: { title: "메일 보내기", url: "mailto:" + ["jsshin2013", "gmail.com"].join("@"), note: ["jsshin2013", "gmail.com"].join("@"), t: "email" }

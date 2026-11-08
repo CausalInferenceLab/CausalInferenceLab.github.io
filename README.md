@@ -83,7 +83,7 @@
 3. **Builder로 프로젝트 열기:** 다음 기수에 직접 프로젝트를 엽니다. 레포는 [Project-template](https://github.com/CausalInferenceLab/Project-template)으로 시작합니다.
 4. **Builder라면:** [프로필·회고 양식](https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/issues/new?template=builder-profile.yml)으로 한 줄 소개와 회고 세 줄을 남겨 주세요. Builder 페이지에 실립니다.
 
-질문은 [가짜연구소 디스코드](https://discord.gg/QEdcGbYSQ)에 남겨 주세요.
+질문은 [가짜연구소 디스코드](https://discord.com/invite/EPurkHVtp2)에 남겨 주세요.
 
 ## English summary
 
