@@ -107,9 +107,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .banner::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 90% at 88% 20%, rgba(255, 255, 255, .16), transparent 60%); pointer-events: none; }
 .banner > * { position: relative; }
 .banner-kicker { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255, 255, 255, .82); margin-bottom: 14px; }
-.banner-kicker span:first-child { font-weight: 700; color: #fff; letter-spacing: -.01em; }
-.banner-kicker .sep { width: 1px; height: 14px; background: rgba(255, 255, 255, .35); }
-.banner-kicker b { color: #fff; }
+.banner-kicker img { display: block; height: 34px; width: auto; }
 .banner h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(36px, 4.6vw, 58px); line-height: 1.08; letter-spacing: -.03em; }
 .banner-lede { margin-top: 14px; font-size: 17px; color: rgba(255, 255, 255, .86); max-width: 36em; }
 .banner-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
