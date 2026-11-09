@@ -23,7 +23,10 @@
     ["OCE-Materials", "온라인 실험 스터디", "온라인 통제 실험 스터디 발표"],
     ["Experimentation-platform-materials", "실험 플랫폼 자료", "국내외 실험 플랫폼 사례 모음"],
     ["causal-inference-practice", "산업 사례 템플릿", "기법별 산업 사례 발표"],
-    ["awesome-causal-inference-python", "메서드 코드북", "주제별 파이썬 코드"]
+    ["awesome-causal-inference-python", "메서드 코드북", "주제별 파이썬 코드"],
+    ["Smart_Causal_Inference", "책 스터디 노트", "『실무로 통하는 인과추론』 장별 정리"],
+    ["causal-inference-with-causalML", "CausalML 스터디", "책 이론을 causalml 코드로"],
+    ["Marketing_Science", "마케팅 사이언스", "마케팅 데이터와 베이지안 스터디 발표"]
   ];
   const SRC_NAME = Object.fromEntries(SOURCES.map(([id, name]) => [id, name]));
   /* each material's curriculum level, so a newcomer can tell an intro from a research paper */
