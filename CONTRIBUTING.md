@@ -30,7 +30,7 @@ PR을 올리기 전에 `python3 scripts/check_data.py`를 실행해 주세요. �
 | `data/term_links.json` | 자료실 용어집의 ‘팀 자료에서’ 목록. 손으로 고치지 않고, 팀 저장소를 한 폴더에 clone한 뒤 `python3 scripts/build_term_links.py <폴더> --check-urls`로 다시 만듭니다. 발표 자료(PDF, `pdftotext` 필요), 노트북과 마크다운에서 용어의 번역어·다른 표기·원어를 찾아, 용어마다 많이 다룬 문서를 4개까지(저장소당 2개) 고릅니다. 팀 저장소에 자료가 늘면 다시 돌려 커밋하세요. 용어의 한 줄 풀이는 `data/pseudo.json`에 있고 Pseudo와 용어집이 함께 씁니다. |
 | `data/repos.json` | 레포를 추가하거나 설명·단계·트랙·상태를 바꿀 때. 자료실 검색은 레포 이름·`title`·`tags`·`builders`와 검색어 `keys`로 팀 프로젝트를 찾아 주제 위에 보여 줍니다(예: `CausalML`, `LLM`). 주제에 넣기 어려운 프로젝트가 검색에 안 걸리면 `keys`를 늘리세요. |
 | `data/map.json` | 트랙 지도에서 레포의 위치를 정할 때. 책과 강의(`paid`)의 표지와 소개도 여기서 고칩니다. |
-| `data/levels.json` | 레벨의 설명과 볼 순서를 바꿀 때. `learn`(배우는 것), `outcome`(끝나면), `steps`(순서대로 볼 레포와 한 줄 `note`), `more`(웹북 장이나 허브 페이지 같은 더 해 보기 링크)를 적습니다. `steps`에 없는 같은 레벨의 레포는 ‘골라 보기’로 나옵니다. |
+| `data/levels.json` | 레벨의 설명과 볼 순서를 바꿀 때. `learn`(배우는 것), `outcome`(끝나면), `steps`(순서대로 볼 레포와 한 줄 `note`), `more`(웹북 장이나 허브 페이지 같은 더 해 보기 링크)를 적습니다. `steps`에 없는 같은 레벨의 레포는 ‘골라 보기’로 나옵니다. `topics`는 그 레벨에서 배우는 자료실 주제 id를 배우는 순서대로 적은 것이고, 커리큘럼은 주제마다 그 레벨에 맞는 자료 두 개를 바로 보여 줍니다(웹북 1–16장은 Level 1, 나머지는 레포의 레벨). 주제 하나는 한 레벨에만 넣고, 새 주제를 `topics.json`에 만들면 어느 레벨에 넣을지도 정합니다. |
 | `data/leveltest.json` | 레벨 진단 문제를 고칠 때. 문제마다 `band`(L0·L1·L2), 보기 `opts`, 정답 순서 `answer`(0부터), 해설 `why`, 다시 볼 장 `chapter`를 적습니다. `bands`의 `pass`보다 적게 맞힌 첫 구간이 시작 Level이 되고, 모두 넘으면 관심 분야에 따라 Level 3이나 4가 됩니다. |
 | `data/routes.json` | 관심 분야별로 이어서 볼 자료를 바꿀 때. 레벨 진단 결과의 ‘관심 분야에 맞춰 이어서’에 쓰입니다. |
 | `data/articles.json`, `articles/*.md` | 연재 글을 추가할 때. 아래 ‘연재 쓰기’를 보세요. |

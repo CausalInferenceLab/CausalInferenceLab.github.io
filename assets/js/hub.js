@@ -417,6 +417,39 @@
       <li class="rail-layer learn" aria-hidden="true">배우기</li><li class="rail-layer build" aria-hidden="true">만들기</li>
     </ol>`;
   }
+  /* the library topics a level covers, in order, each with the one or two materials to start from
+     (data/levels.json topics + data/topics.json). A material's level follows the library: web book chapters
+     1–16 are Level 1 and the rest Level 2; other materials take their repository's level. */
+  const KIND_NAME = { video: "영상", read: "글", code: "코드", slides: "발표", case: "사례", post: "연재" };
+  const KIND_RANK = { video: 0, read: 1, code: 2, slides: 3, case: 4, post: 5 };
+  function itemLevel(x) {
+    if (x.repo === "Causal-Inference-with-Python") { const m = /\/(\d+)-[^/]*\.html$/.exec(x.url || ""); return m && Number(m[1]) < 17 ? "L1" : "L2"; }
+    const r = state.repos.get(x.repo);
+    return r && r.level ? r.level : null;
+  }
+  function startWith(t, levelId) {
+    const want = lvIndex(levelId);
+    const dist = (x) => { const k = lvIndex(itemLevel(x)); return k < 0 ? 9 : Math.abs(k - want); };
+    return [...(t.items || [])].filter((x) => x.kind !== "post")
+      .sort((a, b) => dist(a) - dist(b) || (KIND_RANK[a.kind] ?? 9) - (KIND_RANK[b.kind] ?? 9)).slice(0, 2);
+  }
+  function topicOrder(lv) {
+    const all = (state.topicData && state.topicData.topics) || [];
+    const ts = (lv.topics || []).map((id) => all.find((t) => t.id === id)).filter(Boolean);
+    if (!ts.length) return "";
+    const ev = (topic, target) => `data-event="level_topic" data-event-params='${esc(JSON.stringify({ level: lv.id, topic, target }))}'`;
+    const row = (t, k) => `<li class="lt" data-shelf="${esc(t.shelf)}">
+        <span class="lt-n" aria-hidden="true">${k}</span>
+        <div class="lt-b"><a class="lt-t" href="library.html#${esc(t.id)}" ${ev(t.id, "library")}>${esc(t.name)}</a>
+          <span class="lt-go">${startWith(t, lv.id).map((x) => `<a href="${esc(x.url)}"${/^https?:/.test(x.url) && !/^https:\/\/causalinferencelab\.github\.io\//.test(x.url) ? ' target="_blank" rel="noopener"' : ""} ${ev(t.id, "material")}><i>${esc(KIND_NAME[x.kind] || "자료")}</i>${esc(x.title)}</a>`).join("")}
+          <a class="lt-all" href="library.html#${esc(t.id)}" ${ev(t.id, "library_all")}>자료 ${(t.items || []).length}개</a></span></div>
+      </li>`;
+    const FIRST = 5, head = ts.slice(0, FIRST), rest = ts.slice(FIRST);
+    return `<p class="lr-k">배우는 주제 <span>${ts.length}개, 순서대로</span></p>
+      <ol class="lt-list">${head.map((t, k) => row(t, k + 1)).join("")}</ol>
+      ${rest.length ? `<details class="lt-more" data-topics="${lv.id}"><summary>주제 ${rest.length}개 더</summary><ol class="lt-list" start="${FIRST + 1}">${rest.map((t, k) => row(t, FIRST + k + 1)).join("")}</ol></details>` : ""}`;
+  }
+
   /* one level in full: who it is for, what it covers, what you can do after it, and the order to take it */
   function levelPanel(lv, i) {
     const mine = myLevel(), mi = mine ? lvIndex(mine.level) : -1;
@@ -426,12 +459,13 @@
     const extra = items.filter((r) => !inSteps.has(r.repo) && r.kind !== "paid");
     const books = items.filter((r) => r.kind === "paid");
     const build = (lv.quests || []).length > 0;
+    const topics = topicOrder(lv);
     const crew = [...new Set(items.flatMap((r) => r.builders || []))];
     const count = `<span aria-label="${quests.length}개 중 ${done}개 클리어">${done} / ${quests.length}</span>`;
     const list = build
       ? `<p class="lr-k">직접 해 보기 ${count}</p><ol class="ls-list">${quests.map((q, k) => questRow(q, k + 1)).join("")}</ol>
          <p class="lr-k">함께 만드는 레포</p><ul class="lr-repos">${[...steps.map((s) => [s.r, s.note]), ...extra.map((r) => [r, r.format || ""])].map(([r, note]) => `<li data-id="${esc(r.repo)}" data-line="${primaryLine(r)}"><button type="button" data-open="${esc(r.repo)}" title="${esc(note)}"><i aria-hidden="true"></i>${esc(r.title)}${r.status === "running" ? `<span class="ls-live">진행 중</span>` : ""}</button></li>`).join("")}</ul>`
-      : `<p class="lr-k">이 순서로 ${count}</p><ol class="ls-list">${steps.map((s, k) => stepRow(s.r, k + 1, s.note)).join("")}</ol>
+      : `<p class="lr-k">${topics ? "따라갈 자료" : "이 순서로"} ${count}</p><ol class="ls-list">${steps.map((s, k) => stepRow(s.r, k + 1, s.note)).join("")}</ol>
          ${extra.length ? `<details class="lr-more" data-more="${lv.id}"><summary>골라 보기 ${extra.length}개</summary><ul class="ls-list">${extra.map((r) => stepRow(r, 0, "")).join("")}</ul></details>` : ""}`;
     const text = books.length ? `<p class="lr-also"><span>함께 보는 교재</span>${books.map((b) => `<button type="button" data-open="${esc(b.repo)}" data-id="${esc(b.repo)}">${esc(b.mapLabel || b.title)}</button>`).join("")}</p>` : "";
     const more = (lv.more || []).length ? `<p class="lr-also"><span>더 해 보기</span>${lv.more.map((m) => `<a href="${esc(m.href)}"${/^https?:/.test(m.href) ? ' target="_blank" rel="noopener"' : ""} data-event="click_level_extra" data-event-params='${esc(JSON.stringify({ level: lv.id, target: m.title }))}'>${esc(m.title)}</a>`).join("")}</p>` : "";
@@ -451,11 +485,11 @@
         ${lv.for ? `<p class="lr-for"><b>이런 분께</b>${esc(lv.for)}</p>` : ""}
       </div>
       <div class="lr-body">
-        ${(lv.learn || []).length ? `<p class="lr-k">배우는 것</p><ul class="lr-learn">${lv.learn.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+        ${(lv.learn || []).length && !topics ? `<p class="lr-k">배우는 것</p><ul class="lr-learn">${lv.learn.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
         ${lv.outcome ? `<p class="lr-out"><b>끝나면</b>${esc(lv.outcome)}</p>` : ""}
         ${crew.length ? `<p class="lr-crew"><span>만든 Builder</span>${crew.slice(0, 5).map((n) => `<span class="lr-who">${avatarHTML(n, "sm")}<span>${esc(n)}</span></span>`).join("")}${crew.length > 5 ? `<i>외 ${crew.length - 5}명</i>` : ""}</p>` : ""}
       </div>
-      <div class="lr-steps">${list}${text}${more}${goal}</div>
+      <div class="lr-steps">${topics}${list}${text}${more}${goal}</div>
       ${nav}
     </article>`;
   }
@@ -466,8 +500,10 @@
     state.level = id;
     const keep = shelf.querySelector(`details[data-more="${id}"]`);
     const wasOpen = keep && keep.open;
+    const keepT = shelf.querySelector(`details[data-topics="${id}"]`), topicsOpen = keepT && keepT.open;
     shelf.innerHTML = levelPanel(lv, i);
     if (wasOpen) { const d = shelf.querySelector("details[data-more]"); if (d) d.open = true; }
+    if (topicsOpen) { const d = shelf.querySelector("details[data-topics]"); if (d) d.open = true; }
     if (dir && !reduceMotion) { const a = shelf.firstElementChild; a.classList.add(dir > 0 ? "enter-r" : "enter-l"); }
     wireAvatars(shelf);
     renderRail(reveal); renderHud(); renderTestCard();
@@ -1958,6 +1994,7 @@
     renderGrowth();
     renderContrib();
     renderShelf(); renderWeek(); watchRail(); revealSections();
+    getJSON("data/topics.json").then((d) => { state.topicData = d; renderShelf(); }).catch(() => { /* the course shows without its topic order */ });
     document.addEventListener("hub:stamp", onStamp);
     syncStageStamps();
     const header = $(".site-header");

@@ -1841,6 +1841,24 @@ a.ac-title:hover { text-decoration: underline; }
 .lr-crew > span:first-child { margin-right: 6px; font-weight: 700; }
 .lr-crew i { font-style: normal; margin-left: 4px; }
 .lr-steps { grid-area: steps; min-width: 0; }
+/* a level's topic order: number, topic (to the library), and the one or two materials to start from */
+.lt-list { list-style: none; margin: 0 0 4px; padding: 0; display: grid; }
+.lt { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; padding: 9px 0; border-top: 1px solid var(--rule); }
+.lt-list > .lt:first-child { border-top: 0; }
+.lt-n { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: var(--l-main); border: 2px solid currentColor; background: var(--surface); margin-top: 1px; }
+.lt[data-shelf="exp"] .lt-n { color: var(--l-exp); }
+.lt-b { min-width: 0; display: grid; gap: 3px; }
+.lt-t { font-size: 15.5px; font-weight: 750; color: var(--ink); text-decoration: none; justify-self: start; }
+.lt-t:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.lt-go { display: flex; flex-wrap: wrap; gap: 2px 14px; font-size: 13.5px; }
+.lt-go a { color: var(--ink); text-decoration: none; min-width: 0; }
+.lt-go a i { font-style: normal; font-size: 11.5px; font-weight: 800; color: var(--muted); margin-right: 5px; }
+.lt-go a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.lt-go a.lt-all { color: var(--muted); font-weight: 650; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--rule); }
+.lt-more summary { cursor: pointer; font-size: 13.5px; font-weight: 700; color: var(--accent); padding: 6px 0; list-style-position: inside; }
+.lt-more summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+.lt-more .lt-list > .lt:first-child { border-top: 1px solid var(--rule); }
+.lr-steps .lt-list + .lr-k, .lr-steps .lt-more + .lr-k { margin-top: 16px; }
 .ls-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .ls { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 7px 8px 7px 10px; border-radius: 14px; background: var(--surface-2); }
 .ls-n { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 14px; background: var(--surface); border: 2.5px solid var(--c, var(--l-main)); color: var(--ink); }

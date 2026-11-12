@@ -12,6 +12,10 @@
       "교란",
       "반사실"
     ],
+    "topics": [
+      "why-causal",
+      "ab-basics"
+    ],
     "outcome": "상관과 인과가 왜 다른지 예를 들어 설명할 수 있습니다.",
     "steps": [
       {
@@ -56,6 +60,18 @@
       "통제집단합성법",
       "회귀 불연속"
     ],
+    "topics": [
+      "dag",
+      "regression",
+      "propensity",
+      "iv",
+      "did",
+      "synthetic",
+      "rdd",
+      "metrics",
+      "stats",
+      "trust"
+    ],
     "outcome": "기법마다 필요한 가정을 알고, 데이터에 맞는 추정 방법을 고를 수 있습니다.",
     "steps": [
       {
@@ -82,6 +98,17 @@
       "업리프트",
       "실험 플랫폼",
       "마케팅 효과 측정"
+    ],
+    "topics": [
+      "hte",
+      "dml",
+      "policy",
+      "marketing",
+      "variance",
+      "interference",
+      "long-term",
+      "exp-analysis",
+      "culture"
     ],
     "outcome": "회사 데이터로 효과를 추정하고, 결과와 한계를 설명할 수 있습니다.",
     "steps": [
@@ -127,6 +154,9 @@
       "분석 자동화",
       "PR과 코드 리뷰"
     ],
+    "topics": [
+      "platform"
+    ],
     "outcome": "분석을 돕는 도구에 기여하고 리뷰를 주고받을 수 있습니다.",
     "steps": [
       {
@@ -156,6 +186,10 @@
       "실사용 근거(RWE)",
       "적응형 설계",
       "외부 라이브러리 기여"
+    ],
+    "topics": [
+      "clinical",
+      "discovery"
     ],
     "outcome": "연구 소프트웨어를 만들거나 외부 인과추론 오픈소스에 기여할 수 있습니다.",
     "steps": [
