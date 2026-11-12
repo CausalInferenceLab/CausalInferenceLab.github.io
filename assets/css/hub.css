@@ -2772,3 +2772,25 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .lib-lvb:hover { border-color: var(--ink); }
 .lib-lvb[aria-checked="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
 .lib-lvb:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* hero actions: one main action (the level test), then the quieter ways in (videos, web book) */
+.hero .banner-cta { display: grid; gap: 14px; margin-top: 22px; justify-items: start; }
+.cta-main { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "t i" "s i"; align-items: center; column-gap: 18px; row-gap: 2px; padding: 14px 18px 14px 22px; border-radius: 16px; background: #FFD54A; color: #14162B; text-decoration: none; box-shadow: 0 10px 28px rgba(0, 0, 0, .28); max-width: 100%; }
+.cta-main-t { grid-area: t; font-size: 19px; font-weight: 800; letter-spacing: -.02em; }
+.cta-main-s { grid-area: s; font-size: 13.5px; font-weight: 600; color: rgba(20, 22, 43, .74); }
+.cta-main-i { grid-area: i; width: 36px; height: 36px; padding: 8px; border-radius: 50%; background: #14162B; color: #FFD54A; transition: transform .15s ease; }
+.cta-main:hover { background: #FFDF70; }
+.cta-main:hover .cta-main-i { transform: translateX(3px); }
+.cta-main:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.cta-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.cta-k { width: 100%; margin: 0 0 2px; font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, .7); }
+.hero .banner-cta .cta-sub .pill { min-height: 40px; padding: 0 14px; font-size: 14px; border-radius: 12px; font-weight: 650; border: 1px solid rgba(255, 255, 255, .22); background: rgba(255, 255, 255, .08); color: #fff; }
+.hero .banner-cta .cta-sub .pill:hover { background: rgba(255, 255, 255, .16); border-color: rgba(255, 255, 255, .5); }
+.hero .banner-cta .cta-sub .pill .yt { width: 16px; height: 16px; margin-right: 7px; }
+@media (prefers-reduced-motion: reduce) { .cta-main-i { transition: none; } }
+@media (max-width: 600px) {
+  .hero .banner-cta { justify-items: stretch; }
+  .cta-main { padding: 14px 14px 14px 18px; }
+  .cta-main-t { font-size: 18px; }
+  .hero .banner-cta .cta-sub .pill { width: auto; justify-content: flex-start; }
+}
