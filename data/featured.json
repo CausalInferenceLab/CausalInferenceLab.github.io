@@ -1,37 +1,34 @@
 [
   {
+    "tag": "입문 영상",
+    "icon": "youtube",
+    "title": "인과추론 입문 영상",
+    "desc": "Causal Studio · 짧은 영상과 Colab 노트북",
+    "repo": "causal-studio",
+    "url": "https://www.youtube.com/@CausalStudio"
+  },
+  {
     "tag": "웹북",
-    "title": "Brave & True 인과추론 번역서",
-    "desc": "원서 25장과 부록을 모두 옮긴 웹북",
+    "icon": "team",
+    "title": "인과추론 웹북 25장",
+    "desc": "Brave & True 번역서 · 원서 전 장과 부록",
     "repo": "Causal-Inference-with-Python",
     "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/"
   },
   {
-    "tag": "영상",
-    "title": "Causal Studio",
-    "desc": "영상과 노트북으로 여는 인과추론 입문",
-    "repo": "causal-studio",
-    "url": "https://causalinferencelab.github.io/causal-studio/"
+    "tag": "실무 영상",
+    "icon": "youtube",
+    "title": "인과추론 실무 영상",
+    "desc": "박지용 교수 채널 · 현업 실무자 특강 17강",
+    "repo": "causal-inference-lecture",
+    "url": "https://www.youtube.com/@causaldatascience"
   },
   {
-    "tag": "에이전트",
-    "title": "Lang2SQL",
-    "desc": "대화하며 함께 분석하는 데이터 에이전트",
-    "repo": "Lang2SQL",
-    "url": "https://github.com/CausalInferenceLab/Lang2SQL"
-  },
-  {
-    "tag": "스터디 자료",
-    "title": "OCE Materials",
-    "desc": "A/B 테스트 스터디 16회 자료",
+    "tag": "스터디",
+    "icon": "team",
+    "title": "A/B 테스트 스터디 16회",
+    "desc": "온라인 통제 실험 발표 자료 · OCE",
     "repo": "OCE-Materials",
     "url": "https://github.com/CausalInferenceLab/OCE-Materials"
-  },
-  {
-    "tag": "R 패키지",
-    "title": "ccwr",
-    "desc": "Target trial emulation을 위한 R 패키지",
-    "repo": "ccwr",
-    "url": "https://causalinferencelab.github.io/ccwr/"
   }
 ]

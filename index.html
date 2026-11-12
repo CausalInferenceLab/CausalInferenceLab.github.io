@@ -62,14 +62,7 @@
             <button type="submit" class="hs-go">찾기</button>
             <p class="hs-note" id="hs-note"><a href="library.html">자료실</a>과 <a href="library.html?view=glossary">용어집</a>에서 찾습니다.</p>
           </form>
-          <div class="banner-cta">
-            <p class="cta-k">영상과 웹북으로 바로 시작하기</p>
-            <div class="cta-sub">
-              <a class="pill" href="https://www.youtube.com/@CausalStudio" target="_blank" rel="noopener" data-event="start_click" data-event-params='{"target":"youtube","placement":"hero"}'><svg class="yt" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="#FF0033"/><path d="M10 8.8v6.4l5.4-3.2z" fill="#fff"/></svg>인과추론 입문 영상</a>
-              <a class="pill" href="https://www.youtube.com/@causaldatascience" target="_blank" rel="noopener" title="박지용 교수님의 YouTube 채널 ‘인과추론의 데이터과학’" data-event="start_click" data-event-params='{"target":"youtube_causaldatascience","placement":"hero"}'><svg class="yt" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="#FF0033"/><path d="M10 8.8v6.4l5.4-3.2z" fill="#fff"/></svg>인과추론 실무 영상</a>
-              <a class="pill" href="https://causalinferencelab.github.io/Causal-Inference-with-Python/" data-event="start_click" data-event-params='{"target":"webbook","placement":"hero"}'><img class="pill-mark" src="assets/img/team-mark.png" alt="" width="18" height="18">웹북으로 읽기</a>
-            </div>
-          </div>
+          <p class="hs-pop"><span>많이 찾는 주제</span><a href="library.html?q=%EC%9D%B4%EC%A4%91%EC%B0%A8%EB%B6%84%EB%B2%95&amp;from=hero" data-event="start_click" data-event-params='{"target":"popular_search","placement":"hero"}'>이중차분법</a><a href="library.html?q=%EC%84%B1%ED%96%A5%EC%A0%90%EC%88%98&amp;from=hero" data-event="start_click" data-event-params='{"target":"popular_search","placement":"hero"}'>성향점수</a><a href="library.html?q=A/B%20%ED%85%8C%EC%8A%A4%ED%8A%B8&amp;from=hero" data-event="start_click" data-event-params='{"target":"popular_search","placement":"hero"}'>A/B 테스트</a><a href="library.html?q=CUPED&amp;from=hero" data-event="start_click" data-event-params='{"target":"popular_search","placement":"hero"}'>CUPED</a><a href="library.html?q=%EB%A9%94%ED%83%80%EB%9F%AC%EB%84%88&amp;from=hero" data-event="start_click" data-event-params='{"target":"popular_search","placement":"hero"}'>메타러너</a></p>
           <div class="partner" aria-labelledby="partner-title">
             <p class="partner-k" id="partner-title"><b>With 한빛미디어</b><span>팀이 옮긴 책과 그 책으로 만든 강의, 커리큘럼 L2</span></p>
             <ul class="partner-list" id="partner-list"></ul>
@@ -83,7 +76,8 @@
         </a>
         <div class="banner-side">
           <img class="banner-mark" src="assets/img/team-mark.png" alt="" width="132" height="132">
-          <ul class="featured" id="featured" aria-label="대표 사이트"></ul>
+          <p class="side-k" id="featured-k">무료로 바로 볼 수 있는 자료</p>
+          <ul class="featured" id="featured" aria-labelledby="featured-k"></ul>
         </div>
       </div>
       <a class="next-event" id="next-event" href="#events" data-event="click_event" data-event-params='{"action":"next_strip","placement":"hero"}' hidden></a>

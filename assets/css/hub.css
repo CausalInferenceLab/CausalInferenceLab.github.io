@@ -2792,19 +2792,42 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .lv-card:hover .lv-card-go svg { transform: translateX(3px); }
 .lv-card:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .lv-card-go svg { transition: none; } }
-.hero .banner-cta { display: grid; gap: 8px; margin-top: 22px; justify-items: start; }
-.cta-k { margin: 0; font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, .7); }
-.cta-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.hero .banner-cta .cta-sub .pill { min-height: 42px; padding: 0 15px; font-size: 14.5px; border-radius: 12px; font-weight: 650; border: 1px solid rgba(255, 255, 255, .22); background: rgba(255, 255, 255, .08); color: #fff; width: auto; }
-.hero .banner-cta .cta-sub .pill:hover { background: rgba(255, 255, 255, .16); border-color: rgba(255, 255, 255, .5); }
-.hero .banner-cta .cta-sub .pill .yt { width: 17px; height: 17px; margin-right: 8px; }
-.pill-mark { width: 18px; height: 18px; margin-right: 8px; border-radius: 4px; flex: none; }
 @media (max-width: 860px) {
   .hero .banner-main > * { order: 0; }
   /* phone: the materials first, right after the lead; then the level test, the search and the start links */
   .hero .banner-side { order: 1; margin-top: 18px; }
   .hero .lv-card { order: 2; margin: 14px 0 4px; }
-  .hero .banner-main > .hero-search, .hero .banner-main > .banner-cta { order: 3; }
+  .hero .banner-main > .hero-search { order: 3; }
   .hero .banner-main > .partner { order: 4; }
   .lv-card-t { font-size: 21px; }
 }
+
+/* hero materials: a labelled list under the level test, one row per material, icon · what it is · kind */
+.side-k { margin: 6px 4px 2px; font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, .72); }
+.hero .banner-side { padding: 14px 10px 10px; gap: 4px; align-items: stretch; }
+.hero .featured { gap: 2px; }
+.hero .featured a { display: grid; grid-template-columns: 26px minmax(0, 1fr) 14px; align-items: center; column-gap: 12px; padding: 10px 12px; border-radius: 12px; }
+.hero .featured .fi { width: 22px; height: 22px; border-radius: 5px; }
+.hero .featured .tx { order: 0; gap: 2px; }
+.hero .featured .t { font-size: 15.5px; white-space: normal; line-height: 1.3; }
+.hero .featured .d { display: block; font-size: 12.5px; white-space: normal; line-height: 1.4; color: rgba(255, 255, 255, .72); }
+.hero .featured .tag { display: none; }
+.hero .featured .out { order: 0; }
+.hero .hero-search { margin-top: 22px; }
+@media (max-width: 860px) {
+  .hero .banner-side { padding: 12px 6px 6px; }
+  .hero .featured a { grid-template-columns: 24px minmax(0, 1fr) 14px; padding: 9px 10px; }
+  .hero .featured .tag { display: none; }
+}
+/* popular topics under the search: words a first-time visitor can start from */
+.hs-pop { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 14px 0 0; max-width: 560px; }
+.hs-pop span { font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, .7); margin-right: 4px; }
+.hs-pop a { font-size: 13.5px; font-weight: 600; color: #fff; text-decoration: none; padding: 5px 11px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .24); background: rgba(255, 255, 255, .06); }
+.hs-pop a:hover { background: rgba(255, 255, 255, .16); border-color: rgba(255, 255, 255, .5); }
+.hs-pop a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+/* desktop: the left column runs the full height, the Hanbit block sits at its foot level with the materials */
+@media (min-width: 861px) {
+  .hero .banner-main { display: flex; flex-direction: column; align-self: stretch; }
+  .hero .banner-main > .partner { margin-top: auto; padding-top: 22px; }
+}
+@media (max-width: 860px) { .hero .banner-main > .hs-pop { order: 3; } }
