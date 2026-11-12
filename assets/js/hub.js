@@ -1067,14 +1067,19 @@
 
 
   /* ---------- featured sites (hero) ---------- */
+  /* the hero's study materials: what each one teaches first, the channel or book it lives in second */
+  const FEAT_ICON = {
+    youtube: '<svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="#FF0033"/><path d="M10 8.8v6.4l5.4-3.2z" fill="#fff"/></svg>',
+    team: '<img class="fi" src="assets/img/team-mark.png" alt="" width="22" height="22">'
+  };
   function renderFeatured() {
     $("#featured").innerHTML = (state.featured || []).map((f) => {
       const r = f.repo && state.repos.get(f.repo);
-      const stars = r && r.stars >= 10 ? `<span class="st">${icons.star}${fmt(r.stars)}</span>` : "";
-      return `<li><a href="${esc(f.url)}" target="_blank" rel="noopener" data-repo="${esc(f.repo || "")}"${r ? ` data-line="${primaryLine(r)}"` : ""}>
-        <span class="tag">${esc(f.tag)}</span>
+      const site = /^https:\/\/causalinferencelab\.github\.io\//.test(f.url);
+      return `<li><a href="${esc(f.url)}"${site ? "" : ' target="_blank" rel="noopener"'} data-repo="${esc(f.repo || "")}"${r ? ` data-line="${primaryLine(r)}"` : ""}>
+        ${FEAT_ICON[f.icon] || ""}
         <span class="tx"><span class="t">${esc(f.title)}</span>${f.desc ? `<span class="d">${esc(f.desc)}</span>` : ""}</span>
-        ${stars}
+        <span class="tag">${esc(f.tag)}</span>
         <svg class="out" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></li>`;
     }).join("");
   }
