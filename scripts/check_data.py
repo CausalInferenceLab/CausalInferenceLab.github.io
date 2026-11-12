@@ -79,6 +79,20 @@ def main():
         token(lv.get("id"), "levels.json", "id")
         for q in lv.get("quests") or []:
             token(q, f"levels.json {lv.get('id')!r}", "quests")
+    # each library topic sits in one level's topic order (the curriculum shows them per level)
+    topic_ids = [t.get("id") for t in (data.get("topics.json") or {}).get("topics") or []]
+    if data.get("levels.json") and topic_ids:
+        seen = {}
+        for lv in data.get("levels.json"):
+            for t in lv.get("topics") or []:
+                if t not in topic_ids:
+                    err(f"levels.json {lv.get('id')!r}", f"topic {t!r} is not in topics.json")
+                if t in seen:
+                    err(f"levels.json {lv.get('id')!r}", f"topic {t!r} is already in {seen[t]}")
+                seen[t] = lv.get("id")
+        for t in topic_ids:
+            if t not in seen:
+                warn("levels.json", f"topic {t!r} is in no level's topics; the curriculum will not show it")
     lines = {ln.get("id") for ln in data.get("lines.json") or []}
     for ln in data.get("lines.json") or []:
         token(ln.get("id"), "lines.json", "id")
