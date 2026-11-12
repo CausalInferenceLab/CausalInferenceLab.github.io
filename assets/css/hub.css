@@ -2801,9 +2801,10 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .pill-mark { width: 18px; height: 18px; margin-right: 8px; border-radius: 4px; flex: none; }
 @media (max-width: 860px) {
   .hero .banner-main > * { order: 0; }
-  .hero .lv-card { order: 1; margin: 18px 0 4px; }
-  .hero .banner-main > .hero-search, .hero .banner-main > .banner-cta { order: 2; }
+  /* phone: the materials first, right after the lead; then the level test, the search and the start links */
+  .hero .banner-side { order: 1; margin-top: 18px; }
+  .hero .lv-card { order: 2; margin: 14px 0 4px; }
+  .hero .banner-main > .hero-search, .hero .banner-main > .banner-cta { order: 3; }
   .hero .banner-main > .partner { order: 4; }
-  .hero .banner-side { order: 3; }
   .lv-card-t { font-size: 21px; }
 }
