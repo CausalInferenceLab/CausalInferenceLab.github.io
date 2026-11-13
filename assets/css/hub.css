@@ -2857,10 +2857,10 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .lv-card-s { grid-area: s; margin-top: 4px; font-size: 13.5px; }
 .lv-card-go { grid-area: go; align-self: center; margin-top: 0; }
 .hero .banner-side { padding: 10px 8px 8px; }
-.side-k { margin: 4px 6px 2px; }
+.side-k { margin: 4px 6px 4px; font-size: 15px; color: rgba(255, 255, 255, .82); }
 .starts a { padding: 8px 10px; }
 .starts .tx { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; row-gap: 0; }
-.starts .t { font-size: 17px; }
+.starts .t { font-size: 16px; }
 .starts .d { font-size: 14px; }
 .oss { margin-top: 20px; }
 .oss-k { margin-bottom: 8px; }
