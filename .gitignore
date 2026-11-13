@@ -5,3 +5,6 @@ node_modules/
 /badges/
 __pycache__/
 /sitemap.xml
+# screenshots taken while checking the site belong outside the repo
+/*.png
+/library/

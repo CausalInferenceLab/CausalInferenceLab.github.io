@@ -2913,3 +2913,14 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .lt.on .lt-n { background: var(--l-main); border-color: var(--l-main); color: #fff; }
 .lt[data-shelf="exp"].on .lt-n { background: var(--l-exp); border-color: var(--l-exp); }
 .lt-started { font-weight: 700; color: var(--ink); }
+/* library topics: videos and other materials as two groups; in the video group the kind column says nothing new */
+.lib-group { display: flex; align-items: baseline; gap: 6px; margin: 16px 0 0; font-size: 13px; font-weight: 800; color: var(--ink); }
+.lib-group span { font-size: 12px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.lib-group + .lib-items { margin-top: 6px; }
+.lib-items.is-video .lib-item { grid-template-columns: minmax(0, 1fr); }
+.lib-items.is-video .lib-kind { display: none; }
+/* hero materials: videos first, then the rest, with a hairline between the two groups */
+.starts li.docs-start { margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(255, 255, 255, .14); border-radius: 0; }
+.starts li.docs-start:hover { border-radius: 0 0 12px 12px; }
+@media (min-width: 861px) { .starts a.sm { padding-top: 5px; padding-bottom: 5px; } }
+@media (max-width: 860px) { .starts a.sm { padding-top: 6px; padding-bottom: 6px; } }

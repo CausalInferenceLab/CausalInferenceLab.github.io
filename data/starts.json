@@ -7,6 +7,13 @@
     "target": "youtube"
   },
   {
+    "icon": "youtube",
+    "title": "인과추론 실무 영상",
+    "desc": "인과추론의 데이터과학 채널 · 실무자 특강 17강",
+    "url": "https://www.youtube.com/@causaldatascience",
+    "target": "youtube_causaldatascience"
+  },
+  {
     "icon": "team",
     "title": "인과추론 웹북 25장",
     "desc": "Brave & True 번역서 · 원서 전 장과 부록",
@@ -23,18 +30,19 @@
     "target": "awesome"
   },
   {
-    "icon": "youtube",
-    "title": "인과추론 실무 영상",
-    "desc": "인과추론의 데이터과학 채널 · 실무자 특강 17강",
-    "url": "https://www.youtube.com/@causaldatascience",
-    "target": "youtube_causaldatascience"
-  },
-  {
     "icon": "team",
     "title": "온라인 통제 실험 강의 자료",
     "desc": "OCE 스터디 · A/B 테스트 16회 발표",
     "url": "https://github.com/CausalInferenceLab/OCE-Materials",
     "repo": "OCE-Materials",
     "target": "oce"
+  },
+  {
+    "icon": "team",
+    "title": "마케팅 사이언스",
+    "desc": "마케팅 인과추론 · MMM·CLV 발표 자료",
+    "url": "https://github.com/CausalInferenceLab/Marketing_Science",
+    "repo": "Marketing_Science",
+    "target": "marketing_science"
   }
 ]
