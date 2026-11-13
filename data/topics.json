@@ -120,7 +120,9 @@
         "충돌 변수",
         "do-calculus",
         "do 연산자",
-        "selection bias"
+        "selection bias",
+        "DoWhy",
+        "dowhy"
       ],
       "items": [
         {
@@ -658,7 +660,9 @@
         "업리프트",
         "uplift",
         "개인화",
-        "세그먼트"
+        "세그먼트",
+        "EconML",
+        "econml"
       ],
       "items": [
         {
@@ -851,7 +855,9 @@
         "쿠폰",
         "타겟팅",
         "targeting",
-        "정책 평가"
+        "정책 평가",
+        "EconML",
+        "econml"
       ],
       "items": [
         {
