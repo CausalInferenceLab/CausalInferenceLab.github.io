@@ -21,6 +21,26 @@
       t.remove(); return ok;
     }
   };
+  /* Materials opened from the curriculum or the library (links marked data-opened), kept in this browser
+     only, so a topic can show how many of its materials the reader has opened. Nothing is sent anywhere. */
+  const OPENED_KEY = "cil-hub-opened";
+  window.hubOpened = () => {
+    try { const v = JSON.parse(localStorage.getItem(OPENED_KEY) || "[]"); return new Set(Array.isArray(v) ? v.filter((x) => typeof x === "string") : []); } catch (e) { return new Set(); }
+  };
+  const markOpened = (e) => {
+    if (e.type === "auxclick" && e.button !== 1) return;
+    const a = e.target.closest("a[data-opened]");
+    if (!a) return;
+    const url = a.getAttribute("href");
+    try {
+      const seen = window.hubOpened();
+      if (!seen.has(url)) localStorage.setItem(OPENED_KEY, JSON.stringify([url, ...seen].slice(0, 500)));
+    } catch (err) { return; }
+    /* after the click has done its navigation, so a page redraw never swallows it */
+    setTimeout(() => document.dispatchEvent(new CustomEvent("hub:opened", { detail: { url } })), 0);
+  };
+  document.addEventListener("click", markOpened);
+  document.addEventListener("auxclick", markOpened);
   /* Any element with data-event sends that event on click; data-event-params holds flat JSON. */
   document.addEventListener("click", (e) => {
     const el = e.target.closest("[data-event]");

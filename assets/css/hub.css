@@ -2883,3 +2883,33 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .starts .gh:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 .hero .oss .featured { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (max-width: 860px) { .hero .oss .featured { grid-template-columns: minmax(0, 1fr); } }
+/* tighter hero: the Hanbit label sits beside its cards, the level card and material rows lose spare padding */
+@media (min-width: 861px) {
+  .hero .oss { margin-top: 20px; }
+  .hero .oss-k { margin-bottom: 8px; }
+  .hero .partner { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; margin-top: 16px; max-width: none; }
+  .hero .partner-k { margin: 0; }
+  .lv-card { padding: 16px 20px; }
+  .starts a.sm { padding-top: 7px; padding-bottom: 7px; }
+}
+/* mobile: material rows show titles only and the level card is one row with its button, so the search box
+   is on the first screen */
+@media (max-width: 860px) {
+  .starts a.sm { padding-top: 9px; padding-bottom: 9px; }
+  .starts .d { display: none; }
+  .hero .lv-card { margin: 12px 0 2px; padding: 14px 16px; grid-template-areas: "k go" "t go"; }
+  .hero .lv-card .lv-card-s { display: none; }
+  .hero .lv-card .lv-card-go { justify-self: end; margin-top: 0; }
+  .lv-card-t { font-size: 19px; }
+}
+/* topic progress: how many of a topic's materials this reader has opened (kept in this browser only) */
+.lt-h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-width: 0; }
+.lt-p { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.lt-p[hidden] { display: none; }
+.lt-p b { font-weight: 750; color: var(--ink); }
+.lt-bar { width: 56px; height: 6px; border-radius: 999px; background: var(--rule); overflow: hidden; }
+.lt-bar i { display: block; height: 100%; border-radius: inherit; background: var(--l-main); }
+.lt[data-shelf="exp"] .lt-bar i { background: var(--l-exp); }
+.lt.on .lt-n { background: var(--l-main); border-color: var(--l-main); color: #fff; }
+.lt[data-shelf="exp"].on .lt-n { background: var(--l-exp); border-color: var(--l-exp); }
+.lt-started { font-weight: 700; color: var(--ink); }
