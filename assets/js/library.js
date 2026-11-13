@@ -41,7 +41,7 @@
   const wa = (w) => { const c = String(w).trim().slice(-1).charCodeAt(0) - 0xac00; return c >= 0 && c <= 11171 && c % 28 ? "과" : "와"; };
   const askPseudo = (q) => `<button type="button" class="btn ghost sm" data-helper-ask="${esc(q)} 알려 주세요">Pseudo에게 물어보기</button>`;
 
-  let data = null, gloss = null, repos = new Map(), read = {}, defs = {}, teamLinks = {};
+  let data = null, gloss = null, repos = new Map(), read = {}, opened = new Set(), defs = {}, teamLinks = {};
   const st = { q: "", shelf: "all", kinds: new Set(), src: "", lv: "all", view: "topics", open: new Set() };
 
   const srcName = (id) => SRC_NAME[id] || (repos.get(id) && repos.get(id).title) || id;
@@ -177,12 +177,13 @@
     const kind = data.kinds[x.kind] || x.kind;
     const ev = (target) => `data-event="library_click" data-event-params='${esc(JSON.stringify({ topic: t.id, kind: x.kind, repo: x.repo, target }))}'`;
     const done = x.repo === "Causal-Inference-with-Python" && read[bookSlug(x.url)];
+    const seen = !done && opened.has(x.url);
     const extra = [x.notebook && `<a href="${esc(x.notebook)}" ${ev("notebook")}>노트북</a>`, x.slides && `<a href="${esc(x.slides)}" target="_blank" rel="noopener" ${ev("slides")}>발표 자료</a>`].filter(Boolean).join("");
     const out = /^https?:\/\//.test(x.url) && !/^https:\/\/causalinferencelab\.github\.io\//.test(x.url);
     return `<li class="lib-item k-${esc(x.kind)}">
       <span class="lib-kind">${esc(kind)}</span>
-      <span class="lib-main"><a href="${esc(x.url)}"${out ? ' target="_blank" rel="noopener"' : ""} ${ev("main")}>${esc(x.title)}${out ? '<span class="lib-out" aria-hidden="true"> ↗</span>' : ""}</a>
-        <span class="lib-src">${(() => { const l = levelOf(x); return l ? `<b class="lib-lv lv-${l}" title="커리큘럼 Level ${l.slice(1)} · ${LV_FULL[l]}">${l} ${LV_NAME[l]}</b>` : ""; })()}${esc(srcName(x.repo))}${x.by ? ` · ${esc(x.by)}` : ""}${done ? ' · <b class="lib-done">읽음</b>' : ""}${extra ? `<span class="lib-extra">${extra}</span>` : ""}</span></span>
+      <span class="lib-main"><a href="${esc(x.url)}" data-opened${out ? ' target="_blank" rel="noopener"' : ""} ${ev("main")}>${esc(x.title)}${out ? '<span class="lib-out" aria-hidden="true"> ↗</span>' : ""}</a>
+        <span class="lib-src">${(() => { const l = levelOf(x); return l ? `<b class="lib-lv lv-${l}" title="커리큘럼 Level ${l.slice(1)} · ${LV_FULL[l]}">${l} ${LV_NAME[l]}</b>` : ""; })()}${esc(srcName(x.repo))}${x.by ? ` · ${esc(x.by)}` : ""}${done ? ' · <b class="lib-done">읽음</b>' : ""}${seen ? ' · <b class="lib-done">열어봄</b>' : ""}${extra ? `<span class="lib-extra">${extra}</span>` : ""}</span></span>
     </li>`;
   }
 
@@ -476,6 +477,20 @@
 
   async function init() {
     try { const r = JSON.parse(localStorage.getItem("cil-book-read") || "{}"); read = r && typeof r === "object" ? r : {}; } catch (e) { read = {}; }
+    opened = window.hubOpened ? window.hubOpened() : new Set();
+    /* the opened mark appears on the item right away; the list is not redrawn under the reader */
+    document.addEventListener("hub:opened", (e) => {
+      opened.add(e.detail.url);
+      document.querySelectorAll("#lib-topics .lib-item .lib-main > a[data-opened]").forEach((a) => {
+        if (a.getAttribute("href") !== e.detail.url) return;
+        const src = a.parentElement.querySelector(".lib-src");
+        if (src && !src.querySelector(".lib-done")) {
+          const b = document.createElement("b"); b.className = "lib-done"; b.textContent = "열어봄";
+          const extra = src.querySelector(".lib-extra");
+          src.insertBefore(document.createTextNode(" · "), extra); src.insertBefore(b, extra);
+        }
+      });
+    });
     const get = (p) => fetch(p).then((x) => { if (!x.ok) throw new Error(p); return x.json(); });
     try {
       const [t, r, g, posts, ps, tl] = await Promise.all([get("data/topics.json"), get("data/repos.json").catch(() => []), get("data/glossary.json").catch(() => null), get("data/articles.json").catch(() => []),

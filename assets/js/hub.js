@@ -433,19 +433,55 @@
     return [...(t.items || [])].filter((x) => x.kind !== "post")
       .sort((a, b) => dist(a) - dist(b) || (KIND_RANK[a.kind] ?? 9) - (KIND_RANK[b.kind] ?? 9)).slice(0, 2);
   }
+  /* a material counts as opened when it was clicked from the hub or the library, or, for a web book chapter,
+     when the web book (same origin) marked it read */
+  const BOOK_SLUG = /\/Causal-Inference-with-Python\/([A-Za-z0-9-]+)\.html$/;
+  function openedCheck() {
+    const opened = window.hubOpened ? window.hubOpened() : new Set();
+    let read = {};
+    try { const r = JSON.parse(localStorage.getItem("cil-book-read") || "{}"); read = r && typeof r === "object" ? r : {}; } catch (e) { read = {}; }
+    return (x) => opened.has(x.url) || (x.repo === "Causal-Inference-with-Python" && !!read[(BOOK_SLUG.exec(x.url || "") || [])[1]]);
+  }
+  /* topic rows carry their progress as an element that is updated in place, so returning to the page or
+     opening a material never redraws the list under the reader */
+  function paintTopicProgress() {
+    const all = (state.topicData && state.topicData.topics) || [];
+    const rows = document.querySelectorAll("#shelf .lt[data-topic]");
+    if (!rows.length) return;
+    const done = openedCheck();
+    let started = 0;
+    rows.forEach((li) => {
+      const t = all.find((x) => x.id === li.dataset.topic);
+      const items = (t && t.items) || [];
+      const n = items.length, d = items.filter(done).length;
+      if (d) started += 1;
+      li.classList.toggle("on", d > 0);
+      li.classList.toggle("full", n > 0 && d === n);
+      const p = li.querySelector(".lt-p");
+      if (p) {
+        p.hidden = !d;
+        p.setAttribute("aria-label", `자료 ${n}개 중 ${d}개 열어봄`);
+        p.querySelector("b").textContent = `${d}/${n}`;
+        p.querySelector("i").style.width = `${n ? Math.round((d / n) * 100) : 0}%`;
+      }
+    });
+    const s = document.querySelector("#shelf .lt-started");
+    if (s) { s.hidden = !started; s.textContent = ` · ${started}개 시작함`; }
+  }
   function topicOrder(lv) {
     const all = (state.topicData && state.topicData.topics) || [];
     const ts = (lv.topics || []).map((id) => all.find((t) => t.id === id)).filter(Boolean);
     if (!ts.length) return "";
     const ev = (topic, target) => `data-event="level_topic" data-event-params='${esc(JSON.stringify({ level: lv.id, topic, target }))}'`;
-    const row = (t, k) => `<li class="lt" data-shelf="${esc(t.shelf)}">
+    const row = (t, k) => `<li class="lt" data-shelf="${esc(t.shelf)}" data-topic="${esc(t.id)}">
         <span class="lt-n" aria-hidden="true">${k}</span>
-        <div class="lt-b"><a class="lt-t" href="library.html#${esc(t.id)}" ${ev(t.id, "library")}>${esc(t.name)}</a>
-          <span class="lt-go">${startWith(t, lv.id).map((x) => `<a href="${esc(x.url)}"${/^https?:/.test(x.url) && !/^https:\/\/causalinferencelab\.github\.io\//.test(x.url) ? ' target="_blank" rel="noopener"' : ""} ${ev(t.id, "material")}><i>${esc(KIND_NAME[x.kind] || "자료")}</i>${esc(x.title)}</a>`).join("")}
+        <div class="lt-b"><span class="lt-h"><a class="lt-t" href="library.html#${esc(t.id)}" ${ev(t.id, "library")}>${esc(t.name)}</a>
+          <span class="lt-p" hidden><span class="lt-bar" aria-hidden="true"><i></i></span><b></b></span></span>
+          <span class="lt-go">${startWith(t, lv.id).map((x) => `<a href="${esc(x.url)}" data-opened${/^https?:/.test(x.url) && !/^https:\/\/causalinferencelab\.github\.io\//.test(x.url) ? ' target="_blank" rel="noopener"' : ""} ${ev(t.id, "material")}><i>${esc(KIND_NAME[x.kind] || "자료")}</i>${esc(x.title)}</a>`).join("")}
           <a class="lt-all" href="library.html#${esc(t.id)}" ${ev(t.id, "library_all")}>자료 ${(t.items || []).length}개</a></span></div>
       </li>`;
     const FIRST = 5, head = ts.slice(0, FIRST), rest = ts.slice(FIRST);
-    return `<p class="lr-k">배우는 주제 <span>${ts.length}개, 순서대로</span></p>
+    return `<p class="lr-k">배우는 주제 <span>${ts.length}개, 순서대로<span class="lt-started" hidden></span></span></p>
       <ol class="lt-list">${head.map((t, k) => row(t, k + 1)).join("")}</ol>
       ${rest.length ? `<details class="lt-more" data-topics="${lv.id}"><summary>주제 ${rest.length}개 더</summary><ol class="lt-list" start="${FIRST + 1}">${rest.map((t, k) => row(t, FIRST + k + 1)).join("")}</ol></details>` : ""}`;
   }
@@ -506,6 +542,7 @@
     if (topicsOpen) { const d = shelf.querySelector("details[data-topics]"); if (d) d.open = true; }
     if (dir && !reduceMotion) { const a = shelf.firstElementChild; a.classList.add(dir > 0 ? "enter-r" : "enter-l"); }
     wireAvatars(shelf);
+    paintTopicProgress();
     renderRail(reveal); renderHud(); renderTestCard();
 
     const repos = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot");
@@ -2011,6 +2048,10 @@
     renderContrib();
     renderShelf(); renderWeek(); watchRail(); revealSections();
     getJSON("data/topics.json").then((d) => { state.topicData = d; renderShelf(); }).catch(() => { /* the course shows without its topic order */ });
+    /* a material opened here, or a chapter read in the web book in another tab, shows when the reader is back */
+    document.addEventListener("hub:opened", paintTopicProgress);
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") paintTopicProgress(); });
+    addEventListener("pageshow", (e) => { if (e.persisted) paintTopicProgress(); });
     document.addEventListener("hub:stamp", onStamp);
     syncStageStamps();
     const header = $(".site-header");
