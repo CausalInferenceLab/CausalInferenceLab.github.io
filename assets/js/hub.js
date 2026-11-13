@@ -1151,7 +1151,11 @@
   function renderStarts() {
     const box = $("#starts");
     if (!box) return;
-    const list = state.starts || [], firstDoc = list.findIndex((f) => f.icon !== "youtube");
+    /* videos first, in the order written; the rest by GitHub stars (refreshed daily), most first */
+    const stars = (f) => { const r = f.repo && state.repos.get(f.repo); return (r && r.stars) || 0; };
+    const all = state.starts || [];
+    const list = [...all.filter((f) => f.icon === "youtube"), ...all.filter((f) => f.icon !== "youtube").sort((a, b) => stars(b) - stars(a))];
+    const firstDoc = list.findIndex((f) => f.icon !== "youtube");
     box.innerHTML = list.map((f, i) => {
       const split = i > 0 && i === firstDoc;
       const r = f.repo && state.repos.get(f.repo);

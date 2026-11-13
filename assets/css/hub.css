@@ -2860,8 +2860,8 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .side-k { margin: 4px 6px 2px; }
 .starts a { padding: 8px 10px; }
 .starts .tx { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; row-gap: 0; }
-.starts .t { font-size: 15px; }
-.starts .d { font-size: 12.5px; }
+.starts .t { font-size: 17px; }
+.starts .d { font-size: 14px; }
 .oss { margin-top: 20px; }
 .oss-k { margin-bottom: 8px; }
 .hero .partner { margin-top: 20px; }
@@ -2877,8 +2877,8 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .starts li:hover { background: rgba(255, 255, 255, .1); }
 .starts a.sm { grid-template-columns: 26px minmax(0, 1fr); }
 .starts a.sm:hover { background: none; }
-.starts .gh { display: inline-flex; align-items: center; gap: 3px; margin-right: 8px; padding: 4px 8px; border-radius: 999px; font-size: 12.5px; font-weight: 700; color: rgba(255, 255, 255, .9); text-decoration: none; background: rgba(255, 255, 255, .08); font-variant-numeric: tabular-nums; }
-.starts .gh svg { width: 12px; height: 12px; color: #FFD54A; }
+.starts .gh { display: inline-flex; align-items: center; gap: 3px; margin-right: 8px; padding: 4px 8px; border-radius: 999px; font-size: 14px; font-weight: 700; color: rgba(255, 255, 255, .9); text-decoration: none; background: rgba(255, 255, 255, .08); font-variant-numeric: tabular-nums; }
+.starts .gh svg { width: 13px; height: 13px; color: #FFD54A; }
 .starts .gh:hover { background: rgba(255, 255, 255, .2); }
 .starts .gh:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 .hero .oss .featured { grid-template-columns: repeat(3, minmax(0, 1fr)); }
