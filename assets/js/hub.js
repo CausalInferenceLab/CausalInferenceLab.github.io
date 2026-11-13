@@ -21,6 +21,8 @@
 
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const fmt = (n) => Number(n).toLocaleString("ko-KR");
+  /* the address printed on share cards: the live hub's host (track.js sets hubSite) */
+  const siteHost = () => { try { return new URL(window.hubSite).host; } catch (e) { return "causalinferencelab.github.io"; } };
   const $ = (sel, root = document) => root.querySelector(sel);
   const dot = (d) => esc(String(d ?? "").replace(/-/g, "."));
   /* Data files come from pull requests: links must be http(s) or a site path, ids plain tokens,
@@ -647,7 +649,7 @@
         <p class="fc-tier">${esc(lv.tier || lv.name)}</p>
         ${interest ? `<p class="fc-in"><span>관심</span>${esc(interest)}</p>` : ""}
         <label class="fc-name"><span>이름이나 닉네임 (선택, 저장하지 않음)</span><input type="text" maxlength="16" autocomplete="nickname" placeholder="예: 진수"></label>
-        <p class="fc-foot">인과추론 Hub에서 3분 진단 · causalinferencelab.github.io</p>
+        <p class="fc-foot">인과추론 Hub에서 3분 진단 · ${esc(siteHost())}</p>
       </div>
       <p class="lt-sub">같은 레벨이나 같은 관심 분야인 사람과 이야기를 시작해 보세요. 화면을 켜 둔 채 보여 주면 됩니다.</p></div>
       <div class="sh-foot"><button type="button" class="btn ghost" data-forum-back>결과로 돌아가기</button><button type="button" class="btn" data-goto-level="${lv.id}" data-test-go>${LV(lv.id)} 코스로 이동</button></div>`;
@@ -1628,7 +1630,7 @@
     if (name) { c.fillStyle = "#fff"; c.font = font(700, 34); c.fillText(name, 80, H - 104); }
     c.fillStyle = "rgba(255,255,255,.7)"; c.font = font(500, 24);
     const d = new Date(), date = `${d.getFullYear()}.${pad2(d.getMonth() + 1)}.${pad2(d.getDate())}`;
-    c.fillText(`${date} · causalinferencelab.github.io`, 80, H - 60);
+    c.fillText(`${date} · ${siteHost()}`, 80, H - 60);
     const mark = $(".banner-mark");
     if (mark && mark.complete && mark.naturalWidth) c.drawImage(mark, W - 300, 70, 210, 210);
   }
@@ -1672,7 +1674,7 @@
       c.fillStyle = "#fff"; c.font = font(700, 24); c.fillText(m.name, x + 56, y + 9);
     });
     c.fillStyle = "rgba(255,255,255,.7)"; c.font = font(500, 22);
-    c.fillText(`causalinferencelab.github.io/builders/${info.slug || ""}`, 80, H - 56);
+    c.fillText(`${siteHost()}/builders/${info.slug || ""}`, 80, H - 56);
     drawMedal(c, 930, 330, 150, t, p.cohorts.length);
   }
   async function openMedalCard(name) {
