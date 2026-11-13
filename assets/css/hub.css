@@ -2839,7 +2839,36 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .hs-pop a:hover { background: rgba(255, 255, 255, .16); border-color: rgba(255, 255, 255, .5); }
 .hs-pop a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 @media (max-width: 860px) { .hero .banner-main > .hs-pop { order: 3; } }
-/* wide desktop: the materials panel runs down to the foot of the left column */
-@media (min-width: 1161px) {
-  .hero .banner-side { align-self: stretch; display: flex; flex-direction: column; }
+
+/* hero, compact pass: shorter lead, a card with the button beside the text, one-line material rows,
+   one-line open-source tiles, tighter gaps, so the whole hero reads in one look */
+.banner-kicker a { display: inline-block; border-radius: 6px; }
+.banner-kicker a:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+.banner-lede a { color: #fff; font-weight: 700; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .45); text-underline-offset: 4px; }
+.banner-lede a:hover { text-decoration-color: #fff; }
+.hero .banner { padding: 30px 40px; row-gap: 14px; }
+.hero .banner-kicker { margin-bottom: 6px; }
+.hero .banner-lede { max-width: 40em; }
+.hero .hero-search { margin-top: 18px; }
+.hs-pop { margin-top: 10px; }
+.lv-card { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "k go" "t go" "s s"; column-gap: 14px; row-gap: 2px; padding: 16px 18px 16px 20px; }
+.lv-card-k { grid-area: k; }
+.lv-card-t { grid-area: t; font-size: 22px; }
+.lv-card-s { grid-area: s; margin-top: 4px; font-size: 13.5px; }
+.lv-card-go { grid-area: go; align-self: center; margin-top: 0; }
+.hero .banner-side { padding: 10px 8px 8px; }
+.side-k { margin: 4px 6px 2px; }
+.starts a { padding: 8px 10px; }
+.starts .tx { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; row-gap: 0; }
+.starts .t { font-size: 15px; }
+.starts .d { font-size: 12.5px; }
+.oss { margin-top: 20px; }
+.oss-k { margin-bottom: 8px; }
+.hero .partner { margin-top: 20px; }
+@media (max-width: 860px) {
+  .hero .banner { padding: 24px 20px; }
+  .lv-card-t { font-size: 20px; }
 }
+@media (max-width: 420px) { .lv-card { grid-template-areas: "k k" "t t" "s s" "go go"; } .lv-card-go { justify-self: start; margin-top: 8px; } }
+.hero .oss .featured a { gap: 4px; padding: 9px 12px; }
+.hero .oss .featured .t { font-size: 14px; }
