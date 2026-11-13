@@ -1113,12 +1113,14 @@
   function renderStarts() {
     const box = $("#starts");
     if (!box) return;
-    box.innerHTML = (state.starts || []).map((f) => {
+    const list = state.starts || [], firstDoc = list.findIndex((f) => f.icon !== "youtube");
+    box.innerHTML = list.map((f, i) => {
+      const split = i > 0 && i === firstDoc;
       const r = f.repo && state.repos.get(f.repo);
       const ext = !/^https:\/\/causalinferencelab\.github\.io\//.test(f.url);
       const ev = (target) => `data-event="start_click" data-event-params='${esc(JSON.stringify({ target, placement: "hero" }))}'`;
       const star = r && r.stars ? `<a class="gh" href="https://github.com/CausalInferenceLab/${esc(r.repo)}" target="_blank" rel="noopener" aria-label="${esc(f.title)} GitHub 저장소, 별 ${fmt(r.stars)}개" ${ev(`${f.target}_github`)}>${icons.star}${fmt(r.stars)}</a>` : "";
-      return `<li><a class="sm" href="${esc(f.url)}"${ext ? ' target="_blank" rel="noopener"' : ""} ${ev(f.target)}>${START_ICON[f.icon] || ""}<span class="tx"><span class="t">${esc(f.title)}</span><span class="d">${esc(f.desc)}</span></span></a>${star}</li>`;
+      return `<li${split ? ' class="docs-start"' : ""}><a class="sm" href="${esc(f.url)}"${ext ? ' target="_blank" rel="noopener"' : ""} ${ev(f.target)}>${START_ICON[f.icon] || ""}<span class="tx"><span class="t">${esc(f.title)}</span><span class="d">${esc(f.desc)}</span></span></a>${star}</li>`;
     }).join("");
   }
   /* the team's open-source projects in the hero: name, what kind of project, GitHub stars */

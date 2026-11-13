@@ -484,7 +484,19 @@
       sayEl.querySelector(".hp-say-acts").innerHTML = line.acts.map(([label, q]) => `<button type="button" data-say-ask="${esc(q)}">${esc(label)}</button>`).join("");
     });
     clearTimeout(sayTimer);
-    sayTimer = setTimeout(() => { if (!sayEl.matches(":hover, :focus-within")) hush(false); }, 14000);
+    /* on a phone the bubble covers a third of the screen, so it stays briefly and steps aside once the reader
+       scrolls on; on a wider screen it sits beside the content and stays longer */
+    const phone = matchMedia("(max-width: 760px)").matches;
+    sayTimer = setTimeout(() => { if (!sayEl.matches(":hover, :focus-within")) hush(false); }, phone ? 8000 : 14000);
+    if (phone) {
+      const from = scrollY, since = Date.now();
+      const away = () => {
+        if (sayEl.hidden) { removeEventListener("scroll", away); return; }
+        if (Date.now() - since < 1500 || Math.abs(scrollY - from) < 160 || sayEl.matches(":focus-within")) return;
+        removeEventListener("scroll", away); hush(false);
+      };
+      addEventListener("scroll", away, { passive: true });
+    }
     track("helper_say", { line: line.as || line.id, page });
   }
   function hush(forGood) {
