@@ -188,6 +188,8 @@
     "repo": "awesome-causal-inference-python",
     "title": "메서드 코드북",
     "summary": "실무에 바로 쓸 수 있도록 짧고 정확하게 정리한 인과추론 파이썬 코드 모음입니다.",
+    "site": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/intro.html",
+    "siteLabel": "웹페이지",
     "level": "L2",
     "lines": [
       "ml"

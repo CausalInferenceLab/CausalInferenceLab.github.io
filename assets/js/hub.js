@@ -76,7 +76,7 @@
 
   /* ---------- data ---------- */
   async function load() {
-    const names = ["repos", "lines", "levels", "map", "routes", "projects", "events", "articles", "builders", "growth", "stats", "featured", "daily", "stages", "leveltest"];
+    const names = ["repos", "lines", "levels", "map", "routes", "projects", "events", "articles", "builders", "growth", "stats", "featured", "starts", "daily", "stages", "leveltest"];
     const data = await Promise.all(names.map((n) => getJSON(`data/${n}.json`)));
     /* the activity snapshot is optional: the feed asks GitHub live and falls back to it */
     state.activitySnap = await getJSON("data/activity.json").catch(() => ({ updated: null, items: [] }));
@@ -90,7 +90,7 @@
     (d.map.paid || []).forEach((p) => state.repos.set(p.id, { repo: p.id, kind: "paid", status: "paid", builders: [], cohorts: [], ...p }));
     state.lineList = d.lines;
     d.lines.forEach((l) => state.lines.set(l.id, l));
-    Object.assign(state, { levels: d.levels, map: d.map, routes: d.routes, projects: d.projects, events: d.events, articles: d.articles, builders: d.builders, growth: d.growth, stats: d.stats, featured: d.featured, daily: d.daily, stages: d.stages, leveltest: d.leveltest });
+    Object.assign(state, { levels: d.levels, map: d.map, routes: d.routes, projects: d.projects, events: d.events, articles: d.articles, builders: d.builders, growth: d.growth, stats: d.stats, featured: d.featured, starts: d.starts, daily: d.daily, stages: d.stages, leveltest: d.leveltest });
 
     const pos = new Map(d.map.stations.map((s) => [s.id, s]));
     d.lines.forEach((l) => {
@@ -1067,11 +1067,28 @@
 
 
   /* ---------- featured sites (hero) ---------- */
+  /* the hero's study materials (data/starts.json): what each one teaches, where it lives, and the stars of its
+     GitHub repository, which open the repository */
+  const START_ICON = {
+    youtube: '<svg class="fi" viewBox="0 0 24 24" aria-hidden="true"><rect x="1.5" y="4.5" width="21" height="15" rx="4.5" fill="#FF0033"/><path d="M10 8.8v6.4l5.4-3.2z" fill="#fff"/></svg>',
+    team: '<img class="fi" src="assets/img/team-mark.png" alt="" width="22" height="22">'
+  };
+  function renderStarts() {
+    const box = $("#starts");
+    if (!box) return;
+    box.innerHTML = (state.starts || []).map((f) => {
+      const r = f.repo && state.repos.get(f.repo);
+      const ext = !/^https:\/\/causalinferencelab\.github\.io\//.test(f.url);
+      const ev = (target) => `data-event="start_click" data-event-params='${esc(JSON.stringify({ target, placement: "hero" }))}'`;
+      const star = r && r.stars ? `<a class="gh" href="https://github.com/CausalInferenceLab/${esc(r.repo)}" target="_blank" rel="noopener" aria-label="${esc(f.title)} GitHub 저장소, 별 ${fmt(r.stars)}개" ${ev(`${f.target}_github`)}>${icons.star}${fmt(r.stars)}</a>` : "";
+      return `<li><a class="sm" href="${esc(f.url)}"${ext ? ' target="_blank" rel="noopener"' : ""} ${ev(f.target)}>${START_ICON[f.icon] || ""}<span class="tx"><span class="t">${esc(f.title)}</span><span class="d">${esc(f.desc)}</span></span></a>${star}</li>`;
+    }).join("");
+  }
   /* the team's open-source projects in the hero: name, what kind of project, GitHub stars */
   function renderFeatured() {
     $("#featured").innerHTML = (state.featured || []).map((f) => {
       const r = f.repo && state.repos.get(f.repo);
-      const stars = r && r.stars >= 10 ? `<span class="st" aria-label="GitHub 별 ${fmt(r.stars)}개">${icons.star}${fmt(r.stars)}</span>` : "";
+      const stars = r && r.stars ? `<span class="st" aria-label="GitHub 별 ${fmt(r.stars)}개">${icons.star}${fmt(r.stars)}</span>` : "";
       return `<li><a href="${esc(f.url)}" target="_blank" rel="noopener" title="${esc(f.desc || "")}" data-repo="${esc(f.repo || "")}"${r ? ` data-line="${primaryLine(r)}"` : ""}>
         <span class="t">${esc(f.short || f.title)}</span>
         <span class="m"><span class="tag">${esc(f.tag)}</span>${stars}</span></a></li>`;
@@ -2000,7 +2017,7 @@
     const setHeader = () => { if (header) document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`); };
     setHeader(); window.addEventListener("resize", setHeader);
     renderLegend(); renderMap(); wireTabs();
-    renderFeatured(); renderPartner(); renderEvents(); renderNextEvent(); renderHeaderEvent(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
+    renderFeatured(); renderStarts(); renderPartner(); renderEvents(); renderNextEvent(); renderHeaderEvent(); renderStages(); renderArticles(); renderDaily(); watchMapScroll();
     renderLoop(); loadActivity(); watchSections(); renderTopics();
     /* sections fill in after the data loads, so jump again once they have their height */
     if (/^#(contrib|events|reading|join)$/.test(location.hash)) requestAnimationFrame(() => { const el = $(location.hash); if (el) el.scrollIntoView(); });

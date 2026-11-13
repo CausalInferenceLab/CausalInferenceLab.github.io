@@ -1,32 +1,17 @@
 [
   {
-    "tag": "웹북",
-    "title": "Brave & True 인과추론 번역서",
-    "desc": "원서 25장과 부록을 모두 옮긴 웹북",
-    "repo": "Causal-Inference-with-Python",
-    "url": "https://causalinferencelab.github.io/Causal-Inference-with-Python/",
-    "short": "Brave & True 웹북"
-  },
-  {
-    "tag": "영상",
-    "title": "Causal Studio",
-    "desc": "영상과 노트북으로 여는 인과추론 입문",
-    "repo": "causal-studio",
-    "url": "https://causalinferencelab.github.io/causal-studio/"
-  },
-  {
-    "tag": "에이전트",
+    "tag": "데이터 에이전트",
     "title": "Lang2SQL",
-    "desc": "대화하며 함께 분석하는 데이터 에이전트",
+    "desc": "대화하며 함께 분석하는 Text-to-SQL 에이전트",
     "repo": "Lang2SQL",
     "url": "https://github.com/CausalInferenceLab/Lang2SQL"
   },
   {
-    "tag": "스터디 자료",
-    "title": "OCE Materials",
-    "desc": "A/B 테스트 스터디 16회 자료",
-    "repo": "OCE-Materials",
-    "url": "https://github.com/CausalInferenceLab/OCE-Materials"
+    "tag": "분석 에이전트",
+    "title": "정책 효과 분석 에이전트",
+    "desc": "공공데이터로 정책 효과를 검증하는 에이전트",
+    "repo": "policy-effect-analytics-agent",
+    "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent"
   },
   {
     "tag": "R 패키지",

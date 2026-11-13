@@ -165,13 +165,13 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Backdoor Criterion",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/backdoor_criterion.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part2/backdoor_criterion.html"
         },
         {
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Frontdoor Criterion",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/examples/frontdoor_criterion.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/examples/frontdoor_criterion.html"
         },
         {
           "kind": "read",
@@ -245,7 +245,7 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "OLS",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/ols.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part1/ols.html"
         },
         {
           "kind": "read",
@@ -332,7 +332,7 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Propensity Score & DML",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/ipw_psm.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part1/ipw_psm.html"
         },
         {
           "kind": "read",
@@ -399,13 +399,13 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Instrumental Variables (IV)",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/iv.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part1/iv.html"
         },
         {
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "IV로 CATE 추정하기",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/iv_cate.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part1/iv_cate.html"
         },
         {
           "kind": "read",
@@ -485,7 +485,7 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Difference-in-Differences (DiD)",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/did.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part1/did.html"
         },
         {
           "kind": "read",
@@ -566,13 +566,13 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Synthetic Control (SC)",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/sc.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part1/sc.html"
         },
         {
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Synthetic Difference-in-Differences (SDID)",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/sdid.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part1/sdid.html"
         },
         {
           "kind": "read",
@@ -638,7 +638,7 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Regression Discontinuity Design (RDD)",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part1/rdd.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part1/rdd.html"
         }
       ]
     },
@@ -737,13 +737,13 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "비모수적 개별 처치 효과(CATE) 추정",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/meta_learner.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part2/meta_learner.html"
         },
         {
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "신경망으로 CATE 추정하기",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/cate_with_nn.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part2/cate_with_nn.html"
         },
         {
           "kind": "read",
@@ -832,7 +832,7 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Double Machine Learning",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/dml.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part2/dml.html"
         }
       ]
     },
@@ -864,19 +864,19 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Policy Learning",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/policy_learning.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part2/policy_learning.html"
         },
         {
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Fractional uplift modelling",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/examples/fractional_uplift.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/examples/fractional_uplift.html"
         },
         {
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "예산 제약 최적화",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/examples/budget_constrained_optimization.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/examples/budget_constrained_optimization.html"
         },
         {
           "kind": "code",
@@ -991,7 +991,7 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Causal discovery",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/causal_discovery.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part2/causal_discovery.html"
         }
       ]
     },
@@ -1023,7 +1023,7 @@
           "kind": "code",
           "repo": "awesome-causal-inference-python",
           "title": "Marginal Structural Models",
-          "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/blob/main/book/part2/MSM.ipynb"
+          "url": "https://causalinferencelab.github.io/awesome-causal-inference-python/main/part2/MSM.html"
         },
         {
           "kind": "code",
