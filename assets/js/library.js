@@ -13,7 +13,16 @@
   const norm = (s) => String(s || "").toLowerCase().replace(/[\s·\-_/()]/g, "");
   const BOOK = "https://causalinferencelab.github.io/Causal-Inference-with-Python/";
   const KIND_ORDER = ["video", "read", "code", "slides", "case", "post"];
-  const FIRST = 3;
+  const FIRST_EACH = 2;
+  /* a topic lists its videos together and its other materials (writing, code, slides) together */
+  const isVideo = (x) => x.kind === "video";
+  function groupsHTML(items, t) {
+    const vids = items.filter(isVideo), docs = items.filter((x) => !isVideo(x));
+    const pool = t.items.filter(itemOk);
+    const count = (list, all) => (st.q ? list.length : all);
+    const group = (name, cls, list, all) => (list.length ? `<p class="lib-group">${name}<span>${count(list, all)}</span></p><ol class="lib-items ${cls}">${list.map((x) => itemHTML(x, t)).join("")}</ol>` : "");
+    return group("영상", "is-video", vids, pool.filter(isVideo).length) + group("자료", "is-doc", docs, pool.filter((x) => !isVideo(x)).length);
+  }
   /* the sources in the order a newcomer meets them, with what each one is */
   const SOURCES = [
     ["causal-studio", "Causal Studio", "짧은 입문 영상과 노트북"],
@@ -145,8 +154,13 @@
           items = st.open.has(t.id) && hit.length ? pool : hit;
         }
       }
-      /* three items per topic at first; the rest open on request, so a topic never reads as a wall of links */
-      if (!q && !st.open.has(t.id) && items.length > FIRST) { partial = true; items = items.slice(0, FIRST); }
+      /* two videos and two other materials per topic at first; the rest open on request, so a topic never
+         reads as a wall of links */
+      if (!q && !st.open.has(t.id)) {
+        const vids = items.filter(isVideo), docs = items.filter((x) => !isVideo(x));
+        const shown = [...vids.slice(0, FIRST_EACH), ...docs.slice(0, FIRST_EACH)];
+        if (shown.length < items.length) { partial = true; items = shown; }
+      }
       return { t, items, partial, total: pool.length, n: q ? items.length : pool.length };
     }).filter((v) => v.items.length);
   }
@@ -221,7 +235,7 @@
           <button type="button" class="lib-link" data-copy="${esc(`https://causalinferencelab.github.io/library.html#${t.id}`)}" data-share="library_topic" aria-label="${esc(t.name)} 링크 복사">링크 복사</button></header>
         <p class="lib-about">${esc(t.about)}</p>
         ${terms.length ? `<p class="lib-terms"><span>먼저 알아 둘 용어</span>${terms.map((x) => `<a href="#${esc(x.id)}" data-term="${esc(x.id)}">${esc(x.ko)}</a>`).join("")}</p>` : ""}
-        <ol class="lib-items">${v.items.map((x) => itemHTML(x, t)).join("")}</ol>
+        ${groupsHTML(v.items, t)}
         ${v.partial ? `<button type="button" class="lib-all" data-lib-open="${esc(t.id)}">${v.total - v.items.length}개 더 보기</button>` : ""}
       </article>`;
     }).join("");
