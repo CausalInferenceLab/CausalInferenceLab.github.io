@@ -1,6 +1,7 @@
 """Collect GitHub stats for the hub: stars over time, contributors, last push dates.
 
-Runs in GitHub Actions with GITHUB_TOKEN and writes data/stats.json.
+Runs in GitHub Actions with GITHUB_TOKEN on every deploy and writes data/stats.json into the build only;
+the copy in the repository is the fallback when GitHub cannot be reached.
 Uses only the standard library.
 """
 import json
@@ -40,11 +41,12 @@ def get(url, accept="application/vnd.github+json"):
         with OPENER.open(urllib.request.Request(url, headers=headers), timeout=30) as res:
             return json.load(res)
     except urllib.error.HTTPError as e:
-        # Public data: if the workflow token is refused, ask once more without it.
-        if e.code != 403 or "Authorization" not in headers:
+        # Public data: the workflow token is scoped to this repository and is refused (401 or 403) for
+        # stargazers of the other repositories, so ask once more without it.
+        if e.code not in (401, 403) or "Authorization" not in headers:
             print(f"{e.code} on {url}", file=sys.stderr)
             raise
-        print(f"403 with the token on {url}; retrying without it", file=sys.stderr)
+        print(f"{e.code} with the token on {url}; retrying without it", file=sys.stderr)
         del headers["Authorization"]
         with OPENER.open(urllib.request.Request(url, headers=headers), timeout=30) as res:
             return json.load(res)
@@ -113,7 +115,7 @@ def main(out_path):
 
 
 if __name__ == "__main__":
-    # A refused or failed GitHub call keeps last week's stats rather than stopping the deploy.
+    # A refused or failed GitHub call keeps the last stats rather than stopping the deploy.
     try:
         main(sys.argv[1] if len(sys.argv) > 1 else "data/stats.json")
     except (urllib.error.HTTPError, urllib.error.URLError) as e:
