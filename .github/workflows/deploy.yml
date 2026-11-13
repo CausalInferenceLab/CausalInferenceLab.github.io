@@ -4,8 +4,7 @@ on:
   push:
     branches: [main]
   schedule:
-    # stats once a week (Monday), the activity feed every day
-    - cron: "17 0 * * 1"
+    # stars, contributors and the activity feed every day
     - cron: "17 21 * * *"
   workflow_dispatch:
 
@@ -25,19 +24,12 @@ jobs:
         with:
           persist-credentials: false
 
+      # main is protected, so the bot cannot commit the stats back. They are refreshed into this build on
+      # every deploy instead; the data/stats.json in the repository is only the fallback.
       - name: Refresh GitHub stats
-        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 0 * * 1'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python3 scripts/update_stats.py data/stats.json
-          if ! git diff --quiet data/stats.json; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/stats.json
-            git commit -m "Update GitHub stats"
-            git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
-          fi
+        run: python3 scripts/update_stats.py data/stats.json
 
       - name: Build the activity feed
         env:
