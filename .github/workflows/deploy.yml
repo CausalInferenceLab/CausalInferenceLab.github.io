@@ -100,3 +100,5 @@ jobs:
           publish_dir: ./_site
           publish_branch: gh-pages
           force_orphan: true
+          # the hub (and with it every CausalInferenceLab project site) is served at this address
+          cname: causalinference.pseudo-lab.com

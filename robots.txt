@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://causalinferencelab.github.io/sitemap.xml
+Sitemap: https://causalinference.pseudo-lab.com/sitemap.xml

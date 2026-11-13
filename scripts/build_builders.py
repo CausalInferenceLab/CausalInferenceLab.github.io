@@ -19,7 +19,7 @@ from collections import OrderedDict
 from urllib.parse import urlsplit
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SITE = "https://causalinferencelab.github.io"
+SITE = "https://causalinference.pseudo-lab.com"
 ORG = "CausalInferenceLab"
 
 
