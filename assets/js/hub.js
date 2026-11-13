@@ -327,15 +327,15 @@
 
   /* a level's study order from levels.json, each step resolved to its repo */
   const stepsOf = (lv) => (lv.steps || []).map((s) => ({ ...s, r: state.repos.get(s.repo) })).filter((s) => s.r);
-  /* learning levels: the ordered steps are the quests; build levels: things to do, kept as passport stamps */
+  /* what counts toward a level. Learning levels (0–2): their topics, in order; a topic counts once the reader
+     has opened one of its materials. Build levels (3–4): things to do outside the hub, kept as passport stamps. */
   function questsOf(levelId) {
     const lv = levelOf(levelId);
     if (!lv) return [];
     if ((lv.quests || []).length) {
       return lv.quests.map((id) => passport().stamps.find((x) => x.id === id)).filter(Boolean).map((st) => ({ action: true, repo: st.id, title: st.name, stamp: st }));
     }
-    const steps = stepsOf(lv).map((s) => s.r).filter(rideable);
-    return steps.length ? steps : levelItems(levelId).filter(rideable);
+    return (lv.topics || []).map(topicById).filter(Boolean).map((tp) => ({ topic: true, repo: tp.id, title: tp.name, t: tp }));
   }
 
   /* the visitor's level from the level test; kept in this browser, and in memory when storage is off */
@@ -393,8 +393,8 @@
     if (levelDone(lv.id)) return { cls: "cleared", label: "클리어" };
     if (mine && i === mi) return { cls: "mine", label: "내 레벨" };
     if (mine && i < mi) return { cls: "past", label: "통과" };
-    const q = questsOf(lv.id);
-    return { cls: !mine && i > 0 ? "ahead" : "", label: `${q.filter(questDone).length} / ${q.length}` };
+    const q = questsOf(lv.id), unit = (lv.quests || []).length ? "" : "주제 ";
+    return { cls: !mine && i > 0 ? "ahead" : "", label: `${unit}${q.filter(questDone).length} / ${q.length}` };
   }
   /* five stations on one line; the line is filled up to the visitor's level */
   function renderRail(reveal) {
@@ -444,13 +444,18 @@
     try { const r = JSON.parse(localStorage.getItem("cil-book-read") || "{}"); read = r && typeof r === "object" ? r : {}; } catch (e) { read = {}; }
     return (x) => opened.has(x.url) || (x.repo === "Causal-Inference-with-Python" && !!read[(BOOK_SLUG.exec(x.url || "") || [])[1]]);
   }
+  /* the check is read once per redraw; refreshProgress() drops it when the reader opens something */
+  let doneCheck = null;
+  const isOpened = (x) => (doneCheck || (doneCheck = openedCheck()))(x);
+  const topicById = (id) => ((state.topicData && state.topicData.topics) || []).find((tp) => tp.id === id);
+  const topicStarted = (id) => { const tp = topicById(id); return !!tp && (tp.items || []).some(isOpened); };
   /* topic rows carry their progress as an element that is updated in place, so returning to the page or
      opening a material never redraws the list under the reader */
   function paintTopicProgress() {
     const all = (state.topicData && state.topicData.topics) || [];
     const rows = document.querySelectorAll("#shelf .lt[data-topic]");
     if (!rows.length) return;
-    const done = openedCheck();
+    const done = isOpened;
     let started = 0;
     rows.forEach((li) => {
       const t = all.find((x) => x.id === li.dataset.topic);
@@ -500,13 +505,20 @@
     const topics = topicOrder(lv);
     const crew = [...new Set(items.flatMap((r) => r.builders || []))];
     const count = `<span aria-label="${quests.length}개 중 ${done}개 클리어">${done} / ${quests.length}</span>`;
+    /* a learning level is one path, its topics in order; the repositories behind them are listed once, small */
+    const repoList = (label) => `<p class="lr-k">${label}</p><ul class="lr-repos">${[...steps.map((s) => [s.r, s.note]), ...extra.map((r) => [r, r.format || ""])].map(([r, note]) => `<li data-id="${esc(r.repo)}" data-line="${primaryLine(r)}"><button type="button" data-open="${esc(r.repo)}" title="${esc(note)}"><i aria-hidden="true"></i>${esc(r.title)}${r.status === "running" ? `<span class="ls-live">진행 중</span>` : ""}</button></li>`).join("")}</ul>`;
+    const buildNote = build ? `<p class="lp-note build">Level 3·4는 따라 보는 코스가 아니라 직접 만드는 단계입니다. 아래를 하나씩 해 보고, 다음 기수에 러너로 참여하거나 Builder로 프로젝트를 열어 보세요. <a href="#join" data-helper-ask="Builder가 되려면요?" data-event="click_join" data-event-params='{"target":"pseudo","source":"build_level"}'>참여 방법 보기</a></p>` : "";
     const list = build
       ? `<p class="lr-k">직접 해 보기 ${count}</p><ol class="ls-list">${quests.map((q, k) => questRow(q, k + 1)).join("")}</ol>
-         <p class="lr-k">함께 만드는 레포</p><ul class="lr-repos">${[...steps.map((s) => [s.r, s.note]), ...extra.map((r) => [r, r.format || ""])].map(([r, note]) => `<li data-id="${esc(r.repo)}" data-line="${primaryLine(r)}"><button type="button" data-open="${esc(r.repo)}" title="${esc(note)}"><i aria-hidden="true"></i>${esc(r.title)}${r.status === "running" ? `<span class="ls-live">진행 중</span>` : ""}</button></li>`).join("")}</ul>`
-      : `<p class="lr-k">${topics ? "따라갈 자료" : "이 순서로"} ${count}</p><ol class="ls-list">${steps.map((s, k) => stepRow(s.r, k + 1, s.note)).join("")}</ol>
+         ${repoList("함께 만드는 레포")}`
+      : topics ? repoList("이 레벨의 자료를 만든 레포")
+      : `<p class="lr-k">이 순서로 ${count}</p><ol class="ls-list">${steps.map((s, k) => stepRow(s.r, k + 1, s.note)).join("")}</ol>
          ${extra.length ? `<details class="lr-more" data-more="${lv.id}"><summary>골라 보기 ${extra.length}개</summary><ul class="ls-list">${extra.map((r) => stepRow(r, 0, "")).join("")}</ul></details>` : ""}`;
     const text = books.length ? `<p class="lr-also"><span>함께 보는 교재</span>${books.map((b) => `<button type="button" data-open="${esc(b.repo)}" data-id="${esc(b.repo)}">${esc(b.mapLabel || b.title)}</button>`).join("")}</p>` : "";
-    const more = (lv.more || []).length ? `<p class="lr-also"><span>더 해 보기</span>${lv.more.map((m) => `<a href="${esc(m.href)}"${/^https?:/.test(m.href) ? ' target="_blank" rel="noopener"' : ""} data-event="click_level_extra" data-event-params='${esc(JSON.stringify({ level: lv.id, target: m.title }))}'>${esc(m.title)}</a>`).join("")}</p>` : "";
+    /* extras that are not already a topic's material: the game, the lab */
+    const inTopics = new Set(questsOf(lv.id).flatMap((q) => (q.t ? q.t.items || [] : []).map((x) => x.url)));
+    const extras = (lv.more || []).filter((m) => !inTopics.has(m.href));
+    const more = extras.length ? `<p class="lr-also"><span>직접 해 보기</span>${extras.map((m) => `<a href="${esc(m.href)}"${/^https?:/.test(m.href) ? ' target="_blank" rel="noopener"' : ""} data-event="click_level_extra" data-event-params='${esc(JSON.stringify({ level: lv.id, target: m.title }))}'>${esc(m.title)}</a>`).join("")}</p>` : "";
     const goal = cleared ? `<div class="lr-clear"><b>클리어</b><span>여권에 스탬프가 찍혔습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>` : "";
     /* one line on why this level is on screen for this visitor */
     const note = !mine
@@ -519,7 +531,7 @@
       <div class="lr-head">
         <h3 id="lv-${lv.id}-t"><span class="lr-lv">${LV(lv.id)}</span>${esc(lv.tier || lv.name)}${mine && i === mi ? `<span class="lr-mine">내 레벨</span>` : ""}</h3>
         <p class="lr-q">${esc(lv.question)}</p>
-        ${note}
+        ${note}${buildNote}
         ${lv.for ? `<p class="lr-for"><b>이런 분께</b>${esc(lv.for)}</p>` : ""}
       </div>
       <div class="lr-body">
@@ -596,7 +608,7 @@
     const n = state.leveltest.questions.length;
     box.classList.toggle("lt-slim", !lv);
     box.innerHTML = lv
-      ? `<div class="lt-t"><p class="lt-k">내 레벨 진단 결과</p><h3>${LV(lv.id)} · ${esc(lv.tier || lv.name)}</h3><p>${esc(bandLine(mine))}</p></div>
+      ? `<div class="lt-t"><p class="lt-k">내 레벨 진단 결과</p><h3>${LV(lv.id)} · ${esc(lv.tier || lv.name)}</h3><p>${esc(bandLine(mine))}${(() => { const q = questsOf(lv.id); return q.length && q[0].topic ? ` · 주제 ${q.length}개 중 ${q.filter(questDone).length}개 시작` : ""; })()}</p></div>
         <div class="lt-acts"><button type="button" class="pill solid" data-goto-level="${lv.id}">내 코스 보기</button><button type="button" class="pill" data-test-open="retry">다시 진단</button></div>`
       : `<div class="lt-t"><h3>어디서 시작할지 모르겠다면, 3분 레벨 진단</h3><p>실무 상황 문제 ${n}개를 풀면 시작할 Level과 첫 자료, 다시 볼 개념을 알려 드립니다.</p></div>
         <div class="lt-acts"><button type="button" class="pill solid" data-test-open="card">진단 시작</button></div>`;
@@ -727,7 +739,7 @@
       <ul class="lt-bands">${T.bands.map((b) => { const [r, t] = v.bands[b.level]; return `<li class="${r >= b.pass ? "pass" : ""}"><b>${esc(b.name)}</b><span class="bar" aria-hidden="true"><i style="width:${t ? (r / t) * 100 : 0}%"></i></span><span>${r} / ${t}${r >= b.pass ? " · 통과" : ""}</span></li>`; }).join("")}</ul>
       ${onSite() ? `<div class="lt-forum"><p><b>네트워킹 시간에 보여 줄 카드</b>내 레벨과 관심 분야를 크게 띄워, 같은 관심사인 사람을 찾기 쉽게 합니다.</p><button type="button" class="btn sm" data-forum-card="${lv.id}">네트워킹 카드 열기</button></div>` : ""}
       <p class="lt-share"><button type="button" class="btn ghost sm" data-share-result="${lv.id}">${navigator.share ? "결과 공유하기" : "진단 링크 복사"}</button><span>동료에게 보내면 같은 3분 진단이 바로 열립니다.</span></p>
-      ${start.length ? `<div class="lt-block"><p class="k">여기서 시작</p><ol class="lt-start">${start.map((q, k) => { const s = (lv.steps || []).find((x) => x.repo === q.repo); return `<li><span class="n">${k + 1}</span><span><b>${esc(q.title)}</b><span>${esc(q.action ? q.stamp.how : (s && s.note) || q.format || "")}</span></span></li>`; }).join("")}</ol></div>` : ""}
+      ${start.length ? `<div class="lt-block"><p class="k">여기서 시작</p><ol class="lt-start">${start.map((q, k) => { const s = (lv.steps || []).find((x) => x.repo === q.repo); const first = q.topic ? startWith(q.t, lv.id)[0] : null; return `<li><span class="n">${k + 1}</span><span><b>${esc(q.title)}</b><span>${esc(q.topic ? (first ? `${KIND_NAME[first.kind] || "자료"} · ${first.title}` : "") : q.action ? q.stamp.how : (s && s.note) || q.format || "")}</span></span></li>`; }).join("")}</ol></div>` : ""}
       ${next.length ? `<div class="lt-block"><p class="k">관심 분야에 맞춰 이어서</p><ul class="lt-next">${next.map((r) => `<li><button type="button" data-open="${esc(r.repo)}">${esc(r.title)}</button><span>${LV(r.level)}</span></li>`).join("")}</ul></div>` : ""}
       ${paid.length ? `<div class="lt-block"><p class="k">책과 강의로 이어서</p><ul class="lt-next">${paid.map(({ p, url }) => `<li><a href="${esc(url)}" target="_blank" rel="noopener">${esc(p.title)}<span aria-hidden="true"> ↗</span></a><span>${esc(p.type || "")} · 한빛미디어</span></li>`).join("")}</ul></div>` : ""}
       ${missed.length ? `<div class="lt-block"><p class="k">다시 볼 개념 ${missed.length}개</p><ul class="lt-review">${missed.map((q) => `<li><b>${esc(q.topic)}</b><span>${esc(q.why)}</span><a href="${esc(q.chapter.url)}" target="_blank" rel="noopener" data-event="read_chapter" data-event-params='${esc(JSON.stringify({ source: "level_test", topic: q.id }))}'>${esc(q.chapter.title)} 읽기<span aria-hidden="true"> ↗</span></a></li>`).join("")}</ul></div>` : `<p class="lt-sub">틀린 문제가 없습니다.</p>`}
@@ -981,10 +993,34 @@
 
   /* ---------- this week (curriculum tab) ---------- */
   const weekIndex = () => Math.floor((Date.now() - Date.UTC(2026, 0, 5)) / (7 * DAY));
-  /* where this visitor is: recent repos to go back to, and how much is marked done */
+  /* the material this reader opened last from a curriculum topic or the library, with its topic and level */
+  function lastMaterial() {
+    let seen = [];
+    try { const v = JSON.parse(localStorage.getItem("cil-hub-opened") || "[]"); seen = Array.isArray(v) ? v : []; } catch (e) { seen = []; }
+    const all = (state.topicData && state.topicData.topics) || [];
+    for (const url of seen) {
+      for (const tp of all) {
+        const x = (tp.items || []).find((i) => i.url === url);
+        const lv = x && state.levels.find((l) => (l.topics || []).includes(tp.id));
+        if (lv) return { tp, x, lv };
+      }
+    }
+    return null;
+  }
+  /* where this visitor is: the material to pick up again, else recent repos, and the finish card once earned */
   function renderWeek() {
     const box = $("#progress");
     if (!box) return;
+    const last = lastMaterial();
+    if (last) {
+      const { tp, x, lv } = last, done = state.levels.filter((l) => levelDone(l.id));
+      const out = /^https?:/.test(x.url) && !/^https:\/\/causalinferencelab\.github\.io\//.test(x.url);
+      box.innerHTML = `<div class="continue"><span class="cont-label">이어서 보기</span>
+        <a class="cont-chip go" href="${esc(x.url)}" data-opened${out ? ' target="_blank" rel="noopener"' : ""} data-event="continue_click" data-event-params='${esc(JSON.stringify({ level: lv.id, topic: tp.id, target: "material" }))}'><i aria-hidden="true"></i>${esc(KIND_NAME[x.kind] || "자료")} · ${esc(x.title)}</a>
+        <button type="button" class="cont-chip" data-goto-level="${lv.id}" data-goto-topic="${esc(tp.id)}">${LV(lv.id)} · ${esc(tp.name)}</button>
+        ${done.length ? `<button type="button" class="cont-chip card" data-card="${done[done.length - 1].id}">${LV(done[done.length - 1].id)} 완주 카드</button>` : ""}</div>`;
+      return;
+    }
     const list = learnables();
     const recent = state.recent.map((x) => state.repos.get(x.id)).filter(Boolean).slice(0, 3);
     const finished = state.levels.filter((l) => levelDone(l.id));
@@ -1122,7 +1158,7 @@
       const ext = !/^https:\/\/causalinferencelab\.github\.io\//.test(f.url);
       const ev = (target) => `data-event="start_click" data-event-params='${esc(JSON.stringify({ target, placement: "hero" }))}'`;
       const star = r && r.stars ? `<a class="gh" href="https://github.com/CausalInferenceLab/${esc(r.repo)}" target="_blank" rel="noopener" aria-label="${esc(f.title)} GitHub 저장소, 별 ${fmt(r.stars)}개" ${ev(`${f.target}_github`)}>${icons.star}${fmt(r.stars)}</a>` : "";
-      return `<li${split ? ' class="docs-start"' : ""}><a class="sm" href="${esc(f.url)}"${ext ? ' target="_blank" rel="noopener"' : ""} ${ev(f.target)}>${START_ICON[f.icon] || ""}<span class="tx"><span class="t">${esc(f.title)}</span><span class="d">${esc(f.desc)}</span></span></a>${star}</li>`;
+      return `<li${split ? ' class="docs-start"' : ""}><a class="sm" href="${esc(f.url)}" data-material${ext ? ' target="_blank" rel="noopener"' : ""} ${ev(f.target)}>${START_ICON[f.icon] || ""}<span class="tx"><span class="t">${esc(f.title)}</span><span class="d">${esc(f.desc)}</span></span></a>${star}</li>`;
     }).join("");
   }
   /* the team's open-source projects in the hero: name, what kind of project, GitHub stars */
@@ -1595,12 +1631,26 @@
   const rideable = (r) => !r.kind || r.kind === "external";
   const levelOf = (id) => state.levels.find((l) => l.id === id);
   /* a material is a quest only on stages without action quests */
-  const isMaterialQuest = (r) => rideable(r) && !!r.level && !((levelOf(r.level) || {}).quests || []).length;
+  /* repositories are no longer ticked by hand: a learning level's progress comes from the materials opened in its
+     topics, so nothing is a hand-marked quest any more (kept for the stepRow and dialog code paths) */
+  const isMaterialQuest = () => false;
   const passport = () => window.hubPassport || { stamps: [], has: () => false, count: () => 0 };
-  const questDone = (q) => (q.action ? passport().has(q.repo) : state.ridden.has(q.repo));
+  const questDone = (q) => (q.topic ? topicStarted(q.repo) : q.action ? passport().has(q.repo) : state.ridden.has(q.repo));
   function levelDone(levelId) {
     const qs = questsOf(levelId);
     return qs.length > 0 && qs.every(questDone);
+  }
+  /* after the reader opened something here or came back from a material: progress, clears and stamps catch
+     up; the level panel is redrawn only when its level has just been cleared */
+  function refreshProgress() {
+    const before = new Set(state.levels.filter((l) => levelDone(l.id)).map((l) => l.id));
+    doneCheck = null;
+    const after = state.levels.filter((l) => levelDone(l.id)).map((l) => l.id);
+    after.filter((id) => !before.has(id)).forEach((id) => track("stage_clear", { level: id }));
+    syncStageStamps();
+    if (after.includes(state.level) && !before.has(state.level)) renderShelf();
+    else { paintTopicProgress(); renderRail(); renderHud(); renderTestCard(); }
+    renderWeek();
   }
   /* a cleared stage puts its stamp in the passport (once; stamps stay) */
   function syncStageStamps() {
@@ -1623,7 +1673,7 @@
     c.fillText(`${LV(lv.id)} 완주`, 80, 236);
     c.font = font(700, 44); c.fillText(lv.tier ? `${lv.tier} · ${lv.name}` : lv.name, 80, 300);
     c.fillStyle = "rgba(255,255,255,.86)"; c.font = font(500, 30);
-    c.fillText(items.length === 1 ? `“${lv.question}”에 답하는 자료를 마쳤습니다.` : `“${lv.question}”에 답하는 자료 ${items.length}개를 모두 마쳤습니다.`, 80, 362);
+    c.fillText(items.length && items[0].topic ? `“${lv.question}”의 주제 ${items.length}개를 모두 공부했습니다.` : items.length === 1 ? `“${lv.question}”에 답하는 자료를 마쳤습니다.` : `“${lv.question}”에 답하는 자료 ${items.length}개를 모두 마쳤습니다.`, 80, 362);
     c.font = font(500, 26); c.fillStyle = "rgba(255,255,255,.78)";
     items.slice(0, 3).forEach((r, i) => c.fillText(`· ${r.title}`, 80, 420 + i * 38));
     if (items.length > 3) c.fillText(`외 ${items.length - 3}개`, 80, 420 + 3 * 38);
@@ -1930,8 +1980,18 @@
       if (gl) {
         const fromTest = gl.hasAttribute("data-test-go");
         if (fromTest) { track("level_test_go", { level: gl.dataset.gotoLevel }); closeSheet(); }
-        else track("select_level", { level: gl.dataset.gotoLevel, source: gl.hasAttribute("data-rail") ? "rail" : gl.dataset.stepNav ? `panel_${gl.dataset.stepNav}` : "level_card" });
-        gotoLevel(gl.dataset.gotoLevel, fromTest ? "test" : ""); return;
+        else track("select_level", { level: gl.dataset.gotoLevel, source: gl.hasAttribute("data-rail") ? "rail" : gl.dataset.gotoTopic ? "continue" : gl.dataset.stepNav ? `panel_${gl.dataset.stepNav}` : "level_card" });
+        gotoLevel(gl.dataset.gotoLevel, fromTest ? "test" : "");
+        if (gl.dataset.gotoTopic) {
+          track("continue_click", { level: gl.dataset.gotoLevel, topic: gl.dataset.gotoTopic, target: "topic" });
+          const row = $(`#shelf .lt[data-topic="${CSS.escape(gl.dataset.gotoTopic)}"]`);
+          if (row) {
+            const d = row.closest("details"); if (d) d.open = true;
+            row.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+            const a = row.querySelector(".lt-t"); if (a) a.focus({ preventScroll: true });
+          }
+        }
+        return;
       }
       const card = e.target.closest("[data-card]");
       if (card) { openCard(card.dataset.card); return; }
@@ -2051,11 +2111,11 @@
     renderGrowth();
     renderContrib();
     renderShelf(); renderWeek(); watchRail(); revealSections();
-    getJSON("data/topics.json").then((d) => { state.topicData = d; renderShelf(); }).catch(() => { /* the course shows without its topic order */ });
+    getJSON("data/topics.json").then((d) => { state.topicData = d; doneCheck = null; syncStageStamps(); renderShelf(); renderWeek(); }).catch(() => { /* the course shows without its topic order */ });
     /* a material opened here, or a chapter read in the web book in another tab, shows when the reader is back */
-    document.addEventListener("hub:opened", paintTopicProgress);
-    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") paintTopicProgress(); });
-    addEventListener("pageshow", (e) => { if (e.persisted) paintTopicProgress(); });
+    document.addEventListener("hub:opened", refreshProgress);
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refreshProgress(); });
+    addEventListener("pageshow", (e) => { if (e.persisted) refreshProgress(); });
     document.addEventListener("hub:stamp", onStamp);
     syncStageStamps();
     const header = $(".site-header");

@@ -2924,3 +2924,10 @@ body.has-helper .site-footer { padding-bottom: calc(96px + env(safe-area-inset-b
 .starts li.docs-start:hover { border-radius: 0 0 12px 12px; }
 @media (min-width: 861px) { .starts a.sm { padding-top: 5px; padding-bottom: 5px; } }
 @media (max-width: 860px) { .starts a.sm { padding-top: 6px; padding-bottom: 6px; } }
+/* curriculum: picking up the last material, and the note that frames Level 3–4 as building */
+a.cont-chip { text-decoration: none; }
+.cont-chip.go { border-color: var(--accent); color: var(--ink); max-width: min(420px, 100%); }
+.cont-chip.go i { background: var(--accent); }
+.cont-chip.go, .cont-chip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cont-chip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.lp-note.build a { font-weight: 800; color: var(--accent); text-underline-offset: 3px; }

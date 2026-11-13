@@ -75,10 +75,11 @@
   "use strict";
   const HUB_PATHS = /^\/(?:$|index\.html$|article\.html$|404\.html$|game\.html$|lab\.html$|library\.html$|assets\/|data\/|articles\/|builders\/|badges\/)/;
   const WEBBOOK = "Causal-Inference-with-Python";
+  const LIVE_HOSTS = ["causalinferencelab.github.io", "causalinference.pseudo-lab.com"];
   const SPOTS = [
     ["#featured", "featured"], [".partner", "partner"], ["#station-dialog", "station"], ["#daily", "daily"], ["#posts", "posts"], ["#passport-dialog", "passport"],
     ["#shelf, #week, .spot", "curriculum"], [".gm", "game"], [".lab", "lab"], [".lib", "library"], ["#topics", "topics"], [".bp", "builder_page"],
-    [".post-related, .reader, .prose", "article"], ["#lt-sheet", "level_test"], [".site-footer", "footer"], [".banner", "banner"]
+    [".post-related, .reader, .prose", "article"], ["#lt-sheet", "level_test"], [".site-footer", "footer"], [".hp", "helper"], [".banner", "banner"]
   ];
   function teamSite(a) {
     let u;
@@ -106,6 +107,35 @@
   }
   document.addEventListener("click", decorate, true);
   document.addEventListener("auxclick", decorate, true);
+
+  /* open_material: one event whenever a reader opens something to learn from, wherever it sits on the page.
+     The hub's north star (weekly readers who opened at least one material) counts this event alone; the
+     older events above stay for the reports built on them. A material is a link that goes to the team's
+     other sites (web book, Causal Studio, ...), a hub post, a video, a notebook, or a file or folder in a
+     team repository. A repository's front page, its star badge and the hub's own forms are not materials. */
+  const KIND = [
+    [(u) => u.origin === location.origin && /^\/article\.html$/.test(u.pathname), "post"],
+    /* the team's sites, on this host or written with either live address (data still uses github.io) */
+    [(u) => (u.origin === location.origin || LIVE_HOSTS.includes(u.hostname)) && !HUB_PATHS.test(u.pathname) && !!u.pathname.split("/")[1], "team_site"],
+    [(u) => u.hostname === "youtu.be" || (/(^|\.)youtube\.com$/.test(u.hostname) && /^\/(watch|playlist|shorts|live)\b/.test(u.pathname)), "video"],
+    [(u) => /(^|\.)youtube\.com$/.test(u.hostname), "channel"],
+    [(u) => u.hostname === "colab.research.google.com", "notebook"],
+    [(u) => u.hostname === "github.com" && /^\/CausalInferenceLab\/[^/]+\/(blob|tree)\//.test(u.pathname) && !/\/CausalInferenceLab\.github\.io\//.test(u.pathname), "repo_file"]
+  ];
+  function material(e) {
+    if (e.type === "auxclick" && e.button !== 1) return;
+    const a = e.target.closest && e.target.closest("a[href]");
+    if (!a || a.closest(".site-header, header.hdr") || a.matches(".gh")) return;
+    let u;
+    try { u = new URL(a.href, location.href); } catch (err) { return; }
+    /* a link marked data-material is a material even when it is a repository's front page (the hero's list) */
+    const k = KIND.find(([test]) => test(u)) || (a.hasAttribute("data-material") ? [null, "repo"] : null);
+    if (!k) return;
+    const v = k[1] === "video" && u.searchParams.get("v");
+    window.hubTrack("open_material", { source: placement(a), kind: k[1], link_url: u.origin + u.pathname + (v ? `?v=${v}` : "") });
+  }
+  document.addEventListener("click", material, true);
+  document.addEventListener("auxclick", material, true);
 
   /* Links to Hanbit Media (the team's book and lecture): tag them so Hanbit's own analytics can see
      the visit came from the hub, and send one click_partner per click, the same way everywhere.
