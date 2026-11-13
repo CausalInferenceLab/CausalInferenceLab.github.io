@@ -3,7 +3,11 @@
    dictionary in the PM doc; keep them in snake_case and the params flat. */
 (() => {
   "use strict";
-  const SITE = "https://causalinferencelab.github.io";
+  /* the hub's own address for links people copy and share: wherever the live hub is served (github.io, or
+     the pseudo-lab.com address it can move to); a local preview shares links to the live hub */
+  const LIVE = ["causalinferencelab.github.io", "causalinference.pseudo-lab.com"];
+  const SITE = LIVE.includes(location.hostname) ? location.origin : "https://causalinferencelab.github.io";
+  window.hubSite = SITE;
   window.hubTrack = (name, params = {}) => {
     try {
       if (typeof window.gtag === "function") window.gtag("event", name, params);

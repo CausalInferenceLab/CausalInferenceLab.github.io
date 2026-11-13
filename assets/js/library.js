@@ -180,7 +180,7 @@
   function projectsHTML(list) {
     if (!list.length) return "";
     return `<section class="lib-pjs" aria-labelledby="lib-pjs-h"><h2 class="lib-pjs-h" id="lib-pjs-h">팀 프로젝트<span>저장소째 살펴보기</span></h2><ul>${list.map((r) => {
-      const url = r.site ? (/^https?:/.test(r.site) ? r.site : `https://causalinferencelab.github.io/${String(r.site).replace(/^\//, "")}`) : `https://github.com/CausalInferenceLab/${r.repo}`;
+      const url = r.site ? (/^https?:/.test(r.site) ? r.site : `${window.hubSite}/${String(r.site).replace(/^\//, "")}`) : `https://github.com/CausalInferenceLab/${r.repo}`;
       const lv = /^L[0-4]$/.test(r.level || "") ? `<b class="lib-lv lv-${r.level}">${r.level} ${LV_NAME[r.level]}</b>` : "";
       return `<li class="lib-pj" id="pj-${esc(r.repo)}" tabindex="-1"><a href="${esc(url)}" target="_blank" rel="noopener" data-event="library_click" data-event-params='${esc(JSON.stringify({ topic: "project", kind: "project", repo: r.repo, target: "project" }))}'>
         <span class="lib-pj-t">${esc(r.title)}<span class="lib-out" aria-hidden="true"> ↗</span></span><span class="lib-pj-s">${esc(r.summary || "")}</span><span class="lib-src">${lv}${r.site ? "사이트" : "GitHub"} · ${esc(r.repo)}</span></a></li>`;
@@ -232,7 +232,7 @@
       const terms = termsFor(t).slice(0, 3);
       return `${head}<article class="lib-topic s-${esc(t.shelf)}" id="${esc(t.id)}" tabindex="-1" aria-labelledby="t-${esc(t.id)}">
         <header><h3 id="t-${esc(t.id)}">${esc(t.name)}</h3><span class="lib-en" lang="en">${esc(t.en)}</span>
-          <button type="button" class="lib-link" data-copy="${esc(`https://causalinferencelab.github.io/library.html#${t.id}`)}" data-share="library_topic" aria-label="${esc(t.name)} 링크 복사">링크 복사</button></header>
+          <button type="button" class="lib-link" data-copy="${esc(`${window.hubSite}/library.html#${t.id}`)}" data-share="library_topic" aria-label="${esc(t.name)} 링크 복사">링크 복사</button></header>
         <p class="lib-about">${esc(t.about)}</p>
         ${terms.length ? `<p class="lib-terms"><span>먼저 알아 둘 용어</span>${terms.map((x) => `<a href="#${esc(x.id)}" data-term="${esc(x.id)}">${esc(x.ko)}</a>`).join("")}</p>` : ""}
         ${groupsHTML(v.items, t)}
@@ -294,7 +294,7 @@
         <section class="gl-col"><h4>팀 자료에서</h4>${team ? `<ul class="gl-team">${team}</ul>` : '<p class="gl-none">이 용어를 주로 다룬 팀 자료를 아직 찾지 못했습니다.</p>'}</section>
       </div>
       <p class="gl-acts">${tp ? `<span class="gl-tps"><span>자료실 주제</span>${tp}</span>` : ""}
-        <span class="gl-btns"><button type="button" class="lib-link" data-copy="${esc(`https://causalinferencelab.github.io/library.html#${x.id}`)}" data-share="library_term" aria-label="${esc(x.ko)} 링크 복사">링크 복사</button>
+        <span class="gl-btns"><button type="button" class="lib-link" data-copy="${esc(`${window.hubSite}/library.html#${x.id}`)}" data-share="library_term" aria-label="${esc(x.ko)} 링크 복사">링크 복사</button>
         <button type="button" class="lib-link" data-helper-ask="${esc(x.ko)} 알려 주세요">Pseudo에게 묻기</button>
         <a class="lib-link" href="${BOOK}glossary.html#${encodeURIComponent(x.id)}">웹북 용어집</a></span></p>
     </div>`;

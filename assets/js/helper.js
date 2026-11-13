@@ -8,7 +8,7 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const norm = (s) => String(s || "").toLowerCase().replace(/[\s·\-_/()?!.,~'"]/g, "");
   const track = (n, p) => window.hubTrack && window.hubTrack(n, p);
-  const SITE = "https://causalinferencelab.github.io/";
+  const SITE = `${window.hubSite || "https://causalinferencelab.github.io"}/`;
   const BOOK = SITE + "Causal-Inference-with-Python/";
   const SAID = "cil-helper-said", QUIET = "cil-helper-quiet";
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
