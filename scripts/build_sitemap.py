@@ -1,4 +1,4 @@
-"""Write sitemap.xml for the whole causalinferencelab.github.io domain.
+"""Write sitemap.xml for the whole causalinference.pseudo-lab.com domain.
 
 The hub owns the domain root, so its sitemap also lists the team's other sites served under it
 (the web book, Causal Studio and the rest, from data/repos.json) and every Builder page.
@@ -10,7 +10,9 @@ import os
 from xml.sax.saxutils import escape
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE = "https://causalinferencelab.github.io/"
+BASE = "https://causalinference.pseudo-lab.com/"
+# the team's other sites are still recorded under the github.io address, which GitHub now redirects here
+OLD = "https://causalinferencelab.github.io/"
 
 
 def load(name):
@@ -24,6 +26,8 @@ def main():
     urls += [(f"{BASE}builders/{b['slug']}.html", "0.5") for b in load("builders.json") if b.get("slug")]
     for r in load("repos.json"):
         site = (r.get("site") or "").split("#")[0]
+        if site.startswith(OLD):
+            site = BASE + site[len(OLD):]
         if site.startswith(BASE) and "." not in site.rstrip("/").rsplit("/", 1)[-1] and not site.endswith("/"):
             site += "/"
         if site.startswith(BASE) and site != BASE:
