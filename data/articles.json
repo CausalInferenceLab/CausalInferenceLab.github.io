@@ -1,0 +1,232 @@
+[
+  {
+    "slug": "abcde-11-decisions-with-ai",
+    "title": "AI가 의사결정을 하는 세상",
+    "summary": "마지막 편. AI가 결론과 권고까지 써 오는 시대에 분석 설계는 누가 하고, 결정에는 누구의 이름이 붙어야 할까요.",
+    "date": "2027-01-25",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 11,
+    "weekOf": "2027-01-25",
+    "topics": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "abcde-10-beyond-experiments",
+    "title": "실험할 수 없는 결정 앞에서",
+    "summary": "Beyond Experiments 편. 가격, 신규 런칭, 정책처럼 A/B 테스트를 할 수 없는 결정 앞에서도 인과는 따질 수 있습니다. 완벽하지 않아도 감보다는 낫습니다.",
+    "date": "2027-01-18",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 10,
+    "weekOf": "2027-01-18",
+    "related": [
+      "paid-lecture"
+    ],
+    "topics": [
+      "why-causal",
+      "culture"
+    ]
+  },
+  {
+    "slug": "abcde-09-trustworthy-numbers",
+    "title": "그래서 이 숫자, 믿어도 되나요",
+    "summary": "Trustworthy Numbers 편. 결과가 나온 뒤 더 좋아 보이는 지표로 옮겨 가는 순간 실험은 정당화 도구가 됩니다. 숫자를 믿기 전에 확인할 것들.",
+    "date": "2027-01-11",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 9,
+    "weekOf": "2027-01-11",
+    "related": [
+      "paid-lecture"
+    ],
+    "topics": [
+      "trust",
+      "metrics"
+    ]
+  },
+  {
+    "slug": "abcde-08-culture-gaps",
+    "title": "데이터 기반 조직 문화: 우리는 지금 어느 틈에 서 있을까",
+    "summary": "다섯 단계 정리 편. 조직은 단계와 단계 사이의 틈에서 멈추고, 때로는 거꾸로 돌아갑니다. 우리 조직이 지금 어느 틈에 서 있는지 짚어 봅니다.",
+    "date": "2027-01-04",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 8,
+    "weekOf": "2027-01-04",
+    "topics": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "abcde-07-embeddedness",
+    "title": "누구도 시키지 않는데 모두가 실험하는 조직: 실험이 습관이 되는 순간",
+    "summary": "Embeddedness 편. 누가 시키지 않아도 중요한 결정 앞에서 먼저 가설을 세우는 조직. 틀려도 괜찮은 바닥과 리더 자신이라는 벽.",
+    "date": "2026-12-28",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 7,
+    "weekOf": "2026-12-28",
+    "topics": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "abcde-06-diffusion-2",
+    "title": "실험은 많아졌는데, 우리는 더 잘 배우고 있는가",
+    "summary": "Diffusion 2편. 실험 수는 확산의 결과일 뿐 목적이 아닙니다. 실험의 숨은 가치는 잘못된 결정을 막는 데 있고, 데이터 조직의 역할도 달라져야 합니다.",
+    "date": "2026-12-21",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 6,
+    "weekOf": "2026-12-21",
+    "topics": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "abcde-05-diffusion-1",
+    "title": "한 팀의 무기에서 모두의 기본기로: 실험이 조직의 공용어가 되는 순간",
+    "summary": "Diffusion 1편. 실험이 데이터팀의 무기에서 모두의 기본기가 될 때 필요한 네 가지: 도구와 표준, 공용어, 교육, 권한과 책임.",
+    "date": "2026-12-14",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 5,
+    "weekOf": "2026-12-14",
+    "topics": [
+      "culture",
+      "platform"
+    ]
+  },
+  {
+    "slug": "abcde-04-commitment",
+    "title": "균열을 구조로: 실험이 제품을 만드는 방식이 되는 순간",
+    "summary": "Commitment 편. 한 사람의 용기로 생긴 균열을 조직의 뼈대로 굳히는 단계. 실험을 자원과 제도, 측정과 인센티브로 약속하는 방법.",
+    "date": "2026-12-07",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 4,
+    "weekOf": "2026-12-07",
+    "topics": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "abcde-03-belief",
+    "title": "한 번의 실험이 조직을 바꾼다: 믿음이 생기는 순간",
+    "summary": "Belief 편. 거대한 전략보다 작은 실험 하나가 누군가의 확신에 균열을 냅니다. 믿음이 생기는 순간과, 놀라운 결과일수록 먼저 의심해야 하는 이유.",
+    "date": "2026-11-30",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 3,
+    "weekOf": "2026-11-30",
+    "topics": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "abcde-02-awareness",
+    "title": "의견은 넘치는데 왜 아무도 확신하지 못할까",
+    "summary": "Awareness 편. 조직이 데이터가 필요하다고 느끼는 순간은 데이터가 부족할 때가 아니라, 회의실에 사실보다 의견이 많다는 걸 알아챌 때입니다.",
+    "date": "2026-11-23",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 2,
+    "weekOf": "2026-11-23",
+    "topics": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "abcde-01-introduction",
+    "title": "데이터가 많은데, 왜 결정의 순간엔 망설여질까?",
+    "summary": "서론. 쿠폰을 뿌렸더니 매출이 올랐다는 말을 믿어도 될까요? 데이터는 많은데 결정 앞에서 망설이는 이유와, 실험 문화를 다섯 단계(ABCDE)로 보는 틀을 소개합니다.",
+    "date": "2026-11-16",
+    "author": "신진수",
+    "series": "데이터 기반 의사결정 문화 만들기",
+    "episode": 1,
+    "weekOf": "2026-11-16",
+    "topics": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "brave-true-errata-03",
+    "title": "원서에서 찾은 오류와 처리한 방법",
+    "summary": "코드 출력과 다른 숫자, 수식과 반대로 말하는 설명. 번역하며 멈춘 곳과 옮긴이 주로 처리한 원칙을 정리합니다.",
+    "date": "2026-11-09",
+    "author": "신진수",
+    "series": "번역 노트: Brave & True 한국어판",
+    "episode": 3,
+    "weekOf": "2026-11-09",
+    "related": [
+      "Causal-Inference-with-Python"
+    ]
+  },
+  {
+    "slug": "brave-true-terms-02",
+    "title": "처치군이 아니라 실험군: 번역하며 정한 인과추론 용어",
+    "summary": "실험군·대조군, 처치효과, 교란 요인, 잠재 결과, 탄력성과 민감도까지. 용어를 어떻게, 왜 정했는지 적습니다.",
+    "date": "2026-11-02",
+    "author": "신진수",
+    "series": "번역 노트: Brave & True 한국어판",
+    "episode": 2,
+    "weekOf": "2026-11-02",
+    "related": [
+      "Causal-Inference-with-Python"
+    ]
+  },
+  {
+    "slug": "brave-true-webbook-01",
+    "title": "『Brave & True』 한국어판, 웹북으로 다시 엽니다",
+    "summary": "원서 25장과 부록 5편을 모두 옮기고 네 번 검수한 전면 개정, 그리고 새 웹북에서 달라진 점을 정리합니다.",
+    "date": "2026-10-26",
+    "author": "신진수",
+    "series": "번역 노트: Brave & True 한국어판",
+    "episode": 1,
+    "weekOf": "2026-10-26",
+    "related": [
+      "Causal-Inference-with-Python"
+    ]
+  },
+  {
+    "slug": "book-epilogue-01",
+    "title": "실무에 인과추론을 적용하기 위한 험난한 여정",
+    "summary": "번역서 에필로그에 담은 5단계 여정을 프라임 카드 사례로 풀어 씁니다.",
+    "date": "2024-03-18",
+    "author": "신진수",
+    "series": "번역 노트: 실무로 통하는 인과추론",
+    "episode": 3,
+    "related": [
+      "paid-book",
+      "paid-lecture"
+    ]
+  },
+  {
+    "slug": "book-references",
+    "title": "『실무로 통하는 인과추론 with 파이썬』 논문·자료 모음",
+    "summary": "장별로 참고한 논문과 더 읽을 자료를 정리했습니다.",
+    "date": "2024-03-11",
+    "author": "신진수",
+    "series": "번역 노트: 실무로 통하는 인과추론",
+    "episode": 2,
+    "related": [
+      "paid-book",
+      "paid-lecture"
+    ]
+  },
+  {
+    "slug": "book-release",
+    "title": "『실무로 통하는 인과추론 with 파이썬』 출간 안내",
+    "summary": "한국의 데이터 실무자를 위한 인과추론 첫 기본서를 소개합니다.",
+    "date": "2024-03-05",
+    "author": "신진수",
+    "series": "번역 노트: 실무로 통하는 인과추론",
+    "episode": 1,
+    "related": [
+      "paid-book",
+      "paid-lecture"
+    ]
+  }
+]

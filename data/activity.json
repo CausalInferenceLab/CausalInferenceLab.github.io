@@ -1,0 +1,548 @@
+{
+ "updated": "2026-11-14T02:31:13Z",
+ "items": [
+  {
+   "id": "20083166877",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-14T02:30:26Z",
+   "kind": "pr_merge",
+   "number": 119,
+   "title": "Add a security policy and Dependabot for workflow actions",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/119"
+  },
+  {
+   "id": "20083156117",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-14T02:30:13Z",
+   "kind": "pr_merge",
+   "number": 118,
+   "title": "Resize the materials list and rename Marketing Science",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/118"
+  },
+  {
+   "id": "20082520003",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-14T02:18:19Z",
+   "kind": "pr_open",
+   "number": 119,
+   "title": "Add a security policy and Dependabot for workflow actions",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/119"
+  },
+  {
+   "id": "27063291676",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-13T04:02:48Z",
+   "kind": "push"
+  },
+  {
+   "id": "20023383917",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-13T14:19:33Z",
+   "kind": "pr_open",
+   "number": 118,
+   "title": "Resize the materials list and rename Marketing Science",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/118"
+  },
+  {
+   "id": "20021112991",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-13T13:54:56Z",
+   "kind": "pr_merge",
+   "number": 117,
+   "title": "Make each curriculum level one path of topics and add open_material",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/117"
+  },
+  {
+   "id": "20015162352",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-13T12:46:42Z",
+   "kind": "pr_open",
+   "number": 117,
+   "title": "Make each curriculum level one path of topics and add open_material",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/117"
+  },
+  {
+   "id": "20008761685",
+   "login": "jsshin2022",
+   "repo": "awesome-causal-inference-python",
+   "at": "2026-11-13T11:29:42Z",
+   "kind": "pr_merge",
+   "number": 53,
+   "title": "Add the web page link and a contents table to the README",
+   "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/pull/53"
+  },
+  {
+   "id": "19993059524",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-13T08:11:12Z",
+   "kind": "pr_merge",
+   "number": 115,
+   "title": "Group library videos and materials, add Marketing Science, prepare for a custom domain",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/115"
+  },
+  {
+   "id": "19988095966",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-13T07:05:29Z",
+   "kind": "pr_open",
+   "number": 116,
+   "title": "Serve the hub at causalinference.pseudo-lab.com",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/116"
+  },
+  {
+   "id": "19988047820",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-13T07:04:46Z",
+   "kind": "pr_open",
+   "number": 115,
+   "title": "Group library videos and materials, add Marketing Science, prepare for a custom domain",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/115"
+  },
+  {
+   "id": "19975837788",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-13T04:02:47Z",
+   "kind": "pr_merge",
+   "number": 114,
+   "title": "Split hero materials from projects, show topic progress, refresh stars daily",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/114"
+  },
+  {
+   "id": "19972772061",
+   "login": "jsshin2022",
+   "repo": "awesome-causal-inference-python",
+   "at": "2026-11-13T03:15:42Z",
+   "kind": "pr_open",
+   "number": 53,
+   "title": "Add the web page link and a contents table to the README",
+   "url": "https://github.com/CausalInferenceLab/awesome-causal-inference-python/pull/53"
+  },
+  {
+   "id": "19971428624",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-13T02:55:33Z",
+   "kind": "pr_open",
+   "number": 114,
+   "title": "Split hero materials from projects, show topic progress, refresh stars daily",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/114"
+  },
+  {
+   "id": "19925043495",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-12T17:56:08Z",
+   "kind": "pr_merge",
+   "number": 113,
+   "title": "Rework the hero: level test, study materials, open source and search, and update the forum posters",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/113"
+  },
+  {
+   "id": "19921812063",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-12T17:25:13Z",
+   "kind": "pr_open",
+   "number": 113,
+   "title": "Rework the hero: level test, study materials, open source and search, and update the forum posters",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/113"
+  },
+  {
+   "id": "19919468199",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-12T17:04:35Z",
+   "kind": "pr_merge",
+   "number": 112,
+   "title": "List each level's library topics in order in the curriculum",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/112"
+  },
+  {
+   "id": "19904022009",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-12T14:33:51Z",
+   "kind": "pr_open",
+   "number": 112,
+   "title": "List each level's library topics in order in the curriculum",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/112"
+  },
+  {
+   "id": "19790079984",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-11T14:34:00Z",
+   "kind": "pr_open",
+   "number": 257,
+   "title": "feat: Oracle 부서별 질의 데모 구현 및 실제 DB·LLM 검증",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/257"
+  },
+  {
+   "id": "26829710376",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-09T13:50:01Z",
+   "kind": "push"
+  },
+  {
+   "id": "19637258506",
+   "login": "robertoatila",
+   "repo": "Causal-Inference-with-Python",
+   "at": "2026-11-10T06:32:23Z",
+   "kind": "star"
+  },
+  {
+   "id": "26692821085",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T07:53:21Z",
+   "kind": "push"
+  },
+  {
+   "id": "26689623939",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T06:58:57Z",
+   "kind": "push"
+  },
+  {
+   "id": "26677964539",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-09T13:50:15Z",
+   "kind": "push"
+  },
+  {
+   "id": "26661743351",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-09T02:45:52Z",
+   "kind": "push"
+  },
+  {
+   "id": "26655595130",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T13:29:35Z",
+   "kind": "push"
+  },
+  {
+   "id": "19558040212",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-09T13:50:14Z",
+   "kind": "pr_merge",
+   "number": 111,
+   "title": "Show the Pseudo Lab logo at the top of the hub and open with the team's name",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/111"
+  },
+  {
+   "id": "19558007841",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-09T13:50:00Z",
+   "kind": "pr_merge",
+   "number": 110,
+   "title": "Add the study notes, CausalML study and marketing decks to the library",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/110"
+  },
+  {
+   "id": "19557000917",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-09T13:37:20Z",
+   "kind": "pr_open",
+   "number": 111,
+   "title": "Show the Pseudo Lab logo at the top of the hub and open with the team's name",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/111"
+  },
+  {
+   "id": "19556519345",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-09T13:31:04Z",
+   "kind": "pr_open",
+   "number": 110,
+   "title": "Add the study notes, CausalML study and marketing decks to the library",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/110"
+  },
+  {
+   "id": "26621154149",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-07T13:57:32Z",
+   "kind": "push"
+  },
+  {
+   "id": "26620974476",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T15:08:56Z",
+   "kind": "push"
+  },
+  {
+   "id": "19514693467",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-09T02:45:51Z",
+   "kind": "pr_merge",
+   "number": 109,
+   "title": "Turn the library glossary into dictionary entries linked to team materials",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/109"
+  },
+  {
+   "id": "26575781221",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T07:12:03Z",
+   "kind": "push"
+  },
+  {
+   "id": "26558173382",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T13:30:04Z",
+   "kind": "push"
+  },
+  {
+   "id": "19479498412",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T13:49:05Z",
+   "kind": "pr_open",
+   "number": 109,
+   "title": "Turn the library glossary into dictionary entries linked to team materials",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/109"
+  },
+  {
+   "id": "19478698965",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T13:30:03Z",
+   "kind": "pr_merge",
+   "number": 108,
+   "title": "Send hub analytics to the hub's own GA tag",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/108"
+  },
+  {
+   "id": "19478679299",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T13:29:33Z",
+   "kind": "pr_merge",
+   "number": 107,
+   "title": "Find materials for multi-word searches and show team projects in the library",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/107"
+  },
+  {
+   "id": "19478474642",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T13:24:41Z",
+   "kind": "pr_open",
+   "number": 108,
+   "title": "Send hub analytics to the hub's own GA tag",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/108"
+  },
+  {
+   "id": "19478193213",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T13:17:59Z",
+   "kind": "pr_open",
+   "number": 107,
+   "title": "Find materials for multi-word searches and show team projects in the library",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/107"
+  },
+  {
+   "id": "26542072298",
+   "login": "jsshin2022",
+   "repo": "policy-effect-analytics-agent",
+   "at": "2026-11-08T02:49:41Z",
+   "kind": "push"
+  },
+  {
+   "id": "26541511240",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T05:13:01Z",
+   "kind": "push"
+  },
+  {
+   "id": "26529939916",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T04:14:00Z",
+   "kind": "push"
+  },
+  {
+   "id": "26528592240",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T07:53:31Z",
+   "kind": "push"
+  },
+  {
+   "id": "19466017534",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T07:53:30Z",
+   "kind": "pr_merge",
+   "number": 106,
+   "title": "Show each material's level, keep the mascot off buttons, and talk about the forum after it ends",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/106"
+  },
+  {
+   "id": "19466012187",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T07:53:20Z",
+   "kind": "pr_merge",
+   "number": 105,
+   "title": "Load the hub's own GA tag first and fall back to the shared one",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/105"
+  },
+  {
+   "id": "19465206459",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T07:29:24Z",
+   "kind": "pr_open",
+   "number": 106,
+   "title": "Show each material's level, keep the mascot off buttons, and talk about the forum after it ends",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/106"
+  },
+  {
+   "id": "19465197434",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T07:29:07Z",
+   "kind": "pr_open",
+   "number": 105,
+   "title": "Load the hub's own GA tag first and fall back to the shared one",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/105"
+  },
+  {
+   "id": "19464624949",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T07:12:01Z",
+   "kind": "pr_merge",
+   "number": 104,
+   "title": "Share the hub's header on every page and suggest related searches",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/104"
+  },
+  {
+   "id": "19464589116",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T07:10:58Z",
+   "kind": "pr_open",
+   "number": 104,
+   "title": "Share the hub's header on every page and suggest related searches",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/104"
+  },
+  {
+   "id": "26518183317",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T16:32:35Z",
+   "kind": "push"
+  },
+  {
+   "id": "19464193851",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T06:58:56Z",
+   "kind": "pr_merge",
+   "number": 102,
+   "title": "Give visitors a way to reach the team: Discord, LinkedIn and email",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/102"
+  },
+  {
+   "id": "26513078361",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T03:19:26Z",
+   "kind": "push"
+  },
+  {
+   "id": "19460825321",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T05:13:00Z",
+   "kind": "pr_merge",
+   "number": 103,
+   "title": "Open the hub with a library search and move the team numbers lower",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/103"
+  },
+  {
+   "id": "19460284166",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T04:55:54Z",
+   "kind": "pr_open",
+   "number": 103,
+   "title": "Open the hub with a library search and move the team numbers lower",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/103"
+  },
+  {
+   "id": "19460074669",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T04:49:18Z",
+   "kind": "pr_open",
+   "number": 102,
+   "title": "Give visitors a way to reach the team: Discord, LinkedIn and email",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/102"
+  },
+  {
+   "id": "19458944188",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T04:13:58Z",
+   "kind": "pr_merge",
+   "number": 101,
+   "title": "Stop sending what visitors type to Pseudo, and record how they reach it",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/101"
+  },
+  {
+   "id": "19458187390",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T03:51:05Z",
+   "kind": "pr_open",
+   "number": 101,
+   "title": "Stop sending what visitors type to Pseudo, and record how they reach it",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/101"
+  },
+  {
+   "id": "26502277415",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-07T14:52:24Z",
+   "kind": "push"
+  },
+  {
+   "id": "19457134924",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-08T03:19:24Z",
+   "kind": "pr_merge",
+   "number": 100,
+   "title": "Let Pseudo handle taking part and talk about the next forum",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/100"
+  }
+ ]
+}

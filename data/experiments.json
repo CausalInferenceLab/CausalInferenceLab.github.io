@@ -1,0 +1,20 @@
+{
+  "enabled": false,
+  "baseUrl": "https://iterglow.pseudolab-devfactory.com/api/v1",
+  "apiKey": "",
+  "experiments": [
+    {
+      "id": "pseudo-greeting",
+      "about": "Pseudo가 먼저 인사하는 것(treatment)과 조용히 기다리는 것(control) 중 어느 쪽이 자료를 더 열어 보게 하는지",
+      "flagKey": "",
+      "experimentId": "",
+      "control": "control",
+      "goals": {
+        "helper_open": "pseudo_open",
+        "helper_click": "material_click",
+        "library_click": "material_click",
+        "click_featured": "material_click"
+      }
+    }
+  ]
+}

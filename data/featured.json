@@ -1,0 +1,23 @@
+[
+  {
+    "tag": "데이터 에이전트",
+    "title": "Lang2SQL",
+    "desc": "대화하며 함께 분석하는 Text-to-SQL 에이전트",
+    "repo": "Lang2SQL",
+    "url": "https://github.com/CausalInferenceLab/Lang2SQL"
+  },
+  {
+    "tag": "분석 에이전트",
+    "title": "정책 효과 분석 에이전트",
+    "desc": "공공데이터로 정책 효과를 검증하는 에이전트",
+    "repo": "policy-effect-analytics-agent",
+    "url": "https://github.com/CausalInferenceLab/policy-effect-analytics-agent"
+  },
+  {
+    "tag": "R 패키지",
+    "title": "ccwr",
+    "desc": "Target trial emulation을 위한 R 패키지",
+    "repo": "ccwr",
+    "url": "https://causalinferencelab.github.io/ccwr/"
+  }
+]

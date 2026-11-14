@@ -1,0 +1,232 @@
+[
+  {
+    "cohort": 4,
+    "term": "2022 상반기",
+    "name": "Casual하게 Causality 이해하기",
+    "builder": "신진수",
+    "builderUrl": "https://www.linkedin.com/in/jinsoo-shin-436060162/",
+    "runners": 9,
+    "repo": "Causal-Inference-with-Python",
+    "link": "https://chanrankim.notion.site/Casual-Causality-efb2d821ae334b8d9674ca331edebc72"
+  },
+  {
+    "cohort": 5,
+    "term": "2022 하반기",
+    "name": "Casual하지 않게 Causality 이해하기",
+    "builder": "신진수",
+    "builderUrl": "https://www.linkedin.com/in/jinsoo-shin-436060162/",
+    "runners": 8,
+    "repo": "Causal-Inference-with-Python",
+    "link": "https://chanrankim.notion.site/Casual-Causality-09ebf8f271784589bc18c38e1ea57b66"
+  },
+  {
+    "cohort": 6,
+    "term": "2023 상반기",
+    "name": "Case로 Causality 이해하기",
+    "builder": "신진수",
+    "builderUrl": "https://www.linkedin.com/in/jinsoo-shin-436060162/",
+    "runners": 8,
+    "repo": "Causal-Inference-with-Python",
+    "link": "https://chanrankim.notion.site/Case-Causality-5030892fed8d4b14842e526d4b40c2b9"
+  },
+  {
+    "cohort": 7,
+    "term": "2023 하반기",
+    "name": "인과추론 라이브러리 한국어 자료 만들기",
+    "builder": "신진수",
+    "builderUrl": "https://www.linkedin.com/in/jinsoo-shin-436060162/",
+    "runners": 5,
+    "repo": null,
+    "link": "https://chanrankim.notion.site/Social-Science-bb2c83819f744e1eaa0ddc76961a7dd5"
+  },
+  {
+    "cohort": 7,
+    "term": "2023 하반기",
+    "name": "Gamifying Causal Inference with Game",
+    "builder": "신진수",
+    "builderUrl": "https://www.linkedin.com/in/jinsoo-shin-436060162/",
+    "runners": 8,
+    "repo": null,
+    "link": "https://chanrankim.notion.site/Entertainment-Gamifying-Causal-Inference-with-Game-105f4d2a7ee64c2ea58f3757cbf12b32"
+  },
+  {
+    "cohort": 8,
+    "term": "2024 상반기",
+    "name": "인과추론과 실무",
+    "builder": "김성수",
+    "builderUrl": "https://www.linkedin.com/in/%EC%84%B1%EC%88%98-%EA%B9%80-50825717b/",
+    "runners": 9,
+    "repo": "causal-inference-practice",
+    "link": null
+  },
+  {
+    "cohort": 8,
+    "term": "2024 상반기",
+    "name": "온라인 통제 실험 연구자로 거듭나기",
+    "builder": "방태모",
+    "builderUrl": "https://www.linkedin.com/in/taemo/",
+    "runners": 9,
+    "repo": "OCE-Materials",
+    "link": null
+  },
+  {
+    "cohort": 8,
+    "term": "2024 상반기",
+    "name": "실무로 통하는 인과추론 with 파이썬 특강",
+    "builder": "신진수",
+    "builderUrl": "https://www.linkedin.com/in/jinsoo-shin-436060162/",
+    "runners": 13,
+    "repo": "causal-inference-lecture",
+    "link": null
+  },
+  {
+    "cohort": 8,
+    "term": "2024 상반기",
+    "name": "Kafka - Zero to Hero 실시간 성장하기",
+    "builder": "이동욱",
+    "builderUrl": "https://www.linkedin.com/in/dwlee-1995-lkdin/",
+    "runners": 8,
+    "repo": null,
+    "link": "https://chanrankim.notion.site/Kafka-Zero-to-Hero-9e5bcacdde8c42eb8dc43ac84bc6e5fe"
+  },
+  {
+    "cohort": 8,
+    "term": "2024 상반기",
+    "name": "Smart Causal Inference (SCI)",
+    "builder": "박상호",
+    "builderUrl": "https://www.linkedin.com/in/shstat1729/",
+    "runners": 6,
+    "repo": "Smart_Causal_Inference",
+    "link": null
+  },
+  {
+    "cohort": 9,
+    "term": "2024 하반기",
+    "name": "Bridging Causal Inference and Real-World Evidence: A Study of FDA and Other Regulatory Guidelines",
+    "builder": "박상호",
+    "builderUrl": "https://www.linkedin.com/in/shstat1729/",
+    "runners": 8,
+    "repo": "Bridging-Causal-Inference-and-Real-World-Evidence-A-Study-of-FDA-and-Other-Regulatory-Guidelines",
+    "link": null
+  },
+  {
+    "cohort": 9,
+    "term": "2024 하반기",
+    "name": "From Fixed to Flexible: Your Guide to Adaptive Designs and Master Protocols",
+    "builder": "박상호",
+    "builderUrl": "https://www.linkedin.com/in/shstat1729/",
+    "runners": 5,
+    "repo": "From-Fixed-to-Flexible-Your-Guide-to-Adaptive-Designs-and-Master-Protocols",
+    "link": null
+  },
+  {
+    "cohort": 9,
+    "term": "2024 하반기",
+    "name": "Causal inference + X",
+    "builder": "김성수",
+    "builderUrl": "https://www.linkedin.com/in/%EC%84%B1%EC%88%98-%EA%B9%80-50825717b/",
+    "runners": 9,
+    "repo": null,
+    "link": "https://github.com/Pseudo-Lab/Causalinference-X"
+  },
+  {
+    "cohort": 10,
+    "term": "2025 상반기",
+    "name": "Lang2SQL - 오픈소스로 시작하는 RAG2SQL",
+    "builder": "이동욱",
+    "builderUrl": "https://www.linkedin.com/in/dwlee-1995-lkdin/",
+    "runners": 5,
+    "repo": "Lang2SQL",
+    "link": null
+  },
+  {
+    "cohort": 10,
+    "term": "2025 상반기",
+    "name": "실무로 통하는 인과추론 with 파이썬 + CausalML 곁들인",
+    "builder": "박이삭",
+    "builderUrl": "https://www.linkedin.com/in/%EC%9D%B4%EC%82%AD-%EB%B0%95-75a7a916a/",
+    "runners": 6,
+    "repo": "causal-inference-with-causalML",
+    "link": null
+  },
+  {
+    "cohort": 10,
+    "term": "2025 상반기",
+    "name": "Marketing Science",
+    "builder": "권남택",
+    "builderUrl": "https://www.linkedin.com/in/namtaek-kwon/",
+    "runners": 7,
+    "repo": "Marketing_Science",
+    "link": null
+  },
+  {
+    "cohort": 11,
+    "term": "2025 하반기",
+    "name": "Lang2SQL",
+    "builder": "이동욱",
+    "builderUrl": "https://www.linkedin.com/in/dwlee-1995-lkdin/",
+    "runners": 7,
+    "repo": "Lang2SQL",
+    "link": null
+  },
+  {
+    "cohort": 11,
+    "term": "2025 하반기",
+    "name": "Awesome Causal Inference with Python",
+    "builder": "권명석",
+    "builderUrl": "https://www.linkedin.com/in/myeongseok-gwon-b41414312/",
+    "runners": 7,
+    "repo": "awesome-causal-inference-python",
+    "link": null
+  },
+  {
+    "cohort": 12,
+    "term": "2026 상반기",
+    "name": "Target Trial Emulation: Clone Censor Weighting R Package / Python Library",
+    "builder": "박상호",
+    "builderUrl": "https://www.linkedin.com/in/shstat1729/",
+    "runners": 4,
+    "repo": "ccwr",
+    "link": null
+  },
+  {
+    "cohort": 12,
+    "term": "2026 상반기",
+    "name": "코디 폰세는 어떻게 한국을 흔들었을까 : 세이버메트릭스 X 인과추론",
+    "builder": "김상원",
+    "builderUrl": "https://www.linkedin.com/in/sangwon-kim-1438ba221/",
+    "runners": 4,
+    "repo": null,
+    "link": null
+  },
+  {
+    "cohort": 12,
+    "term": "2026 상반기",
+    "name": "Lang2SQL",
+    "builder": "최세영",
+    "builderUrl": "https://www.linkedin.com/in/seyoung4503/",
+    "runners": 6,
+    "repo": "Lang2SQL",
+    "link": null
+  },
+  {
+    "cohort": 12,
+    "term": "2026 상반기",
+    "name": "Causal Studio: Causal Inference Handbook & Visualization",
+    "builder": "조해창",
+    "builderUrl": "https://www.linkedin.com/in/hae-chang-cho/",
+    "runners": 7,
+    "repo": "causal-studio",
+    "link": null
+  },
+  {
+    "cohort": 13,
+    "term": "2026 하반기",
+    "name": "데이터는 여전히 말하지 않는다: 『행동 데이터 분석』 리딩 살롱",
+    "builder": null,
+    "builderUrl": null,
+    "runners": null,
+    "repo": "data-still-does-not-speak",
+    "link": null
+  }
+]
