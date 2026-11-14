@@ -35,7 +35,7 @@
     ["awesome-causal-inference-python", "메서드 코드북", "주제별 파이썬 코드"],
     ["Smart_Causal_Inference", "책 스터디 노트", "『실무로 통하는 인과추론』 장별 정리"],
     ["causal-inference-with-causalML", "CausalML 스터디", "책 이론을 causalml 코드로"],
-    ["Marketing_Science", "마케팅 사이언스", "마케팅 데이터와 베이지안 스터디 발표"]
+    ["Marketing_Science", "Marketing Science", "마케팅 데이터와 베이지안 스터디 발표"]
   ];
   const SRC_NAME = Object.fromEntries(SOURCES.map(([id, name]) => [id, name]));
   /* each material's curriculum level, so a newcomer can tell an intro from a research paper */

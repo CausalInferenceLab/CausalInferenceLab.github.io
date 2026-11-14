@@ -24,7 +24,7 @@
   {
     "id": "marketing",
     "label": "마케팅 효과를 재요",
-    "description": "광고와 프로모션이 정말 매출을 움직였는지, 마케팅 사이언스 자료와 특강으로 따라갑니다.",
+    "description": "광고와 프로모션이 정말 매출을 움직였는지, Marketing Science 자료와 특강으로 따라갑니다.",
     "stops": [
       "causal-studio",
       "Marketing_Science",
