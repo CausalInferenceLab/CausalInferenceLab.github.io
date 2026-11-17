@@ -387,38 +387,18 @@
   const lvIndex = (id) => state.levels.findIndex((l) => l.id === id);
   /* the level on screen: the one picked, else the tested level, else Level 0 */
   const shownLevel = () => (levelOf(state.level) ? state.level : (myLevel() || {}).level || "L0");
-  /* where this level sits for the visitor: their level, passed by the test, cleared, or not yet */
+  /* where a level sits for the visitor: cleared, their tested level, passed by the test, or not yet */
   function levelStatus(lv) {
     const mine = myLevel(), mi = mine ? lvIndex(mine.level) : -1, i = lvIndex(lv.id);
-    if (levelDone(lv.id)) return { cls: "cleared", label: "클리어" };
-    if (mine && i === mi) return { cls: "mine", label: "내 레벨" };
-    if (mine && i < mi) return { cls: "past", label: "통과" };
-    const q = questsOf(lv.id), unit = (lv.quests || []).length ? "" : "주제 ";
-    return { cls: !mine && i > 0 ? "ahead" : "", label: `${unit}${q.filter(questDone).length} / ${q.length}` };
+    if (levelDone(lv.id)) return "cleared";
+    if (mine && i === mi) return "mine";
+    if (mine && i < mi) return "past";
+    return "";
   }
-  /* five stations on one line; the line is filled up to the visitor's level */
-  function renderRail(reveal) {
-    const box = $("#lv-rail");
-    if (!box) return;
-    const mine = myLevel(), mi = mine ? lvIndex(mine.level) : -1, sel = lvIndex(shownLevel());
-    const n = state.levels.length;
-    box.innerHTML = `<ol class="rail${reveal ? " reveal" : ""}" style="--fill:${mi > 0 ? mi / (n - 1) : 0}" aria-label="Level 0부터 4까지">
-      <li class="rail-line" aria-hidden="true"><i></i></li>
-      ${state.levels.map((lv, i) => {
-        const st = levelStatus(lv), q = questsOf(lv.id), pct = q.length ? q.filter(questDone).length / q.length : 0;
-        const mark = st.cls === "cleared" ? "★" : st.cls === "past" ? "✓" : String(i);
-        return `<li class="rs ${st.cls}${lv.layer === "build" ? " build" : ""}" style="--i:${i}">
-          <button type="button" data-goto-level="${lv.id}" data-rail aria-pressed="${i === sel}" aria-label="${esc(`${LV(lv.id)} ${lv.tier || lv.name}, ${st.label}`)}">
-            ${st.cls === "mine" ? `<span class="rs-pin" aria-hidden="true">내 레벨</span>` : ""}
-            <span class="rs-node" style="--p:${pct}" aria-hidden="true">${mark}</span>
-            <span class="rs-lv">${LV(lv.id)}</span>
-            <b class="rs-t">${esc(lv.tier || lv.name)}</b>
-            <span class="rs-s">${st.cls === "mine" ? esc(lv.question) : esc(st.label)}</span>
-          </button></li>`;
-      }).join("")}
-      <li class="rail-layer learn" aria-hidden="true">배우기</li><li class="rail-layer build" aria-hidden="true">만들기</li>
-    </ol>`;
-  }
+  /* one square per topic (per thing to do on build levels), filled once it has been started */
+  const squaresHTML = (lv) => `<span class="sy-sq" aria-hidden="true">${questsOf(lv.id).map((q) => `<i data-sq="${esc(q.repo)}"${questDone(q) ? ' class="on"' : ""} title="${esc(q.title)}"></i>`).join("")}</span>`;
+  const countOf = (lv) => { const q = questsOf(lv.id); return { done: q.filter(questDone).length, n: q.length }; };
+  const countLabel = (lv) => { const c = countOf(lv); return `${(lv.quests || []).length ? "할 일" : "주제"} ${c.n}개 중 ${c.done}개 ${(lv.quests || []).length ? "완료" : "시작"}`; };
   /* the library topics a level covers, in order, each with the one or two materials to start from
      (data/levels.json topics + data/topics.json). A material's level follows the library: web book chapters
      1–16 are Level 1 and the rest Level 2; other materials take their repository's level. */
@@ -449,120 +429,157 @@
   const isOpened = (x) => (doneCheck || (doneCheck = openedCheck()))(x);
   const topicById = (id) => ((state.topicData && state.topicData.topics) || []).find((tp) => tp.id === id);
   const topicStarted = (id) => { const tp = topicById(id); return !!tp && (tp.items || []).some(isOpened); };
-  /* topic rows carry their progress as an element that is updated in place, so returning to the page or
+  /* progress is painted in place (rows, squares, counts, the next-topic button), so returning to the page or
      opening a material never redraws the list under the reader */
   function paintTopicProgress() {
     const all = (state.topicData && state.topicData.topics) || [];
-    const rows = document.querySelectorAll("#shelf .lt[data-topic]");
-    if (!rows.length) return;
     const done = isOpened;
-    let started = 0;
-    rows.forEach((li) => {
-      const t = all.find((x) => x.id === li.dataset.topic);
-      const items = (t && t.items) || [];
-      const n = items.length, d = items.filter(done).length;
-      if (d) started += 1;
-      li.classList.toggle("on", d > 0);
-      li.classList.toggle("full", n > 0 && d === n);
-      const p = li.querySelector(".lt-p");
-      if (p) {
-        p.hidden = !d;
-        p.setAttribute("aria-label", `자료 ${n}개 중 ${d}개 열어봄`);
-        p.querySelector("b").textContent = `${d}/${n}`;
-        p.querySelector("i").style.width = `${n ? Math.round((d / n) * 100) : 0}%`;
-      }
+    document.querySelectorAll("#shelf .sy-lv").forEach((box) => {
+      const lv = levelOf(box.dataset.row);
+      if (!lv) return;
+      let started = 0;
+      box.querySelectorAll(".lt[data-topic]").forEach((li) => {
+        const t = all.find((x) => x.id === li.dataset.topic);
+        const items = (t && t.items) || [];
+        const n = items.length, d = items.filter(done).length;
+        if (d) started += 1;
+        li.classList.toggle("on", d > 0);
+        li.classList.toggle("full", n > 0 && d === n);
+        li.classList.remove("next");
+        const p = li.querySelector(".lt-p");
+        if (p) {
+          p.hidden = !d;
+          p.setAttribute("aria-label", `자료 ${n}개 중 ${d}개 열어봄`);
+          p.querySelector("b").textContent = `${d}/${n}`;
+          p.querySelector("i").style.width = `${n ? Math.round((d / n) * 100) : 0}%`;
+        }
+      });
+      const s = box.querySelector(".lt-started");
+      if (s) { s.hidden = !started; s.textContent = ` · ${started}개 시작함`; }
+      questsOf(lv.id).forEach((q) => { const sq = box.querySelector(`[data-sq="${CSS.escape(q.repo)}"]`); if (sq) sq.classList.toggle("on", questDone(q)); });
+      const c = countOf(lv), cn = box.querySelector(".sy-n"), cl = box.querySelector(".sy-c");
+      if (cn) cn.textContent = `${c.done}/${c.n}`;
+      if (cl) cl.textContent = countLabel(lv);
+      const nb = box.querySelector(".sy-next-box");
+      if (nb) nb.innerHTML = nextHTML(lv);
+      const nx = nextTopic(lv);
+      const row = nx && box.querySelector(`.lt[data-topic="${CSS.escape(nx.t.id)}"]`);
+      if (row) row.classList.add("next");
     });
-    const s = document.querySelector("#shelf .lt-started");
-    if (s) { s.hidden = !started; s.textContent = ` · ${started}개 시작함`; }
   }
-  function topicOrder(lv) {
-    const all = (state.topicData && state.topicData.topics) || [];
-    const ts = (lv.topics || []).map((id) => all.find((t) => t.id === id)).filter(Boolean);
+  /* the first topic of a level not started yet, and the material to open first */
+  function nextTopic(lv) {
+    if ((lv.quests || []).length) return null;
+    const q = questsOf(lv.id).filter((x) => x.topic);
+    const t = q.find((x) => !questDone(x));
+    const x = t && startWith(t.t, lv.id)[0];
+    return x ? { t: t.t, x, k: q.indexOf(t) + 1 } : null;
+  }
+  const outLink = (url) => /^https?:/.test(url) && !/^https:\/\/causalinferencelab\.github\.io\//.test(url);
+  function nextHTML(lv) {
+    const n = nextTopic(lv);
+    if (!n) {
+      const nx = state.levels[lvIndex(lv.id) + 1];
+      return nx ? `<p class="sy-next done"><span class="sy-next-k">이 레벨의 주제를 모두 시작했습니다</span><button type="button" class="sy-go" data-goto-level="${nx.id}" data-step-nav="next">${LV(nx.id)} ${esc(nx.tier || nx.name)} 열기</button></p>` : "";
+    }
+    return `<p class="sy-next"><span class="sy-next-k">다음 주제 · ${n.k}. ${esc(n.t.name)}</span>
+      <a class="sy-go" href="${esc(n.x.url)}" data-opened${outLink(n.x.url) ? ' target="_blank" rel="noopener"' : ""} data-event="continue_click" data-event-params='${esc(JSON.stringify({ level: lv.id, topic: n.t.id, target: "next" }))}'><i>${esc(KIND_NAME[n.x.kind] || "자료")}</i>${esc(n.x.title)}</a></p>`;
+  }
+  /* a level's topics in study order, each with the one or two materials to start from */
+  function topicRows(lv) {
+    const ts = (lv.topics || []).map(topicById).filter(Boolean);
     if (!ts.length) return "";
     const ev = (topic, target) => `data-event="level_topic" data-event-params='${esc(JSON.stringify({ level: lv.id, topic, target }))}'`;
     const row = (t, k) => `<li class="lt" data-shelf="${esc(t.shelf)}" data-topic="${esc(t.id)}">
         <span class="lt-n" aria-hidden="true">${k}</span>
-        <div class="lt-b"><span class="lt-h"><a class="lt-t" href="library.html#${esc(t.id)}" ${ev(t.id, "library")}>${esc(t.name)}</a>
+        <div class="lt-b"><span class="lt-h"><a class="lt-t" href="library.html#${esc(t.id)}" ${ev(t.id, "library")}>${esc(t.name)}</a><span class="lt-up">다음</span>
           <span class="lt-p" hidden><span class="lt-bar" aria-hidden="true"><i></i></span><b></b></span></span>
-          <span class="lt-go">${startWith(t, lv.id).map((x) => `<a href="${esc(x.url)}" data-opened${/^https?:/.test(x.url) && !/^https:\/\/causalinferencelab\.github\.io\//.test(x.url) ? ' target="_blank" rel="noopener"' : ""} ${ev(t.id, "material")}><i>${esc(KIND_NAME[x.kind] || "자료")}</i>${esc(x.title)}</a>`).join("")}
+          <span class="lt-go">${startWith(t, lv.id).map((x) => `<a href="${esc(x.url)}" data-opened${outLink(x.url) ? ' target="_blank" rel="noopener"' : ""} ${ev(t.id, "material")}><i>${esc(KIND_NAME[x.kind] || "자료")}</i>${esc(x.title)}</a>`).join("")}
           <a class="lt-all" href="library.html#${esc(t.id)}" ${ev(t.id, "library_all")}>자료 ${(t.items || []).length}개</a></span></div>
       </li>`;
-    const FIRST = 5, head = ts.slice(0, FIRST), rest = ts.slice(FIRST);
-    return `<p class="lr-k">배우는 주제 <span>${ts.length}개, 순서대로<span class="lt-started" hidden></span></span></p>
-      <ol class="lt-list">${head.map((t, k) => row(t, k + 1)).join("")}</ol>
-      ${rest.length ? `<details class="lt-more" data-topics="${lv.id}"><summary>주제 ${rest.length}개 더</summary><ol class="lt-list" start="${FIRST + 1}">${rest.map((t, k) => row(t, FIRST + k + 1)).join("")}</ol></details>` : ""}`;
+    const build = (lv.quests || []).length > 0;
+    return `<p class="lr-k">${build ? "관련 주제" : "배우는 주제"} <span>${ts.length}개${build ? "" : ", 순서대로"}<span class="lt-started" hidden></span></span></p>
+      <ol class="lt-list">${ts.map((t, k) => row(t, k + 1)).join("")}</ol>`;
   }
 
-  /* one level in full: who it is for, what it covers, what you can do after it, and the order to take it */
-  function levelPanel(lv, i) {
-    const mine = myLevel(), mi = mine ? lvIndex(mine.level) : -1;
+  /* one level opened: what to open next, the topics in order, then who it is for and what is behind it */
+  function levelBody(lv) {
     const steps = stepsOf(lv), quests = questsOf(lv.id), done = quests.filter(questDone).length, cleared = levelDone(lv.id);
     const inSteps = new Set(steps.map((s) => s.repo));
     const items = levelItems(lv.id);
     const extra = items.filter((r) => !inSteps.has(r.repo) && r.kind !== "paid");
     const books = items.filter((r) => r.kind === "paid");
     const build = (lv.quests || []).length > 0;
-    const topics = topicOrder(lv);
+    const topics = topicRows(lv);
     const crew = [...new Set(items.flatMap((r) => r.builders || []))];
-    const count = `<span aria-label="${quests.length}개 중 ${done}개 클리어">${done} / ${quests.length}</span>`;
-    /* a learning level is one path, its topics in order; the repositories behind them are listed once, small */
-    const repoList = (label) => `<p class="lr-k">${label}</p><ul class="lr-repos">${[...steps.map((s) => [s.r, s.note]), ...extra.map((r) => [r, r.format || ""])].map(([r, note]) => `<li data-id="${esc(r.repo)}" data-line="${primaryLine(r)}"><button type="button" data-open="${esc(r.repo)}" title="${esc(note)}"><i aria-hidden="true"></i>${esc(r.title)}${r.status === "running" ? `<span class="ls-live">진행 중</span>` : ""}</button></li>`).join("")}</ul>`;
-    const buildNote = build ? `<p class="lp-note build">Level 3·4는 따라 보는 코스가 아니라 직접 만드는 단계입니다. 아래를 하나씩 해 보고, 다음 기수에 러너로 참여하거나 Builder로 프로젝트를 열어 보세요. <a href="#join" data-helper-ask="Builder가 되려면요?" data-event="click_join" data-event-params='{"target":"pseudo","source":"build_level"}'>참여 방법 보기</a></p>` : "";
-    const list = build
-      ? `<p class="lr-k">직접 해 보기 ${count}</p><ol class="ls-list">${quests.map((q, k) => questRow(q, k + 1)).join("")}</ol>
-         ${repoList("함께 만드는 레포")}`
-      : topics ? repoList("이 레벨의 자료를 만든 레포")
-      : `<p class="lr-k">이 순서로 ${count}</p><ol class="ls-list">${steps.map((s, k) => stepRow(s.r, k + 1, s.note)).join("")}</ol>
-         ${extra.length ? `<details class="lr-more" data-more="${lv.id}"><summary>골라 보기 ${extra.length}개</summary><ul class="ls-list">${extra.map((r) => stepRow(r, 0, "")).join("")}</ul></details>` : ""}`;
-    const text = books.length ? `<p class="lr-also"><span>함께 보는 교재</span>${books.map((b) => `<button type="button" data-open="${esc(b.repo)}" data-id="${esc(b.repo)}">${esc(b.mapLabel || b.title)}</button>`).join("")}</p>` : "";
-    /* extras that are not already a topic's material: the game, the lab */
-    const inTopics = new Set(questsOf(lv.id).flatMap((q) => (q.t ? q.t.items || [] : []).map((x) => x.url)));
+    const repos = [...steps.map((s) => [s.r, s.note]), ...extra.map((r) => [r, r.format || ""])];
+    const main = build
+      ? `<p class="lp-note build">Level 3·4는 따라 보는 코스가 아니라 직접 만드는 단계입니다. 아래를 하나씩 해 보고, 다음 기수에 러너로 참여하거나 Builder로 프로젝트를 열어 보세요. <a href="#join" data-helper-ask="Builder가 되려면요?" data-event="click_join" data-event-params='{"target":"pseudo","source":"build_level"}'>참여 방법 보기</a></p>
+         <p class="lr-k">직접 해 보기 <span aria-label="${quests.length}개 중 ${done}개 완료">${done} / ${quests.length}</span></p><ol class="ls-list">${quests.map((q, k) => questRow(q, k + 1)).join("")}</ol>${topics}`
+      : topics ? `<div class="sy-next-box"></div>${topics}`
+      : `<p class="lr-k">이 순서로</p><ol class="ls-list">${steps.map((s, k) => stepRow(s.r, k + 1, s.note)).join("")}</ol>`;
+    const inTopics = new Set(quests.flatMap((q) => (q.t ? q.t.items || [] : []).map((x) => x.url)));
     const extras = (lv.more || []).filter((m) => !inTopics.has(m.href));
-    const more = extras.length ? `<p class="lr-also"><span>직접 해 보기</span>${extras.map((m) => `<a href="${esc(m.href)}"${/^https?:/.test(m.href) ? ' target="_blank" rel="noopener"' : ""} data-event="click_level_extra" data-event-params='${esc(JSON.stringify({ level: lv.id, target: m.title }))}'>${esc(m.title)}</a>`).join("")}</p>` : "";
+    const foot = [
+      lv.for ? `<p class="sy-f"><b>이런 분께</b><span>${esc(lv.for)}</span></p>` : "",
+      lv.outcome ? `<p class="sy-f"><b>끝나면</b><span>${esc(lv.outcome)}</span></p>` : "",
+      extras.length ? `<p class="sy-f"><b>직접 해 보기</b><span class="sy-links">${extras.map((m) => `<a href="${esc(m.href)}"${/^https?:/.test(m.href) ? ' target="_blank" rel="noopener"' : ""} data-event="click_level_extra" data-event-params='${esc(JSON.stringify({ level: lv.id, target: m.title }))}'>${esc(m.title)}</a>`).join("")}</span></p>` : "",
+      books.length ? `<p class="sy-f"><b>함께 보는 교재</b><span class="sy-links">${books.map((b) => `<button type="button" data-open="${esc(b.repo)}" data-id="${esc(b.repo)}">${esc(b.mapLabel || b.title)}</button>`).join("")}</span></p>` : "",
+      repos.length ? `<div class="sy-f"><b>${build ? "함께 만드는 레포" : "자료를 만든 레포"}</b><ul class="lr-repos">${repos.map(([r, note]) => `<li data-id="${esc(r.repo)}" data-line="${primaryLine(r)}"><button type="button" data-open="${esc(r.repo)}" title="${esc(note)}"><i aria-hidden="true"></i>${esc(r.title)}${r.status === "running" ? `<span class="ls-live">진행 중</span>` : ""}</button></li>`).join("")}</ul></div>` : "",
+      crew.length ? `<p class="sy-f lr-crew"><b>만든 Builder</b>${crew.slice(0, 6).map((n) => `<span class="lr-who">${avatarHTML(n, "sm")}<span>${esc(n)}</span></span>`).join("")}${crew.length > 6 ? `<i>외 ${crew.length - 6}명</i>` : ""}</p>` : ""
+    ].join("");
     const goal = cleared ? `<div class="lr-clear"><b>클리어</b><span>여권에 스탬프가 찍혔습니다.</span><button type="button" class="btn sm" data-card="${lv.id}">완주 카드 만들기</button></div>` : "";
-    /* one line on why this level is on screen for this visitor */
-    const note = !mine
-      ? (i === 0 ? `<p class="lp-note">처음이라면 여기부터 보세요. 아는 내용이라면 <button type="button" data-test-open="panel">3분 진단</button>으로 내 레벨을 찾아 바로 건너뛸 수 있습니다.</p>` : "")
-      : i === mi ? `<p class="lp-note mine">진단 결과, 여기서 시작하면 됩니다.${mi > 0 ? ` 앞의 Level ${mi === 1 ? "0" : `0–${mi - 1}`}은 통과했습니다.` : ""}</p>`
-      : i < mi ? `<p class="lp-note">진단에서 통과한 레벨입니다. 필요할 때 복습하세요.</p>` : "";
-    const prev = state.levels[i - 1], next = state.levels[i + 1];
-    const nav = `<div class="lp-nav">${prev ? `<button type="button" data-goto-level="${prev.id}" data-step-nav="prev"><span aria-hidden="true">‹ </span>${LV(prev.id)} ${esc(prev.tier || prev.name)}</button>` : "<span></span>"}${next ? `<button type="button" data-goto-level="${next.id}" data-step-nav="next">${LV(next.id)} ${esc(next.tier || next.name)}<span aria-hidden="true"> ›</span></button>` : ""}</div>`;
-    return `<article class="lr${build ? " build" : ""}${mine && i === mi ? " mine" : ""}${cleared ? " cleared" : ""}" id="lv-${lv.id}" data-row="${lv.id}" aria-labelledby="lv-${lv.id}-t">
-      <div class="lr-head">
-        <h3 id="lv-${lv.id}-t"><span class="lr-lv">${LV(lv.id)}</span>${esc(lv.tier || lv.name)}${mine && i === mi ? `<span class="lr-mine">내 레벨</span>` : ""}</h3>
-        <p class="lr-q">${esc(lv.question)}</p>
-        ${note}${buildNote}
-        ${lv.for ? `<p class="lr-for"><b>이런 분께</b>${esc(lv.for)}</p>` : ""}
-      </div>
-      <div class="lr-body">
-        ${(lv.learn || []).length && !topics ? `<p class="lr-k">배우는 것</p><ul class="lr-learn">${lv.learn.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
-        ${lv.outcome ? `<p class="lr-out"><b>끝나면</b>${esc(lv.outcome)}</p>` : ""}
-        ${crew.length ? `<p class="lr-crew"><span>만든 Builder</span>${crew.slice(0, 5).map((n) => `<span class="lr-who">${avatarHTML(n, "sm")}<span>${esc(n)}</span></span>`).join("")}${crew.length > 5 ? `<i>외 ${crew.length - 5}명</i>` : ""}</p>` : ""}
-      </div>
-      <div class="lr-steps">${topics}${list}${text}${more}${goal}</div>
-      ${nav}
-    </article>`;
+    return `<div class="sy-body">${goal}${main}<div class="sy-foot">${foot}</div></div>`;
   }
-  function renderShelf(_, dir, reveal) {
+
+  /* one level as a row of the syllabus: number, name, question, progress squares; the body opens below it */
+  function levelBlock(lv, i, open) {
+    const st = levelStatus(lv), build = (lv.quests || []).length > 0, c = countOf(lv);
+    const prev = state.levels[i - 1];
+    const layer = i === 0 ? `<p class="sy-layer">배우기<span>Level 0–2 · 무료 자료로 끝까지</span></p>`
+      : lv.layer === "build" && prev && prev.layer !== "build" ? `<p class="sy-layer">만들기<span>Level 3–4 · 직접 기여하기</span></p>` : "";
+    const tag = st === "mine" ? `<span class="lr-mine">내 레벨</span>` : st === "past" ? `<span class="sy-tag">통과</span>` : st === "cleared" ? `<span class="sy-tag on">클리어</span>` : "";
+    return `${layer}<details class="sy-lv${st ? ` ${st}` : ""}${build ? " build" : ""}" id="lv-${lv.id}" data-row="${lv.id}"${open ? " open" : ""}>
+      <summary>
+        <span class="sy-num" aria-hidden="true">${st === "cleared" ? "★" : i}</span>
+        <span class="sy-h"><span class="sy-tt"><span class="lr-lv">${LV(lv.id)}</span><b>${esc(lv.tier || lv.name)}</b>${tag}</span><span class="sy-q">${esc(lv.question)}</span></span>
+        <span class="sy-p">${squaresHTML(lv)}<span class="sy-n" aria-hidden="true">${c.done}/${c.n}</span><span class="sr sy-c">${esc(countLabel(lv))}</span></span>
+        <span class="sy-chev" aria-hidden="true"></span>
+      </summary>
+      ${levelBody(lv)}
+    </details>`;
+  }
+  function renderShelf() {
     const shelf = $("#shelf");
     if (!shelf) return;
-    const id = shownLevel(), lv = levelOf(id), i = lvIndex(id);
+    const id = shownLevel();
     state.level = id;
-    const keep = shelf.querySelector(`details[data-more="${id}"]`);
-    const wasOpen = keep && keep.open;
-    const keepT = shelf.querySelector(`details[data-topics="${id}"]`), topicsOpen = keepT && keepT.open;
-    shelf.innerHTML = levelPanel(lv, i);
-    if (wasOpen) { const d = shelf.querySelector("details[data-more]"); if (d) d.open = true; }
-    if (topicsOpen) { const d = shelf.querySelector("details[data-topics]"); if (d) d.open = true; }
-    if (dir && !reduceMotion) { const a = shelf.firstElementChild; a.classList.add(dir > 0 ? "enter-r" : "enter-l"); }
+    if (!state.openLv) state.openLv = new Set([id]);
+    shelf.innerHTML = `<div class="sy">${state.levels.map((lv, i) => levelBlock(lv, i, state.openLv.has(lv.id))).join("")}</div>
+      <p class="sy-map">레벨 대신 주제별로 이어서 보고 싶다면 <button type="button" class="link-btn" data-tab-go="tab-map">주제별 노선도로 보기</button></p>`;
     wireAvatars(shelf);
     paintTopicProgress();
-    renderRail(reveal); renderHud(); renderTestCard();
+    renderHud(); renderTestCard();
 
     const repos = [...state.repos.values()].filter((r) => !r.kind && r.status !== "depot");
     const depot = [...state.repos.values()].filter((r) => r.status === "depot");
     $("#n-course").textContent = repos.length; $("#n-course").title = `레포 ${repos.length}개`;
-    $("#shelf-foot").innerHTML = `자료 이름을 누르면 자세한 정보와 링크가 열립니다. 진단 결과와 클리어 기록은 이 브라우저에만 남습니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
+    $("#shelf-foot").innerHTML = `주제 이름을 누르면 자료실에서 그 주제의 자료를 모두 볼 수 있습니다. 진단 결과와 진도는 이 브라우저에만 남습니다. 운영·보관 레포: ${depot.map((r) => `<a href="${esc(repoUrl(r))}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(", ")}`;
+  }
+  /* which levels are open is remembered while the page is open, and a click on a level row is counted */
+  function wireSyllabus() {
+    const shelf = $("#shelf");
+    if (!shelf) return;
+    shelf.addEventListener("toggle", (e) => {
+      const d = e.target;
+      if (!(d instanceof HTMLDetailsElement) || !d.classList.contains("sy-lv")) return;
+      if (!state.openLv) state.openLv = new Set();
+      if (d.open) { state.openLv.add(d.dataset.row); state.level = d.dataset.row; } else state.openLv.delete(d.dataset.row);
+    }, true);
+    shelf.addEventListener("click", (e) => {
+      const sm = e.target.closest(".sy-lv > summary");
+      if (sm) track("select_level", { level: sm.parentElement.dataset.row, source: sm.parentElement.open ? "syllabus_close" : "syllabus" });
+    });
   }
   /* each section arrives once as it comes into view: its station dot, then the heading, then the content */
   function revealSections() {
@@ -582,18 +599,6 @@
     const show = () => { const t = /^#[\w-]+$/.test(location.hash) && document.getElementById(location.hash.slice(1)); const sec = t && t.closest("section.band"); if (sec) sec.classList.add("rv-in"); };
     window.addEventListener("hashchange", show); show();
   }
-  /* the rail draws itself once, the first time the curriculum comes into view */
-  function watchRail() {
-    const rail = $("#lv-rail");
-    if (!rail || reduceMotion || !("IntersectionObserver" in window)) return;
-    rail.classList.add("pre");
-    const io = new IntersectionObserver((ens) => ens.forEach((en) => {
-      if (!en.isIntersecting) return;
-      rail.classList.remove("pre"); rail.classList.add("drawn"); io.disconnect();
-    }), { threshold: 0, rootMargin: "0px 0px 20% 0px" });
-    io.observe(rail);
-  }
-
   /* ---------- level test: concept questions place the visitor on a level ---------- */
   const test = { step: 0, picks: [], interest: null, done: false };
   function meterHTML(levelId) {
@@ -608,10 +613,10 @@
     const n = state.leveltest.questions.length;
     box.classList.toggle("lt-slim", !lv);
     box.innerHTML = lv
-      ? `<div class="lt-t"><p class="lt-k">내 레벨 진단 결과</p><h3>${LV(lv.id)} · ${esc(lv.tier || lv.name)}</h3><p>${esc(bandLine(mine))}${(() => { const q = questsOf(lv.id); return q.length && q[0].topic ? ` · 주제 ${q.length}개 중 ${q.filter(questDone).length}개 시작` : ""; })()}</p></div>
-        <div class="lt-acts"><button type="button" class="pill solid" data-goto-level="${lv.id}">내 코스 보기</button><button type="button" class="pill" data-test-open="retry">다시 진단</button></div>`
-      : `<div class="lt-t"><h3>어디서 시작할지 모르겠다면, 3분 레벨 진단</h3><p>실무 상황 문제 ${n}개를 풀면 시작할 Level과 첫 자료, 다시 볼 개념을 알려 드립니다.</p></div>
-        <div class="lt-acts"><button type="button" class="pill solid" data-test-open="card">진단 시작</button></div>`;
+      ? `<p class="lt-t"><span class="lt-k">내 레벨</span><b>${LV(lv.id)} · ${esc(lv.tier || lv.name)}</b><span class="lt-s">${esc(bandLine(mine))}</span></p>
+        <div class="lt-acts"><button type="button" class="pill solid" data-goto-level="${lv.id}">내 레벨 열기</button><button type="button" class="pill" data-test-open="retry">다시 진단</button></div>`
+      : `<p class="lt-t"><b>어디서 시작할지 모르겠다면</b><span class="lt-s">실무 문제 ${n}개로 시작할 레벨과 첫 자료를 찾아 드립니다.</span></p>
+        <div class="lt-acts"><button type="button" class="pill solid" data-test-open="card">3분 진단</button></div>`;
   }
   function scoreTest() {
     const T = state.leveltest, bands = {};
@@ -1101,21 +1106,25 @@
   function gotoLevel(levelId, source) {
     if (!levelOf(levelId)) return;
     selectTab("tab-course");
-    const from = lvIndex(shownLevel());
     state.level = levelId;
-    renderShelf(null, lvIndex(levelId) - from, source === "test");
-    const top = $("#lv-rail");
-    if (top && (top.getBoundingClientRect().top < 0 || top.getBoundingClientRect().top > innerHeight * 0.5)) top.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    (state.openLv || (state.openLv = new Set())).add(levelId);
+    let el = $(`#lv-${levelId}`);
+    if (!el) { renderShelf(); el = $(`#lv-${levelId}`); }
+    if (!el) return;
+    el.open = true;
+    const top = el.getBoundingClientRect().top;
+    if (top < 0 || top > innerHeight * 0.6) el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    if (source === "test") flash(el);
   }
 
-  /* Jump to one material: show its level, then mark it briefly. */
+  /* Jump to one material: open its level, then mark it briefly. */
   function gotoItem(id) {
     closeStation();
     const r = state.repos.get(id);
-    if (r && r.level) { selectTab("tab-course"); const from = lvIndex(shownLevel()); state.level = r.level; renderShelf(null, lvIndex(r.level) - from); }
+    if (r && r.level) { selectTab("tab-course"); state.level = r.level; (state.openLv || (state.openLv = new Set())).add(r.level); const d = $(`#lv-${r.level}`); if (d) d.open = true; }
     const el = $(`#shelf [data-id="${CSS.escape(id)}"]`);
     if (!el) return;
-    const more = el.closest("details"); if (more) more.open = true;
+    const lvBox = el.closest("details.sy-lv"); if (lvBox) lvBox.open = true;
     document.querySelectorAll("#shelf .picked").forEach((x) => x.classList.remove("picked", "flash"));
     el.classList.add("picked");
     el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
@@ -1653,7 +1662,7 @@
     after.filter((id) => !before.has(id)).forEach((id) => track("stage_clear", { level: id }));
     syncStageStamps();
     if (after.includes(state.level) && !before.has(state.level)) renderShelf();
-    else { paintTopicProgress(); renderRail(); renderHud(); renderTestCard(); }
+    else { paintTopicProgress(); renderHud(); renderTestCard(); }
     renderWeek();
   }
   /* a cleared stage puts its stamp in the passport (once; stamps stay) */
@@ -2114,7 +2123,7 @@
     try { await load(); } catch (err) { fail(err); return; }
     renderGrowth();
     renderContrib();
-    renderShelf(); renderWeek(); watchRail(); revealSections();
+    wireSyllabus(); renderShelf(); renderWeek(); revealSections();
     getJSON("data/topics.json").then((d) => { state.topicData = d; doneCheck = null; syncStageStamps(); renderShelf(); renderWeek(); }).catch(() => { /* the course shows without its topic order */ });
     /* a material opened here, or a chapter read in the web book in another tab, shows when the reader is back */
     document.addEventListener("hub:opened", refreshProgress);
