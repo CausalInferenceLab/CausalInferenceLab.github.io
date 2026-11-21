@@ -1,0 +1,36 @@
+{
+  "host": "한국경영정보학회",
+  "note": "한국경영정보학회가 주최하는 학회 행사에 가짜연구소 인과추론팀이 협력하고 있습니다. 오래 함께한 Builder에게는 이런 학회와 Data Forum에서 발표할 기회가 열립니다.",
+  "items": [
+    {
+      "id": "kbes2026",
+      "year": 2026,
+      "name": "한국 비즈니스 실험 심포지엄 2026",
+      "en": "Korea Business Experimentation Symposium 2026",
+      "when": "2026.07.11",
+      "place": "한국과학기술회관",
+      "about": "생성형 AI 시대의 데이터 사이언스와 실험",
+      "url": "https://sites.google.com/view/business-experimentation2026/home"
+    },
+    {
+      "id": "kbes2025",
+      "year": 2025,
+      "name": "한국 비즈니스 실험 심포지엄 2025",
+      "en": "Korea Business Experimentation Symposium 2025",
+      "when": "2025.07.12",
+      "place": "고려대학교 LG-POSCO 경영관",
+      "about": "A/B 테스트와 현장 실험을 다루는 국내 첫 산학 심포지엄",
+      "url": "https://sites.google.com/view/business-experimentation2025/home"
+    },
+    {
+      "id": "kswci2024",
+      "year": 2024,
+      "name": "인과추론 여름 워크숍 2024",
+      "en": "Korea Summer Workshop on Causal Inference 2024",
+      "when": "2024.06.13 – 06.28",
+      "place": "온라인",
+      "about": "실무를 위한 인과추론과 의사결정을 위한 데이터과학",
+      "url": "https://sites.google.com/view/causal-inference2024/home"
+    }
+  ]
+}
