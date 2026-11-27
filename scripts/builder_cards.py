@@ -41,7 +41,7 @@ h1{{font-size:96px;font-weight:800;letter-spacing:-.03em;line-height:1.05;margin
 <h1>{name}{top}</h1>
 <p class="s">{since}</p>
 <div class="st"><div><b>{projects}</b>프로젝트</div><div><b>{runners}</b>함께한 러너</div><div><b>{cohorts}</b>기수</div></div>
-<p class="f">causalinferencelab.github.io/builders/{slug}</p>
+<p class="f">causalinference.pseudo-lab.com/builders/{slug}</p>
 </div></body></html>"""
 
 
