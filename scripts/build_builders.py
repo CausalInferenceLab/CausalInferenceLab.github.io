@@ -131,8 +131,8 @@ def head(title, desc, url, image):
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="/" aria-label="Causal Inference Hub 처음으로"><img class="brand-logo" src="/assets/img/team-mark.png" alt="" width="34" height="34"><span class="brand-text"><span class="brand-name">Causal Inference Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span></a>
-    <nav class="site-nav" aria-label="주요 메뉴"><a href="/#curriculum" class="stn s-main">커리큘럼</a><a href="/library.html" class="stn s-topics">자료실</a><a href="/builders/" class="stn s-ml" aria-current="page">Builder</a><a href="/#events" class="stn s-exp">행사</a><a href="/#posts" class="stn s-behavior">연재</a><a href="/#join" class="stn s-research" data-event="click_join" data-event-params='{{"target":"pseudo","source":"nav"}}'>참여하기</a></nav>
+    <a class="brand" href="/" aria-label="Pseudo Lab Data Hub 처음으로"><img class="brand-logo" src="/assets/img/team-mark.png" alt="" width="34" height="34"><span class="brand-text"><span class="brand-name">Pseudo Lab Data Hub</span><span class="brand-sub">가짜연구소 인과추론팀</span></span></a>
+    <nav class="site-nav" aria-label="주요 메뉴"><a href="/#curriculum" class="stn s-main">커리큘럼</a><a href="/library.html" class="stn s-topics">자료실</a><a href="/lounge.html" class="stn s-lounge">라운지</a><a href="/builders/" class="stn s-ml" aria-current="page">Builder</a><a href="/#events" class="stn s-exp">행사</a><a href="/#posts" class="stn s-behavior">연재</a><a href="/#join" class="stn s-research" data-event="click_join" data-event-params='{{"target":"pseudo","source":"nav"}}'>참여하기</a></nav>
     <a class="hdr-ev" id="hdr-event" hidden></a>
     <button type="button" class="pass-btn" data-passport aria-label="활동 여권 열기">여권 <b data-passport-count>0/9</b></button>
   </div>
@@ -304,7 +304,7 @@ def page(p, repos, projects, terms):
     <section class="bp-hero" data-line="{esc(token(p['line']))}">
       {avatar(p)}
       <div class="bp-id">
-        <p class="bp-kicker">{top}<span class="bp-tier">{esc(t["name"])}</span><span>Causal Inference Hub Builder</span></p>
+        <p class="bp-kicker">{top}<span class="bp-tier">{esc(t["name"])}</span><span>Pseudo Lab Data Hub Builder</span></p>
         <h1>{esc(p['name'])}</h1>
         <p class="bp-since">{esc(tenure(p))}</p>
         {f'<p class="bp-intro">{esc(intro)}</p>' if intro else ''}
@@ -343,7 +343,7 @@ def page(p, repos, projects, terms):
   </div>
 </main>
 """
-    return head(f"{p['name']} | Causal Inference Hub Builder", desc, url, image) + body + FOOT
+    return head(f"{p['name']} | Pseudo Lab Data Hub Builder", desc, url, image) + body + FOOT
 
 
 def rank_tag(p):
@@ -366,7 +366,7 @@ def index_page(ranked):
   </div>
 </main>
 """
-    return head("Builder | Causal Inference Hub", f"가짜연구소 인과추론팀에서 프로젝트를 연 Builder {len(ranked)}명", f"{SITE}/builders/", f"{SITE}/assets/img/og-hub.png") + body + FOOT
+    return head("Builder | Pseudo Lab Data Hub", f"가짜연구소 인과추론팀에서 프로젝트를 연 Builder {len(ranked)}명", f"{SITE}/builders/", f"{SITE}/assets/img/og-hub.png") + body + FOOT
 
 
 def main():

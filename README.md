@@ -1,12 +1,12 @@
-# Causal Inference Hub
+# Pseudo Lab Data Hub
 
-**가짜연구소 인과추론팀이 2022년부터 함께 만든 오픈소스와 자료를 Level 0–4 커리큘럼으로 엮은 곳입니다.**
+**가짜연구소 인과추론팀이 운영하는 데이터 실무 커뮤니티입니다.**
 
-인과추론에서 시작해 온라인 실험, 데이터 에이전트까지 AI 시대에 데이터로 판단하는 힘을 함께 공부하고 만듭니다.
+2022년부터 함께 만든 인과추론·온라인 실험 자료를 Level 0–4 커리큘럼으로 엮고, 데이터 실무자들이 라운지에서 질문하고 글과 회고를 나눕니다.
 
 **[causalinferencelab.github.io](https://causalinferencelab.github.io)**
 
-![Causal Inference Hub](assets/img/hub-preview.png)
+![Pseudo Lab Data Hub](assets/img/hub-preview.png)
 
 ## 어디서 시작할까
 
@@ -16,6 +16,7 @@
 | 처음 공부한다 | [Causal Studio](https://www.youtube.com/@CausalStudio): 짧은 입문 영상과 Colab 노트북으로 상관과 인과의 차이부터 |
 | 글로 차근차근 읽고 싶다 | [Brave & True 웹북](https://causalinferencelab.github.io/Causal-Inference-with-Python/): 원서 25장과 부록 5편을 모두 옮긴 한국어판 |
 | 현업 문제에 바로 쓰고 싶다 | [실무자 특강 영상 17강](https://www.youtube.com/playlist?list=PLKKkeayRo4PWuwIL0_C7n_QQQ_at6CpoE), [산업 사례 템플릿](https://github.com/CausalInferenceLab/causal-inference-practice), [온라인 실험 자료](https://github.com/CausalInferenceLab/OCE-Materials) |
+| 묻고 싶거나 나누고 싶다 | [라운지](https://causalinferencelab.github.io/lounge.html): 질문, 공유, 회고, 소식. GitHub 계정으로 누구나 씁니다 |
 | 직접 만들고 싶다 | [참여하는 방법](#참여하는-방법) |
 
 여기까지의 자료는 모두 무료입니다. Causal Studio는 처음 보는 분을 위한 입문 영상이고, 실무자 특강 영상은 책의 장마다 현업 사례를 다루는 Level 2 자료라 개념을 익힌 뒤 보는 편이 좋습니다.
@@ -87,7 +88,7 @@
 
 ## English summary
 
-The Causal Inference Hub is the home of the Pseudo-Lab Causal Inference Team (가짜연구소 인과추론팀). It gathers the team's open-source work since 2022 into one Level 0–4 curriculum: a video primer (Causal Studio), the full Korean edition of *Causal Inference for The Brave and True*, applied templates and online-experiment materials, a data agent (Lang2SQL) and a research R package (ccwr). A three-minute level test points you to where to start. Each cohort, Builders open projects and runners join them; the hub shows those projects, the people who led them, and how to take part.
+Pseudo Lab Data Hub (formerly the Causal Inference Hub) is a community for data practitioners run by the Pseudo-Lab Causal Inference Team (가짜연구소 인과추론팀). Its lounge, built on GitHub Discussions, is where anyone with a GitHub account asks questions and shares posts and retrospectives. It also gathers the team's open-source work since 2022 into one Level 0–4 curriculum: a video primer (Causal Studio), the full Korean edition of *Causal Inference for The Brave and True*, applied templates and online-experiment materials, a data agent (Lang2SQL) and a research R package (ccwr). A three-minute level test points you to where to start. Each cohort, Builders open projects and runners join them; the hub shows those projects, the people who led them, and how to take part.
 
 ## 이 레포에 대해
 
@@ -95,7 +96,7 @@ The Causal Inference Hub is the home of the Pseudo-Lab Causal Inference Team (�
 
 | 폴더·파일 | 들어 있는 것 |
 | --- | --- |
-| `index.html`, `library.html`, `article.html`, `game.html`, `lab.html` | 허브, 자료실, 연재 글, 게임, 실험실 페이지 |
+| `index.html`, `library.html`, `lounge.html`, `article.html`, `game.html`, `lab.html` | 허브, 자료실, 라운지, 연재 글, 게임, 실험실 페이지 |
 | `data/` | 레포, 커리큘럼, 레벨 진단, 행사, Builder 정보. 내용을 바꿀 때는 대부분 여기만 고칩니다 |
 | `articles/` | 연재 글 원고(Markdown) |
 | `assets/` | 스타일, 스크립트, 이미지 |

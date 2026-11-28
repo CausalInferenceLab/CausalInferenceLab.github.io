@@ -7,7 +7,7 @@
      web book's property and the hub's first stream, G-C5V0X2SGD3. That stream now only keeps the history.) */
   const ID = "G-CS9K0E86LR";
   /* counted on the live hub only: its github.io address and the pseudo-lab.com address it can move to */
-  if (["causalinferencelab.github.io", "causalinference.pseudo-lab.com"].includes(location.hostname)) {
+  if (["causalinferencelab.github.io", "datahub.pseudo-lab.com"].includes(location.hostname)) {
     const s = document.createElement("script");
     s.async = true;
     s.src = `https://www.googletagmanager.com/gtag/js?id=${ID}`;

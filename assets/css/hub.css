@@ -1766,7 +1766,7 @@ a.ac-title:hover { text-decoration: underline; }
 
 /* section heads: the station for that section, then the name */
 .section-head h2 { display: flex; align-items: center; gap: 14px; font-size: clamp(28px, 3.4vw, 40px); letter-spacing: -.035em; }
-#curriculum .section-head h2::before, #contrib .section-head h2::before, #events .section-head h2::before, #posts .section-head h2::before {
+#curriculum .section-head h2::before, #lounge .section-head h2::before, #contrib .section-head h2::before, #events .section-head h2::before, #posts .section-head h2::before {
   content: ""; width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%; background: var(--surface); border: 5px solid var(--sec); box-sizing: border-box; }
 .section-head > p { max-width: 40em; }
 
@@ -3033,3 +3033,74 @@ a.cont-chip { text-decoration: none; }
 }
 .sy-lv { scroll-margin-top: 24px; }
 #panel-course > #progress:not(:empty) { margin-bottom: 14px; }
+
+/* ==========================================================================
+   Lounge: GitHub Discussions shown on the hub (lounge.js). Each board keeps a line colour:
+   질문 main, 공유 behavior, 회고 ml, 소식 exp.
+   ========================================================================== */
+:root { --l-lounge: #0E7490; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --l-lounge: #3BBBD6; } }
+:root[data-theme="dark"] { --l-lounge: #3BBBD6; }
+#lounge, .s-lounge { --sec: var(--l-lounge); }
+.lg .l-main { --c: var(--l-main); }
+.lg .l-behavior { --c: var(--l-behavior); }
+.lg .l-ml { --c: var(--l-ml); }
+.lg .l-exp { --c: var(--l-exp); }
+.lg .l-ai { --c: var(--l-ai); }
+
+.lg-write { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.lg-w { display: grid; gap: 2px; height: 100%; padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1.5px solid var(--rule); border-top: 4px solid var(--c); color: var(--ink); text-decoration: none; }
+.lg-w b { font-size: 16px; font-weight: 800; }
+.lg-w span { font-size: 13.5px; color: var(--muted); }
+.lg-w:hover { border-color: var(--c); }
+.lg-w:focus-visible, .lg-main:focus-visible, .lg-more a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+p.lg-write { display: block; }
+
+.lg-list { list-style: none; margin: 0; padding: 0; display: grid; border-radius: 16px; background: var(--surface); border: 1px solid var(--rule); overflow: hidden; }
+.lg-post { padding: 14px 18px; display: grid; gap: 8px; }
+.lg-post + .lg-post { border-top: 1px solid var(--rule); }
+.lg-main { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 4px; align-items: baseline; color: var(--ink); text-decoration: none; }
+.lg-main:hover .lg-t { text-decoration: underline; text-underline-offset: 3px; }
+.lg-cat { grid-row: 1; font-size: 12.5px; font-weight: 800; color: var(--c); padding: 2px 9px; border-radius: 999px; background: color-mix(in srgb, var(--c) 12%, transparent); }
+.lg-t { font-size: 16px; font-weight: 700; line-height: 1.4; }
+.lg-x { grid-column: 2; font-size: 14px; color: var(--muted); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.lg-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-left: 0; font-size: 13px; color: var(--muted); }
+.lg-who { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 600; }
+.lg-who .avatar.sm { width: 22px; height: 22px; font-size: 11px; --c: var(--l-ai); }
+.lg-badge { font-size: 11.5px; font-weight: 800; padding: 1px 7px; border-radius: 999px; background: color-mix(in srgb, var(--l-ml) 14%, transparent); color: var(--l-ml); }
+.lg-done { color: var(--l-behavior); font-weight: 700; }
+.lg-wait { color: var(--l-exp); font-weight: 700; }
+.lg-more { margin-top: 12px; font-size: 15px; }
+.lg-more a { font-weight: 700; color: var(--accent); text-decoration: none; }
+.lg-more a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.lg-empty { display: grid; gap: 14px; padding: 20px; border-radius: 16px; background: var(--surface); border: 1.5px dashed var(--rule); }
+.lg-empty p { font-size: 15px; color: var(--muted); }
+.lg-empty p b { color: var(--ink); }
+.lg-empty .lg-write { margin: 0; }
+.lg-tools { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin: 4px 0 12px; }
+.lg-tabs, .lg-sort { display: flex; flex-wrap: wrap; gap: 6px; }
+.lg .chip { min-height: 38px; padding: 6px 14px; border: 1.5px solid var(--rule); }
+.lg .chip[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.lg-none { padding: 24px 0; color: var(--muted); }
+.lounge-page { padding-block: 40px 64px; }
+.lounge-page .lib-head { margin-bottom: 22px; }
+.lg-rules { margin-top: 40px; max-width: 760px; padding: 22px 24px; border-radius: 16px; background: var(--surface-2); }
+.lg-rules h2 { font-size: 19px; font-weight: 800; margin-bottom: 10px; }
+.lg-rules ul { margin: 0 0 12px; padding-left: 18px; display: grid; gap: 6px; font-size: 15px; line-height: 1.6; }
+.lg-rules p { font-size: 14.5px; color: var(--muted); line-height: 1.6; }
+@media (max-width: 720px) {
+  .lg-write { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .lg-w { padding: 12px 14px; }
+  .lg-w b { font-size: 15px; }
+  .lg-w span { font-size: 12.5px; }
+  .lg-post { padding: 14px; }
+  .lg-main { grid-template-columns: minmax(0, 1fr); }
+  .lg-cat { justify-self: start; }
+  .lg-x { grid-column: 1; }
+  .lg-tools { align-items: flex-start; }
+}
+/* seven stops: keep the last one (참여하기) on a phone screen */
+@media (max-width: 420px) {
+  .site-nav { gap: 10px; }
+  .site-nav a.stn { font-size: 13.5px; }
+}

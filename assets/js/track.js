@@ -5,7 +5,7 @@
   "use strict";
   /* the hub's own address for links people copy and share: wherever the live hub is served (github.io, or
      the pseudo-lab.com address it can move to); a local preview shares links to the live hub */
-  const LIVE = ["causalinferencelab.github.io", "causalinference.pseudo-lab.com"];
+  const LIVE = ["causalinferencelab.github.io", "datahub.pseudo-lab.com"];
   const SITE = LIVE.includes(location.hostname) ? location.origin : "https://causalinferencelab.github.io";
   window.hubSite = SITE;
   window.hubTrack = (name, params = {}) => {
@@ -75,7 +75,7 @@
   "use strict";
   const HUB_PATHS = /^\/(?:$|index\.html$|article\.html$|404\.html$|game\.html$|lab\.html$|library\.html$|assets\/|data\/|articles\/|builders\/|badges\/)/;
   const WEBBOOK = "Causal-Inference-with-Python";
-  const LIVE_HOSTS = ["causalinferencelab.github.io", "causalinference.pseudo-lab.com"];
+  const LIVE_HOSTS = ["causalinferencelab.github.io", "datahub.pseudo-lab.com"];
   const SPOTS = [
     ["#featured", "featured"], [".partner", "partner"], ["#station-dialog", "station"], ["#daily", "daily"], ["#posts", "posts"], ["#passport-dialog", "passport"],
     ["#shelf, #week, .spot", "curriculum"], [".gm", "game"], [".lab", "lab"], [".lib", "library"], ["#topics", "topics"], [".bp", "builder_page"],
