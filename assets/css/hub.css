@@ -1766,7 +1766,7 @@ a.ac-title:hover { text-decoration: underline; }
 
 /* section heads: the station for that section, then the name */
 .section-head h2 { display: flex; align-items: center; gap: 14px; font-size: clamp(28px, 3.4vw, 40px); letter-spacing: -.035em; }
-#curriculum .section-head h2::before, #contrib .section-head h2::before, #events .section-head h2::before, #posts .section-head h2::before {
+#curriculum .section-head h2::before, #lounge .section-head h2::before, #contrib .section-head h2::before, #events .section-head h2::before, #posts .section-head h2::before {
   content: ""; width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%; background: var(--surface); border: 5px solid var(--sec); box-sizing: border-box; }
 .section-head > p { max-width: 40em; }
 
@@ -3033,3 +3033,200 @@ a.cont-chip { text-decoration: none; }
 }
 .sy-lv { scroll-margin-top: 24px; }
 #panel-course > #progress:not(:empty) { margin-bottom: 14px; }
+
+/* ==========================================================================
+   Lounge: GitHub Discussions shown on the hub (lounge.js). Each board keeps a line colour:
+   질문 main, 공유 behavior, 회고 ml, 소식 exp.
+   ========================================================================== */
+:root { --l-lounge: #0E7490; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --l-lounge: #3BBBD6; } }
+:root[data-theme="dark"] { --l-lounge: #3BBBD6; }
+#lounge, .s-lounge { --sec: var(--l-lounge); }
+.lg .l-main { --c: var(--l-main); }
+.lg .l-behavior { --c: var(--l-behavior); }
+.lg .l-ml { --c: var(--l-ml); }
+.lg .l-exp { --c: var(--l-exp); }
+.lg .l-ai { --c: var(--l-ai); }
+
+.lg-write { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.lg-w { display: grid; gap: 2px; height: 100%; padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1.5px solid var(--rule); border-top: 4px solid var(--c); color: var(--ink); text-decoration: none; }
+.lg-w b { font-size: 16px; font-weight: 800; }
+.lg-w span { font-size: 13.5px; color: var(--muted); }
+.lg-w:hover { border-color: var(--c); }
+.lg-w:focus-visible, .lg-main:focus-visible, .lg-more a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+p.lg-write { display: block; }
+
+.lg-list { list-style: none; margin: 0; padding: 0; display: grid; border-radius: 16px; background: var(--surface); border: 1px solid var(--rule); overflow: hidden; }
+.lg-post { padding: 14px 18px; display: grid; gap: 8px; }
+.lg-post + .lg-post { border-top: 1px solid var(--rule); }
+.lg-main { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; row-gap: 4px; align-items: baseline; color: var(--ink); text-decoration: none; }
+.lg-main:hover .lg-t { text-decoration: underline; text-underline-offset: 3px; }
+.lg-cat { grid-row: 1; font-size: 12.5px; font-weight: 800; color: var(--c); padding: 2px 9px; border-radius: 999px; background: color-mix(in srgb, var(--c) 12%, transparent); }
+.lg-t { font-size: 16px; font-weight: 700; line-height: 1.4; }
+.lg-x { grid-column: 2; font-size: 14px; color: var(--muted); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.lg-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-left: 0; font-size: 13px; color: var(--muted); }
+.lg-who { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 600; }
+.lg-who .avatar.sm { width: 22px; height: 22px; font-size: 11px; --c: var(--l-ai); }
+.lg-badge { font-size: 11.5px; font-weight: 800; padding: 1px 7px; border-radius: 999px; background: color-mix(in srgb, var(--l-ml) 14%, transparent); color: var(--l-ml); }
+.lg-done { color: var(--l-behavior); font-weight: 700; }
+.lg-wait { color: var(--l-exp); font-weight: 700; }
+.lg-more { margin-top: 12px; font-size: 15px; }
+.lg-more a { font-weight: 700; color: var(--accent); text-decoration: none; }
+.lg-more a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.lg-empty { display: grid; gap: 14px; padding: 20px; border-radius: 16px; background: var(--surface); border: 1.5px dashed var(--rule); }
+.lg-empty p { font-size: 15px; color: var(--muted); }
+.lg-empty p b { color: var(--ink); }
+.lg-empty .lg-write { margin: 0; }
+.lg-tools { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin: 4px 0 12px; }
+.lg-tabs, .lg-sort { display: flex; flex-wrap: wrap; gap: 6px; }
+.lg .chip { min-height: 38px; padding: 6px 14px; border: 1.5px solid var(--rule); }
+.lg .chip[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.lg-none { padding: 24px 0; color: var(--muted); }
+.lounge-page { padding-block: 40px 64px; }
+.lounge-page .lib-head { margin-bottom: 22px; }
+.lg-rules { margin-top: 40px; max-width: 760px; padding: 22px 24px; border-radius: 16px; background: var(--surface-2); }
+.lg-rules h2 { font-size: 19px; font-weight: 800; margin-bottom: 10px; }
+.lg-rules ul { margin: 0 0 12px; padding-left: 18px; display: grid; gap: 6px; font-size: 15px; line-height: 1.6; }
+.lg-rules p { font-size: 14.5px; color: var(--muted); line-height: 1.6; }
+@media (max-width: 720px) {
+  .lg-write { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .lg-w { padding: 12px 14px; }
+  .lg-w b { font-size: 15px; }
+  .lg-w span { font-size: 12.5px; }
+  .lg-post { padding: 14px; }
+  .lg-main { grid-template-columns: minmax(0, 1fr); }
+  .lg-cat { justify-self: start; }
+  .lg-x { grid-column: 1; }
+  .lg-tools { align-items: flex-start; }
+}
+/* seven stops: keep the last one (참여하기) on a phone screen */
+@media (max-width: 420px) {
+  .site-nav { gap: 10px; }
+  .site-nav a.stn { font-size: 13.5px; }
+}
+
+/* ==========================================================================
+   Home: a question box in the hero, and the sections the box searches as tabs right under it
+   (커리큘럼 by default). Builder and 행사 stay as sections below.
+   ========================================================================== */
+.hero-search.ask { grid-template-columns: minmax(0, 1fr) auto; max-width: 680px; margin-top: 26px; }
+.ask-q { grid-column: 1 / -1; margin: 0 2px 4px; font-family: var(--f-display); font-size: 22px; font-weight: 800; letter-spacing: -.02em; color: #fff; }
+.hero-search.ask .hs-box { min-height: 60px; border-radius: 16px; padding: 0 18px; }
+.hero-search.ask .hs-box input { font-size: 17px; }
+.hero-search.ask .hs-go { min-height: 60px; border-radius: 16px; padding: 0 26px; background: #FFD43B; color: #1E2160; font-size: 16px; font-weight: 800; }
+.hero-search.ask .hs-go:hover { background: #FFDF70; }
+.sg-o.t-post .sg-k { color: var(--l-lounge); }
+.sg-o.t-ask { border-top: 1px solid var(--rule); margin-top: 4px; }
+.sg-o.t-ask .sg-k { color: var(--accent); }
+.sg-o.t-ask .sg-l { color: var(--accent); font-weight: 700; }
+
+.home-tabs { padding-top: 28px; }
+.ht-bar { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; border-bottom: 2px solid var(--rule); }
+.ht-bar::-webkit-scrollbar { display: none; }
+.ht-bar [role=tab] { position: relative; flex-shrink: 0; padding: 12px 18px 14px; border: 0; background: none; font: inherit; font-family: var(--f-display); font-size: 19px; font-weight: 800; letter-spacing: -.02em; color: var(--muted); cursor: pointer; }
+.ht-bar [role=tab]:hover { color: var(--ink); }
+.ht-bar [role=tab][aria-selected="true"] { color: var(--ink); }
+.ht-bar [role=tab][aria-selected="true"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -2px; height: 4px; border-radius: 2px; background: var(--sec, var(--ink)); }
+.ht-bar [role=tab]:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; border-radius: 8px; }
+#ht-curriculum { --sec: var(--l-main); }
+#ht-lounge { --sec: var(--l-lounge); }
+#ht-topics { --sec: var(--l-ai); }
+#ht-posts { --sec: var(--l-behavior); }
+#ht-repo-news { --sec: var(--l-ml); }
+.ht-bar .tab-n { margin-left: 6px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.ht-bar .tab-n:empty { display: none; }
+.band.tab-panel { padding-top: 24px; border-top: 0; }
+.tab-panel .section-head h2 { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.tab-panel .section-head { margin-bottom: 16px; }
+.tab-panel + .band:not(.tab-panel) { border-top: 1px solid var(--rule); }
+
+.lg-waiting { margin: 0 0 14px; padding: 14px 18px; border-radius: 14px; background: color-mix(in srgb, var(--l-exp) 8%, var(--surface)); border: 1px solid color-mix(in srgb, var(--l-exp) 24%, var(--rule)); }
+.lg-wk { font-size: 14px; font-weight: 800; color: var(--l-exp); margin-bottom: 6px; }
+.lg-waiting ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.lg-waiting li { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; font-size: 15px; }
+.lg-waiting a { color: var(--ink); font-weight: 700; text-decoration: none; }
+.lg-waiting a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.lg-waiting span { font-size: 13px; color: var(--muted); }
+
+.rn-main { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 12px; align-items: center; color: var(--ink); text-decoration: none; }
+.rn-main .avatar.sm { width: 26px; height: 26px; font-size: 12px; --c: var(--l-ai); }
+.rn-tx { display: grid; gap: 2px; min-width: 0; }
+.rn-t { font-size: 15px; }
+.rn-t b { font-weight: 800; }
+.rn-x { font-size: 13.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rn-at { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.rn-main:hover .rn-t { text-decoration: underline; text-underline-offset: 3px; }
+.rn-main:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 8px; }
+
+@media (max-width: 860px) {
+  /* phone: the question box comes right after the lead, then the level test and the start links */
+  .hero .banner-main > .hero-search { order: 1; }
+  .hero .banner-main > .hs-pop { order: 1; }
+  .hero .lv-card { order: 2; }
+  .hero .banner-side { order: 3; }
+  .ask-q { font-size: 19px; }
+  .hero-search.ask .hs-box, .hero-search.ask .hs-go { min-height: 54px; }
+  .hero-search.ask .hs-go { padding: 0 18px; }
+  .ht-bar [role=tab] { font-size: 16.5px; padding: 10px 12px 12px; }
+  .home-tabs { padding-top: 20px; }
+}
+
+/* the lounge page: one tile per post, board tabs with counts above */
+.lg .chip .lg-n { margin-left: 6px; font-size: 12.5px; font-weight: 700; opacity: .7; }
+.lg-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; background: none; border: 0; border-radius: 0; overflow: visible; }
+.lg-grid .lg-post { align-content: space-between; min-height: 176px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--rule); border-top: 5px solid var(--c); border-radius: 16px; }
+.lg-grid .lg-post + .lg-post { border-top: 5px solid var(--c); }
+.lg-grid .lg-main { grid-template-columns: minmax(0, 1fr); }
+.lg-grid .lg-cat { justify-self: start; }
+.lg-grid .lg-t { font-size: 17px; }
+.lg-grid .lg-x { grid-column: 1; -webkit-line-clamp: 3; }
+.lg-grid .lg-meta { border-top: 1px solid var(--rule); padding-top: 10px; }
+@media (max-width: 1000px) { .lg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .lg-grid { grid-template-columns: minmax(0, 1fr); } .lg-grid .lg-post { min-height: 0; } }
+
+/* the hero, simplified: the name, one line, the question box, popular topics and a way into the level test.
+   Materials, open source and the Hanbit book and lecture sit at the top of the 자료 tab. */
+.banner-simple { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; padding: 56px 48px 48px; }
+.banner-simple .banner-main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 760px; }
+.banner-simple .banner-kicker { justify-content: center; }
+.banner-simple .banner-lede { margin-top: 12px; }
+.banner-simple .hero-search.ask { width: 100%; max-width: 720px; text-align: left; }
+.banner-simple .ask-q { text-align: center; }
+.banner-simple .hs-pop { justify-content: center; max-width: 720px; }
+.hero-first { margin: 18px 0 0; font-size: 15px; }
+.hero-first a { color: #FFD43B; font-weight: 700; text-decoration: none; }
+.hero-first a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.hero-first a:focus-visible { outline: 3px solid #fff; outline-offset: 3px; border-radius: 4px; }
+
+.res-strip { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 20px 36px; margin-bottom: 28px; padding: 22px 24px; border-radius: 22px; background: #1E2160; color: #fff; }
+.res-strip .rs-col { min-width: 0; }
+.res-strip .side-k { margin: 0 4px 6px; }
+.res-strip .oss-k { color: rgba(255, 255, 255, .72); }
+.res-strip .partner { margin-top: 20px; max-width: none; }
+@media (max-width: 860px) {
+  .banner-simple { padding: 36px 20px 30px; }
+  .res-strip { grid-template-columns: minmax(0, 1fr); padding: 18px 14px; }
+}
+.hero .banner.banner-simple { grid-template-columns: minmax(0, 1fr); padding: 56px 48px 48px; }
+.hero .banner.banner-simple .banner-main { margin-inline: auto; justify-self: center; grid-column: 1 / -1; }
+@media (max-width: 860px) {
+  .hero .banner.banner-simple { padding: 34px 20px 28px; }
+  .hero .banner.banner-simple .banner-main > .hero-first, .hero .banner.banner-ask .banner-main > .hero-first { order: 2; }
+}
+/* the open source cards keep the hero's look inside the 자료 tab */
+.res-strip .oss .featured { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.res-strip .oss .featured a { display: grid; gap: 6px; height: 100%; padding: 11px 14px; border-radius: 12px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .16); color: #fff; }
+.res-strip .oss .featured a:hover { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .4); }
+.res-strip .oss .featured .t { font-size: 14.5px; font-weight: 700; line-height: 1.3; white-space: normal; }
+.res-strip .oss .featured .m { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.res-strip .oss .featured .tag { width: auto; padding: 0; background: none; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, .7); text-align: left; }
+@media (max-width: 640px) { .res-strip .oss .featured { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* the hero with the question box on the left and the main materials on the right */
+.banner-ask .hero-search.ask { max-width: 640px; }
+.banner-ask .ask-q { margin-top: 4px; }
+.res-strip { grid-template-columns: minmax(0, 1fr); }
+.res-strip .rs-col { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px 32px; align-items: start; }
+.res-strip .partner { margin-top: 0; }
+.res-strip .partner-list { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 960px) { .res-strip .rs-col { grid-template-columns: minmax(0, 1fr); } }

@@ -77,7 +77,7 @@
   const WEBBOOK = "Causal-Inference-with-Python";
   const LIVE_HOSTS = ["causalinferencelab.github.io", "causalinference.pseudo-lab.com"];
   const SPOTS = [
-    ["#featured", "featured"], [".partner", "partner"], ["#station-dialog", "station"], ["#daily", "daily"], ["#posts", "posts"], ["#passport-dialog", "passport"],
+    ["#featured", "featured"], [".partner", "partner"], [".res-strip", "materials_tab"], ["#station-dialog", "station"], ["#daily", "daily"], ["#posts", "posts"], ["#passport-dialog", "passport"],
     ["#shelf, #week, .spot", "curriculum"], [".gm", "game"], [".lab", "lab"], [".lib", "library"], ["#topics", "topics"], [".bp", "builder_page"],
     [".post-related, .reader, .prose", "article"], ["#lt-sheet", "level_test"], [".site-footer", "footer"], [".hp", "helper"], [".banner", "banner"]
   ];
@@ -142,7 +142,7 @@
      The partner report counts click_partner by item and placement. */
   const PARTNER = /(^|\.)hanbit\.co\.kr$/;
   const PARTNER_ITEMS = [["B6208936856", "paid-book"], ["C0781073345", "paid-lecture"], ["/channel/", "channel-h"]];
-  const PARTNER_SPOT = { partner: "hero", station: "curriculum" };
+  const PARTNER_SPOT = { partner: "materials_tab", station: "curriculum" };
   function partner(e) {
     const a = e.target.closest && e.target.closest("a[href]");
     if (!a || (e.type === "auxclick" && e.button !== 1)) return;

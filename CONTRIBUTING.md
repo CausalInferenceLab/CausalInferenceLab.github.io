@@ -93,6 +93,18 @@ python3 scripts/builder_cards.py
 - `date`가 미래인 글은 그날(한국 시간)까지 목록에 보이지 않습니다. 연재 여러 편을 PR 하나로 올려 두고, 편마다 `date`와 `weekOf`를 그 주 월요일로 넣으면 한 주에 한 편씩 열립니다. 미리 보려면 `article.html#<slug>`로 직접 엽니다.
 - `related`에는 `map.json`의 책·강의 id나, `repos.json`에서 `site`가 있는 레포 이름(예: `Causal-Inference-with-Python`)을 넣습니다. 글 아래에 이어지는 자료로 보입니다.
 
+## 라운지
+
+라운지(`lounge.html`, 홈의 ‘라운지’ 섹션)는 이 저장소의 GitHub Discussions를 보여 줍니다. 글쓰기와 답, 수정, 삭제는 모두 GitHub에서 하고, 허브는 읽기만 합니다.
+
+- **게시판:** Discussions 카테고리 `질문`(Question / Answer 형식), `공유`, `회고`, `소식`. 허브는 이름으로 게시판을 알아보고, 쓰기 버튼은 GitHub가 정한 카테고리 slug로 연결합니다.
+- **갱신:** 글이나 답이 생기거나 바뀌면 배포 워크플로가 돌아 `scripts/build_lounge.py`가 `data/lounge.json`을 새로 씁니다. 매일 배포와 수동 실행에서도 갱신됩니다. 저장소의 `data/lounge.json`은 처음 화면용 빈 파일입니다.
+- **스팸:** 성인·도박·대출 광고 낱말, 메신저 연락처 링크, 만든 지 며칠 안 된 계정의 링크 글은 피드에서 빠지고 워크플로 로그에 번호와 이유가 남습니다. GitHub의 글은 그대로이니, 정말 스팸이면 GitHub에서 지우거나 숨깁니다.
+- **숨기기:** 글에 `spam`이나 `hidden` 라벨을 달면 다음 배포에서 허브에서 빠집니다. 라벨을 떼면 돌아옵니다.
+- **Builder 표시:** 글쓴이의 GitHub 아이디가 `data/builders.json`의 `github`에 있으면 이름과 Builder 표시가 붙습니다.
+- **연재로 옮기기:** 매월 고른 글은 글쓴이에게 알린 뒤 [연재 쓰기](#연재-쓰기) 순서대로 `articles/`에 옮기고, `url`로 원래 토론을 함께 걸어 둡니다.
+- **로컬에서 규칙 시험:** GraphQL 응답을 파일로 저장해 `python3 scripts/build_lounge.py /tmp/lounge.json --from answer.json`.
+
 ## 활동 여권과 실험실
 
 스탬프 정의는 `assets/js/passport.js`의 `STAMPS`에 있습니다. `kind: "auto"`는 허브가 알아서 찍고(`window.hubStamp("post")`), `kind: "self"`는 행사 후기, 강의 후기, 레포 댓글처럼 허브 밖에서 하는 일이라 방문자가 ‘했어요’를 눌러 찍습니다. 레벨 스탬프(`stage_L0`–`stage_L4`)는 그 레벨의 퀘스트를 모두 클리어하면 허브가 찍습니다. L3·L4처럼 `data/levels.json`에 `quests`(스탬프 id 목록)가 있는 레벨은 그 스탬프들이 퀘스트이고, 없는 레벨은 `steps`에 적은 자료가 퀘스트입니다. 레벨 진단 스탬프(`level_test`)는 진단을 끝까지 풀면 찍히고, 결과는 `cil-hub-level`에 남습니다. `/?level`로 들어오면 진단이 바로 열립니다. 이미 받은 스탬프는 다시 주지 않고, 기록은 `localStorage`에만 남습니다. 웹북 독자 스탬프는 같은 도메인의 웹북이 남기는 `cil-book-read`(읽은 장)를 보고 찍고, 역 정보 창의 '내 진도'와 '이어 읽기'는 `cil-book-read`, `cil-book-last`를 읽습니다. `/#passport`로 들어오면 여권이 바로 열립니다. 교란 실험실(`lab.html`, `assets/js/lab.js`)의 데이터는 페이지에서 만드는 가상 사용자입니다.
@@ -100,6 +112,8 @@ python3 scripts/builder_cards.py
 ## 이벤트 측정
 
 `assets/js/track.js`의 `hubTrack(이름, 파라미터)`가 GA4로 이벤트를 보냅니다. 허브는 `assets/js/ga.js`에서 자체 Google 태그(`G-CS9K0E86LR`, 허브 GA4 속성의 스트림)만 불러오고, 웹북 태그와는 섞이지 않습니다. GA4가 설치되지 않았으면 아무 일도 하지 않습니다. 이벤트 이름과 파라미터는 PM 문서의 이벤트 사전을 따르고, 새 이벤트를 넣을 때는 사전에도 같이 적습니다. HTML에서는 `data-event="click_join" data-event-params='{"target":"template","source":"builder_page"}'`처럼 속성만으로도 보낼 수 있습니다. 로컬에서 확인하려면 콘솔에서 `window.HUB_DEBUG = true`를 켭니다.
+
+라운지는 `lounge_write`(category, placement: 쓰기 버튼), `lounge_open`(category, placement: 글 열기), `lounge_more`(홈에서 라운지 전체 보기), `lounge_filter`(category: 게시판 탭)를 보냅니다. 새 파라미터 이름에는 `source`, `medium`, `campaign`, `content`, `term`을 쓰지 않습니다. GA가 유입 경로 값으로 읽습니다.
 
 한빛미디어 링크는 `track.js`가 한곳에서 처리합니다. 누를 때마다 `click_partner`(item, action, placement)를 한 번 보내고 링크에 `utm_source=causalinference_hub`를 붙이므로, 한빛 링크에는 따로 `data-event`를 달지 않습니다. `item`은 책 `paid-book`, 강의 `paid-lecture`, 채널 H 연재 `channel-h`이고, 그 밖의 한빛 주소는 `other`입니다. 들어온 링크의 `utm_*`는 `ga.js`가 주소창에서 지우기 전에 `sessionStorage`의 `cil-hub-landing`에 남깁니다. `utm_source=forum5`처럼 `forum<회차>`로 들어오면 그 탭에서는 진단이 행사 현장 모드가 됩니다. 진단 결과에 네트워킹 카드가 생기고, 진단 이벤트에 `context`가 붙습니다. 카드는 행사 다음 날까지만 나옵니다.
 

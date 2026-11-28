@@ -612,6 +612,8 @@
     const mine = myLevel(), lv = mine && levelOf(mine.level);
     const n = state.leveltest.questions.length;
     box.classList.toggle("lt-slim", !lv);
+    /* before the test, the hero's one line ("처음이라면 3분 레벨 진단부터") is the way in; this card is for the result */
+    box.hidden = !lv;
     box.innerHTML = lv
       ? `<p class="lt-t"><span class="lt-k">내 레벨</span><b>${LV(lv.id)} · ${esc(lv.tier || lv.name)}</b><span class="lt-s">${esc(bandLine(mine))}</span></p>
         <div class="lt-acts"><button type="button" class="pill solid" data-goto-level="${lv.id}">내 레벨 열기</button><button type="button" class="pill" data-test-open="retry">다시 진단</button></div>`
@@ -1105,6 +1107,7 @@
   const flash = (el) => { el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); };
   function gotoLevel(levelId, source) {
     if (!levelOf(levelId)) return;
+    if (window.hubShowTab) window.hubShowTab("curriculum");
     selectTab("tab-course");
     state.level = levelId;
     (state.openLv || (state.openLv = new Set())).add(levelId);
@@ -1120,6 +1123,7 @@
   /* Jump to one material: open its level, then mark it briefly. */
   function gotoItem(id) {
     closeStation();
+    if (window.hubShowTab) window.hubShowTab("curriculum");
     const r = state.repos.get(id);
     if (r && r.level) { selectTab("tab-course"); state.level = r.level; (state.openLv || (state.openLv = new Set())).add(r.level); const d = $(`#lv-${r.level}`); if (d) d.open = true; }
     const el = $(`#shelf [data-id="${CSS.escape(id)}"]`);
@@ -1334,7 +1338,7 @@
     const note = $("#hs-note");
     if (note) {
       const items = d.topics.reduce((n, t) => n + (t.items || []).length, 0);
-      const line = (terms) => `<a href="library.html">자료 ${items}개</a>와 <a href="library.html?view=glossary">${terms ? `용어 ${terms}개` : "용어집"}</a>에서 찾습니다.`;
+      const line = (terms) => `<a href="library.html">자료 ${items}개</a>, <a href="library.html?view=glossary">${terms ? `용어 ${terms}개` : "용어집"}</a>, <a href="lounge.html">라운지 글</a>에서 함께 찾고, 없으면 질문으로 올립니다.`;
       note.innerHTML = line(0);
       getJSON("data/glossary.json").then((g) => { note.innerHTML = line((g.sections || []).reduce((n, x) => n + (x.terms || []).length, 0)); }).catch(() => {});
     }
@@ -2030,7 +2034,7 @@
       const person = e.target.closest("[data-person]");
       if (person) { openPerson(person.dataset.person, person.closest("#top3") ? "top3" : person.closest("#people-rail") ? "rail" : person.closest("#roster") ? "roster" : "hub"); return; }
       const go = e.target.closest("[data-goto]");
-      if (go) { if (go.closest("#partner-list")) track("click_partner", { item: go.dataset.goto, action: "goto", placement: "hero" }); gotoItem(go.dataset.goto); return; }
+      if (go) { if (go.closest("#partner-list")) track("click_partner", { item: go.dataset.goto, action: "goto", placement: "materials_tab" }); gotoItem(go.dataset.goto); return; }
       const open = e.target.closest("[data-open]");
       if (open) { e.preventDefault(); state.backTo = open.dataset.fromPerson || (open.closest(".p-repos") ? (state.lastPerson || null) : null); openStation(open.dataset.open, sourceOf(open)); }
       const back = e.target.closest("[data-back-person]");
@@ -2073,7 +2077,7 @@
   function navSpy() {
     if (!("IntersectionObserver" in window)) return;
     /* 참여하기, the last stop, is Pseudo rather than a section: the line reaches it at the end of the page */
-    const ids = ["curriculum", "topics", "contrib", "events", "posts"];
+    const ids = ["lounge", "curriculum", "topics", "posts", "contrib", "events"];
     const seen = new Map();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
@@ -2087,7 +2091,7 @@
     let queued = false;
     const update = () => {
       queued = false;
-      const tops = ids.map((id) => document.getElementById(id)).filter(Boolean).map((el) => el.getBoundingClientRect().top + scrollY);
+      const tops = ids.map((id) => document.getElementById(id)).filter((el) => el && !el.hidden).map((el) => el.getBoundingClientRect().top + scrollY);
       tops.push(Math.max(tops[tops.length - 1] + 1, document.documentElement.scrollHeight - innerHeight * 0.55 - 2));
       const y = scrollY + innerHeight * 0.45;
       let p = 0;

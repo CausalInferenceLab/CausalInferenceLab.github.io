@@ -7,9 +7,15 @@ on:
     # stars, contributors and the activity feed every day
     - cron: "17 21 * * *"
   workflow_dispatch:
+  # the lounge shows GitHub Discussions, so a new post or answer rebuilds the site
+  discussion:
+    types: [created, edited, deleted, labeled, unlabeled, category_changed, answered, unanswered]
+  discussion_comment:
+    types: [created, deleted]
 
 permissions:
   contents: write
+  discussions: read
 
 concurrency:
   group: pages
@@ -36,6 +42,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 scripts/build_activity.py data/activity.json || echo "activity feed kept as is"
 
+      - name: Build the lounge feed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/build_lounge.py data/lounge.json || echo "lounge kept as is"
+
       - name: Copy the web book glossary
         run: python3 scripts/build_glossary.py
 
@@ -51,7 +62,7 @@ jobs:
       - name: Collect site files
         run: |
           mkdir _site
-          cp -r index.html article.html game.html lab.html library.html 404.html .nojekyll robots.txt sitemap.xml assets data articles builders badges _site/
+          cp -r index.html article.html game.html lab.html library.html lounge.html 404.html .nojekyll robots.txt sitemap.xml assets data articles builders badges _site/
 
       # The Iterglow public SDK key lives in the ITERGLOW_SDK_KEY secret, not in the repo. It is added to the
       # published experiments.json only while an experiment is switched on; with no key, experiments stay off.
