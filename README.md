@@ -1,12 +1,12 @@
-# Pseudo Lab Data Hub
+# Causal Inference Hub
 
-**가짜연구소 인과추론팀이 운영하는 데이터 실무 커뮤니티입니다.**
+**가짜연구소 인과추론팀이 2022년부터 함께 만든 오픈소스와 자료를 Level 0–4 커리큘럼으로 엮은 곳입니다.**
 
-2022년부터 함께 만든 인과추론·온라인 실험 자료를 Level 0–4 커리큘럼으로 엮고, 데이터 실무자들이 라운지에서 질문하고 글과 회고를 나눕니다.
+인과추론에서 시작해 온라인 실험, 데이터 에이전트까지 AI 시대에 데이터로 판단하는 힘을 함께 공부하고 만듭니다. 라운지에서는 데이터 실무자 누구나 묻고, 나누고, 회고를 남깁니다.
 
 **[causalinferencelab.github.io](https://causalinferencelab.github.io)**
 
-![Pseudo Lab Data Hub](assets/img/hub-preview.png)
+![Causal Inference Hub](assets/img/hub-preview.png)
 
 ## 어디서 시작할까
 
@@ -88,7 +88,7 @@
 
 ## English summary
 
-Pseudo Lab Data Hub (formerly the Causal Inference Hub) is a community for data practitioners run by the Pseudo-Lab Causal Inference Team (가짜연구소 인과추론팀). Its lounge, built on GitHub Discussions, is where anyone with a GitHub account asks questions and shares posts and retrospectives. It also gathers the team's open-source work since 2022 into one Level 0–4 curriculum: a video primer (Causal Studio), the full Korean edition of *Causal Inference for The Brave and True*, applied templates and online-experiment materials, a data agent (Lang2SQL) and a research R package (ccwr). A three-minute level test points you to where to start. Each cohort, Builders open projects and runners join them; the hub shows those projects, the people who led them, and how to take part.
+The Causal Inference Hub is the home of the Pseudo-Lab Causal Inference Team (가짜연구소 인과추론팀). Its lounge, built on GitHub Discussions, is where anyone with a GitHub account asks questions and shares posts and retrospectives. It also gathers the team's open-source work since 2022 into one Level 0–4 curriculum: a video primer (Causal Studio), the full Korean edition of *Causal Inference for The Brave and True*, applied templates and online-experiment materials, a data agent (Lang2SQL) and a research R package (ccwr). A three-minute level test points you to where to start. Each cohort, Builders open projects and runners join them; the hub shows those projects, the people who led them, and how to take part.
 
 ## 이 레포에 대해
 

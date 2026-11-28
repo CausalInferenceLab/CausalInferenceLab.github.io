@@ -23,7 +23,7 @@
     more.innerHTML = articles.filter((x) => x !== a && !x.url && published(x)).map((x) =>
       `<li><a class="article-card" href="#${esc(x.slug)}"><h3>${esc(x.title)}</h3><time datetime="${esc(x.date)}">${esc(String(x.date).replace(/-/g, "."))}</time></a></li>`).join("");
     if (!a) { notFound(); return; }
-    document.title = `${a.title} | Pseudo Lab Data Hub`;
+    document.title = `${a.title} | Causal Inference Hub`;
     title.textContent = a.title;
     meta.textContent = `${a.series ? `${a.series}${a.episode ? ` ${a.episode}편` : ""} · ` : ""}${a.author} · ${String(a.date).replace(/-/g, ".")}`;
     /* the writer, and the next and previous parts of the same series */

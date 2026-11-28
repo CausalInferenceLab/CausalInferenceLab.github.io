@@ -666,7 +666,7 @@
         <p class="fc-tier">${esc(lv.tier || lv.name)}</p>
         ${interest ? `<p class="fc-in"><span>관심</span>${esc(interest)}</p>` : ""}
         <label class="fc-name"><span>이름이나 닉네임 (선택, 저장하지 않음)</span><input type="text" maxlength="16" autocomplete="nickname" placeholder="예: 진수"></label>
-        <p class="fc-foot">Data Hub에서 3분 진단 · ${esc(siteHost())}</p>
+        <p class="fc-foot">인과추론 Hub에서 3분 진단 · ${esc(siteHost())}</p>
       </div>
       <p class="lt-sub">같은 레벨이나 같은 관심 분야인 사람과 이야기를 시작해 보세요. 화면을 켜 둔 채 보여 주면 됩니다.</p></div>
       <div class="sh-foot"><button type="button" class="btn ghost" data-forum-back>결과로 돌아가기</button><button type="button" class="btn" data-goto-level="${lv.id}" data-test-go>${LV(lv.id)} 코스로 이동</button></div>`;
@@ -1105,6 +1105,7 @@
   const flash = (el) => { el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); };
   function gotoLevel(levelId, source) {
     if (!levelOf(levelId)) return;
+    if (window.hubShowTab) window.hubShowTab("curriculum");
     selectTab("tab-course");
     state.level = levelId;
     (state.openLv || (state.openLv = new Set())).add(levelId);
@@ -1120,6 +1121,7 @@
   /* Jump to one material: open its level, then mark it briefly. */
   function gotoItem(id) {
     closeStation();
+    if (window.hubShowTab) window.hubShowTab("curriculum");
     const r = state.repos.get(id);
     if (r && r.level) { selectTab("tab-course"); state.level = r.level; (state.openLv || (state.openLv = new Set())).add(r.level); const d = $(`#lv-${r.level}`); if (d) d.open = true; }
     const el = $(`#shelf [data-id="${CSS.escape(id)}"]`);
@@ -1334,7 +1336,7 @@
     const note = $("#hs-note");
     if (note) {
       const items = d.topics.reduce((n, t) => n + (t.items || []).length, 0);
-      const line = (terms) => `<a href="library.html">자료 ${items}개</a>와 <a href="library.html?view=glossary">${terms ? `용어 ${terms}개` : "용어집"}</a>에서 찾습니다.`;
+      const line = (terms) => `<a href="library.html">자료 ${items}개</a>, <a href="library.html?view=glossary">${terms ? `용어 ${terms}개` : "용어집"}</a>, <a href="lounge.html">라운지 글</a>에서 함께 찾고, 없으면 질문으로 올립니다.`;
       note.innerHTML = line(0);
       getJSON("data/glossary.json").then((g) => { note.innerHTML = line((g.sections || []).reduce((n, x) => n + (x.terms || []).length, 0)); }).catch(() => {});
     }
@@ -1681,7 +1683,7 @@
     c.fillStyle = glow; c.fillRect(0, 0, W, H);
     const font = (w, px) => `${w} ${px}px "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif`;
     c.fillStyle = "rgba(255,255,255,.82)"; c.font = font(600, 28);
-    c.fillText("Pseudo Lab Data Hub · 가짜연구소 인과추론팀", 80, 110);
+    c.fillText("Causal Inference Hub · 가짜연구소 인과추론팀", 80, 110);
     c.fillStyle = "#fff"; c.font = font(800, 92);
     c.fillText(`${LV(lv.id)} 완주`, 80, 236);
     c.font = font(700, 44); c.fillText(lv.tier ? `${lv.tier} · ${lv.name}` : lv.name, 80, 300);
@@ -1724,7 +1726,7 @@
     glow.addColorStop(0, "rgba(255,255,255,.22)"); glow.addColorStop(1, "rgba(255,255,255,0)");
     c.fillStyle = glow; c.fillRect(0, 0, W, H);
     const font = (w, px) => `${w} ${px}px "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif`;
-    c.fillStyle = "rgba(255,255,255,.82)"; c.font = font(600, 26); c.fillText("Pseudo Lab Data Hub Builder · 가짜연구소 인과추론팀", 80, 104);
+    c.fillStyle = "rgba(255,255,255,.82)"; c.font = font(600, 26); c.fillText("Causal Inference Hub Builder · 가짜연구소 인과추론팀", 80, 104);
     c.fillStyle = "#FFD54A"; c.font = font(800, 34); c.fillText(t.name, 80, 186);
     c.fillStyle = "#fff"; c.font = font(800, 96); c.fillText(p.name, 80, 292);
     c.fillStyle = "rgba(255,255,255,.88)"; c.font = font(600, 30);
@@ -1789,7 +1791,7 @@
       const file = typeof File === "function" ? new File([blob], name, { type: "image/png" }) : null;
       /* phones: hand the image to the share sheet; elsewhere download it */
       if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-        try { await navigator.share({ files: [file], title: medal ? "Pseudo Lab Data Hub Builder 메달" : "Pseudo Lab Data Hub 완주 카드" }); track("share", { content, method: "share_sheet" }); return; } catch (e) { if (e && e.name === "AbortError") return; }
+        try { await navigator.share({ files: [file], title: medal ? "Causal Inference Hub Builder 메달" : "Causal Inference Hub 완주 카드" }); track("share", { content, method: "share_sheet" }); return; } catch (e) { if (e && e.name === "AbortError") return; }
       }
       const a = document.createElement("a");
       a.download = name; a.href = URL.createObjectURL(blob);
@@ -2073,7 +2075,7 @@
   function navSpy() {
     if (!("IntersectionObserver" in window)) return;
     /* 참여하기, the last stop, is Pseudo rather than a section: the line reaches it at the end of the page */
-    const ids = ["curriculum", "topics", "lounge", "contrib", "events", "posts"];
+    const ids = ["curriculum", "lounge", "topics", "posts", "contrib", "events"];
     const seen = new Map();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));
@@ -2087,7 +2089,7 @@
     let queued = false;
     const update = () => {
       queued = false;
-      const tops = ids.map((id) => document.getElementById(id)).filter(Boolean).map((el) => el.getBoundingClientRect().top + scrollY);
+      const tops = ids.map((id) => document.getElementById(id)).filter((el) => el && !el.hidden).map((el) => el.getBoundingClientRect().top + scrollY);
       tops.push(Math.max(tops[tops.length - 1] + 1, document.documentElement.scrollHeight - innerHeight * 0.55 - 2));
       const y = scrollY + innerHeight * 0.45;
       let p = 0;

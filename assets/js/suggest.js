@@ -14,17 +14,26 @@
   const track = (n, p) => window.hubTrack && window.hubTrack(n, p);
   const page = /library\.html$/.test(location.pathname) ? "library" : "hub";
   const MAX = 8;
+  const ASK = new Set(["hero"]);
 
   /* initial consonants, so "ㅇㅈㅊㅂ" finds 이중차분법 */
   const CHO = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
   const cho = (s) => [...String(s || "")].map((c) => { const k = c.charCodeAt(0) - 0xac00; return k >= 0 && k <= 11171 ? CHO[Math.floor(k / 588)] : c; }).join("");
   const onlyCho = (q) => /^[ㄱ-ㅎ]+$/.test(q);
 
-  let index = null, loading = null;
+  let index = null, loading = null, lounge = {};
+  /* where "ask this in the lounge" goes: a new discussion in the 질문 board with the typed words as its title */
+  const askUrl = (typed) => {
+    const repo = lounge.repo || "CausalInferenceLab/CausalInferenceLab.github.io";
+    const q = (lounge.categories || []).find((c) => c.name === "질문");
+    const u = new URL(`https://github.com/${repo}/discussions/new${q && q.slug ? "" : "/choose"}`);
+    if (q && q.slug) { u.searchParams.set("category", q.slug); u.searchParams.set("title", typed); }
+    return u.href;
+  };
   function load() {
     if (loading) return loading;
     const get = (p) => fetch(ROOT + p).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-    loading = Promise.all([get("data/topics.json"), get("data/glossary.json"), get("data/repos.json")]).then(([t, g, r]) => {
+    loading = Promise.all([get("data/topics.json"), get("data/glossary.json"), get("data/repos.json"), get("data/lounge.json")]).then(([t, g, r, l]) => {
       const shelves = Object.fromEntries(((t && t.shelves) || []).map((s) => [s.id, s.name]));
       const topics = ((t && t.topics) || []).map((x) => ({
         type: "topic", id: x.id, label: x.name, sub: `${shelves[x.shelf] || "주제"} · 자료 ${(x.items || []).length}개`,
@@ -39,7 +48,13 @@
         type: "project", id: `pj-${x.repo}`, label: x.title, sub: `프로젝트 · ${(x.tags || []).slice(0, 2).join(" · ") || x.repo}`,
         href: `${ROOT}library.html#pj-${encodeURIComponent(x.repo)}`, keys: [x.title, x.repo, ...(x.keys || []), ...(x.tags || [])]
       }));
-      index = [...topics, ...terms, ...projects].map((e) => {
+      /* lounge posts (GitHub Discussions), so a question finds the ones already asked */
+      lounge = l || {};
+      const posts = ((l && l.posts) || []).filter((x) => x && x.title && /^https:\/\/github\.com\//.test(x.url || "")).map((x) => ({
+        type: "post", id: `post-${x.number}`, label: x.title, sub: `라운지 · ${x.category || "글"}${x.answered ? " · 답변 채택" : x.comments ? ` · 답 ${x.comments}` : ""}`,
+        href: x.url, keys: [x.title, x.category, x.excerpt]
+      }));
+      index = [...topics, ...terms, ...projects, ...posts].map((e) => {
         const keys = e.keys.filter(Boolean).map(String);
         return { ...e, n: keys.map(norm), c: keys.map((k) => norm(cho(k))), words: keys.flatMap((k) => k.toLowerCase().split(/[\s/()·-]+/)).filter(Boolean) };
       });
@@ -123,9 +138,13 @@
       const raw = input.value;
       items = find(raw);
       at = -1;
-      if (!raw.trim() || !items.length) { close(); return; }
-      box.innerHTML = `<li class="sg-head" role="presentation">관련 검색어 ${items.length}개 · ↑↓로 고르고 Enter</li>` + items.map((e, i) => `<li role="option" id="${id}-${i}" class="sg-o t-${e.type}" aria-selected="false" data-i="${i}">
-          <span class="sg-k">${{ topic: "주제", term: "용어", project: "프로젝트" }[e.type]}</span><span class="sg-l">${mark(e.label, raw)}</span><span class="sg-s">${esc(e.sub)}</span></li>`).join("");
+      const typed = raw.trim();
+      /* on the hub's question box, the last line always offers to ask it in the lounge */
+      if (ASK.has(placement) && typed.length >= 2) items = [...items.slice(0, MAX - 1), { type: "ask", id: "ask", label: `‘${typed.slice(0, 40)}’ 라운지에 질문하기`, sub: "찾는 답이 없으면 그대로 질문으로 올립니다", href: askUrl(typed.slice(0, 120)) }];
+      if (!typed || !items.length) { close(); return; }
+      const found = items.filter((e) => e.type !== "ask").length;
+      box.innerHTML = `<li class="sg-head" role="presentation">${found ? `찾은 것 ${found}개 · ↑↓로 고르고 Enter` : "자료와 라운지에서 찾지 못했습니다"}</li>` + items.map((e, i) => `<li role="option" id="${id}-${i}" class="sg-o t-${e.type}" aria-selected="false" data-i="${i}">
+          <span class="sg-k">${{ topic: "주제", term: "용어", project: "프로젝트", post: "라운지", ask: "질문" }[e.type]}</span><span class="sg-l">${e.type === "ask" ? esc(e.label) : mark(e.label, raw)}</span><span class="sg-s">${esc(e.sub)}</span></li>`).join("");
       place();
       box.hidden = false;
       input.setAttribute("aria-expanded", "true");
@@ -138,6 +157,8 @@
       close();
       const ev = new CustomEvent("hub:suggest", { cancelable: true, detail: { type: e.type, id: e.id, label: e.label, href: e.href, typed } });
       if (!input.dispatchEvent(ev)) return;
+      /* lounge posts and the ask link live on GitHub: open them beside the hub */
+      if (e.type === "post" || e.type === "ask") { window.open(e.href, "_blank", "noopener"); return; }
       /* from the hub, the library records the pick on arrival (a record sent while leaving can be lost) */
       const u = new URL(e.href);
       u.searchParams.set("q", e.label.slice(0, 60));

@@ -6,7 +6,7 @@
 - 무엇이 문제인지, 재현 방법, 영향 범위를 적어 주세요.
 - 확인 후 일주일 안에 답하고, 고친 뒤에 공개합니다.
 
-대상: `causalinferencelab.github.io`와 `datahub.pseudo-lab.com`에 배포되는 이 저장소의 코드, 그리고 `.github/workflows`.
+대상: `causalinferencelab.github.io`와 `causalinference.pseudo-lab.com`에 배포되는 이 저장소의 코드, 그리고 `.github/workflows`.
 링크로 연결된 다른 저장소나 외부 사이트의 문제는 해당 저장소에 알려 주세요.
 
 ## Reporting a security issue

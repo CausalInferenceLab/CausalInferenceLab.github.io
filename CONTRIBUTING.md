@@ -1,6 +1,6 @@
 # 허브를 고치고 더하는 방법
 
-이 문서는 [Pseudo Lab Data Hub](https://causalinferencelab.github.io)를 관리하는 사람을 위한 안내입니다. 허브 소개는 [README](README.md)에 있습니다.
+이 문서는 [Causal Inference Hub](https://causalinferencelab.github.io)를 관리하는 사람을 위한 안내입니다. 허브 소개는 [README](README.md)에 있습니다.
 
 ## 공개 원칙
 

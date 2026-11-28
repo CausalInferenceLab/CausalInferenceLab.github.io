@@ -36,7 +36,7 @@ h1{{font-size:96px;font-weight:800;letter-spacing:-.03em;line-height:1.05;margin
 .tier{{display:inline-block;font-size:30px;font-weight:800;color:#FFD54A;margin-top:26px}}
 .top{{display:inline-block;margin-left:14px;font-size:22px;font-weight:800;color:#14162B;background:#FFD54A;border-radius:999px;padding:3px 14px;vertical-align:middle}}
 </style></head><body><span class="md">{medal}</span><div class="in">
-<p class="k">Pseudo Lab Data Hub Builder · 가짜연구소 인과추론팀</p>
+<p class="k">Causal Inference Hub Builder · 가짜연구소 인과추론팀</p>
 <p class="tier">{tier}</p>
 <h1>{name}{top}</h1>
 <p class="s">{since}</p>
