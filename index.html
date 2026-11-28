@@ -49,7 +49,7 @@
 <main id="main">
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="wrap">
-      <div class="banner banner-simple">
+      <div class="banner banner-ask">
         <img class="banner-mark" src="assets/img/team-mark.png" alt="" width="132" height="132">
         <div class="banner-main">
           <p class="banner-kicker"><a href="https://pseudo-lab.com/" target="_blank" rel="noopener" data-event="team_site_click" data-event-params='{"site":"pseudo-lab","placement":"hero_logo"}'><img src="assets/img/pseudolab-white.png" alt="가짜연구소 Pseudo Lab 홈페이지" width="140" height="34"></a></p>
@@ -67,6 +67,10 @@
           <p class="hs-pop"><span>많이 찾는 주제</span><a href="library.html?q=%EC%9D%B4%EC%A4%91%EC%B0%A8%EB%B6%84%EB%B2%95&amp;from=hero" data-event="start_click" data-event-params='{"target":"popular_search","placement":"hero"}'>이중차분법</a><a href="library.html?q=%EC%84%B1%ED%96%A5%EC%A0%90%EC%88%98&amp;from=hero" data-event="start_click" data-event-params='{"target":"popular_search","placement":"hero"}'>성향점수</a><a href="library.html?q=A/B%20%ED%85%8C%EC%8A%A4%ED%8A%B8&amp;from=hero" data-event="start_click" data-event-params='{"target":"popular_search","placement":"hero"}'>A/B 테스트</a><a href="library.html?q=CUPED&amp;from=hero" data-event="start_click" data-event-params='{"target":"popular_search","placement":"hero"}'>CUPED</a><a href="library.html?q=%EB%A9%94%ED%83%80%EB%9F%AC%EB%84%88&amp;from=hero" data-event="start_click" data-event-params='{"target":"popular_search","placement":"hero"}'>메타러너</a></p>
           <p class="hero-first"><a href="?level" data-test-open="hero" data-event="start_click" data-event-params='{"target":"level_test","placement":"hero"}'>처음이라면 3분 레벨 진단부터<span aria-hidden="true"> →</span></a></p>
         </div>
+        <div class="banner-side">
+          <p class="side-k" id="starts-k">주요 자료</p>
+          <ul class="starts" id="starts" aria-labelledby="starts-k"></ul>
+        </div>
       </div>
       <a class="next-event" id="next-event" href="#events" data-event="click_event" data-event-params='{"action":"next_strip","placement":"hero"}' hidden></a>
     </div>
@@ -75,8 +79,8 @@
   <nav class="home-tabs" id="explore" aria-label="허브 둘러보기">
     <div class="wrap">
       <div class="ht-bar" role="tablist" aria-label="허브 둘러보기">
-        <button type="button" role="tab" id="ht-curriculum" aria-controls="curriculum" aria-selected="true">커리큘럼</button>
-        <button type="button" role="tab" id="ht-lounge" aria-controls="lounge" aria-selected="false" tabindex="-1">라운지<span class="tab-n" id="n-lounge"></span></button>
+        <button type="button" role="tab" id="ht-lounge" aria-controls="lounge" aria-selected="true">라운지<span class="tab-n" id="n-lounge"></span></button>
+        <button type="button" role="tab" id="ht-curriculum" aria-controls="curriculum" aria-selected="false" tabindex="-1">커리큘럼</button>
         <button type="button" role="tab" id="ht-topics" aria-controls="topics" aria-selected="false" tabindex="-1">자료</button>
         <button type="button" role="tab" id="ht-posts" aria-controls="posts" aria-selected="false" tabindex="-1">연재</button>
         <button type="button" role="tab" id="ht-repo-news" aria-controls="repo-news" aria-selected="false" tabindex="-1">레포 소식</button>
@@ -84,7 +88,17 @@
     </div>
   </nav>
 
-  <section class="band tab-panel" id="curriculum" role="tabpanel" aria-labelledby="ht-curriculum">
+  <section class="band tab-panel" id="lounge" role="tabpanel" aria-labelledby="ht-lounge">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="lounge-title">라운지</h2>
+        <p>데이터 실무자가 묻고, 나누고, 돌아보는 곳입니다. 인과추론이 아니어도 괜찮고, GitHub 계정이면 누구나 씁니다. <a href="lounge.html#rules">글 올리는 기준</a></p>
+      </div>
+      <div class="lg" data-lounge="home" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="band tab-panel" id="curriculum" role="tabpanel" aria-labelledby="ht-curriculum" hidden>
     <div class="wrap">
       <div class="section-head">
         <h2 id="curriculum-title">커리큘럼</h2>
@@ -129,16 +143,6 @@
     </div>
   </section>
 
-  <section class="band tab-panel" id="lounge" role="tabpanel" aria-labelledby="ht-lounge" hidden>
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="lounge-title">라운지</h2>
-        <p>데이터 실무자가 묻고, 나누고, 돌아보는 곳입니다. 인과추론이 아니어도 괜찮고, GitHub 계정이면 누구나 씁니다. <a href="lounge.html#rules">글 올리는 기준</a></p>
-      </div>
-      <div class="lg" data-lounge="home" aria-live="polite"></div>
-    </div>
-  </section>
-
   <section class="band tab-panel" id="topics" role="tabpanel" aria-labelledby="ht-topics" hidden>
     <div class="wrap">
       <div class="section-head">
@@ -146,10 +150,6 @@
         <p>커리큘럼 밖에서 궁금한 주제나 용어가 생기면 여기서 찾으세요.</p>
       </div>
       <div class="res-strip">
-        <div class="rs-col">
-          <p class="side-k" id="starts-k">자료로 바로가기</p>
-          <ul class="starts" id="starts" aria-labelledby="starts-k"></ul>
-        </div>
         <div class="rs-col">
             <div class="oss" aria-labelledby="oss-k">
               <p class="oss-k" id="oss-k"><b>인과추론팀 오픈소스</b><span>함께 만들고 있는 라이브러리와 에이전트</span></p>

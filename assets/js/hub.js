@@ -2077,7 +2077,7 @@
   function navSpy() {
     if (!("IntersectionObserver" in window)) return;
     /* 참여하기, the last stop, is Pseudo rather than a section: the line reaches it at the end of the page */
-    const ids = ["curriculum", "lounge", "topics", "posts", "contrib", "events"];
+    const ids = ["lounge", "curriculum", "topics", "posts", "contrib", "events"];
     const seen = new Map();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => seen.set(e.target.id, e.isIntersecting));

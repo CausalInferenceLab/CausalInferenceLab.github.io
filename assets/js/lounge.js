@@ -135,7 +135,7 @@
     }).join("")}</ol><p class="lg-more"><a href="https://github.com/CausalInferenceLab" target="_blank" rel="noopener">GitHub에서 팀 레포 보기<span aria-hidden="true"> ↗</span></a></p>`;
   }
 
-  /* ---------- home tabs: 커리큘럼 (default), 라운지, 자료, 연재, 레포 소식 under the question box ---------- */
+  /* ---------- home tabs: 라운지 (default), 커리큘럼, 자료, 연재, 레포 소식 under the question box ---------- */
   function wireTabs() {
     const bar = document.querySelector(".ht-bar");
     if (!bar) return;
@@ -159,7 +159,7 @@
       if (!t) return;
       const id = t.getAttribute("aria-controls");
       show(id, "tab");
-      history.replaceState(null, "", id === "curriculum" ? location.pathname + location.search : `#${id}`);
+      history.replaceState(null, "", id === tabs[0].getAttribute("aria-controls") ? location.pathname + location.search : `#${id}`);
     });
     bar.addEventListener("keydown", (e) => {
       const i = tabs.indexOf(document.activeElement);
