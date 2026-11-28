@@ -1,0 +1,59 @@
+{
+  "source": "Project DB",
+  "uniqueRunners": [
+    {
+      "cohort": 4,
+      "runners": 9,
+      "new": 9,
+      "cumulative": 9
+    },
+    {
+      "cohort": 5,
+      "runners": 8,
+      "new": 0,
+      "cumulative": 9
+    },
+    {
+      "cohort": 6,
+      "runners": 8,
+      "new": 0,
+      "cumulative": 9
+    },
+    {
+      "cohort": 7,
+      "runners": 13,
+      "new": 10,
+      "cumulative": 19
+    },
+    {
+      "cohort": 8,
+      "runners": 45,
+      "new": 32,
+      "cumulative": 51
+    },
+    {
+      "cohort": 9,
+      "runners": 20,
+      "new": 11,
+      "cumulative": 62
+    },
+    {
+      "cohort": 10,
+      "runners": 18,
+      "new": 14,
+      "cumulative": 76
+    },
+    {
+      "cohort": 11,
+      "runners": 14,
+      "new": 9,
+      "cumulative": 85
+    },
+    {
+      "cohort": 12,
+      "runners": 21,
+      "new": 17,
+      "cumulative": 102
+    }
+  ]
+}

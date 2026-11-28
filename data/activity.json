@@ -1,0 +1,584 @@
+{
+ "updated": "2026-11-28T03:21:12Z",
+ "items": [
+  {
+   "id": "28480066168",
+   "login": "Funbucket",
+   "repo": "causal-studio",
+   "at": "2026-11-27T11:30:18Z",
+   "kind": "push"
+  },
+  {
+   "id": "21544712986",
+   "login": "WisemanLim",
+   "repo": "causal-studio",
+   "at": "2026-11-28T01:21:25Z",
+   "kind": "star"
+  },
+  {
+   "id": "28449288596",
+   "login": "Funbucket",
+   "repo": "causal-studio",
+   "at": "2026-11-27T14:47:32Z",
+   "kind": "push"
+  },
+  {
+   "id": "28440007607",
+   "login": "Funbucket",
+   "repo": "causal-studio",
+   "at": "2026-11-27T13:24:46Z",
+   "kind": "push"
+  },
+  {
+   "id": "21445192321",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-27T02:19:45Z",
+   "kind": "pr_merge",
+   "number": 364,
+   "title": "feat: MCP 쓰기 권한 옵션·용어 없는 조회·컬럼 설명 저장 (#296 데모)",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/364"
+  },
+  {
+   "id": "21445159313",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-27T02:19:12Z",
+   "kind": "pr_open",
+   "number": 364,
+   "title": "feat: MCP 쓰기 권한 옵션·용어 없는 조회·컬럼 설명 저장 (#296 데모)",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/364"
+  },
+  {
+   "id": "21437173933",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T23:59:04Z",
+   "kind": "pr_open",
+   "number": 363,
+   "title": "Evaluate cited card-frame history as a separate context condition",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/363"
+  },
+  {
+   "id": "21436587371",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T23:48:36Z",
+   "kind": "pr_open",
+   "number": 362,
+   "title": "Compile exact integer ratios before floating-point division",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/362"
+  },
+  {
+   "id": "21436069929",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T23:39:39Z",
+   "kind": "pr_open",
+   "number": 361,
+   "title": "Expose official column descriptions through the existing MCP schema cache",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/361"
+  },
+  {
+   "id": "21434869699",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T23:18:41Z",
+   "kind": "pr_open",
+   "number": 360,
+   "title": "Make the official IPL glossary available as explicit supplemental context",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/360"
+  },
+  {
+   "id": "21434700133",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T23:15:42Z",
+   "kind": "pr_open",
+   "number": 359,
+   "title": "Validate the frozen Codex MCP candidate on all 500 BIRD questions",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/359"
+  },
+  {
+   "id": "21434151813",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T23:06:25Z",
+   "kind": "pr_open",
+   "number": 358,
+   "title": "Reject unexpected benchmark case selection before model calls",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/358"
+  },
+  {
+   "id": "21433528901",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T22:55:57Z",
+   "kind": "pr_open",
+   "number": 357,
+   "title": "Preserve official BIRD column value definitions in benchmark context",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/357"
+  },
+  {
+   "id": "21432190517",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T22:33:23Z",
+   "kind": "pr_open",
+   "number": 356,
+   "title": "Separate intermediate calculations from final answer selection",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/356"
+  },
+  {
+   "id": "21430069613",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T22:00:03Z",
+   "kind": "pr_open",
+   "number": 355,
+   "title": "Validate declared SQL result cardinality without truncating to fit",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/355"
+  },
+  {
+   "id": "21429246122",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T21:47:38Z",
+   "kind": "pr_open",
+   "number": 354,
+   "title": "Combine output projection, unit and type fixes",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/354"
+  },
+  {
+   "id": "21429112616",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T21:45:37Z",
+   "kind": "pr_open",
+   "number": 353,
+   "title": "Preserve stored output types when casting for numeric ordering",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/353"
+  },
+  {
+   "id": "21428484799",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T21:36:10Z",
+   "kind": "pr_open",
+   "number": 352,
+   "title": "Preserve fractional units for unqualified share requests",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/352"
+  },
+  {
+   "id": "21427591697",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T21:23:01Z",
+   "kind": "pr_open",
+   "number": 351,
+   "title": "Snapshot completed benchmark records without restarting inference",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/351"
+  },
+  {
+   "id": "21427262721",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T21:18:17Z",
+   "kind": "pr_open",
+   "number": 350,
+   "title": "Recover unscored Codex records and fill evaluation coverage gaps",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/350"
+  },
+  {
+   "id": "21427004981",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T21:14:37Z",
+   "kind": "pr_open",
+   "number": 349,
+   "title": "Diagnose Spider group grain, tied winners and result-shape failures",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/349"
+  },
+  {
+   "id": "21426718836",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T21:10:31Z",
+   "kind": "pr_open",
+   "number": 348,
+   "title": "Record four-case BIRD evidence review with no repairs",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/348"
+  },
+  {
+   "id": "21426257887",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T21:04:04Z",
+   "kind": "pr_open",
+   "number": 347,
+   "title": "Add deterministic fixed-decimal SQL aggregation compiler",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/347"
+  },
+  {
+   "id": "21425829984",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T20:58:06Z",
+   "kind": "pr_open",
+   "number": 346,
+   "title": "Compile calendar duration SQL with month-end and leap-year handling",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/346"
+  },
+  {
+   "id": "21424684781",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T20:41:53Z",
+   "kind": "pr_open",
+   "number": 345,
+   "title": "experiment: evaluate Astra on 36 remaining Spider failures",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/345"
+  },
+  {
+   "id": "21424015689",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T20:32:36Z",
+   "kind": "pr_open",
+   "number": 344,
+   "title": "experiment: evaluate Astra on 27 remaining BIRD failures",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/344"
+  },
+  {
+   "id": "21423798865",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T20:29:35Z",
+   "kind": "pr_open",
+   "number": 343,
+   "title": "experiment: compare Astra on six unresolved SQL calculations",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/343"
+  },
+  {
+   "id": "21423674664",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T20:27:52Z",
+   "kind": "pr_open",
+   "number": 342,
+   "title": "fix: bind benchmark exports to actual MCP execution",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/342"
+  },
+  {
+   "id": "21423432251",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T20:24:43Z",
+   "kind": "pr_open",
+   "number": 341,
+   "title": "experiment: remove competing ranking projection instruction",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/341"
+  },
+  {
+   "id": "21423029942",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T20:19:16Z",
+   "kind": "pr_open",
+   "number": 340,
+   "title": "experiment: measure evidence-only review on eight remaining SQL failures",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/340"
+  },
+  {
+   "id": "21422865306",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T20:17:05Z",
+   "kind": "pr_open",
+   "number": 339,
+   "title": "fix: preserve interrupted Codex MCP traces and submitted input",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/339"
+  },
+  {
+   "id": "21421641064",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T20:01:04Z",
+   "kind": "pr_open",
+   "number": 338,
+   "title": "Compare completed MCP benchmark traces case by case",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/338"
+  },
+  {
+   "id": "21421314572",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T19:56:44Z",
+   "kind": "pr_open",
+   "number": 337,
+   "title": "Integrate prior SQL guidance with deterministic MCP fixes for failure evaluation",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/337"
+  },
+  {
+   "id": "21421102088",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T19:53:58Z",
+   "kind": "pr_open",
+   "number": 336,
+   "title": "Compare Codex models on semantic failures and verify pinned BIRD inputs",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/336"
+  },
+  {
+   "id": "21421081794",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T19:53:42Z",
+   "kind": "pr_open",
+   "number": 335,
+   "title": "Exclude repaired cases from failed-only Codex benchmark reruns",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/335"
+  },
+  {
+   "id": "21420607838",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T19:47:29Z",
+   "kind": "pr_open",
+   "number": 334,
+   "title": "Audit failed MCP traces and compare reasoning effort without prompt changes",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/334"
+  },
+  {
+   "id": "21419912021",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T19:38:45Z",
+   "kind": "pr_open",
+   "number": 333,
+   "title": "Validate SQL output column contracts in MCP tools",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/333"
+  },
+  {
+   "id": "21418980451",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T19:27:03Z",
+   "kind": "pr_open",
+   "number": 332,
+   "title": "fix: enforce SQLite execution deadlines from the safety context",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/332"
+  },
+  {
+   "id": "21415617207",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T18:46:20Z",
+   "kind": "pr_open",
+   "number": 331,
+   "title": "fix: expose SQL result truncation and reject duplicate output columns",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/331"
+  },
+  {
+   "id": "21414984558",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T18:38:52Z",
+   "kind": "pr_open",
+   "number": 330,
+   "title": "fix: preserve requested rate calculation and output columns",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/330"
+  },
+  {
+   "id": "21414627574",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T18:34:49Z",
+   "kind": "pr_open",
+   "number": 329,
+   "title": "fix: retain requested summaries over selected detail rows",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/329"
+  },
+  {
+   "id": "21414189012",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T18:29:37Z",
+   "kind": "pr_open",
+   "number": 328,
+   "title": "fix: preserve aggregate eligibility scope in SQL guidance",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/328"
+  },
+  {
+   "id": "21414022538",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T18:27:36Z",
+   "kind": "pr_open",
+   "number": 327,
+   "title": "fix: preserve database text collation in SQL guidance",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/327"
+  },
+  {
+   "id": "21413892835",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T18:26:00Z",
+   "kind": "pr_open",
+   "number": 326,
+   "title": "fix: rerun only failed Codex MCP benchmark cases",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/326"
+  },
+  {
+   "id": "21413416049",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T18:20:17Z",
+   "kind": "pr_open",
+   "number": 325,
+   "title": "experiment: audit prior MCP evidence before regenerating SQL",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/325"
+  },
+  {
+   "id": "21413111595",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T18:16:38Z",
+   "kind": "pr_open",
+   "number": 324,
+   "title": "fix: validate MCP fetch limits before SQL execution",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/324"
+  },
+  {
+   "id": "21412630242",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T18:10:57Z",
+   "kind": "pr_open",
+   "number": 323,
+   "title": "fix: identify unresolved MCP business terms in a single check",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/323"
+  },
+  {
+   "id": "21412513927",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T18:09:32Z",
+   "kind": "pr_open",
+   "number": 322,
+   "title": "fix: avoid duplicate LIMIT for signed SQLite row limits",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/322"
+  },
+  {
+   "id": "21398638883",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-26T15:40:23Z",
+   "kind": "pr_open",
+   "number": 122,
+   "title": "Remove CSS rules that no page uses anymore",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/122"
+  },
+  {
+   "id": "21387532749",
+   "login": "jsshin2022",
+   "repo": "CausalInferenceLab.github.io",
+   "at": "2026-11-26T13:45:57Z",
+   "kind": "pr_merge",
+   "number": 121,
+   "title": "Show the curriculum as one syllabus of Level 0-4",
+   "url": "https://github.com/CausalInferenceLab/CausalInferenceLab.github.io/pull/121"
+  },
+  {
+   "id": "21377842849",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T12:02:09Z",
+   "kind": "pr_open",
+   "number": 321,
+   "title": "fix: validate MCP execution evidence and diagnose Spider SQL failures",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/321"
+  },
+  {
+   "id": "21356699191",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-26T08:10:08Z",
+   "kind": "pr_open",
+   "number": 320,
+   "title": "bench: measure Spider2 and BIRD execution accuracy with reproducible evidence",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/320"
+  },
+  {
+   "id": "28253614825",
+   "login": "Funbucket",
+   "repo": "causal-studio",
+   "at": "2026-11-24T17:42:19Z",
+   "kind": "push"
+  },
+  {
+   "id": "21295847613",
+   "login": "seyoung4503",
+   "repo": "Lang2SQL",
+   "at": "2026-11-25T18:38:04Z",
+   "kind": "pr_open",
+   "number": 319,
+   "title": "feat: Oracle CO 기반 raw Codex 데모 준비 및 정의 승인 안내 수정 (#296)",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/319"
+  },
+  {
+   "id": "28242250341",
+   "login": "Funbucket",
+   "repo": "causal-studio",
+   "at": "2026-11-24T17:56:34Z",
+   "kind": "push"
+  },
+  {
+   "id": "21275788331",
+   "login": "jhpark324",
+   "repo": "Lang2SQL",
+   "at": "2026-11-25T15:13:17Z",
+   "kind": "pr_open",
+   "number": 318,
+   "title": "bench(bird): PR #314의 12회 모델 호출 A/B 평가",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/318"
+  },
+  {
+   "id": "21261703846",
+   "login": "jhpark324",
+   "repo": "Lang2SQL",
+   "at": "2026-11-25T12:59:05Z",
+   "kind": "pr_open",
+   "number": 317,
+   "title": "bench(bird): PR #314 프롬프트 SQLite 100문항 A/B 평가",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/317"
+  },
+  {
+   "id": "21255279408",
+   "login": "jhpark324",
+   "repo": "Lang2SQL",
+   "at": "2026-11-25T11:52:50Z",
+   "kind": "pr_open",
+   "number": 316,
+   "title": "bench(bird): 변경 전후 비교용 SQLite 100문항 벤치",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/316"
+  },
+  {
+   "id": "28223184086",
+   "login": "Funbucket",
+   "repo": "causal-studio",
+   "at": "2026-11-24T15:59:56Z",
+   "kind": "push"
+  },
+  {
+   "id": "21237811285",
+   "login": "jhpark324",
+   "repo": "Lang2SQL",
+   "at": "2026-11-25T08:49:40Z",
+   "kind": "pr_open",
+   "number": 315,
+   "title": "bench(bird): SQL 실행 후 답변 검증 프롬프트 평가 (#313)",
+   "url": "https://github.com/CausalInferenceLab/Lang2SQL/pull/315"
+  }
+ ]
+}
