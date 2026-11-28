@@ -3183,3 +3183,41 @@ p.lg-write { display: block; }
 .lg-grid .lg-meta { border-top: 1px solid var(--rule); padding-top: 10px; }
 @media (max-width: 1000px) { .lg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .lg-grid { grid-template-columns: minmax(0, 1fr); } .lg-grid .lg-post { min-height: 0; } }
+
+/* the hero, simplified: the name, one line, the question box, popular topics and a way into the level test.
+   Materials, open source and the Hanbit book and lecture sit at the top of the 자료 tab. */
+.banner-simple { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; padding: 56px 48px 48px; }
+.banner-simple .banner-main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 760px; }
+.banner-simple .banner-kicker { justify-content: center; }
+.banner-simple .banner-lede { margin-top: 12px; }
+.banner-simple .hero-search.ask { width: 100%; max-width: 720px; text-align: left; }
+.banner-simple .ask-q { text-align: center; }
+.banner-simple .hs-pop { justify-content: center; max-width: 720px; }
+.hero-first { margin: 18px 0 0; font-size: 15px; }
+.hero-first a { color: #FFD43B; font-weight: 700; text-decoration: none; }
+.hero-first a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.hero-first a:focus-visible { outline: 3px solid #fff; outline-offset: 3px; border-radius: 4px; }
+
+.res-strip { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 20px 36px; margin-bottom: 28px; padding: 22px 24px; border-radius: 22px; background: #1E2160; color: #fff; }
+.res-strip .rs-col { min-width: 0; }
+.res-strip .side-k { margin: 0 4px 6px; }
+.res-strip .oss-k { color: rgba(255, 255, 255, .72); }
+.res-strip .partner { margin-top: 20px; max-width: none; }
+@media (max-width: 860px) {
+  .banner-simple { padding: 36px 20px 30px; }
+  .res-strip { grid-template-columns: minmax(0, 1fr); padding: 18px 14px; }
+}
+.hero .banner.banner-simple { grid-template-columns: minmax(0, 1fr); padding: 56px 48px 48px; }
+.hero .banner.banner-simple .banner-main { margin-inline: auto; justify-self: center; grid-column: 1 / -1; }
+@media (max-width: 860px) {
+  .hero .banner.banner-simple { padding: 34px 20px 28px; }
+  .hero .banner.banner-simple .banner-main > .hero-first { order: 2; }
+}
+/* the open source cards keep the hero's look inside the 자료 tab */
+.res-strip .oss .featured { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.res-strip .oss .featured a { display: grid; gap: 6px; height: 100%; padding: 11px 14px; border-radius: 12px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .16); color: #fff; }
+.res-strip .oss .featured a:hover { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .4); }
+.res-strip .oss .featured .t { font-size: 14.5px; font-weight: 700; line-height: 1.3; white-space: normal; }
+.res-strip .oss .featured .m { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.res-strip .oss .featured .tag { width: auto; padding: 0; background: none; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, .7); text-align: left; }
+@media (max-width: 640px) { .res-strip .oss .featured { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

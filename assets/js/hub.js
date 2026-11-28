@@ -612,6 +612,8 @@
     const mine = myLevel(), lv = mine && levelOf(mine.level);
     const n = state.leveltest.questions.length;
     box.classList.toggle("lt-slim", !lv);
+    /* before the test, the hero's one line ("처음이라면 3분 레벨 진단부터") is the way in; this card is for the result */
+    box.hidden = !lv;
     box.innerHTML = lv
       ? `<p class="lt-t"><span class="lt-k">내 레벨</span><b>${LV(lv.id)} · ${esc(lv.tier || lv.name)}</b><span class="lt-s">${esc(bandLine(mine))}</span></p>
         <div class="lt-acts"><button type="button" class="pill solid" data-goto-level="${lv.id}">내 레벨 열기</button><button type="button" class="pill" data-test-open="retry">다시 진단</button></div>`
@@ -2032,7 +2034,7 @@
       const person = e.target.closest("[data-person]");
       if (person) { openPerson(person.dataset.person, person.closest("#top3") ? "top3" : person.closest("#people-rail") ? "rail" : person.closest("#roster") ? "roster" : "hub"); return; }
       const go = e.target.closest("[data-goto]");
-      if (go) { if (go.closest("#partner-list")) track("click_partner", { item: go.dataset.goto, action: "goto", placement: "hero" }); gotoItem(go.dataset.goto); return; }
+      if (go) { if (go.closest("#partner-list")) track("click_partner", { item: go.dataset.goto, action: "goto", placement: "materials_tab" }); gotoItem(go.dataset.goto); return; }
       const open = e.target.closest("[data-open]");
       if (open) { e.preventDefault(); state.backTo = open.dataset.fromPerson || (open.closest(".p-repos") ? (state.lastPerson || null) : null); openStation(open.dataset.open, sourceOf(open)); }
       const back = e.target.closest("[data-back-person]");
